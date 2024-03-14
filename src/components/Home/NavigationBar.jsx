@@ -1,28 +1,32 @@
-import React, { useState } from 'react'
-import { Alert, Button } from 'react-bootstrap'
+import React from 'react'
+import { Container, Nav, Navbar } from 'react-bootstrap'
+import { authUser } from '../../backend/autharization'
+
+function ProfileBoxToggle() {
+    if (authUser)
+        return (
+            <>
+                <Navbar.Text as='button'>
+                    Signed in as: <a href="#login">Mark Otto</a>
+                </Navbar.Text>
+            </>
+        )
+}
 
 function NavigationBar() {
-    const [show,setShow]=useState(false)
-  return (
-    <>
-    <Alert show={show} variant="success">
-        <Alert.Heading>My Alert</Alert.Heading>
-        <p>
-          Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget
-          lacinia odio sem nec elit. Cras mattis consectetur purus sit amet
-          fermentum.
-        </p>
-        <hr />
-        <div className="d-flex justify-content-end">
-          <Button onClick={() => setShow(false)} variant="outline-success">
-            Close me
-          </Button>
-        </div>
-      </Alert>
-
-      {!show && <Button onClick={() => setShow(true)}>Show Alert</Button>}
-    </>
-  )
+    return (
+        <>
+            <Navbar fixed="top" >
+                <Container>
+                    <Navbar.Brand href="#home">Navbar with text</Navbar.Brand>
+                    <Navbar.Toggle />
+                    <Navbar.Collapse className="justify-content-end">
+                        <ProfileBoxToggle />
+                    </Navbar.Collapse>
+                </Container>
+            </Navbar>
+        </>
+    )
 }
 
 export default NavigationBar
