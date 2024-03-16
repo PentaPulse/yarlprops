@@ -1,8 +1,6 @@
 import React from 'react'
-import { Container, Nav, Navbar } from 'react-bootstrap'
-import { authUser } from '../../backend/autharization'
-
-
+import { Container, Navbar } from 'react-bootstrap'
+import ProfileBoxToggle from './ProfileBoxToggle'
 
 function NavigationBar() {
     return (

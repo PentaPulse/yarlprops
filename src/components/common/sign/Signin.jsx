@@ -1,6 +1,6 @@
 import React from 'react'
 
-function Slidshow() {
+function Signin() {
   return (
     <div>
       
@@ -8,4 +8,4 @@ function Slidshow() {
   )
 }
 
-export default Slidshow
+export default Signin

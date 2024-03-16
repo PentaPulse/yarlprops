@@ -1,4 +1,6 @@
-
+import React from "react"
+import { Navbar } from "react-bootstrap"
+import {authUser} from '../../backend/autharization'
 
 function ProfileBoxToggle() {
     if (authUser)
@@ -10,3 +12,5 @@ function ProfileBoxToggle() {
             </>
         )
 }
+
+export default ProfileBoxToggle
