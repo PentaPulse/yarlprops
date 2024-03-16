@@ -3,14 +3,14 @@ import Routings from './components/Routings';
 import Maintain from './components/Maintain';
 
 function App() {
-  const web_status = false;
+  const web_status = true;
   if (web_status) {
     return (
-      <Routings />
+        <Routings />
     );
   }
-  else{
-    return(<Maintain/>)
+  else {
+    return (<Maintain />)
   }
 }
 

@@ -2,7 +2,7 @@ import React from 'react'
 import { Container, Navbar } from 'react-bootstrap'
 import ProfileBoxToggle from './ProfileBoxToggle'
 
-function NavigationBar() {
+function NavigationBar({handleSigninButton}) {
     return (
         <>
             <Navbar fixed="top" >
@@ -10,7 +10,7 @@ function NavigationBar() {
                     <Navbar.Brand href="#home">Navbar with text</Navbar.Brand>
                     <Navbar.Toggle />
                     <Navbar.Collapse className="justify-content-end">
-                        <ProfileBoxToggle />
+                        <ProfileBoxToggle handleSigninButton={handleSigninButton}/>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
