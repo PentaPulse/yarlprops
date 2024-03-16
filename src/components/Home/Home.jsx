@@ -37,7 +37,6 @@ function Home() {
                 </Modal>
             </div>
             <Slidshow />
-
         </>
     )
 }
