@@ -1,4 +1,10 @@
-import React from 'react'
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
+import { authUser } from '../../../backend/autharization';
+import { storage } from '../../../backend/storage';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { Button, Col, FloatingLabel, Form, Row } from 'react-bootstrap';
 
 function Signup({ toggleSignin }) {
     const [signupWithEmail, setSignupWithEmail] = useState(false);
@@ -77,12 +83,12 @@ function SignupWithEmail({ handleSignupWithEmail }) {
                             getDownloadURL(snapshot.ref).then((downloadURL) => {
                                 updateProfile((user), {
                                     photoURL: downloadURL,
-                                }).then(()=>{
+                                }).then(() => {
                                     navigate('/')
                                 })
                             })
                         })
-                    }else{
+                    } else {
                         navigate('/')
                     }
                 })
@@ -90,7 +96,7 @@ function SignupWithEmail({ handleSignupWithEmail }) {
             }).catch((error) => {
                 const errorCode = error.code;
                 const errorMassage = error.massage;
-                console.log(errorCode+' : '+errorMassage)
+                console.log(errorCode + ' : ' + errorMassage)
             })
     }
     const handleEye = () => {
