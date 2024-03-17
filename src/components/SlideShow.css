@@ -1,0 +1,10 @@
+.carousel-indicators [data-bs-target]{
+    border-radius: 100%;
+    width: 15px;
+    height: 15px;
+    margin-right: 5px;
+}
+.carousel-caption p{
+    font-size: 20px;
+    font-style: italic;
+}
