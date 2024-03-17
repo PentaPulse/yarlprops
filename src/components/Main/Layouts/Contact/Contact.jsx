@@ -1,9 +1,10 @@
 import React from 'react'
+import styles from '../../Home.module.css'
 
 function Contact() {
   return (
     <>
-      <div className='d-flex justify-content-center align-items-center bg-primary vh-100'>
+      <div className={`${'d-flex justify-content-center align-items-center vh-100'} ${styles.contactContainer}`}>
         <div className="gg">
         </div>
         <div className="bg-white rounded w-30 p-10">
