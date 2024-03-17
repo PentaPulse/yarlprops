@@ -11,7 +11,7 @@ function Routings() {
     <Router>
       <Layout>
         <Routes>
-          <Route exact path='/' component={Home}/>
+          <Route exact path='/' element={<Home/>}/>
           <Route path='/guide' element={<Guide/>}/>
           <Route path='/contact' element={<Contact/>}/>
         </Routes>
