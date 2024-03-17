@@ -34,8 +34,8 @@ function Layout({children}) {
                         {toggle ? <Signin toggleSignup={toggleSignup} toggle /> : <Signup toggleSignin={toggleSignin} toggle />}
                     </Modal.Body>
                 </Modal>
-            </div>          
-            {children}
+            </div>
+            <div className='mt-4'>{children}</div>
             <Footer/>
         </>
     )
