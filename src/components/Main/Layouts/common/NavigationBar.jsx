@@ -57,7 +57,6 @@ function NavigationBar({ handleSigninButton }) {
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-            {/*<img alt='hello' src='/show/show.svg'width='500px'/>*/}
         </>
     );
 }

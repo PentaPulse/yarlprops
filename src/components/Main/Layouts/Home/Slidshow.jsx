@@ -2,8 +2,8 @@ import React from 'react'
 
 function Slidshow() {
   return (
-    <div>
-      
+    <div>      
+      <img alt='hello' src='/show/show.svg'width='500px'/>
     </div>
   )
 }
