@@ -1,7 +1,9 @@
 import React from 'react'
+import { Button } from 'react-bootstrap'
 
 function Contact() {
-  return (
+  return (<>
+  <Button>sadaewq</Button>
     <div className='d-flex justify-content-center align-items-center bg-primary vh-100'>
       <div className="gg">
       </div>
@@ -13,9 +15,9 @@ function Contact() {
             <input type='name' placeholder='enter name' name='name'/>
           </div>
         </form>
-      </div>
-      
+      </div>      
     </div>
+    </>
   )
 }
 

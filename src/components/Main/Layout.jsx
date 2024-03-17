@@ -35,7 +35,7 @@ function Layout({children}) {
                     </Modal.Body>
                 </Modal>
             </div>          
-            <div className='content'>{children}</div>
+            {children}
             <Footer/>
         </>
     )
