@@ -3,6 +3,7 @@ import NavigationBar from './NavigationBar'
 import Slidshow from './Slidshow'
 import { Modal } from 'react-bootstrap';
 import { Signin, Signup } from '../common/sign/Sign';
+import Footer from './Footer';
 
 function Home() {
     const [open, setOpen] = useState(false);
@@ -36,7 +37,9 @@ function Home() {
                     </Modal.Body>
                 </Modal>
             </div>
+
             <Slidshow />
+            <Footer/>
         </>
     )
 }
