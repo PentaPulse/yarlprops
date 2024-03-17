@@ -6,10 +6,12 @@ import { authUser } from '../../../../backend/autharization';
 
 function NavigationBar({ handleSigninButton }) {
     const [user, setUser] = useState(null);
+    const [photo,setPhoto]=useState('')
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(authUser, (user) => {
             setUser(user);
+            setPhoto(user.photoURL);
         });
 
         return () => {
@@ -55,6 +57,7 @@ function NavigationBar({ handleSigninButton }) {
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
+            <img alt='hello' src={photo} width='500px'/>
         </>
     );
 }

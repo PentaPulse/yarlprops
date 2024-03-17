@@ -66,7 +66,7 @@ function SigninWithEmail({ handleSigninWithEmail }) {
                 const user = result.user;
                 user.toJSON();
                 console.log(user);
-                window.location.reload(0);
+                //window.location.reload(0);
             }).catch((error) => {
                 const errorCode = error.code;
                 const errorMassage = error.massage;
@@ -116,10 +116,9 @@ function SigninWithEmail({ handleSigninWithEmail }) {
                         <img className='btn border' alt='show/hide' src={eye ? 'show/show.svg' : 'show/hide.svg'} onClick={handleEye} width={60} />
                     </FloatingLabel>
                     <span className="text-danger">{warning}</span><br />
+                    <button className='btn w-100' onClick={handleReset}><span>Forgot password ? Click to Reset</span></button>
                     <Button className='mt-3 text-center' variant='dark' type='submit'>Sign in</Button>
                 </Form>
-
-                <button className='btn w-100' onClick={handleReset}><span>Forgot password ? Click to Reset</span></button>
                 <br />
                 <button className='btn mt-3 mb-3' onClick={handleSigninWithEmail}><h5>All sign in options</h5></button>
             </div>
