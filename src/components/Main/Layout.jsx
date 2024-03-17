@@ -1,14 +1,8 @@
 import React, { useState } from 'react'
-import NavigationBar from './NavigationBar'
-import Slidshow from './Slidshow'
+import NavigationBar from './Layouts/common/NavigationBar'
 import { Modal } from 'react-bootstrap';
 import { Signin, Signup } from '../common/sign/Sign';
-import Footer from './Footer';
-import { Route, Routes } from 'react-router-dom';
-import Contact from './Contact';
-import Guide from './Guide';
-import Home from './Home';
-
+import Footer from './Layouts/common/Footer';
 function Layout({children}) {
     const [open, setOpen] = useState(false);
     const [toggle, setToggle] = useState(true);

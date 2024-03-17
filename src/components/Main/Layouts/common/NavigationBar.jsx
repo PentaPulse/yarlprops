@@ -1,26 +1,24 @@
 import React, { useEffect, useState } from 'react'
-import { Container, Nav, NavDropdown, Navbar, NavbarOffcanvas, Tab, Tabs } from 'react-bootstrap'
-import ProfileBoxToggle from './ProfileBoxToggle'
-import Contact from './Contact';
-import styles from "./Home.module.css"
-import { authUser } from '../../backend/autharization';
+import { Button, ButtonGroup, Container, Nav, NavDropdown, Navbar } from 'react-bootstrap'
+import styles from "../../Home.module.css"
+import { onAuthStateChanged } from 'firebase/auth';
+import { authUser } from '../../../../backend/autharization';
 
-function NavigationBar({ handleSigninButton, authUser }) {
-    const [signed, setSigned] = useState('');
+function NavigationBar({ handleSigninButton }) {
+    const [user, setUser] = useState(null);
 
     useEffect(() => {
-        // Update the signed state when the component mounts or authUser changes
-        handleSignedButton();
-    }, [authUser]);
+        const unsubscribe = onAuthStateChanged(authUser, (user) => {
+            setUser(user);
+        });
 
-    const handleSignedButton = () => {
-        if (authUser) {
-            setSigned('Profile');
-        } else {
-            setSigned('Signin');
-        }
+        return () => {
+            unsubscribe();
+        };
+    }, []);
+    const handleSignout = () => {
+        authUser.signOut();
     };
-
     return (
         <>
             <Navbar expand="md" className={styles.naviContainer}>
@@ -45,7 +43,11 @@ function NavigationBar({ handleSigninButton, authUser }) {
                             </NavDropdown>
                             <Nav.Link href='/guide'>Guide</Nav.Link>
                             <Nav.Link href='/contact'>Contact</Nav.Link>
-                            <Navbar.Text className='rounded btn btn-transparent' onClick={handleSigninButton}>Sign in</Navbar.Text>
+                            {user?
+                            <ButtonGroup><Nav.Link>Profile</Nav.Link>
+                            <Button variant='dark' onClick={handleSignout}>Sign out</Button></ButtonGroup>
+                            :
+                            <Button variant='dark' onClick={handleSigninButton}>Sign in</Button>}
                         </Nav>
                     </Navbar.Collapse>
                 </Container>

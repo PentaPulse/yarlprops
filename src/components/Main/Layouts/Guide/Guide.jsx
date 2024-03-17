@@ -1,6 +1,6 @@
 import React from 'react'
-import NavigationBar from './NavigationBar';
-import Footer from './Footer';
+import NavigationBar from '../common/NavigationBar';
+import Footer from '../common/Footer';
 
 function Guide() {
   return (

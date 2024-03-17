@@ -1,9 +1,9 @@
 import React from 'react'
 import {BrowserRouter as Router,Routes,Route} from 'react-router-dom'
-import Layout from './Home/Layout';
-import Home from './Home/Home';
-import Guide from './Home/Guide';
-import Contact from './Home/Contact';
+import Layout from './Main/Layout';
+import Home from './Main/Layouts/Home/Home';
+import Guide from './Main/Layouts/Guide/Guide';
+import Contact from './Main/Layouts/Contact/Contact';
 
 function Routings() {
   return (

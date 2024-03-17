@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Button } from "react-bootstrap"
-import {authUser} from '../../backend/autharization'
+import {authUser} from '../../../../backend/autharization'
 import { onAuthStateChanged } from "firebase/auth";
 
 function ProfileBoxToggle({handleSigninButton}) {
@@ -27,7 +27,7 @@ function ProfileBoxToggle({handleSigninButton}) {
                     <button onClick={handleSignout}>Sign out</button>
                 </>
             ) : (
-                <Button onClick={handleSigninButton} aria-controls='popup-window'>Sign in</Button>
+                <span onClick={handleSigninButton} className="btn btn-transparent rounded" aria-controls='popup-window'>Sign in</span>
             )}
         </div>
     );
