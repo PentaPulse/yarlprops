@@ -5,9 +5,9 @@ import Footer from '../common/Footer';
 function Guide() {
   return (
     <>
-    <NavigationBar/>
-
-    <Footer/>
+    <div className="guideContainer">
+      
+    </div>
     </>
   )
 }
