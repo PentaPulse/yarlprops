@@ -43,11 +43,14 @@ function NavigationBar({ handleSigninButton }) {
                             </NavDropdown>
                             <Nav.Link href='/guide'>Guide</Nav.Link>
                             <Nav.Link href='/contact'>Contact</Nav.Link>
-                            {user?
-                            <ButtonGroup><Nav.Link>Profile</Nav.Link>
-                            <Button variant='dark' onClick={handleSignout}>Sign out</Button></ButtonGroup>
-                            :
-                            <Button variant='dark' onClick={handleSigninButton}>Sign in</Button>}
+                            {user ?
+                                <div className={styles.naviToggle}>
+                                    <Nav.Link>Profile</Nav.Link>
+                                    <Button variant='dark' onClick={handleSignout}>Sign out</Button>
+                                </div>
+                                :
+                                <Button variant='dark' onClick={handleSigninButton}>Sign in</Button>
+                            }
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
