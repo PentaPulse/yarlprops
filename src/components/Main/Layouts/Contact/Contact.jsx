@@ -3,6 +3,8 @@ import React from 'react'
 function Contact() {
   return (
     <div className='d-flex justify-content-center align-items-center bg-primary vh-100'>
+      <div className="gg">
+      </div>
       <div className="bg-white rounded w-30 p-10">
         <h1>Our Team</h1>
         <form>

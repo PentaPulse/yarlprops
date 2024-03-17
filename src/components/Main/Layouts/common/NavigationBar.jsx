@@ -11,7 +11,7 @@ function NavigationBar({ handleSigninButton }) {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(authUser, (user) => {
             setUser(user);
-            setPhoto(user.photoURL);
+            //setPhoto(user.photoURL);
         });
 
         return () => {
@@ -57,7 +57,7 @@ function NavigationBar({ handleSigninButton }) {
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-            <img alt='hello' src={photo} width='500px'/>
+            {/*<img alt='hello' src='/show/show.svg'width='500px'/>*/}
         </>
     );
 }
