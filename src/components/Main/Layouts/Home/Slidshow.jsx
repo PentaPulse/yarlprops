@@ -1,10 +1,11 @@
 import React from 'react'
+import { authUser } from '../../../../backend/autharization'
 
 function Slidshow() {
   return (
-    <div>      
-      <img alt='hello' src='/show/show.svg'width='500px'/>
-    </div>
+    <>
+
+    </>
   )
 }
 
