@@ -31,20 +31,20 @@ function NavigationBar({ handleSigninButton, authUser }) {
                         <Nav>
                             <Nav.Link href="/">Home</Nav.Link>
                             <NavDropdown title="Categories" id="basic-nav-dropdown" >
-                                <NavDropdown.Item href="#action/3.1">Products</NavDropdown.Item>
+                                <NavDropdown.Item >Products</NavDropdown.Item>
                                 <NavDropdown.Divider />
-                                <NavDropdown.Item href="#action/3.2">
+                                <NavDropdown.Item >
                                     Product2
                                 </NavDropdown.Item>
                                 <NavDropdown.Divider />
-                                <NavDropdown.Item href="#action/3.3">Services</NavDropdown.Item>
+                                <NavDropdown.Item >Services</NavDropdown.Item>
                                 <NavDropdown.Divider />
-                                <NavDropdown.Item href="#action/3.4">
+                                <NavDropdown.Item >
                                     Service 1
                                 </NavDropdown.Item>
                             </NavDropdown>
-                            <Nav.Link href="/guide">Guide</Nav.Link>
-                            <Nav.Link href="/guide">Contact</Nav.Link>
+                            <Nav.Link href='/guide'>Guide</Nav.Link>
+                            <Nav.Link href='/contact'>Contact</Nav.Link>
                             <Navbar.Text className='rounded btn btn-transparent' onClick={handleSigninButton}>Sign in</Navbar.Text>
                         </Nav>
                     </Navbar.Collapse>
