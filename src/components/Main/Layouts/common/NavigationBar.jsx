@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { Button, ButtonGroup, Container, Nav, NavDropdown, Navbar } from 'react-bootstrap'
+import { Button, Container, Nav, NavDropdown, Navbar } from 'react-bootstrap'
 import styles from "../../Home.module.css"
 import { onAuthStateChanged } from 'firebase/auth';
 import { authUser } from '../../../../backend/autharization';
 
 function NavigationBar({ handleSigninButton }) {
     const [user, setUser] = useState(null);
-    const [photo,setPhoto]=useState('')
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(authUser, (user) => {
             setUser(user);
-            //setPhoto(user.photoURL);
         });
 
         return () => {

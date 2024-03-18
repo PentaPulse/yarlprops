@@ -1,10 +1,11 @@
-import { createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { GoogleAuthProvider, createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, updateProfile } from 'firebase/auth';
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { authUser } from '../../../backend/autharization';
 import { storage } from '../../../backend/storage';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { Button, Col, FloatingLabel, Form, Row, Toast, ToastContainer } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 
 function Signin({ toggleSignup }) {
     const [signinWithEmail, setSigninWithEmail] = useState(false);
@@ -19,10 +20,28 @@ function Signin({ toggleSignup }) {
 }
 
 function SigninMethods({ toggleSignup, handleSigninWithEmail }) {
+    const navigate = useNavigate()
+    const handleSigninWithGoogle = () => {
+        const provider = new GoogleAuthProvider();
+        signInWithPopup(authUser, provider)
+            .then((result) => {
+                const credential = GoogleAuthProvider.credentialFromResult(result)
+                const token = credential.accessToken
+                const user = result.user
+                console.log(token)
+                console.log(user)
+                navigate('/')
+            })
+            .catch((error) => {
+                const errorCode = error.code
+                const errorMessage = error.message
+                toast.warning(errorCode, ' : ', errorMessage)
+            })
+    }
     return (
         <>
             <div className="methods d-flex flex-column justify-content-center align-items-center">
-                <button className='btn border-dark w-100 mt-4 d-flex justify-content-center align-items-center'>
+                <button className='btn border-dark w-100 mt-4 d-flex justify-content-center align-items-center' onClick={handleSigninWithGoogle}>
                     <div className="d-flex justify-content-start align-items-center w-50">
                         <img className='me-4' src="social-icons/google.svg" alt="" width={25} />
                         <span>Sign in with Google</span>
@@ -284,4 +303,4 @@ function SignupWithEmail({ handleSignupWithEmail }) {
     )
 }
 
-export {Signup,Signin}
+export { Signup, Signin }

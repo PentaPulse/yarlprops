@@ -1,13 +1,12 @@
 import React from 'react'
-import NavigationBar from '../common/NavigationBar';
-import Footer from '../common/Footer';
+import styles from '../../Home.module.css'
 
 function Guide() {
   return (
     <>
-    <NavigationBar/>
-
-    <Footer/>
+    <div className={`${styles.guideContainer} ${'vh-90'}`}>
+      
+    </div>
     </>
   )
 }
