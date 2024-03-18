@@ -1,22 +1,13 @@
-*{
-    padding:0px;
-    margin:0;
-    box-sizing:border-box;
-}
-body{
-    background: #fff;
-}
-
 body,input,textarea,a{
     font-family:'Roboto',sans-serif;
 }
 
-.section-wrapper{
+.sectionWrapper{
     width:100%;
     padding:10px;
 }
 
-.box-wrapper{
+.boxWrapper{
     position:relative;
     display:table;
     width: 1100px;
@@ -28,24 +19,24 @@ body,input,textarea,a{
 
 }
 
-.info-wrapper{
+.infoWrapper{
     width: 35%;
     height: 551px;
     padding: 40px;
     float: left;
     display: block;
     border-radius: 30px 0px 0px 30px;
-    background: linear-gradient(144deg,rgb(2, 14, 17) 20%,rgb(150,12,143) 49%);
+    background: linearGradient(144deg,rgb(2, 14, 17) 20%,rgb(150,12,143) 49%);
     color: #fff;
 }
 
-.info-title{
+.infoTitle{
     text-align: left;
     font-size: 28px;
     letter-spacing: 0.5px;
 }
 
-.info-sub-title{
+.infoSubTitle{
     font-size: 18px;
     font-weight: 300;
     margin-top: 17px;
@@ -53,36 +44,36 @@ body,input,textarea,a{
     line-height: 26px;
 }
 
-.info-details{
+.infoDetails{
     list-style: none;
     margin: 60px 0px;
 }
 
-.info-details li{
+.infoDetails li{
     margin-top: 25px;
     font-size: 18px;
     color: #fff;
 }
 
-.info-details li i{
+.infoDetails li i{
     background: #342b2d;
     padding: 12px;
     border-radius: 50%;
     margin-right: 5px;
 }
 
-.social-icons{
+.socialIcons{
     list-style: none;
     text-align: center;
     margin:20px 0px;
 }
 
-.social-icons li{
+.socialIcons li{
     margin-top: 25px;
     display: inline-block;
 }
 
-.social-icons li i{
+.socialIcons li i{
     background:#211c1e;
     color: #fff;
     padding: 15px;
@@ -94,33 +85,33 @@ body,input,textarea,a{
 
 }
 
-.social-icons li i:hover{
+.socialIcons li i:hover{
     background:  #fff;
     color: #000000;
 }
 
 
-.form-wrapper{
+.formWrapper{
     width: 65%;
     float:right;
     padding: 40px 25px 35px 25px;
     border-radius: 0px 30px 30px 0px;
     background: #ecf0f3;
 }
-.form-title{
+.formTitle{
     text-align: left;
     margin-left: 23px;
     font-size: 28px;
     letter-spacing: 0.5px;
 
 }
-.form-fields{
+.formFields{
     display: table;
     width: 100%;
     padding: 15px 5px 5px 5px ;
 }
 
-.form-fields input,.form-fields textarea{
+.formFields input,.formFields textarea{
     border: none;
     outline: none;
     background: none;
@@ -131,12 +122,12 @@ body,input,textarea,a{
 
 }
 
-.form-fields textarea{
+.formFields textarea{
     height: 150px;
     resize: none;
 }
 
-.form-group{
+.formGroup{
     width: 46%;
     float: left;
     padding: 0px 30px;
@@ -145,11 +136,11 @@ body,input,textarea,a{
     box-shadow: inset 8px 8px 8px #cbced1, inset -8px -8px 8px #ffffff;
 }
 
-.form-fields .form-group:last-child{
+.formFields .formGroup:last-child{
     width: 96%;
 }
 
-.submit-button{
+.submitButton{
     width: 96%;
     height: 60px;
     margin: 0px 12px;
@@ -167,33 +158,33 @@ body,input,textarea,a{
 
 }
 
-.submit-button:hover{
+.submitButton:hover{
     background: #34b399;
 }
 
 
 @media only screen and (max-width: 767px) {
-    .box-wrapper{
+    .boxWrapper{
         width: 100%;
     }
-    .info-wrapper,
-    .form-wrapper{
+    .infoWrapper,
+    .formWrapper{
         width: 100%;
         height: inherit;
         float: none;  
     }
-    .info-wrapper{
+    .infoWrapper{
         border-radius: 30px 30px 0px 0px;
     }
-    .form-wrapper{
+    .formWrapper{
         border-radius: 0px 0px 30px 30px;
     }
-    .form-group{
+    .formGroup{
         width: 100%;
         float: none;
         margin: 25px 0px;
     }
-    .form-fields .form-group:last-child, 
+    .form-fields .formGroup:last-child, 
     .submit-button{
         width: 100%;
     }
