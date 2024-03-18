@@ -1,7 +1,8 @@
 .naviContainer,
 .contactContainer,
 .guideContainer ,
-.slidshowContainer{
+.slidshowContainer,
+.panelContainer{
     backdrop-filter: blur(10.5px);
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -11,6 +12,15 @@
 .slidshowContainer img{
     width: 100%;
 }
+
+.panelContainer{
+
+}
+
+.cardContainer{
+    width:40%
+}
+
 .naviToggle {
     display: flex;
 }

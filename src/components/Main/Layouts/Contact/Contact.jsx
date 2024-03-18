@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './Contact.module.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+//import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FaSquarePhone } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
 import { FaAddressBook } from "react-icons/fa";

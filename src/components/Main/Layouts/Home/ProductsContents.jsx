@@ -1,10 +1,11 @@
 import React from 'react'
 import { Card, ListGroup } from 'react-bootstrap'
+import styles from './../../Home.module.css'
 
 function ProductsContents() {
   return (
     <div>
-    <Card width={10}>
+    <Card className={styles.cardContainer}>
       <Card.Img variant="top" src="holder.js/100px180?text=Image cap" className='box'/>
       <Card.Body>
         <Card.Title>Card Title</Card.Title>
