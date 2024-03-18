@@ -4,6 +4,7 @@ import Layout from './Main/Layout';
 import Home from './Main/Layouts/Home/Home';
 import Guide from './Main/Layouts/Guide/Guide';
 import Contact from './Main/Layouts/Contact/Contact';
+import About from './Main/Layouts/About/about';
 
 function Routings() {
   return (
@@ -14,6 +15,7 @@ function Routings() {
           <Route exact path='/' element={<Home/>}/>
           <Route path='/guide' element={<Guide/>}/>
           <Route path='/contact' element={<Contact/>}/>
+          <Route path='/about' element={<About/>}/>
         </Routes>
       </Layout>
     </Router>
