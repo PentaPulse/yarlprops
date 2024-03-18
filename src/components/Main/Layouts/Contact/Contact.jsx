@@ -1,12 +1,13 @@
 import React from 'react';
 import styles from './Contact.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FaSquarePhone } from "react-icons/fa6";
-import { MdEmail } from "react-icons/md";
-import { FaAddressBook } from "react-icons/fa";
+//import { FaSquarePhone } from "react-icons/fa6";
+//import { MdEmail } from "react-icons/md";
+//import { FaAddressBook } from "react-icons/fa";
 import { FaFacebook } from "react-icons/fa";
 import { FaGithub } from "react-icons/fa";
 import { IoLogoWhatsapp } from "react-icons/io";
+import { faPhone, faEnvelope, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 function Contact() {
   return (
     <>
@@ -17,16 +18,16 @@ function Contact() {
             <h3 className={styles.infoSubTitle}>Fill up the form and our Team will get back to you within 24 hours</h3>
             <ul className={styles.infoDetails}>
               <li>
-                <i><FaSquarePhone /></i>
+              <FontAwesomeIcon icon={faPhone} />
                 <span>Phone:</span>
               </li>
               <li>
-                <i><MdEmail /></i>
+              <FontAwesomeIcon icon={faEnvelope} />
                 <span>Email:</span>
               </li>
               <li>
-                <i><FaAddressBook /></i>
-                <span>Address:</span>
+              <FontAwesomeIcon icon={faLocationDot} />
+                <span>Location:</span>
               </li>
             </ul>
             <ul className={styles.socialIcons}>
