@@ -139,7 +139,7 @@ function Contact() {
           </Col>
         </Row>
       </Container>
-      {/** Below akkas code */}
+      {/* Below akkas code 
       <section className={styles.sectionWrapper}>
         <div className={styles.boxWrapper}>
           <div className={styles.infoWrapper}>
@@ -189,7 +189,7 @@ function Contact() {
             </form>
           </div>
         </div>
-      </section>
+      </section>*/}      
     </>
   );
 }
