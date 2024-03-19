@@ -4,8 +4,6 @@ import GoogleMapReact from 'google-map-react';
 
 import styless from '../../Home.module.css'
 function Contact() {
-  const dFlex = 'd-flex vh-100'
-
   const defaultProps = {
     center: {
       lat: 10.99835602,
