@@ -1,19 +1,8 @@
 import React from 'react';
-import styles from './Contact.module.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-//import { FaSquarePhone } from "react-icons/fa6";
-//import { MdEmail } from "react-icons/md";
-//import { FaAddressBook } from "react-icons/fa";
-import { FaFacebook } from "react-icons/fa";
-import { FaGithub } from "react-icons/fa";
-//import { IoLogoWhatsapp } from "react-icons/io";
-import { faPhone, faEnvelope, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { Button, Col, Container, FloatingLabel, Form, Row } from 'react-bootstrap';
-import { MapContainer, TileLayer, useMap } from 'react-leaflet'
 import GoogleMapReact from 'google-map-react';
 
 import styless from '../../Home.module.css'
-import { Marker, Popup } from 'react-leaflet';
 function Contact() {
   const dFlex = 'd-flex vh-100'
 
