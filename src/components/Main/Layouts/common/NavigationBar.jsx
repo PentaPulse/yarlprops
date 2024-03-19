@@ -16,6 +16,12 @@ function NavigationBar({ handleSigninButton }) {
             unsubscribe();
         };
     }, []);
+    let photo=''
+    try{
+        photo = authUser.currentUser.photoURL
+    }catch(e){
+            console.log(e)
+    }
     const handleSignout = () => {
         authUser.signOut();
     };
@@ -55,6 +61,7 @@ function NavigationBar({ handleSigninButton }) {
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
+            <img src={photo}/>
         </>
     );
 }

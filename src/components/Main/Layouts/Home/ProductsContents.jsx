@@ -2,7 +2,7 @@ import React from 'react'
 import { Card, ListGroup } from 'react-bootstrap'
 import styles from './../../Home.module.css'
 
-function ProductsContents() {
+function ProductsContents({handleBuy}) {
   return (
     <div>
     <Card className={styles.cardContainer}>
@@ -20,7 +20,7 @@ function ProductsContents() {
         <ListGroup.Item>Vestibulum at eros</ListGroup.Item>
       </ListGroup>
       <Card.Body>
-        <Card.Link href="#">Card Link</Card.Link>
+        <Card.Link href="#" onClick={handleBuy}>Card Link</Card.Link>
         <Card.Link href="#">Another Link</Card.Link>
       </Card.Body>
     </Card>

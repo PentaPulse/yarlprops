@@ -1,5 +1,5 @@
 body{
-    background: radial-gradient(circle at center, rgb(215, 234, 10),rgb(230, 230, 135),rgb(134, 134, 224),rgb(89, 46, 218),blue);
+    background: linear-gradient(90deg, rgba(0,0,1,1) 0%, rgba(145,145,145,1) 35%, rgba(255,255,255,1) 100%);
     height:100vh;
     background-position: center;
     background-size: cover;

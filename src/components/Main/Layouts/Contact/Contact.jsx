@@ -9,6 +9,7 @@ import { FaGithub } from "react-icons/fa";
 import { IoLogoWhatsapp } from "react-icons/io";
 import { faPhone, faEnvelope, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 function Contact() {
+  const dFlex = 'd-flex vh-100'
   return (
     <>
       <section className={styles.sectionWrapper}>
@@ -39,10 +40,10 @@ function Contact() {
 
           <div className={styles.formWrapper}>
             <form method='POST'>
-              <h2 className={styles.formTitle}>Send us a message</h2>
+              <h2 className={styles.formTitle}>Send us a message</h2>              
               <div className={styles.formFields}>
                 <div className={styles.formGroup}>
-                  <input type="text" placeholder='First Name' />
+                <input type="text" placeholder='First Name' />
                 </div>
                 <div className={styles.formGroup}>
                   <input type="text" placeholder='Last Name' />
