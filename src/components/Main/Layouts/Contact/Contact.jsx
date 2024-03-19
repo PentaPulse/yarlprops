@@ -1,25 +1,145 @@
 import React from 'react';
 import styles from './Contact.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+//import { FaSquarePhone } from "react-icons/fa6";
+//import { MdEmail } from "react-icons/md";
+//import { FaAddressBook } from "react-icons/fa";
+import { FaFacebook } from "react-icons/fa";
+import { FaGithub } from "react-icons/fa";
+//import { IoLogoWhatsapp } from "react-icons/io";
 import { faPhone, faEnvelope, faLocationDot } from '@fortawesome/free-solid-svg-icons';
+import { Button, Col, Container, FloatingLabel, Form, Row } from 'react-bootstrap';
+import { MapContainer, TileLayer, useMap } from 'react-leaflet'
+import GoogleMapReact from 'google-map-react';
 
-
-
+import styless from '../../Home.module.css'
+import { Marker, Popup } from 'react-leaflet';
 function Contact() {
-  
-   
+  const dFlex = 'd-flex vh-100'
+
+  const defaultProps = {
+    center: {
+      lat: 10.99835602,
+      lng: 77.01502627
+    },
+    zoom: 11
+  };
+
   return (
     <>
-    <div  className={styles.contactMap}>
-              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d251709.86090183843!2d79.79166219246085!3d9.683893700000018!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3afe55d8c70c5db9%3A0xc4ee5d6945ad9bbd!2sUniversity%20of%20Jaffna!5e0!3m2!1sen!2slk!4v1710826610095!5m2!1sen!2slk" 
-              width="400"
-               height="450"
-                style={{ border: "0" }} 
-                allowfullscreen="" 
-                loading="lazy" 
-                ></iframe>
+      <Container className={`${styless.contactContainer} ${'mt-4'}`}>
+        <img src='/sample/profile.svg' width='20%' />
+        <img src='/sample/profile.svg' width='20%' />
+        <img src='/sample/profile.svg' width='20%' />
+        <img src='/sample/profile.svg' width='20%' />
+        <img src='/sample/profile.svg' width='20%' />
+      </Container>
+      <Container className={`${styless.contactContainer} ${'mt-4'}`}>
+        <p>"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"</p>
+      </Container>
+      <Container className={`${styless.contactContainer} ${'mt-4'}`}>
+        <Row>
+          <Col>
+            <h4>Send message</h4>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Row>
+              <Col>
+                <FloatingLabel
+                  controlId="floatingInput"
+                  label="Email address"
+                  className="mb-3"
+                >
+                  <Form.Control type="email" placeholder="name@example.com" />
+                </FloatingLabel>
+              </Col>
+              <Col>
+                <FloatingLabel
+                  controlId="floatingInput"
+                  label="Email address"
+                  className="mb-3"
+                >
+                  <Form.Control type="email" placeholder="name@example.com" />
+                </FloatingLabel>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <FloatingLabel
+                  controlId="floatingInput"
+                  label="Email address"
+                  className="mb-3"
+                >
+                  <Form.Control type="email" placeholder="name@example.com" />
+                </FloatingLabel>
+              </Col>
+              <Col>
+                <FloatingLabel
+                  controlId="floatingInput"
+                  label="Email address"
+                  className="mb-3"
+                >
+                  <Form.Control type="email" placeholder="name@example.com" />
+                </FloatingLabel>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <Form>
+                  <label htmlFor="">Massege type: </label>
+                  <Form.Check
+                    inline
+                    label="Feedback"
+                    name="group1"
+                    type='radio'
+                    id={`inline-radio-1`}
+                  />
+                  <Form.Check
+                    inline
+                    label="Problem"
+                    name="group1"
+                    type='radio'
+                    id={`inline-radio-1`}
+                  />
+                </Form>
+              </Col>
+            </Row>
+          </Col>
+          <Col>
+            <FloatingLabel controlId="floatingTextarea2" label="Comments">
+              <Form.Control
+                as="textarea"
+                placeholder="Leave a comment here"
+                style={{ height: '100px' }}
+              />
+            </FloatingLabel>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Button variant='success' width='100%'>Send Message</Button>
+          </Col>
+        </Row>
+      </Container>
+      <Container className={`${styless.contactContainer} ${'mt-4'}`}>
+        <Row>
+          <Col>
+            <p>Email address</p>
+          </Col>
+          <Col>
+            <div style={{ height: '500px', width: '100%' }}>
+              <GoogleMapReact
+                bootstrapURLKeys={{ key: "" }}
+                defaultCenter={defaultProps.center}
+                defaultZoom={defaultProps.zoom}
+              />
             </div>
-     
+          </Col>
+        </Row>
+      </Container>
+      {/** Below akkas code */}
       <section className={styles.sectionWrapper}>
         <div className={styles.boxWrapper}>
           <div className={styles.infoWrapper}>
@@ -27,15 +147,15 @@ function Contact() {
             <h3 className={styles.infoSubTitle}>Fill up the form and our Team will get back to you within 24 hours</h3>
             <ul className={styles.infoDetails}>
               <li>
-              <i><FontAwesomeIcon icon={faPhone} /></i>
+                <FontAwesomeIcon icon={faPhone} />
                 <span>Phone:</span>
               </li>
               <li>
-              <i><FontAwesomeIcon icon={faEnvelope} /></i>
+                <FontAwesomeIcon icon={faEnvelope} />
                 <span>Email:</span>
               </li>
               <li>
-              <i><FontAwesomeIcon icon={faLocationDot} /></i>
+                <FontAwesomeIcon icon={faLocationDot} />
                 <span>Location:</span>
               </li>
               <li>
@@ -43,10 +163,10 @@ function Contact() {
               
               </li>
             </ul>
-
-
-            
-           
+            <ul className={styles.socialIcons}>
+              <li><i><FaFacebook /></i></li>
+              <li><i><FaGithub /></i></li>
+            </ul>
           </div>
           
 

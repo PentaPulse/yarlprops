@@ -1,27 +1,24 @@
 import React from 'react'
-import { Card, ListGroup } from 'react-bootstrap'
-import styles from './../../Home.module.css'
+import { Card, Button } from 'react-bootstrap'
+import { authUser } from '../../../../backend/autharization'
+import { Signin } from '../../../common/sign/Sign'
 
 function ProductsContents() {
+  const handleReadmore=()=>{
+    if(!authUser.currentUser){
+        <Signin/>
+    }
+  }
   return (
     <div>
-    <Card className={styles.cardContainer}>
-      <Card.Img variant="top" src="holder.js/100px180?text=Image cap" className='box'/>
+    <Card style={{ width: '18rem' }} className='rounded'>
+      <Card.Img variant="top" src="holder.js/100px180" />
       <Card.Body>
-        <Card.Title>Card Title</Card.Title>
+        <Card.Title>Bodim</Card.Title>
         <Card.Text>
-          Some quick example text to build on the card title and make up the
-          bulk of the card's content.
+          Near to University of Jaffna
         </Card.Text>
-      </Card.Body>
-      <ListGroup className="list-group-flush">
-        <ListGroup.Item>Cras justo odio</ListGroup.Item>
-        <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
-        <ListGroup.Item>Vestibulum at eros</ListGroup.Item>
-      </ListGroup>
-      <Card.Body>
-        <Card.Link href="#">Card Link</Card.Link>
-        <Card.Link href="#">Another Link</Card.Link>
+        <Button onClick={handleReadmore} variant="primary">Read more</Button>
       </Card.Body>
     </Card>
     </div>

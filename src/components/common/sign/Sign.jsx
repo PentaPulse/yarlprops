@@ -85,7 +85,7 @@ function SigninWithEmail({ handleSigninWithEmail }) {
                 const user = result.user;
                 user.toJSON();
                 console.log(user);
-                //window.location.reload(0);
+                window.location.reload(0);
             }).catch((error) => {
                 const errorCode = error.code;
                 const errorMassage = error.massage;
@@ -217,13 +217,13 @@ function SignupWithEmail({ handleSignupWithEmail }) {
                     displayName: displayName,
                 }).then(() => {
                     if (pp) {
-                        const storageRef = ref(storage, `users/profilePictures/${user.uid}`);
+                        const storageRef = ref(storage, `users/${user.uid}/profilePicture`);
                         uploadBytes(storageRef, pp).then((snapshot) => {
                             getDownloadURL(snapshot.ref).then((downloadURL) => {
                                 updateProfile((user), {
                                     photoURL: downloadURL,
                                 }).then(() => {
-                                    navigate('/')
+                                    window.location.reload(0);
                                 })
                             })
                         })
@@ -265,14 +265,6 @@ function SignupWithEmail({ handleSignupWithEmail }) {
                             </FloatingLabel>
                         </Col>
                     </Row>
-
-                    <FloatingLabel
-                        controlId="floatingDOB"
-                        label="Date of Birth"
-                        className="mb-3"
-                    >
-                        <Form.Control type="date" placeholder="Date of Birth" />
-                    </FloatingLabel>
 
                     <FloatingLabel
                         controlId="floatingProfilePicture"

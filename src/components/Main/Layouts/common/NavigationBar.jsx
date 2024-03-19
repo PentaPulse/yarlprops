@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Container, Nav, NavDropdown, Navbar } from 'react-bootstrap'
+import { Button, Container, Nav, NavDropdown, Navbar, Spinner } from 'react-bootstrap'
 import styles from "../../Home.module.css"
 import { onAuthStateChanged } from 'firebase/auth';
 import { authUser } from '../../../../backend/autharization';
@@ -16,9 +16,30 @@ function NavigationBar({ handleSigninButton }) {
             unsubscribe();
         };
     }, []);
+    let photo=''
+    try{
+        if(authUser.currentUser.photoURL){
+            photo = authUser.currentUser.photoURL
+        }
+        else{
+            photo = '/sample/profile.svg'
+        }
+        
+    }catch(e){
+            console.log(e)
+    }
+
+    const handleProfilePicture=()=>{
+
+    }
     const handleSignout = () => {
         authUser.signOut();
     };
+
+    const handleLoading =()=>{
+        <Spinner animation="border" role="status"/>
+    }
+
     return (
         <>
             <Navbar expand="md" className={styles.naviContainer}>
@@ -46,7 +67,7 @@ function NavigationBar({ handleSigninButton }) {
                             <Nav.Link href='/about'>About Us</Nav.Link>
                             {user ?
                                 <div className={styles.naviToggle}>
-                                    <Nav.Link>Profile</Nav.Link>
+                                    <Nav.Link onClick={handleProfilePicture}><img alt='pp' src={photo} className='rounded' width={30} onLoad={handleLoading}/></Nav.Link>
                                     <Button variant='dark' onClick={handleSignout}>Sign out</Button>
                                 </div>
                                 :

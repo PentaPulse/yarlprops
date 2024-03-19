@@ -5,7 +5,7 @@ import Slidshow from './Slidshow'
 import SearchAndFilters from './SearchAndFilters'
 import ProductsContents from './ProductsContents'
 
-function Home() {
+function Home({handleBuy}) {
   return (
     <>
       <Container className={styles.panelContainer}>
@@ -16,7 +16,7 @@ function Home() {
         </Row>
         <Row className='mt-3'>
           <Col xs={3}><SearchAndFilters /></Col>
-          <Col md="auto" ><ProductsContents/></Col>
+          <Col md="auto" ><ProductsContents handleBuy={handleBuy}/></Col>
         </Row>
       </Container>
     </>
