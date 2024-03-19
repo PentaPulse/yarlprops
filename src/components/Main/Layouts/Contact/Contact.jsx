@@ -158,12 +158,17 @@ function Contact() {
                 <FontAwesomeIcon icon={faLocationDot} />
                 <span>Location:</span>
               </li>
+              <li>
+              
+              
+              </li>
             </ul>
             <ul className={styles.socialIcons}>
               <li><i><FaFacebook /></i></li>
               <li><i><FaGithub /></i></li>
             </ul>
           </div>
+          
 
           <div className={styles.formWrapper}>
             <form method='POST'>
@@ -181,15 +186,47 @@ function Contact() {
                 <div className={styles.formGroup}>
                   <input type="number" placeholder='Phone' />
                 </div>
+
+
+                
+                  
+                <div className={`${styles.formGroup} ${styles.radioGroup}`}>
+                <div className={styles.radioOption}>
+                  <label> Type:</label>
+                  </div>
+                  
+  <div className={styles.radioOption}>
+    
+    <input type="radio" id="feedback" name="messageType" value="feedback" />
+    <label htmlFor="feedback">Feedback</label>
+  </div>
+  <div className={styles.radioOption}>
+    <input type="radio" id="issue" name="messageType" value="issue" />
+    <label htmlFor="issue">Issue</label>
+  </div>
+</div>
+
+
+
+               
+                
+                
+                
                 <div className={styles.formGroup}>
                   <textarea name="message" placeholder='Write your message'></textarea>
                 </div>
               </div>
               <input type='submit' value="Send Message" className={styles.submitButton} />
             </form>
+           
           </div>
+          
+
         </div>
-      </section>*/}      
+        
+      </section>
+      
+      
     </>
   );
 }
