@@ -1,7 +1,9 @@
 body{
-    background: radial-gradient(circle at center, rgb(215, 234, 10),rgb(230, 230, 135),rgb(134, 134, 224),rgb(89, 46, 218),blue);
+   background: radial-gradient(circle at center, rgb(215, 234, 10),rgb(230, 230, 135),rgb(134, 134, 224),rgb(89, 46, 218),blue);
     height:100vh;
     background-position: center;
     background-size: cover;
     z-index:-1;
 }
+
+

@@ -1,10 +1,11 @@
-import { createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { GoogleAuthProvider, createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, updateProfile } from 'firebase/auth';
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { authUser } from '../../../backend/autharization';
 import { storage } from '../../../backend/storage';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { Button, Col, FloatingLabel, Form, Row, Toast, ToastContainer } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 
 function Signin({ toggleSignup }) {
     const [signinWithEmail, setSigninWithEmail] = useState(false);
@@ -16,13 +17,31 @@ function Signin({ toggleSignup }) {
             {!signinWithEmail ? <SigninMethods toggleSignup={toggleSignup} handleSigninWithEmail={handleSigninWithEmail} /> : <SigninWithEmail handleSigninWithEmail={handleSigninWithEmail} />}
         </>
     )
-  }
-  
-  function SigninMethods({ toggleSignup, handleSigninWithEmail }) {
+}
+
+function SigninMethods({ toggleSignup, handleSigninWithEmail }) {
+    const navigate = useNavigate()
+    const handleSigninWithGoogle = () => {
+        const provider = new GoogleAuthProvider();
+        signInWithPopup(authUser, provider)
+            .then((result) => {
+                const credential = GoogleAuthProvider.credentialFromResult(result)
+                const token = credential.accessToken
+                const user = result.user
+                console.log(token)
+                console.log(user)
+                navigate('/')
+            })
+            .catch((error) => {
+                const errorCode = error.code
+                const errorMessage = error.message
+                toast.warning(errorCode, ' : ', errorMessage)
+            })
+    }
     return (
         <>
             <div className="methods d-flex flex-column justify-content-center align-items-center">
-                <button className='btn border-dark w-100 mt-4 d-flex justify-content-center align-items-center'>
+                <button className='btn border-dark w-100 mt-4 d-flex justify-content-center align-items-center' onClick={handleSigninWithGoogle}>
                     <div className="d-flex justify-content-start align-items-center w-50">
                         <img className='me-4' src="social-icons/google.svg" alt="" width={25} />
                         <span>Sign in with Google</span>
@@ -50,9 +69,9 @@ function Signin({ toggleSignup }) {
             </div>
         </>
     )
-  }
-  
-  function SigninWithEmail({ handleSigninWithEmail }) {
+}
+
+function SigninWithEmail({ handleSigninWithEmail }) {
     const navigate = useNavigate()
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -79,7 +98,7 @@ function Signin({ toggleSignup }) {
     const handleEye = () => {
         setEye(!eye);
     }
-  
+
     const handleReset = (e) => {
         e.preventDefault();
         if (email.length === 0) {
@@ -98,7 +117,7 @@ function Signin({ toggleSignup }) {
                 // Handle specific errors or display a generic message
             });
     };
-  
+
     return (
         <>
             <ToastContainer />
@@ -116,16 +135,15 @@ function Signin({ toggleSignup }) {
                         <img className='btn border' alt='show/hide' src={eye ? 'show/show.svg' : 'show/hide.svg'} onClick={handleEye} width={60} />
                     </FloatingLabel>
                     <span className="text-danger">{warning}</span><br />
+                    <button className='btn w-100' onClick={handleReset}><span>Forgot password ? Click to Reset</span></button>
                     <Button className='mt-3 text-center' variant='dark' type='submit'>Sign in</Button>
                 </Form>
-  
-                <button className='btn w-100' onClick={handleReset}><span>Forgot password ? Click to Reset</span></button>
                 <br />
                 <button className='btn mt-3 mb-3' onClick={handleSigninWithEmail}><h5>All sign in options</h5></button>
             </div>
         </>
     )
-  }
+}
 
 function Signup({ toggleSignin }) {
     const [signupWithEmail, setSignupWithEmail] = useState(false);
@@ -199,13 +217,13 @@ function SignupWithEmail({ handleSignupWithEmail }) {
                     displayName: displayName,
                 }).then(() => {
                     if (pp) {
-                        const storageRef = ref(storage, `users/profilePictures/${user.uid}`);
+                        const storageRef = ref(storage, `users/${user.uid}/profilePicture`);
                         uploadBytes(storageRef, pp).then((snapshot) => {
                             getDownloadURL(snapshot.ref).then((downloadURL) => {
                                 updateProfile((user), {
                                     photoURL: downloadURL,
                                 }).then(() => {
-                                    navigate('/')
+                                    window.location.reload(0);
                                 })
                             })
                         })
@@ -249,14 +267,6 @@ function SignupWithEmail({ handleSignupWithEmail }) {
                     </Row>
 
                     <FloatingLabel
-                        controlId="floatingDOB"
-                        label="Date of Birth"
-                        className="mb-3"
-                    >
-                        <Form.Control type="date" placeholder="Date of Birth" />
-                    </FloatingLabel>
-
-                    <FloatingLabel
                         controlId="floatingProfilePicture"
                         label="Profile picture"
                         className="mb-3"
@@ -285,4 +295,4 @@ function SignupWithEmail({ handleSignupWithEmail }) {
     )
 }
 
-export { Signup,Signin}
+export { Signup, Signin }

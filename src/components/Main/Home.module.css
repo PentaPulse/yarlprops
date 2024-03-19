@@ -1,0 +1,32 @@
+.naviContainer,
+.contactContainer,
+.guideContainer ,
+.slidshowContainer,
+.panelContainer{
+    backdrop-filter: blur(10.5px);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}
+
+.slidshowContainer img{
+    width: 100%;
+}
+
+.cardContainer{
+    width:40%
+}
+
+.naviToggle {
+    display: flex;
+}
+
+@media (max-width:768px) {
+    .naviToggle {
+        display: block;
+    }
+
+    .naviToggle button {
+        width: 100%
+    }
+}
