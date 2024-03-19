@@ -8,10 +8,10 @@ import styless from '../../Home.module.css';
 function Contact() {
   const defaultProps = {
     center: {
-      lat: 10.99835602,
-      lng: 77.01502627
+      lat: 9.684224538462379, 
+      lng: 80.02292933973115
     },
-    zoom: 11
+    zoom: 16
   };
 
   let info = `
@@ -32,11 +32,11 @@ function Contact() {
   return (
     <>
       <Container className={`${styless.contactContainer} ${'mt-4 d-flex justify-content-center'}`}>
-        <img src='https://demo.epic-webdesign.com/tf-pacifico/v1/images/team1a.jpg' alt='pic' width='18%' />
-        <img src='https://demo.epic-webdesign.com/tf-pacifico/v1/images/team1a.jpg' alt='pic' width='18%' />
-        <img src='https://demo.epic-webdesign.com/tf-pacifico/v1/images/team1a.jpg' alt='pic' width='18%' />
-        <img src='https://demo.epic-webdesign.com/tf-pacifico/v1/images/team1a.jpg' alt='pic' width='18%' />
-        <img src='https://demo.epic-webdesign.com/tf-pacifico/v1/images/team1a.jpg' alt='pic' width='18%' />
+        <img src='https://demo.epic-webdesign.com/tf-pacifico/v1/images/team1a.jpg' className={styless.contactImg} alt='pic' width='18%' />
+        <img src='https://demo.epic-webdesign.com/tf-pacifico/v1/images/team1a.jpg' className={styless.contactImg} alt='pic' width='18%' />
+        <img src='https://demo.epic-webdesign.com/tf-pacifico/v1/images/team1a.jpg' className={styless.contactImg} alt='pic' width='18%' />
+        <img src='https://demo.epic-webdesign.com/tf-pacifico/v1/images/team1a.jpg' className={styless.contactImg} alt='pic' width='18%' />
+        <img src='https://demo.epic-webdesign.com/tf-pacifico/v1/images/team1a.jpg' className={styless.contactImg} alt='pic' width='18%' />
       </Container>
       <Container className={`${styless.contactContainer} ${'mt-4'}`}>
         <p>{info}</p>

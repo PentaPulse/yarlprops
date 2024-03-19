@@ -1,12 +1,8 @@
 import React from 'react'
-import { Card, Button } from 'react-bootstrap'
-import { authUser } from '../../../../backend/autharization'
-import { Signin } from '../../../common/sign/Sign'
+import { Card} from 'react-bootstrap'
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-//import Button from 'react-bootstrap/Button';
-//import Card from 'react-bootstrap/Card';
 import { FaAngleRight } from "react-icons/fa";
 
 const blogData = [
@@ -39,11 +35,6 @@ const blogData = [
 
 
 function ProductsContents() {
-  const handleReadmore=()=>{
-    if(!authUser.currentUser){
-        <Signin/>
-    }
-  }
   return (
     <div>
       <section id="blog" className="block blog-block">

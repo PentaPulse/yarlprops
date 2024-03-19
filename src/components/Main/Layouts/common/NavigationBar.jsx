@@ -64,7 +64,6 @@ function NavigationBar({ handleSigninButton }) {
                             </NavDropdown>
                             <Nav.Link href='/guide'>Guide</Nav.Link>
                             <Nav.Link href='/contact'>Contact</Nav.Link>
-                            <Nav.Link href='/about'>About Us</Nav.Link>
                             {user ?
                                 <div className={styles.naviToggle}>
                                     <Nav.Link onClick={handleProfilePicture}><img alt='pp' src={photo} className='rounded' width={30} onLoad={handleLoading}/></Nav.Link>

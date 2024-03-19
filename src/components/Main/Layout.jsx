@@ -3,10 +3,6 @@ import NavigationBar from './Layouts/common/NavigationBar'
 import { Modal } from 'react-bootstrap';
 import { Signin, Signup } from '../common/sign/Sign';
 import Footer from './Layouts/common/Footer';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from './Layouts/Home/Home';
-import Guide from './Layouts/Guide/Guide';
-import Contact from './Layouts/Contact/Contact';
 function Layout({children}) {
     const [open, setOpen] = useState(false);
     const [toggle, setToggle] = useState(true);
