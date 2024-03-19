@@ -2,7 +2,9 @@ import React from 'react';
 import { Button, Col, Container, FloatingLabel, Form, Row } from 'react-bootstrap';
 import GoogleMapReact from 'google-map-react';
 
-import styless from '../../Home.module.css'
+import styless from '../../Home.module.css';
+
+
 function Contact() {
   const defaultProps = {
     center: {
@@ -12,18 +14,33 @@ function Contact() {
     zoom: 11
   };
 
+  let info = `
+
+  Welcome to YarlProps, where simplicity meets efficiency in managing your rental properties. At YarlProps, we understand the challenges property managers and landlords face in juggling multiple properties, tenants, and administrative tasks. That's why we've developed a comprehensive solution tailored to streamline the rental management process, empowering you to focus on what matters most – growing your business and providing exceptional service to your tenants.
+
+  Founded with a vision to revolutionize the way rental properties are managed, YarlProps brings together cutting-edge technology and industry expertise to offer a user-friendly platform that caters to the diverse needs of property owners and managers alike. Whether you're managing a single apartment complex or an extensive portfolio of properties, our platform is designed to scale seamlessly, providing robust features and customizable options to suit your unique requirements.
+  
+  At YarlProps, we prioritize simplicity without compromising on functionality. Our intuitive interface makes it easy to navigate through essential tasks such as tenant screening, lease management, rent collection, maintenance requests, and financial reporting. With automated reminders and notifications, you can stay on top of critical deadlines and ensure smooth operations at all times.
+  
+  We pride ourselves on delivering exceptional customer service and ongoing support to our clients. Our dedicated team is committed to providing personalized assistance and guidance every step of the way, ensuring that you maximize the full potential of our platform to optimize your rental management processes.
+  
+  Join countless property owners and managers who have embraced the future of rental management with YarlProps. Experience the difference today and discover a simpler, more efficient way to manage your rental properties. Welcome to the future of rental management with YarlProps.
+  
+  
+  `;
+
   return (
     <>
       <Container className={`${styless.contactContainer} ${'mt-4'}`}>
-        <img src='/sample/profile.svg' width='20%' />
-        <img src='/sample/profile.svg' width='20%' />
-        <img src='/sample/profile.svg' width='20%' />
-        <img src='/sample/profile.svg' width='20%' />
-        <img src='/sample/profile.svg' width='20%' />
+        <img src='https://demo.epic-webdesign.com/tf-pacifico/v1/images/team1a.jpg' alt='pic' className={`${styless.contactImageRound}`} width='18%' />
+        <img src='https://demo.epic-webdesign.com/tf-pacifico/v1/images/team1a.jpg' alt='pic' className={`${styless.contactImageRound}`} width='18%' />
+        <img src='https://demo.epic-webdesign.com/tf-pacifico/v1/images/team1a.jpg' alt='pic' className={`${styless.contactImageRound}`} width='18%' />
+        <img src='https://demo.epic-webdesign.com/tf-pacifico/v1/images/team2a.jpg' alt='pic' className={`${styless.contactImageRound}`} width='18%' />
+        <img src='https://demo.epic-webdesign.com/tf-pacifico/v1/images/team2a.jpg' alt='pic' className={`${styless.contactImageRound}`} width='18%' />
       </Container>
       <Container className={`${styless.contactContainer} ${'mt-4'}`}>
-        <p>"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"</p>
-      </Container>
+        <p>{info}</p>
+        </Container>
       <Container className={`${styless.contactContainer} ${'mt-4'}`}>
         <Row>
           <Col>

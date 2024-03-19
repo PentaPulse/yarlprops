@@ -188,6 +188,15 @@ body,input,textarea,a{
     background: #34b399;
 }
 
+.contactImageRound{
+
+   
+    border-radius: 50%;
+    margin: 0 auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    margin-right: 1%;
+}
+
 
 @media (max-width: 768px) {
     .boxWrapper{
