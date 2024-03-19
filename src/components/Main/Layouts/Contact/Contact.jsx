@@ -31,12 +31,12 @@ function Contact() {
 
   return (
     <>
-      <Container className={`${styless.contactContainer} ${'mt-4'}`}>
-        <img src='https://demo.epic-webdesign.com/tf-pacifico/v1/images/team1a.jpg' alt='pic' className={`${styless.contactImageRound}`} width='18%' />
-        <img src='https://demo.epic-webdesign.com/tf-pacifico/v1/images/team1a.jpg' alt='pic' className={`${styless.contactImageRound}`} width='18%' />
-        <img src='https://demo.epic-webdesign.com/tf-pacifico/v1/images/team1a.jpg' alt='pic' className={`${styless.contactImageRound}`} width='18%' />
-        <img src='https://demo.epic-webdesign.com/tf-pacifico/v1/images/team2a.jpg' alt='pic' className={`${styless.contactImageRound}`} width='18%' />
-        <img src='https://demo.epic-webdesign.com/tf-pacifico/v1/images/team2a.jpg' alt='pic' className={`${styless.contactImageRound}`} width='18%' />
+      <Container className={`${styless.contactContainer} ${'mt-4 d-flex justify-content-center'}`}>
+        <img src='https://demo.epic-webdesign.com/tf-pacifico/v1/images/team1a.jpg' alt='pic' width='18%' />
+        <img src='https://demo.epic-webdesign.com/tf-pacifico/v1/images/team1a.jpg' alt='pic' width='18%' />
+        <img src='https://demo.epic-webdesign.com/tf-pacifico/v1/images/team1a.jpg' alt='pic' width='18%' />
+        <img src='https://demo.epic-webdesign.com/tf-pacifico/v1/images/team1a.jpg' alt='pic' width='18%' />
+        <img src='https://demo.epic-webdesign.com/tf-pacifico/v1/images/team1a.jpg' alt='pic' width='18%' />
       </Container>
       <Container className={`${styless.contactContainer} ${'mt-4'}`}>
         <p>{info}</p>
