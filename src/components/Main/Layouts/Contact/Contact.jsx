@@ -1,14 +1,12 @@
 import React from 'react';
 import { Button, Col, Container, FloatingLabel, Form, Row } from 'react-bootstrap';
 import GoogleMapReact from 'google-map-react';
-
 import styless from '../../Home.module.css';
-
 
 function Contact() {
   const defaultProps = {
     center: {
-      lat: 9.684224538462379, 
+      lat: 9.684224538462379,
       lng: 80.02292933973115
     },
     zoom: 16
@@ -32,15 +30,21 @@ function Contact() {
   return (
     <>
       <Container className={`${styless.contactContainer} ${'mt-4 d-flex justify-content-center'}`}>
-        <img src='https://demo.epic-webdesign.com/tf-pacifico/v1/images/team1a.jpg' className={styless.contactImg} alt='pic' width='18%' />
-        <img src='https://demo.epic-webdesign.com/tf-pacifico/v1/images/team1a.jpg' className={styless.contactImg} alt='pic' width='18%' />
-        <img src='https://demo.epic-webdesign.com/tf-pacifico/v1/images/team1a.jpg' className={styless.contactImg} alt='pic' width='18%' />
-        <img src='https://demo.epic-webdesign.com/tf-pacifico/v1/images/team1a.jpg' className={styless.contactImg} alt='pic' width='18%' />
-        <img src='https://demo.epic-webdesign.com/tf-pacifico/v1/images/team1a.jpg' className={styless.contactImg} alt='pic' width='18%' />
+          <h2>OUR TEAM</h2>
+        <Row>
+          <Col>
+            <img src='/sample/profile.svg' className={styless.contactImg} alt='pic' width='18%' />
+            <img src='/sample/profile.svg' className={styless.contactImg} alt='pic' width='18%' />
+            <img src='/sample/profile.svg' className={styless.contactImg} alt='pic' width='18%' />
+            <img src='/sample/profile.svg' className={styless.contactImg} alt='pic' width='18%' />
+            <img src='/sample/profile.svg' className={styless.contactImg} alt='pic' width='18%' />
+          </Col>
+        </Row>
+
       </Container>
       <Container className={`${styless.contactContainer} ${'mt-4'}`}>
         <p>{info}</p>
-        </Container>
+      </Container>
       <Container className={`${styless.contactContainer} ${'mt-4'}`}>
         <Row>
           <Col>
