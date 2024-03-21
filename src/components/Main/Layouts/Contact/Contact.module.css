@@ -1,0 +1,19 @@
+.contactInfo h2 {
+    text-align: center;
+}
+
+.contactInfo h4 {
+    margin-left: 10%;
+}
+
+.contactInfo p {
+    margin-left: 20%;
+}
+
+.contactInfo iframe {
+    margin: auto;
+}
+
+.contactForm h2 {
+    text-align: center;
+}

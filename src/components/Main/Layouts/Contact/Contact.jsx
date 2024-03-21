@@ -56,7 +56,7 @@ function ContactComps() {
 function ContactInfo() {
     return (
         <>
-            <div>
+            <div className={styles.contactInfo}>
                 <h2>We are here</h2>
                 <h4>Email us : </h4>
                 <p>penta5pulse@gmail.com</p>
@@ -74,7 +74,9 @@ function ContactInfo() {
 function ContactForm() {
     return (
         <>
-
+        <div className={styles.contactForm}></div>
+            <h2>Feel free to contact us</h2>
+            
         </>
     )
 }
