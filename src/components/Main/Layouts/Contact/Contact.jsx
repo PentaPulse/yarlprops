@@ -2,6 +2,10 @@ import React from 'react'
 import styles from './Contact.module.css'
 import { Col, Container, Row } from 'react-bootstrap'
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPhone, faEnvelope, faLocationDot } from '@fortawesome/free-solid-svg-icons';
+
+
 function About() {
     return (
         <>
