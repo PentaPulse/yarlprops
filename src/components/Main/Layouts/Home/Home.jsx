@@ -8,7 +8,7 @@ import ProductsContents from './ProductsContents'
 function Home({handleBuy}) {
   return (
     <>
-      <Container className={styles.panelContainer}>
+      <Container className={styles.mContainer}>
         <Row>
           <Col className='mt-2'>
             <Slidshow />

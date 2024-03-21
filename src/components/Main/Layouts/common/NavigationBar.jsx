@@ -3,9 +3,11 @@ import { Button, Container, Nav, NavDropdown, Navbar, Spinner } from 'react-boot
 import styles from "../../Home.module.css"
 import { onAuthStateChanged } from 'firebase/auth';
 import { authUser } from '../../../../backend/autharization';
+import { useNavigate } from 'react-router-dom';
 
 function NavigationBar({ handleSigninButton }) {
     const [user, setUser] = useState(null);
+    const navigate=useNavigate()
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(authUser, (user) => {
@@ -30,7 +32,7 @@ function NavigationBar({ handleSigninButton }) {
     }
 
     const handleProfilePicture=()=>{
-
+        navigate('/profile');
     }
     const handleSignout = () => {
         authUser.signOut();
@@ -42,7 +44,7 @@ function NavigationBar({ handleSigninButton }) {
 
     return (
         <>
-            <Navbar expand="md" className={styles.naviContainer}>
+            <Navbar fixed='top' expand="md" className={styles.myContainer}>
                 <Container className='ml-4'>
                     <Navbar.Brand href="/" className='m-0'>YarlProps</Navbar.Brand >
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -76,6 +78,7 @@ function NavigationBar({ handleSigninButton }) {
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
+            <br/>
         </>
     );
 }
