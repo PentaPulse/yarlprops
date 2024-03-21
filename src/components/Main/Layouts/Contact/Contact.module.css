@@ -2,116 +2,10 @@ body,input,textarea,a{
     font-family:'Roboto',sans-serif;
 }
 
-
-.sectionWrapper{
-    width:100%;
-    padding:10px;
-    
-}
-/*.contactMap{
-    margin-top: 200px;
-    margin-left:1220px;
-    
-
-    
-    
-}*/
-
-
-.boxWrapper{
-    position:relative;
-    display:table;
-    width: 1100px;
-    margin:auto;
-    margin-top:100px;
-    margin-left: 20px;
-    border-radius: 30px;
-    box-shadow: 0 8px 32px 0 rgb(31,38,135,0.37);
-    
-
-}
-
-.infoWrapper{
-    width: 35%;
-    height: 551px;
-    padding: 40px;
-    float: left;
-    display: block;
-    border-radius: 30px 0px 0px 30px;
-    background: linearGradient(144deg,rgb(2, 14, 17) 20%,rgb(150,12,143) 49%);
-    color: #fff;
-}
-
-.infoTitle{
-    text-align: left;
-    font-size: 40px;
-    letter-spacing: 0.5px;
-}
-
-.infoSubTitle{
-    font-size: 20px;
-    font-weight: 370;
-    margin-top: 17px;
-    letter-spacing: 0.5px;
-    line-height: 26px;
-}
-
-.infoDetails{
-    list-style: none;
-    margin: 60px 0px;
-}
-
-.infoDetails li{
-    margin-top: 25px;
-    font-size: 18px;
-    font-weight: 500;
-    color: #fff;
-}
-
-.infoDetails li i{
-    background: #5b595a;
-    padding: 8px;
-    border-radius: 50%;
-    margin-right: 15px;
-}
-
-
-
-/*.socialIcons{
-    list-style: none;
-    text-align: center;
-    margin:20px 0px;
-}
-
-.socialIcons li{
-    margin-top: 25px;
-    display: inline-block;
-}
-
-.socialIcons li i{
-    background:#211c1e;
-    color: #fff;
-    padding: 15px;
-    font-size: 20px;
-    border-radius: 22%;
-    margin: 0px 5px;
-    cursor: pointer;
-    transition: all 0.5s;
-
-}
-
-.socialIcons li i:hover{
-    background:  #fff;
-    color: #000000;
-}*/
-
-
 .formWrapper{
-    width: 65%;
-    float:right;
+    width: 100%;
     padding: 40px 25px 35px 25px;
-    border-radius: 0px 30px 30px 0px;
-    
+    border-radius: 30px 30px 30px 30px;    
     background: #ecf0f3;
 }
 .formTitle{
@@ -137,27 +31,6 @@ body,input,textarea,a{
     width: 100%;
 
 }
-.radioGroup {
-    display: flex;
-    align-items: center;
-  }
-  
-  .radioOption {
-    padding: 20px 10px 20px 5px;
-    align-items: left;
-    margin-right: 5px; /* Adjust the spacing between radio buttons */
-  }
-  
-  .radioOption label {
-    margin-left: 5px;
-    color: #5b595a;
-    align-items: left;
-    
-  }
-  
-  
-
-
 
 .formFields textarea{
     height: 150px;
@@ -166,14 +39,18 @@ body,input,textarea,a{
 
 .formGroup{
     width: 46%;
-    float: left;
     padding: 0px 30px;
     margin: 14px 12px;
     border-radius: 25px;
     box-shadow: inset 8px 8px 8px #cbced1, inset -8px -8px 8px #ffffff;
 }
 
-
+.formEmail{
+    padding: 0px 30px;
+    margin: 14px 12px;
+    border-radius: 25px;
+    box-shadow: inset 8px 8px 8px #cbced1, inset -8px -8px 8px #ffffff;
+}
 
 .formFields .formGroup:last-child{
     width: 96%;
@@ -199,36 +76,4 @@ body,input,textarea,a{
 
 .submitButton:hover{
     background: #34b399;
-}
-
-
-@media only screen and (max-width: 767px) {
-    .boxWrapper{
-        width: 100%;
-    }
-    .infoWrapper,
-    .formWrapper{
-        width: 100%;
-        height: inherit;
-        float: none;  
-    }
-    .infoWrapper{
-        border-radius: 30px 30px 0px 0px;
-    }
-    .formWrapper{
-        border-radius: 0px 0px 30px 30px;
-    }
-    .formGroup{
-        width: 100%;
-        float: none;
-        margin: 25px 0px;
-    }
-    .form-fields .formGroup:last-child, 
-    .submit-button{
-        width: 100%;
-    }
-    .submit-button{
-        margin: 10px 0px;
-    }
-   
 }

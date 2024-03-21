@@ -61,7 +61,7 @@ function NavigationBar({ handleSigninButton }) {
                 <Container className='ml-4'>
                     <Navbar.Brand href="/" className='m-0'>YarlProps</Navbar.Brand >
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                            <Nav.Link><img src='mode/sun.svg' width={30} /></Nav.Link>
+                    <Nav.Link><img src='mode/sun.svg' width={30} /></Nav.Link>
                     <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
                         <Nav>
                             <Nav.Link href="/">Home</Nav.Link>
@@ -82,7 +82,7 @@ function NavigationBar({ handleSigninButton }) {
                             <Nav.Link href='/contact'>Contact</Nav.Link>
                             {user ?
                                 <div className={styles.naviToggle}>
-                                    <Nav.Link onClick={handleShow}><img alt='pp' src={photo} className='rounded' width={50} /></Nav.Link>
+                                    <Nav.Link onClick={handleShow}><img alt='pp' src={photo} style={{ borderRadius: '100%' , width:40}} /></Nav.Link>
                                     <Profile show={show} handleClose={handleClose} photo={photo} />
                                 </div>
                                 :
