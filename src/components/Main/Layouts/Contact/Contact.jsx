@@ -15,7 +15,7 @@ function Photos() {
     return (
         <>
             <Container>
-
+                <h2 align='center'>OUR TEAM</h2>
                 <img src='/sample/profile.svg' className={styles.contactImg} alt='pic' width='18%' />
                 <img src='/sample/profile.svg' className={styles.contactImg} alt='pic' width='18%' />
                 <img src='/sample/profile.svg' className={styles.contactImg} alt='pic' width='18%' />
@@ -30,7 +30,7 @@ function InfoPP() {
     return (
         <>
             <Container>
-
+                <p align='center'>Welcome all for YarlProps System. In our system you can buy and rent any item as your wish.  </p>
             </Container>
         </>
     )
