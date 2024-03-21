@@ -1,14 +1,38 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Container, Nav, NavDropdown, Navbar, Spinner } from 'react-bootstrap'
-import styles from "../../Home.module.css"
+import { Button, Container, Nav, NavDropdown, Navbar, Offcanvas } from 'react-bootstrap'
+import styles from "./Navigation.module.css"
 import { onAuthStateChanged } from 'firebase/auth';
-import { authUser } from '../../../../backend/autharization';
-import { useNavigate } from 'react-router-dom';
+import { authUser } from '../../../backend/autharization';
+import { Link } from 'react-router-dom';
+
+function Profile({ show, handleClose, photo }) {
+    const handleSignout = () => {
+        authUser.signOut()
+    }
+    return (
+        <>
+            <Offcanvas show={show} onHide={handleClose} placement='end' scroll>
+                <Offcanvas.Header closeButton>
+                    <Offcanvas.Title><img alt='pp' src={photo} className='rounded' width={50} />{authUser.currentUser.displayName}</Offcanvas.Title>
+                </Offcanvas.Header>
+                <hr />
+                <Offcanvas.Body>
+                    <Link to='/profile' onClick={handleClose}>Your Profile</Link>
+                    <hr />
+                    <Button onClick={handleSignout}>Sign out</Button>
+                </Offcanvas.Body>
+            </Offcanvas>
+        </>
+    );
+}
 
 function NavigationBar({ handleSigninButton }) {
-    const [user, setUser] = useState(null);
-    const navigate=useNavigate()
+    const [show, setShow] = useState(false);
 
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+    const [user, setUser] = useState(null);
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(authUser, (user) => {
             setUser(user);
@@ -18,36 +42,26 @@ function NavigationBar({ handleSigninButton }) {
             unsubscribe();
         };
     }, []);
-    let photo=''
-    try{
-        if(authUser.currentUser.photoURL){
+    let photo = ''
+    try {
+        if (authUser.currentUser.photoURL) {
             photo = authUser.currentUser.photoURL
         }
-        else{
+        else {
             photo = '/sample/profile.svg'
         }
-        
-    }catch(e){
-            console.log(e)
-    }
 
-    const handleProfilePicture=()=>{
-        navigate('/profile');
-    }
-    const handleSignout = () => {
-        authUser.signOut();
-    };
-
-    const handleLoading =()=>{
-        <Spinner animation="border" role="status"/>
+    } catch (e) {
+        console.log(e)
     }
 
     return (
         <>
-            <Navbar fixed='top' expand="md" className={styles.myContainer}>
+            <Navbar fixed='top' expand="md" className={styles.navigationBarContainer}>
                 <Container className='ml-4'>
                     <Navbar.Brand href="/" className='m-0'>YarlProps</Navbar.Brand >
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                            <Nav.Link><img src='mode/sun.svg' width={30} /></Nav.Link>
                     <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
                         <Nav>
                             <Nav.Link href="/">Home</Nav.Link>
@@ -68,8 +82,8 @@ function NavigationBar({ handleSigninButton }) {
                             <Nav.Link href='/contact'>Contact</Nav.Link>
                             {user ?
                                 <div className={styles.naviToggle}>
-                                    <Nav.Link onClick={handleProfilePicture}><img alt='pp' src={photo} className='rounded' width={30} onLoad={handleLoading}/></Nav.Link>
-                                    <Button variant='dark' onClick={handleSignout}>Sign out</Button>
+                                    <Nav.Link onClick={handleShow}><img alt='pp' src={photo} className='rounded' width={50} /></Nav.Link>
+                                    <Profile show={show} handleClose={handleClose} photo={photo} />
                                 </div>
                                 :
                                 <Button variant='dark' onClick={handleSigninButton}>Sign in</Button>
@@ -78,7 +92,7 @@ function NavigationBar({ handleSigninButton }) {
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-            <br/>
+            <br />
         </>
     );
 }

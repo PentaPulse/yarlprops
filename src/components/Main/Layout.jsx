@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
-import NavigationBar from './Layouts/common/NavigationBar'
 import { Modal } from 'react-bootstrap';
 import { Signin, Signup } from '../common/sign/Sign';
-import Footer from './Layouts/common/Footer';
+import NavigationBar from '../common/NavigationBar/NavigationBar';
+import Footer from '../common/Footer';
+
 function Layout({children}) {
     const [open, setOpen] = useState(false);
     const [toggle, setToggle] = useState(true);
