@@ -15,6 +15,7 @@ function Photos() {
     return (
         <>
             <Container>
+
                 <img src='/sample/profile.svg' className={styles.contactImg} alt='pic' width='18%' />
                 <img src='/sample/profile.svg' className={styles.contactImg} alt='pic' width='18%' />
                 <img src='/sample/profile.svg' className={styles.contactImg} alt='pic' width='18%' />
@@ -28,12 +29,33 @@ function Photos() {
 function InfoPP() {
     return (
         <>
+            <Container>
 
+            </Container>
         </>
     )
 }
 
 function ContactComps() {
+    return (
+        <>
+            <Container>
+                <ContactInfo />
+                <ContactForm />
+            </Container>
+        </>
+    )
+}
+
+function ContactInfo() {
+    return (
+        <>
+
+        </>
+    )
+}
+
+function ContactForm() {
     return (
         <>
 
