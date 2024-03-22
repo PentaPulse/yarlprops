@@ -8,27 +8,29 @@ function Photos() {
   return (
     <Container style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <Row>
-        <Col>
-        <img src={authUser.currentUser.photoURL} alt='pic' width='200%' style={{ borderRadius: '100%'}} />
-        </Col>
-        <Col>
-        <h1>{authUser.currentUser.displayName}</h1>
+        <div style={{ display: 'flex', alignItems: 'center', marginTop: '140px' }}>
+          <Col>
+            <img src={authUser.currentUser.photoURL} alt='pic' width='100%' style={{ borderRadius: '100%' }} />
+          </Col>
+          <Col>
+            <Row><Col>
+              <div style={{ marginLeft: 'auto' }}>
+                <Card style={{ width: '50rem' }}>
+                  <Card.Body>
+                    <Card.Title><h1>{authUser.currentUser.displayName}</h1></Card.Title>
+                    <Card.Body><h4>{authUser.currentUser.email}</h4></Card.Body>
+                    <Card.Body><h4>{authUser.currentUser.phoneNumber || 'Your phonenumber'}</h4></Card.Body>
+                  </Card.Body>
+                </Card>
+              </div>
+            </Col>{/** *
+          <Col><h1>{authUser.currentUser.displayName}</h1></Col>
+          <Col><h4>{authUser.currentUser.email}</h4></Col>
+  <Col><h4>{authUser.currentUser.phoneNumber || 'Your phonenumber'}</h4></Col>*/}
+            </div>
+          </Row>
         </Col>
       </Row>
-      <div style={{ display: 'flex', alignItems: 'center', marginTop: '140px' }}>
-        <div>
-          
-        </div>
-        <div style={{ marginLeft: 'auto' }}>
-          <Card style={{ width: '50rem' }}>
-            <Card.Body>
-              <Card.Title><h1>{authUser.currentUser.displayName}</h1></Card.Title>
-              <Card.Body><h4>{authUser.currentUser.email}</h4></Card.Body>
-              <Card.Body><h4>{authUser.currentUser.phoneNumber || 'Your phonenumber'}</h4></Card.Body>
-            </Card.Body>
-          </Card>
-        </div>
-      </div>
       <br />
       <Container style={{ width: '100rem', marginTop: '20px' }}>
         <Accordion>

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Col, Container, Row } from 'react-bootstrap'
 import Slidshow from './Slidshow'
-import SearchAndFilters from './SearchAndFilters'
+import SearchAndFilters from './SearchAndFilters/SearchAndFilters'
 import ProductsContents from './ProductsContents'
 
 function Home({handleBuy}) {
