@@ -13,7 +13,8 @@ function Photos() {
             <img src={authUser.currentUser.photoURL} alt='pic' width='100%' style={{ borderRadius: '100%' }} />
           </Col>
           <Col>
-            <Row><Col>
+            <Row>
+              <Col>
               <div style={{ marginLeft: 'auto' }}>
                 <Card style={{ width: '50rem' }}>
                   <Card.Body>
@@ -23,13 +24,13 @@ function Photos() {
                   </Card.Body>
                 </Card>
               </div>
-            </Col>{/** *
-          <Col><h1>{authUser.currentUser.displayName}</h1></Col>
-          <Col><h4>{authUser.currentUser.email}</h4></Col>
-  <Col><h4>{authUser.currentUser.phoneNumber || 'Your phonenumber'}</h4></Col>*/}
-            </div>
-          </Row>
+              </Col>{/** *
+                  <Col><h1>{authUser.currentUser.displayName}</h1></Col>
+                  <Col><h4>{authUser.currentUser.email}</h4></Col>
+                  <Col><h4>{authUser.currentUser.phoneNumber || 'Your phonenumber'}</h4></Col>*/}
+            </Row>
         </Col>
+        </div>
       </Row>
       <br />
       <Container style={{ width: '100rem', marginTop: '20px' }}>
