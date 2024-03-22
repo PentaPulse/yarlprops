@@ -3,11 +3,13 @@ import { Button, Container, Nav, NavDropdown, Navbar, Offcanvas } from 'react-bo
 import styles from "./Navigation.module.css"
 import { onAuthStateChanged } from 'firebase/auth';
 import { authUser } from '../../../backend/autharization';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Profile({ show, handleClose, photo }) {
+    const navigate=useNavigate()
     const handleSignout = () => {
         authUser.signOut()
+        navigate('/')
     }
     return (
         <>

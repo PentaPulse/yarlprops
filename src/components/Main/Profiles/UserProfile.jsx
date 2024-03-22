@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container } from 'react-bootstrap';
+import { Col, Container, Row } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import Accordion from 'react-bootstrap/Accordion';
 import { authUser } from '../../../backend/autharization';
@@ -7,9 +7,17 @@ import { authUser } from '../../../backend/autharization';
 function Photos() {
   return (
     <Container style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <Row>
+        <Col>
+        <img src={authUser.currentUser.photoURL} alt='pic' width='200%' style={{ borderRadius: '100%'}} />
+        </Col>
+        <Col>
+        <h1>{authUser.currentUser.displayName}</h1>
+        </Col>
+      </Row>
       <div style={{ display: 'flex', alignItems: 'center', marginTop: '140px' }}>
         <div>
-          <img src={authUser.currentUser.photoURL} alt='pic' width='40%' style={{ borderRadius: '100%', width: '90%', height: 'auto' }} />
+          
         </div>
         <div style={{ marginLeft: 'auto' }}>
           <Card style={{ width: '50rem' }}>
