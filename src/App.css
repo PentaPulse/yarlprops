@@ -1,6 +1,6 @@
 body{
     background-color: #ffffff;
-    background-image: linear-gradient(315deg, #ffffff 0%, #91a6ff 74%);
+    background-image: linear-gradient(to bottom, #d2d1d1, #ffffff 74%, #d2d1d1);
 }
 
 body .dark{

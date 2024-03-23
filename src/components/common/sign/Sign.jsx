@@ -1,4 +1,4 @@
-import { GoogleAuthProvider, OAuthProvider, createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, updateProfile } from 'firebase/auth';
+import { GoogleAuthProvider, createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, updateProfile } from 'firebase/auth';
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { authUser } from '../../../backend/autharization';
@@ -38,47 +38,12 @@ function SocialLogins() {
                 toast.warning(errorCode, ' : ', errorMessage)
             })
     }
-    const handleSigninWithMicrosoft = () => {
-        const provider = new OAuthProvider('microsoft.com');
-        signInWithPopup(authUser, provider)
-            .then((result) => {
-                const credential = OAuthProvider.credentialFromResult(result)
-                const token = credential.accessToken
-                const user = result.user
-                console.log(token)
-                console.log(user)
-                navigate('/')
-            })
-            .catch((error) => {
-                const errorCode = error.code
-                const errorMessage = error.message
-                toast.warning(errorCode, ' : ', errorMessage)
-            })
-    }
     return (
         <>
             <button className='btn border-dark w-100 mt-4 d-flex justify-content-center align-items-center' onClick={handleSigninWithGoogle}>
                 <div className="d-flex justify-content-start align-items-center w-50">
                     <img className='me-4' src="social-icons/google.svg" alt="" width={25} />
                     <span>Google</span>
-                </div>
-            </button>
-            <button className='btn border-dark w-100 mt-4 d-flex justify-content-center align-items-center'>
-                <div className="d-flex justify-content-start align-items-center w-50">
-                    <img className='me-4' src="social-icons/facebook.svg" alt="" width={25} />
-                    <span>Facebook</span>
-                </div>
-            </button>
-            <button className='btn border-dark w-100 mt-4 d-flex justify-content-center align-items-center'>
-                <div className="d-flex justify-content-start align-items-center w-50">
-                    <img className='me-4' src="social-icons/github.svg" alt="" width={25} />
-                    <span>Github</span>
-                </div>
-            </button>
-            <button className='btn border-dark w-100 mt-4 d-flex justify-content-center align-items-center' onClick={handleSigninWithMicrosoft}>
-                <div className="d-flex justify-content-start align-items-center w-50">
-                    <img className='me-4' src="social-icons/microsoft.svg" alt="" width={25} />
-                    <span>Microsoft</span>
                 </div>
             </button>
         </>
@@ -193,7 +158,7 @@ function SignupMethods({ toggleSignin, handleSignupWithEmail }) {
     return (
         <>
             <div className="methods d-flex flex-column justify-content-center align-items-center">
-                <SocialLogins/>
+                <SocialLogins />
                 <button className='btn border-dark w-100 mt-4 d-flex justify-content-center align-items-center' onClick={handleSignupWithEmail}>
                     <div className="d-flex justify-content-start align-items-center w-50">
                         <img className='me-4' src="social-icons/email.svg" alt="" width={25} />

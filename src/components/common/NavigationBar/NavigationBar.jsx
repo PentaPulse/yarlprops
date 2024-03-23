@@ -63,7 +63,7 @@ function NavigationBar({ handleSigninButton }) {
                 <Container className='ml-4'>
                     <Navbar.Brand href="/" className='m-0'>YarlProps</Navbar.Brand >
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                    <Nav.Link><img src='mode/sun.svg' width={30} /></Nav.Link>
+                    <Nav.Link><img alt="" src='mode/sun.svg' width={30} /></Nav.Link>
                     <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
                         <Nav>
                             <Nav.Link href="/">Home</Nav.Link>

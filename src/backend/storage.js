@@ -1,7 +1,9 @@
+import firebase from "firebase/compat/app";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
-import { app } from "./configs";
 import { updateProfile } from "firebase/auth";
+import { firebaseConfig } from "./configs";
 
+const app=firebase.initializeApp(firebaseConfig)
 const storage = getStorage(app);
 
 function uploadProfilePicture(user, pp) {
