@@ -27,3 +27,126 @@ background-image: linear-gradient(315deg, #2b4162 0%, #12100e 74%);
 
 
 */
+
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap");
+.App {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  font-family: "Nunito", sans-serif;
+  background-image: linear-gradient(90deg, #410076, #8820dd);
+}
+body {
+  padding: 0;
+  margin: 0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+  }
+  
+  .nav_ul li {
+    padding: 0 0.6rem;
+  }
+  
+  .nav_ul a {
+    font-size: 1.05rem;
+    color: #000 !important;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+  }
+  
+  .btn1 {
+    border: 0;
+    padding: 0.5rem 1.8rem;
+    color: #fff;
+    background-color: #01193c;
+  }
+  
+  .btn2 {
+    border: 0;
+    padding: 0.5rem 1.2rem;
+    color: #fff;
+    background-color: #e005aabe;
+  }
+  
+  .Footer {
+    padding: 2rem 0;
+    margin-top: 15rem;
+  }
+  
+  .ft-1 h3 {
+    font-weight: 700;
+    font-family: cursive;
+    letter-spacing: 2px;
+    padding: 0.5rem 0;
+  }
+  
+  .ft-1 span {
+    color: #e005aabe;
+  }
+  
+  .ft-1 p {
+    padding: 0rem 5rem 0.8rem 0;
+    font-weight: 500;
+  }
+  
+  .footer-icons i {
+    padding: 0.4rem 0.5rem;
+    background: #e1e1e1;
+    color: #e005aabe;
+    margin: 0 0.5rem;
+    border-radius: 50%;
+  }
+  
+  .footer-icons i:hover {
+    background: #e005aabe;
+    color: #fff;
+    transition: 0.6s;
+    cursor: pointer;
+  }
+  
+  .Footer h5 {
+    color: #e005aabe;
+  }
+  
+  .ft-2 ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  
+  .ft-2 ul li {
+    padding: 0.35rem 0;
+    font-weight: 500;
+  }
+  
+  .ft-2 ul a {
+    text-decoration: none;
+    color: #000;
+    font-size: 1.06rem;
+  }
+  
+  .ft-3 p {
+    font-weight: 500;
+    padding: 0.1rem 0;
+    font-size: 1.06rem;
+  }
+  
+  .ft-3 i {
+    padding-right: 0.5rem;
+  }
+  
+  .Last-footer {
+    background: #e005aabe;
+    text-align: center;
+    padding: 1rem 0;
+  }
+  
+  .Last-footer p {
+    margin-bottom: 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
