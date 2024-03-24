@@ -136,7 +136,7 @@ function SigninWithEmail({ handleSigninWithEmail }) {
                     <Button className='mt-3 text-center' variant='dark' type='submit'>Sign in</Button>
                 </Form>
                 <br />
-                <button className='btn mt-3 mb-3' onClick={handleSigninWithEmail}><h5>All sign in options</h5></button>
+                <button className='btn mt-3 mb-3' onClick={handleSigninWithEmail}><h5>Back</h5></button>
             </div>
         </>
     )
@@ -269,7 +269,7 @@ function SignupWithEmail({ handleSignupWithEmail }) {
                     <Button className='mt-3 text-center' variant='dark' type='submit'>Sign up</Button>
                 </Form>
                 <br />
-                <button className='btn mt-3 mb-3' onClick={handleSignupWithEmail}><h5>All sign up options</h5></button>
+                <button className='btn mt-3 mb-3' onClick={handleSignupWithEmail}><h5>Back</h5></button>
             </div>
         </>
     )
