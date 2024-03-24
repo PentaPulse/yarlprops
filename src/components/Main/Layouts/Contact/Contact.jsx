@@ -14,14 +14,63 @@ function About() {
 function Photos() {
     return (
         <>
-            <Container>
-                <h2 align='center'>OUR TEAM</h2>
-                <img src='/sample/profile.svg' className={styles.contactImg} alt='pic' width='18%' />
-                <img src='/sample/profile.svg' className={styles.contactImg} alt='pic' width='18%' />
-                <img src='/sample/profile.svg' className={styles.contactImg} alt='pic' width='18%' />
-                <img src='/sample/profile.svg' className={styles.contactImg} alt='pic' width='18%' />
-                <img src='/sample/profile.svg' className={styles.contactImg} alt='pic' width='18%' />
-            </Container>
+        <h1 className={`${styles.centerHeading}`}>Our Team</h1>
+            <div class={styles.homeContainer}>
+            
+             
+        <div class={styles.profileCard}>
+          
+            <div class={styles.img}>
+            <img src='/sample/man.jpg' alt='pic' width='18%' />
+            </div>
+            <div class={styles.caption}>
+                <h3>Sachintha Wigerathna</h3>
+                <p>Team Leader</p>
+               
+            </div>
+        </div>
+        <div class={styles.profileCard}>
+            <div class={styles.img}>
+            <img src='/sample/man.jpg' alt='pic' width='18%' />
+            </div>
+            <div class={styles.caption}>
+                <h3>Charith Rajapaksha</h3>
+                <p>Team member</p>
+               
+            </div>
+        </div>
+        <div class={styles.profileCard}>
+            <div class={styles.img}>
+            <img src='/sample/man.jpg' alt='pic' width='18%' />
+            </div>
+            <div class={styles.caption}>
+                <h3>Mith Jayakodi</h3>
+                <p>Team member</p>
+               
+            </div>
+        </div>
+        <div class={styles.profileCard}>
+        <div class={styles.img}>
+        <img src='/sample/man.jpg' alt='pic' width='18%' />
+            </div>
+            <div class={styles.caption}>
+                <h3>R.Priyadarshani</h3>
+                <p>Team member</p>
+               
+            </div>
+        </div>
+        <div class={styles.profileCard}>
+        <div class={styles.img}>
+        <img src='/sample/man.jpg' alt='pic' width='18%' />
+            </div>
+            <div class={styles.caption}>
+                <h3>Janani Welipitiya</h3>
+                <p>Team member</p>
+                
+            </div>
+        </div>
+    </div>
+
         </>
     )
 }
@@ -30,7 +79,7 @@ function InfoPP() {
     return (
         <>
             <Container>
-                <p align='center'>Welcome all for YarlProps System. In our system you can buy and rent any item as your wish.  </p>
+                <h3 align='center'>Welcome all for YarlProps System. In our system you can buy and rent any item as your wish.  </h3>
             </Container>
         </>
     )

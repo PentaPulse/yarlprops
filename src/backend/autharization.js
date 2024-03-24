@@ -1,13 +1,13 @@
+import firebase from "firebase/compat/app";
 import { useState, useEffect } from "react";
 import { getAuth} from "firebase/auth";
 import 'firebase/compat/auth';
-import { app } from "./configs";
+import { firebaseConfig } from "./configs";
 
-
-const auth = app.auth;
+firebase.initializeApp(firebaseConfig)
 const authUser = getAuth();
 
-export { auth, authUser };
+export {  authUser };
 
 export const useAuth = () => {
     const [currentUser, setCurrentUser] = useState(null);
