@@ -21,7 +21,7 @@ function Photos() {
         <div class={styles.profileCard}>
           
             <div class={styles.img}>
-            <img src='/sample/man.jpg' alt='pic' width='18%' />
+            <img src='/sample/sachi02.jpg' alt='pic' width='18%' />
             </div>
             <div class={styles.caption}>
                 <h3>Sachintha Wigerathna</h3>
@@ -51,7 +51,7 @@ function Photos() {
         </div>
         <div class={styles.profileCard}>
         <div class={styles.img}>
-        <img src='/sample/man.jpg' alt='pic' width='18%' />
+        <img src='/sample/priya01.jpg' alt='pic' width='18%' />
             </div>
             <div class={styles.caption}>
                 <h3>R.Priyadarshani</h3>
@@ -61,7 +61,7 @@ function Photos() {
         </div>
         <div class={styles.profileCard}>
         <div class={styles.img}>
-        <img src='/sample/man.jpg' alt='pic' width='18%' />
+        <img src='/sample/jan1.jpg' alt='pic' width='18%' />
             </div>
             <div class={styles.caption}>
                 <h3>Janani Welipitiya</h3>
@@ -79,7 +79,7 @@ function InfoPP() {
     return (
         <>
             <Container>
-                <h3 align='center'>Welcome all for YarlProps System. In our system you can buy and rent any item as your wish.  </h3>
+                <p align='center'>Welcome all for YarlProps System. In our system you can buy and rent any item as your wish.  </p>
             </Container>
         </>
     )
