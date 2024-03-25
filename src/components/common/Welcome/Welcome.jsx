@@ -4,24 +4,20 @@ import { useNavigate } from 'react-router-dom';
 import { authUser } from '../../../backend/autharization';
 import { storage } from '../../../backend/storage';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { Button, Col, FloatingLabel, Form, Row, Toast, ToastContainer } from 'react-bootstrap';
+import { Col, FloatingLabel, Form, Row, Toast, ToastContainer } from 'react-bootstrap';
 import { toast } from 'react-toastify';
+import { Button, ButtonGroup, TextField } from '@mui/material';
 
-function Signin({ toggleSignup }) {
-    const [signinWithEmail, setSigninWithEmail] = useState(false);
-    const handleSigninWithEmail = () => {
-        setSigninWithEmail(!signinWithEmail);
-    }
-    return (
-        <>
-            {!signinWithEmail ? <SigninMethods toggleSignup={toggleSignup} handleSigninWithEmail={handleSigninWithEmail} /> : <SigninWithEmail handleSigninWithEmail={handleSigninWithEmail} />}
-        </>
-    )
+const googleStyle = {
+    "border-radius": "100px",
+    width: "80%"
+}
+const inputStyle = {
+    "border-radius": "100px"
 }
 
-function SocialLogins() {
-    const navigate = useNavigate()
-    const handleSigninWithGoogle = () => {
+export function Welcome({ toLogin, toRegister }) {
+    const handleGoogle = () => {
         const provider = new GoogleAuthProvider();
         signInWithPopup(authUser, provider)
             .then((result) => {
@@ -30,7 +26,7 @@ function SocialLogins() {
                 const user = result.user
                 console.log(token)
                 console.log(user)
-                navigate('/')
+                window.location.reload(0)
             })
             .catch((error) => {
                 const errorCode = error.code
@@ -40,29 +36,93 @@ function SocialLogins() {
     }
     return (
         <>
-            <button className='btn border-dark w-100 mt-4 d-flex justify-content-center align-items-center' onClick={handleSigninWithGoogle}>
-                <div className="d-flex justify-content-start align-items-center w-50">
-                    <img className='me-4' src="social-icons/google.svg" alt="" width={25} />
-                    <span>Google</span>
+            <div className='d-flex justify-content-center flex-column'>
+                <h2>Welcome to YarlProps</h2>
+                <span className="btn border text-center" style={googleStyle} onClick={handleGoogle}><img src="social-icons/google.svg" alt="G" width={30} /> Connect with Google</span>
+                <h5>OR</h5>
+                <div className="text-center">
+                    <ButtonGroup aria-label='Basic button group' variant='contained'>
+                        <Button variant='contained' onClick={toLogin}>Login</Button>
+                        <Button variant='contained' onClick={toRegister}>Register</Button>
+                    </ButtonGroup>
                 </div>
-            </button>
+            </div>
         </>
     )
 }
 
-function SigninMethods({ toggleSignup, handleSigninWithEmail }) {
+export function Login({ handleBack }) {
+    const handleLogin = () => {
 
+    }
     return (
         <>
-            <div className="methods d-flex flex-column justify-content-center align-items-center">
-                <SocialLogins />
-                <button className='btn border-dark w-100 mt-4 d-flex justify-content-center align-items-center' onClick={handleSigninWithEmail}>
-                    <div className="d-flex justify-content-start align-items-center w-50">
-                        <img className='me-4' src="social-icons/email.svg" alt="" width={25} />
-                        <span>Sign in with email</span>
-                    </div>
-                </button>
-                <button className='btn mt-4 w-100' onClick={toggleSignup}><h5> No account ? Create one</h5></button>
+        <div className="d-flex flex-column gap-2">
+            <h2>Login</h2>
+            <hr />
+            <div className="d-flex flex-column gap-4">
+            <TextField inputProps={inputStyle} label="Email" />
+            <TextField inputProps={inputStyle} label="Password" />            
+            <span className="a">Forgot Your Password?</span>
+            </div>
+            <div className="text-center">
+            <ButtonGroup aria-label='Vertical button group' className='gap-3'>
+                <Button variant='contained' onClick={handleBack}>Back</Button>
+                <Button variant='contained' onClick={handleLogin}>Login</Button>
+            </ButtonGroup>
+            </div>
+            </div>
+        </>
+    )
+}
+
+export function Register({ handleBack }) {
+    const [fname, setFname] = useState('')
+    const [lname, setLname] = useState('')
+    const [dname, setDname] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const handleFname = (e) => {
+        setFname(e.target.value)
+        setDname(e.target.value + " " + lname)
+    }
+    const handleLname = (e) => {
+        setLname(e.target.value)
+        setDname(fname + " " + e.target.value)
+    }
+    const handleRegister = (e) => {
+        e.preventDefault()
+        createUserWithEmailAndPassword(authUser, email, password)
+        .then((result)=>{
+            const user = result.user;
+            user.displayName = dname;            
+        })
+        .catch((error)=>{
+            const errorMassege = 
+        })
+    }
+    return (
+        <>
+            <div className="d-flex flex-column justify-content-center text-center">
+                <h2>Create account</h2>
+                <hr/>
+                <div className="d-flex flex-column gap-3">
+                <div className="d-flex gap-4 w-100">
+                    <TextField className='w-50' inputProps={inputStyle} label="First name" value={fname} onChange={handleFname} />
+                    <TextField className='w-50' inputProps={inputStyle} label="Last name" value={lname} onChange={handleLname} />
+                </div>
+
+                <TextField inputProps={inputStyle} label="Display name" value={dname} />
+                <TextField inputProps={inputStyle} label="Email" value={email} onChange={(e)=>setEmail(e.target.value)} />
+                <TextField inputProps={inputStyle} label="Password" type='password' value={password} onChange={(e)=>setPassword(e.target.value)} />
+                {/*<TextField inputProps={inputStyle} label="Confirm Password" type='password' />*/}
+                <div className="text-center">
+                    <ButtonGroup aria-label='Vertical button group' className='gap-3 text-center'>
+                        <Button variant='contained' onClick={handleBack}>Back</Button>
+                        <Button variant='contained' onClick={handleRegister}>Register</Button>
+                    </ButtonGroup>
+                </div>
+                </div>
             </div>
         </>
     )
@@ -137,35 +197,6 @@ function SigninWithEmail({ handleSigninWithEmail }) {
                 </Form>
                 <br />
                 <button className='btn mt-3 mb-3' onClick={handleSigninWithEmail}><h5>Back</h5></button>
-            </div>
-        </>
-    )
-}
-
-function Signup({ toggleSignin }) {
-    const [signupWithEmail, setSignupWithEmail] = useState(false);
-    const handleSignupWithEmail = () => {
-        setSignupWithEmail(!signupWithEmail);
-    }
-    return (
-        <>
-            {!signupWithEmail ? <SignupMethods toggleSignin={toggleSignin} handleSignupWithEmail={handleSignupWithEmail} /> : <SignupWithEmail handleSignupWithEmail={handleSignupWithEmail} />}
-        </>
-    )
-}
-
-function SignupMethods({ toggleSignin, handleSignupWithEmail }) {
-    return (
-        <>
-            <div className="methods d-flex flex-column justify-content-center align-items-center">
-                <SocialLogins />
-                <button className='btn border-dark w-100 mt-4 d-flex justify-content-center align-items-center' onClick={handleSignupWithEmail}>
-                    <div className="d-flex justify-content-start align-items-center w-50">
-                        <img className='me-4' src="social-icons/email.svg" alt="" width={25} />
-                        <span>Sign up with email</span>
-                    </div>
-                </button>
-                <button className='btn mt-4 w-100' onClick={toggleSignin}><h5> Already have account ? Lets Signin</h5></button>
             </div>
         </>
     )
@@ -275,4 +306,3 @@ function SignupWithEmail({ handleSignupWithEmail }) {
     )
 }
 
-export { Signup, Signin }

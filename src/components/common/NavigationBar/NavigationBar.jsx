@@ -88,7 +88,7 @@ function NavigationBar({ handleSigninButton }) {
                                     <Profile show={show} handleClose={handleClose} photo={photo} />
                                 </div>
                                 :
-                                <Button variant='dark' onClick={handleSigninButton}>Sign in</Button>
+                                <Button variant='dark' onClick={handleSigninButton}>Login</Button>
                             }
                         </Nav>
                     </Navbar.Collapse>

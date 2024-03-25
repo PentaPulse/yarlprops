@@ -1,21 +1,17 @@
 import firebase from "firebase/compat/app";
 import "firebase/firestore";
-import { firebaseConfig } from "./configs";
+import { firebaseConfig } from "./secrets";
 import { doc, setDoc } from "firebase/firestore";
 
 firebase.initializeApp(firebaseConfig)
 
 const db = firebase.firestore();
 
-export const addUser= async (uid,fName,lName,email,postal,fac,dep,regNumber)=>{
+export const addUser= async (uid,fName,lName,email)=>{
     await setDoc(doc(db,"users",uid),{
         firstName:fName,
         lastName:lName,
-        email:email,
-        postal:postal,
-        faculty:fac,
-        department:dep,
-        regNumber:regNumber
+        email:email
     })
 }
 

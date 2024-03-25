@@ -4,7 +4,7 @@ import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
-import { Signin, Signup } from '../common/sign/Sign';
+import { Login, Register, Welcome } from '../common/Welcome/Welcome';
 import NavigationBar from '../common/NavigationBar/NavigationBar';
 import Footer from '../common/Footer';
 
@@ -13,35 +13,44 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 500,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
+    width: 600,
+    boxShadow: '0 8px 32px 0 rgba( 31, 38, 135, 0.37 )',
     p: 4,
+    background: 'rgba( 255, 255, 255, 0.65 )',
+    "box-shadow": '0 8px 32px 0 rgba( 31, 38, 135, 0.37 )',
+    'backdrop-filter': 'blur( 11.5px )',
+    '-webkit-backdrop-filter': 'blur( 11.5px )',
+    'border-radius': '10px',
+    textAlign:"center"
 };
 
 function Layout({ children }) {
     const [open, setOpen] = useState(false);
-    const [toggle, setToggle] = useState(true);
+    const [welcome,setWelcome]=useState(false)
+    const [login,setLogin]=useState(false)
 
-    const handleSigninButton = () => {
+    const showWelcome = () => {
         setOpen(!open);
-        setToggle(true)
+        setWelcome(true)
     }
     const handleClose = () => {
         setOpen(!open);
     }
-
-    const toggleSignup = () => {
-        setToggle(false);
+    const handleLoginButton=()=>{
+        setLogin(true)
+        setWelcome(false)
+    }
+    const handleRegisterButton=()=>{
+        setLogin(false)
+        setWelcome(false)
+    }
+    const handleBackButton=()=>{
+        setWelcome(true)
     }
 
-    const toggleSignin = () => {
-        setToggle(true)
-    }
     return (
         <>
-            <NavigationBar handleSigninButton={handleSigninButton} />
+            <NavigationBar handleSigninButton={showWelcome} />
             <div className='d-flex justify-content-center align-items-center mt-30 text-center'>
                 <Modal
                     aria-labelledby="transition-modal-title"
@@ -56,9 +65,9 @@ function Layout({ children }) {
                         },
                     }}>
                     <Fade in={open}>
-                    <Box sx={style}>
-                            {toggle ? <Signin toggleSignup={toggleSignup} toggle /> : <Signup toggleSignin={toggleSignin} toggle />}
-                            </Box>
+                        <Box sx={style}>
+                            {welcome?<Welcome toLogin={handleLoginButton} toRegister={handleRegisterButton}/>:(login?<Login handleBack={handleBackButton}/>:<Register handleBack={handleBackButton}/>)}
+                        </Box>
                     </Fade>
                 </Modal>
             </div>

@@ -1,0 +1,43 @@
+<div className={styless.container}>
+                    <div className={styles.content}>
+                        <div className={styless.leftSide}>
+                            <div className={`${styless.address} ${styless.details}`}>
+                                <i className='bx bx-map'></i>
+                                <div className={styless.topic}>Address</div>
+                                <div className={styless.textOne}>No </div>
+                                <div className={styless.textTwo}>Jaffna</div>
+                            </div>
+                            <div className={`${styless.phone} ${styless.details}`}>
+                                <i className='bx bx-phone-call'></i>
+                                <div className={styless.topic}>Phone</div>
+                                <div className={styless.textOne}>+94 123 456789</div>
+                            </div>
+                            <div className={`${styless.email} ${styless.details}`}>
+                                <i className='bx bx-envelope'></i>
+                                <div className={styless.topic}>Email</div>
+                                <div className={styless.textOne}>slcodehub@gmail.com</div>
+                            </div>
+                        </div>
+                        <div className={styless.rightSide}>
+                            <div className={styless.topicText}>Send us a Message</div><br />
+                            <p>if you have any work from me any types of quries relates to my tutorial,you can send me Message
+                                form here. it's my pleasure to help you.</p><br />
+
+                            <form action="#">
+                                <div className={styless.inputBox}>
+                                    <input type="text" placeholder="Enter your name" />
+                                </div>
+                                <div className={styless.inputBox}>
+                                    <input type="email" placeholder="Enter your email" />
+                                </div>
+                                <div className={`${styless.inputBox} ${styless.messageBox}`}>
+                                    <textarea></textarea>
+                                </div>
+                                <div className={styless.button}>
+                                    <input type="button" value="Send Now" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
