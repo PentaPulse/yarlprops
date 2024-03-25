@@ -7,6 +7,7 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { Col, FloatingLabel, Form, Row, Toast, ToastContainer } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { Button, ButtonGroup, TextField } from '@mui/material';
+import { addUser } from '../../../backend/database';
 
 const googleStyle = {
     "border-radius": "100px",
@@ -95,26 +96,38 @@ export function Register({ handleBack }) {
         createUserWithEmailAndPassword(authUser, email, password)
         .then((result)=>{
             const user = result.user;
-            user.displayName = dname;            
+            user.displayName = dname;
+            console.log("uid : "+user.uid)
+            addUser(user.uid,fname,lname,email)
+            window.location.reload(0)
         })
         .catch((error)=>{
-            const errorMassege = 
+            const errorMassege = error.massage
+            const errorCode = error.code
+            if(errorCode==="auth/invalid-email"){
+                console.log("invalid credentials")
+            }
+            else{
+            console.log(errorCode+" : "+errorMassege)
+            }
         })
     }
     return (
         <>
+        <ToastContainer/>
             <div className="d-flex flex-column justify-content-center text-center">
                 <h2>Create account</h2>
                 <hr/>
                 <div className="d-flex flex-column gap-3">
                 <div className="d-flex gap-4 w-100">
-                    <TextField className='w-50' inputProps={inputStyle} label="First name" value={fname} onChange={handleFname} />
-                    <TextField className='w-50' inputProps={inputStyle} label="Last name" value={lname} onChange={handleLname} />
+                    <TextField className='w-50' inputProps={inputStyle} label="First name" value={fname} onChange={handleFname} required/>
+                    <TextField className='w-50' inputProps={inputStyle} label="Last name" value={lname} onChange={handleLname} required />
                 </div>
 
                 <TextField inputProps={inputStyle} label="Display name" value={dname} />
-                <TextField inputProps={inputStyle} label="Email" value={email} onChange={(e)=>setEmail(e.target.value)} />
-                <TextField inputProps={inputStyle} label="Password" type='password' value={password} onChange={(e)=>setPassword(e.target.value)} />
+                <TextField inputProps={inputStyle}  type='file' />
+                <TextField inputProps={inputStyle} label="Email" value={email} onChange={(e)=>setEmail(e.target.value)} required/>
+                <TextField inputProps={inputStyle} label="Password" type='password' value={password} onChange={(e)=>setPassword(e.target.value)} required />
                 {/*<TextField inputProps={inputStyle} label="Confirm Password" type='password' />*/}
                 <div className="text-center">
                     <ButtonGroup aria-label='Vertical button group' className='gap-3 text-center'>
