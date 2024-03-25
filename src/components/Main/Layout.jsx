@@ -7,6 +7,7 @@ import Fade from '@mui/material/Fade';
 import { Login, Register, Welcome } from '../common/Welcome/Welcome';
 import NavigationBar from '../common/NavigationBar/NavigationBar';
 import Footer from '../common/Footer';
+import { ToastContainer } from 'react-toastify';
 
 const style = {
     position: 'absolute',
@@ -51,6 +52,7 @@ function Layout({ children }) {
     return (
         <>
             <NavigationBar handleSigninButton={showWelcome} />
+            <ToastContainer/>
             <div className='d-flex justify-content-center align-items-center mt-30 text-center'>
                 <Modal
                     aria-labelledby="transition-modal-title"

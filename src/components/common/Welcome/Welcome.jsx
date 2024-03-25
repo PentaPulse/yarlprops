@@ -1,10 +1,8 @@
-import { GoogleAuthProvider, createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup} from 'firebase/auth';
+import { GoogleAuthProvider, createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
 import { authUser } from '../../../backend/autharization';
-import { FloatingLabel, Form,Toast, ToastContainer } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import { Button, ButtonGroup, TextField } from '@mui/material';
+import { Alert, Button, ButtonGroup, TextField } from '@mui/material';
 import { addUser } from '../../../backend/database';
 
 const googleStyle = {
@@ -37,7 +35,7 @@ export function Welcome({ toLogin, toRegister }) {
         <>
             <div className='d-flex justify-content-center flex-column'>
                 <h2>Welcome to YarlProps</h2>
-                <span className="btn border text-center" style={googleStyle} onClick={handleGoogle}><img src="social-icons/google.svg" alt="G" width={30} /> Connect with Google</span>
+                <span className="btn border d-flex justify-content-center gap-4" style={googleStyle} onClick={handleGoogle}><img src="social-icons/google.svg" alt="G" width={30} /> Connect with Google</span>
                 <h5>OR</h5>
                 <div className="text-center">
                     <ButtonGroup aria-label='Basic button group' variant='contained'>
@@ -65,11 +63,20 @@ export function Login({ handleBack }) {
             const errorMassege = error.massage
             const errorCode = error.code
             if(errorCode==="auth/invalid-email"){
-                console.log("invalid credentials")
+                return(
+                    <Alert severity='warning'>ss</Alert>
+                )
             }
             else{
             console.log(errorCode+" : "+errorMassege)
             }
+        })
+    }
+    const handleResetPassword=()=>{
+        sendPasswordResetEmail(authUser,email)
+        .then((result)=>{
+            alert("check "+email+" inbox")
+            console.log("email sent"+result)
         })
     }
     return (
@@ -80,7 +87,7 @@ export function Login({ handleBack }) {
             <div className="d-flex flex-column gap-4">
             <TextField inputProps={inputStyle} label="Email" value={email} onChange={(e)=>setEmail(e.target.value)}/>
             <TextField inputProps={inputStyle} label="Password" value={password} onChange={(e)=>setPassword(e.target.value)}/>            
-            <span className="a">Forgot Your Password?</span>
+            <span className="btn" onClick={handleResetPassword}>Forgot Your Password?</span>
             </div>
             <div className="text-center">
             <ButtonGroup aria-label='Vertical button group' className='gap-3'>
@@ -122,6 +129,7 @@ export function Register({ handleBack }) {
             const errorCode = error.code
             if(errorCode==="auth/invalid-email"){
                 console.log("invalid credentials")
+                toast.warn("email missing")
             }
             else{
             console.log(errorCode+" : "+errorMassege)
@@ -130,7 +138,6 @@ export function Register({ handleBack }) {
     }
     return (
         <>
-        <ToastContainer/>
             <div className="d-flex flex-column justify-content-center text-center">
                 <h2>Create account</h2>
                 <hr/>
@@ -152,80 +159,6 @@ export function Register({ handleBack }) {
                     </ButtonGroup>
                 </div>
                 </div>
-            </div>
-        </>
-    )
-}
-
-function SigninWithEmail({ handleSigninWithEmail }) {
-    const navigate = useNavigate()
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [warning, setWarning] = useState('');
-    const [eye, setEye] = useState(false);
-    const [emailerror, setEmailError] = useState(null);
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        signInWithEmailAndPassword(authUser, email, password)
-            .then((result) => {
-                const user = result.user;
-                user.toJSON();
-                console.log(user);
-                window.location.reload(0);
-            }).catch((error) => {
-                const errorCode = error.code;
-                const errorMassage = error.massage;
-                if (errorCode === 'auth/invalid-credential' || errorCode === 'auth/invalid-email') {
-                    setWarning('Invalid email and/or password!!!')
-                }
-                console.log(errorCode + ' : ' + errorMassage)
-            })
-    }
-    const handleEye = () => {
-        setEye(!eye);
-    }
-
-    const handleReset = (e) => {
-        e.preventDefault();
-        if (email.length === 0) {
-            setEmailError(<span className='text-warning'>Enter registered Email</span>);
-            return;
-        }
-        setEmailError('');
-        sendPasswordResetEmail(authUser, email)
-            .then(() => {
-                Toast.success("Successfully sent reset email link");
-                navigate('/');
-            })
-            .catch((error) => {
-                console.log(error)
-                console.error("Error sending reset email:", error);
-                // Handle specific errors or display a generic message
-            });
-    };
-
-    return (
-        <>
-            <ToastContainer />
-            <div className='mt-3 text-center'>
-                <Form onSubmit={handleSubmit} >
-                    <FloatingLabel
-                        controlId="floatingInput"
-                        label="Email address"
-                    >
-                        <Form.Control type="email" placeholder="name@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
-                    </FloatingLabel>
-                    {emailerror}
-                    <FloatingLabel controlId="floatingPassword" label="Password" className='d-flex mt-2'>
-                        <Form.Control type={!eye ? "password" : "text"} placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                        <img className='btn border' alt='show/hide' src={eye ? 'show/show.svg' : 'show/hide.svg'} onClick={handleEye} width={60} />
-                    </FloatingLabel>
-                    <span className="text-danger">{warning}</span><br />
-                    <button className='btn w-100' onClick={handleReset}><span>Forgot password ? Click to Reset</span></button>
-                    <Button className='mt-3 text-center' variant='dark' type='submit'>Sign in</Button>
-                </Form>
-                <br />
-                <button className='btn mt-3 mb-3' onClick={handleSigninWithEmail}><h5>Back</h5></button>
             </div>
         </>
     )
