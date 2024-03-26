@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styles from './Contact.module.css'
 import { Button, TextField ,Container} from '@mui/material'
+import { sendMessage } from '../../../../backend/database'
 
 function About() {
     return (
@@ -89,6 +90,12 @@ function InfoPP() {
 }
 
 function ContactComps() {
+    const [name,setName]=useState('')
+    const [email,setEmail]=useState('')
+    const [message,setMessage]=useState('')
+    const handleSubmit=()=>{
+        sendMessage(name,email,message)
+    }
     return (
         <>
             <Container maxWidth='lg' className='' sx={{ bgcolor: '#cfe8fc'}}>
@@ -113,10 +120,10 @@ function ContactComps() {
                     </div>
                     <div className="right d-flex flex-column w-50 gap-3">
                         <h3>Send us a Message</h3>
-                        <TextField label='Your Name'></TextField>
-                        <TextField label='Your Email'></TextField>
-                        <TextField label='Your Message'></TextField>
-                        <Button variant='contained'>Send Message</Button>
+                        <TextField label='Your Name' value={name} onChange={(e)=>setName(e.target.value)}/>
+                        <TextField label='Your Email' value={email} onChange={(e)=>setEmail(e.target.value)}/>
+                        <TextField label='Your Message' value={message} onChange={(e)=>setMessage(e.target.value)}/>
+                        <Button variant='contained' onClick={handleSubmit}>Send Message</Button>
                     </div>
                 </div>
             </Container>
