@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styles from './Contact.module.css'
-import './ContactComps.css'
-import { Container} from 'react-bootstrap'
+import { Button, TextField ,Container} from '@mui/material'
+import { sendMessage } from '../../../../backend/database'
 
 function About() {
     return (
@@ -15,63 +15,66 @@ function About() {
 function Photos() {
     return (
         <>
-            <h1 className={`${styles.centerHeading}`}>Our Team</h1>
-            <div class={styles.homeContainer}>
+        <Container maxWidth='md'>
+            <div className="d-flex flex-column text-center mt-4">
+                <h1 className={`${styles.centerHeading}`}>Our Team</h1>
+                <div class={styles.homeContainer}>
 
 
-                <div class={styles.profileCard}>
+                    <div class={styles.profileCard}>
 
-                    <div class={styles.img}>
-                        <img src='/sample/sachi02.jpg' alt='pic' width='18%' />
-                    </div>
-                    <div class={styles.caption}>
-                        <h3>Sachintha Wigerathna</h3>
-                        <p>Team Leader</p>
+                        <div class={styles.img}>
+                            <img src='/sample/sachi02.jpg' alt='pic' width='18%' />
+                        </div>
+                        <div class={styles.caption}>
+                            <h3>Sachintha Wijerathna</h3>
+                            <p>Team Leader</p>
 
+                        </div>
                     </div>
-                </div>
-                <div class={styles.profileCard}>
-                    <div class={styles.img}>
-                        <img src='/sample/man.jpg' alt='pic' width='18%' />
-                    </div>
-                    <div class={styles.caption}>
-                        <h3>Charith Rajapaksha</h3>
-                        <p>Team member</p>
+                    <div class={styles.profileCard}>
+                        <div class={styles.img}>
+                            <img src='/sample/man.jpg' alt='pic' width='18%' />
+                        </div>
+                        <div class={styles.caption}>
+                            <h3>Charith Rajapaksha</h3>
+                            <p>Team member</p>
 
+                        </div>
                     </div>
-                </div>
-                <div class={styles.profileCard}>
-                    <div class={styles.img}>
-                        <img src='/sample/man.jpg' alt='pic' width='18%' />
-                    </div>
-                    <div class={styles.caption}>
-                        <h3>Mith Jayakodi</h3>
-                        <p>Team member</p>
+                    <div class={styles.profileCard}>
+                        <div class={styles.img}>
+                            <img src='/sample/man.jpg' alt='pic' width='18%' />
+                        </div>
+                        <div class={styles.caption}>
+                            <h3>Mith Jayakodi</h3>
+                            <p>Team member</p>
 
+                        </div>
                     </div>
-                </div>
-                <div class={styles.profileCard}>
-                    <div class={styles.img}>
-                        <img src='/sample/priya01.jpg' alt='pic' width='18%' />
-                    </div>
-                    <div class={styles.caption}>
-                        <h3>R.Priyadarshani</h3>
-                        <p>Team member</p>
+                    <div class={styles.profileCard}>
+                        <div class={styles.img}>
+                            <img src='/sample/priya01.jpg' alt='pic' width='18%' />
+                        </div>
+                        <div class={styles.caption}>
+                            <h3>R.Priyadarshani</h3>
+                            <p>Team member</p>
 
+                        </div>
                     </div>
-                </div>
-                <div class={styles.profileCard}>
-                    <div class={styles.img}>
-                        <img src='/sample/jan1.jpg' alt='pic' width='18%' />
-                    </div>
-                    <div class={styles.caption}>
-                        <h3>Janani Welipitiya</h3>
-                        <p>Team member</p>
+                    <div class={styles.profileCard}>
+                        <div class={styles.img}>
+                            <img src='/sample/jan1.jpg' alt='pic' width='18%' />
+                        </div>
+                        <div class={styles.caption}>
+                            <h3>Janani Welipitiya</h3>
+                            <p>Team member</p>
 
+                        </div>
                     </div>
                 </div>
             </div>
-
+            </Container>
         </>
     )
 }
@@ -87,53 +90,43 @@ function InfoPP() {
 }
 
 function ContactComps() {
+    const [name,setName]=useState('')
+    const [email,setEmail]=useState('')
+    const [message,setMessage]=useState('')
+    const handleSubmit=()=>{
+        sendMessage(name,email,message)
+    }
     return (
         <>
-        <div class="contactContainer">
-            <div class="content">
-                <div class="left-side">
-                    <div class="address details">
-                        <i class='bx bx-map'></i>
-                        <div class="topic">Address</div>
-                        <div class="text-one">No 50, kalawana</div>
-                        <div class="text-two">Ratnapura</div>
+            <Container maxWidth='lg' className='' sx={{ bgcolor: '#cfe8fc'}}>
+                <div className="d-flex flex-row mt-4">
+                    <div className="left d-flex flex-column w-50 text-center mt-4">
+                        <div className="address mb-4">
+                            <img src="./images/address.svg" alt="address" />
+                            <div class="topic">Address</div>
+                            <div class="text-one">Ramanathan Rd, </div>
+                            <div class="text-two">Jaffna</div>
+                        </div>
+                        <div className="phone mb-4">
+                            <img src="./images/phone.svg" alt="phone" />
+                            <div class="topic">Phone</div>
+                            <div class="text-one">+94 12 345 6789</div>
+                        </div>
+                        <div className="email">
+                            <img src="./images/email.svg" alt="email" />
+                            <div class="topic">Email</div>
+                            <div class="text-one">penta5pulse@gmail.com</div>
+                        </div>
                     </div>
-                    <div class="phone details">
-                        <i class='bx bx-phone-call'></i>
-                        <div class="topic">Phone</div>
-                        <div class="text-one">+94 70 323 3232</div>
-                        <div class="text-two">+94 76 325 2332</div>
-                    </div>
-                    <div class="email details">
-                        <i class='bx bx-envelope'></i>
-                        <div class="topic">Email</div>
-                        <div class="text-one">slcodehub@gmail.com</div>
-                        <div class="text-two">Dilshan@gmail.caom</div>
+                    <div className="right d-flex flex-column w-50 gap-3">
+                        <h3>Send us a Message</h3>
+                        <TextField label='Your Name' value={name} onChange={(e)=>setName(e.target.value)}/>
+                        <TextField label='Your Email' value={email} onChange={(e)=>setEmail(e.target.value)}/>
+                        <TextField label='Your Message' value={message} onChange={(e)=>setMessage(e.target.value)}/>
+                        <Button variant='contained' onClick={handleSubmit}>Send Message</Button>
                     </div>
                 </div>
-                <div class="right-side">
-                    <div class="topic-text">Send us a Message</div><br/>
-                    <p>if you have any work from me any types of quries relates to my tutorial,you can send me Message
-                        form here. it's my pleasure to help you.</p><br/>
-    
-                    <form action="#">
-                        <div class="input-box">
-                            <input type="text" placeholder="Enter your name"/>
-                        </div>
-                        <div class="input-box">
-                            <input type="email" placeholder="Enter your email"/>
-                        </div>
-                        <div class="input-box message-box">
-                            <textarea></textarea>
-                        </div>
-                        <div class="button">
-                            <input type="button" value="Send Now"/>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    
+            </Container>
         </>
     )
 }

@@ -9,6 +9,7 @@ const db = getFirestore(app);
 //references
 const userRef = collection(db,"users")
 const productRef = collection(db,"products")
+const contactRef = collection(db,"contactUs")
 
 export const addUser= async (uid,fName,lName,email)=>{
     await setDoc(doc(userRef,uid),{
@@ -24,4 +25,12 @@ export const addProduct =async (productId,type,name,description)=>{
         name:name,
         description:description
     })
+}
+
+export const sendMessage=async (name,email,message)=>{
+await setDoc(doc(contactRef,email),{
+    custName:name,
+    custEmail:email,
+    custMessage:message
+})
 }
