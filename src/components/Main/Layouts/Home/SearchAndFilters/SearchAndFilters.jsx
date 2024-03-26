@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
+import './searchbar.css';
 
 function SearchBar({ placeholder, data }) {
   const [filteredData, setFilteredData] = useState([]);
@@ -58,11 +59,9 @@ function SearchBar({ placeholder, data }) {
 function SearchAndFilters() {
   return (
     <div>
-        <div className="App">
-      <SearchBar placeholder="Search for Anything..."/>
-    </div>
+      <SearchBar placeholder="Search"/>
     </div>
   )
 }
 
-export default SearchAndFilters
+export default SearchAndFilters;

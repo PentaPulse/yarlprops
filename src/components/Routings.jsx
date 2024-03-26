@@ -16,6 +16,8 @@ function Routings() {
           <Route path='/guide' element={<Guide/>}/>
           <Route path='/contact' element={<Contact/>}/>
           <Route path='/profile' element={<UserProfile/>}/>
+          {/* <Route path="/" element={ProductsContents} />
+          <Route path="/product/:id" elementt={ProductPage} /> */}
         </Routes>
       </Layout>
     </Router>

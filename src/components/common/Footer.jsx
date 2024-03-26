@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import '@fortawesome/fontawesome-free/css/all.css';
 
 const Footer = () => {
     return (
@@ -38,19 +39,18 @@ const Footer = () => {
                         </div>
                         <div className="col-md-6 col-lg-4 col-12 ft-3">
                             <h5>Quick Links</h5>
-                            <p><i className="fa-solid fa-phone-volume"></i> +9477 1234567</p>
+                            <p><i className="fa-solid fa-phone-volume"></i> +94 77 1234567</p>
                             <p><i className="fa-solid fa-envelope"></i> PentaPulse@gmail.com</p>
-                            <p><i className="fa-solid fa-paper-plane"></i> Ramanathan Rd, Jaffna</p>
+                            <p><i className="fa-solid fa-paper-plane"></i> Ramanathan Road, Thirunelvely, Jaffna</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div className='Last-footer'>
-                <p>Copyright by PentaPulse</p>
+                <p>© 2024 Designed By PentaPulse</p>
             </div>
         </>
     )
 }
 
-
-export default Footer
+export default Footer;
