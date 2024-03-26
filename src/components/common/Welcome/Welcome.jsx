@@ -33,9 +33,9 @@ export function Welcome({ toLogin, toRegister }) {
     }
     return (
         <>
-            <div className='d-flex justify-content-center flex-column'>
+            <div className='d-flex justify-content-center flex-column text-center'>
                 <h2>Welcome to YarlProps</h2>
-                <span className="btn border d-flex justify-content-center gap-4" style={googleStyle} onClick={handleGoogle}><img src="social-icons/google.svg" alt="G" width={30} /> Connect with Google</span>
+                <span className=" btn border gap-4" style={googleStyle} onClick={handleGoogle}><img src="social-icons/google.svg" alt="G" width={30} /> Connect with Google</span>
                 <h5>OR</h5>
                 <div className="text-center">
                     <ButtonGroup aria-label='Basic button group' variant='contained'>

@@ -15,7 +15,6 @@ function About() {
 function Photos() {
     return (
         <>
-        <Container maxWidth='md'>
             <div className="d-flex flex-column text-center mt-4">
                 <h1 className={`${styles.centerHeading}`}>Our Team</h1>
                 <div class={styles.homeContainer}>
@@ -74,7 +73,6 @@ function Photos() {
                     </div>
                 </div>
             </div>
-            </Container>
         </>
     )
 }
