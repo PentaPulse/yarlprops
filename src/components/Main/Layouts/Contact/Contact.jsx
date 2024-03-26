@@ -18,55 +18,55 @@ function Photos() {
         <Container maxWidth='md'>
             <div className="d-flex flex-column text-center mt-4">
                 <h1 className={`${styles.centerHeading}`}>Our Team</h1>
-                <div class={styles.homeContainer}>
+                <div className={styles.homeContainer}>
 
 
-                    <div class={styles.profileCard}>
+                    <div className={styles.profileCard}>
 
-                        <div class={styles.img}>
-                            <img src='/sample/sachi02.jpg' alt='pic' width='18%' />
+                        <div className={styles.imageContainer}>
+                            <img className={styles.image} src='/sample/sachi02.jpg' alt='memberImage01'/>
                         </div>
-                        <div class={styles.caption}>
+                        <div className={styles.caption}>
                             <h3>Sachintha Wijerathna</h3>
                             <p>Team Leader</p>
 
                         </div>
                     </div>
-                    <div class={styles.profileCard}>
-                        <div class={styles.img}>
-                            <img src='/sample/man.jpg' alt='pic' width='18%' />
+                    <div className={styles.profileCard}>
+                        <div className={styles.imageContainer}>
+                            <img className={styles.image} src='/sample/Charith.jpg' alt='memberImage02'/>
                         </div>
-                        <div class={styles.caption}>
+                        <div className={styles.caption}>
                             <h3>Charith Rajapaksha</h3>
                             <p>Team member</p>
 
                         </div>
                     </div>
-                    <div class={styles.profileCard}>
-                        <div class={styles.img}>
-                            <img src='/sample/man.jpg' alt='pic' width='18%' />
+                    <div className={styles.profileCard}>
+                        <div className={styles.imageContainer}>
+                            <img className={styles.image} src='/sample/mith.jpeg' alt='memberImage03'/>
                         </div>
-                        <div class={styles.caption}>
+                        <div className={styles.caption}>
                             <h3>Mith Jayakodi</h3>
                             <p>Team member</p>
 
                         </div>
                     </div>
-                    <div class={styles.profileCard}>
-                        <div class={styles.img}>
-                            <img src='/sample/priya01.jpg' alt='pic' width='18%' />
+                    <div className={styles.profileCard}>
+                        <div className={styles.imageContainer}>
+                            <img className={styles.image} src='/sample/priya01.jpg' alt='memberImage04'/>
                         </div>
-                        <div class={styles.caption}>
+                        <div className={styles.caption}>
                             <h3>R.Priyadarshani</h3>
                             <p>Team member</p>
 
                         </div>
                     </div>
-                    <div class={styles.profileCard}>
-                        <div class={styles.img}>
-                            <img src='/sample/jan1.jpg' alt='pic' width='18%' />
+                    <div className={styles.profileCard}>
+                        <div className={styles.imageContainer}>
+                            <img className={styles.image} src='/sample/jan1.jpg' alt='memberImage05'/>
                         </div>
-                        <div class={styles.caption}>
+                        <div className={styles.caption}>
                             <h3>Janani Welipitiya</h3>
                             <p>Team member</p>
 
