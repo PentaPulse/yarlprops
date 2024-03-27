@@ -7,17 +7,18 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 
 function Profile({ show, handleClose }) {
-    const [cookies,setCookie]=useCookies(['photo'])
+    const [cookies,setCookie]=useCookies(['photo','dpn'])
     const navigate=useNavigate()
     const handleSignout = () => {
         authUser.signOut()
+        setCookie([])
         navigate('/')
     }
     return (
         <>
             <Offcanvas show={show} onHide={handleClose} placement='end' scroll>
                 <Offcanvas.Header closeButton>
-                    <Offcanvas.Title><img alt='pp' src={cookies.photo} className='rounded' width={50} />{authUser.currentUser.displayName}</Offcanvas.Title>
+                    <Offcanvas.Title><img alt='pp' src={cookies.photo} className='rounded' width={50} />{cookies.dpn}</Offcanvas.Title>
                 </Offcanvas.Header>
                 <hr />
                 <Offcanvas.Body>
