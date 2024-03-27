@@ -28,7 +28,6 @@ export function Welcome({ toLogin, toRegister }) {
             .catch((error) => {
                 const errorCode = error.code
                 const errorMessage = error.message
-                toast.warning(errorCode, ' : ', errorMessage)
             })
     }
     return (
@@ -62,14 +61,6 @@ export function Login({ handleBack }) {
         .catch((error)=>{
             const errorMassege = error.massage
             const errorCode = error.code
-            if(errorCode==="auth/invalid-email"){
-                return(
-                    <Alert severity='warning'>ss</Alert>
-                )
-            }
-            else{
-            console.log(errorCode+" : "+errorMassege)
-            }
         })
     }
     const handleResetPassword=()=>{
@@ -127,13 +118,6 @@ export function Register({ handleBack }) {
         .catch((error)=>{
             const errorMassege = error.massage
             const errorCode = error.code
-            if(errorCode==="auth/invalid-email"){
-                console.log("invalid credentials")
-                toast.warn("email missing")
-            }
-            else{
-            console.log(errorCode+" : "+errorMassege)
-            }
         })
     }
     return (

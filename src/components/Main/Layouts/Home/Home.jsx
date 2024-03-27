@@ -14,7 +14,7 @@ function Home({handleBuy}) {
           </Col>
         </Row>
         <Row className='mt-3'>
-          <Col xs={3}><SearchAndFilters /></Col>
+          <Col ><SearchAndFilters /></Col>
           <Col md="auto" ><ProductsContents handleBuy={handleBuy}/></Col>
         </Row>
       </Container>

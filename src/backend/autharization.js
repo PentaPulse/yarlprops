@@ -27,3 +27,10 @@ export const useAuth = () => {
 
     return { currentUser, signOut };
 };
+
+export const getUserInfo=()=>{
+    
+    if(authUser.currentUser){
+
+    }
+}
