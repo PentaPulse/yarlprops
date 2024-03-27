@@ -55,12 +55,8 @@ const renderCard = (blog) => (
 function ProductsContents() {
     return (
         <div>
-            <section id="blog" className="block blog-block">
+            <section id="blog" className="block blog-block mt-4">
                 <Container fluid>
-                    <div className="title-holder" style={{ textAlign: 'center' }}>
-                        <h1>Our Categories</h1>
-                        <h5 style={{ paddingBottom: '20px', fontStyle: 'italic' }}>Needed items and find bordings</h5>
-                    </div>
                     <Row>
                         {blogData.map(renderCard)}
                     </Row>

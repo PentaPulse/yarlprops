@@ -93,10 +93,13 @@ function ContactComps() {
     const [message,setMessage]=useState('')
     const handleSubmit=()=>{
         sendMessage(name,email,message)
+        setName('')
+        setEmail('')
+        setMessage('')
     }
     return (
         <>
-            <Container maxWidth='lg' className='' sx={{ bgcolor: '#cfe8fc'}}>
+            <Container maxWidth='lg' className='' >{/*sx={{ bgcolor: '#cfe8fc'}}*/}
                 <div className="d-flex flex-row mt-4">
                     <div className="left d-flex flex-column w-50 text-center mt-4">
                         <div className="address mb-4">
