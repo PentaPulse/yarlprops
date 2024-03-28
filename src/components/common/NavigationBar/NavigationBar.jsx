@@ -70,19 +70,6 @@ function NavigationBar({ handleSigninButton }) {
                     <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
                         <Nav>
                             <Nav.Link href="/">Home</Nav.Link>
-                            <NavDropdown title="Categories" id="basic-nav-dropdown" >
-                                <NavDropdown.Item >Products</NavDropdown.Item>
-                                <NavDropdown.Divider />
-                                <NavDropdown.Item >
-                                    Product2
-                                </NavDropdown.Item>
-                                <NavDropdown.Divider />
-                                <NavDropdown.Item >Services</NavDropdown.Item>
-                                <NavDropdown.Divider />
-                                <NavDropdown.Item >
-                                    Service 1
-                                </NavDropdown.Item>
-                            </NavDropdown>
                             <Nav.Link href='/guide'>Guide</Nav.Link>
                             <Nav.Link href='/contact'>Contact</Nav.Link>
                             {user ?
