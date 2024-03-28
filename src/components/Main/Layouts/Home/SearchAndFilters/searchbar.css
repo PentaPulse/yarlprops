@@ -1,3 +1,10 @@
+.search{
+  display: flex; /*used to create flex container*/
+  flex-direction: row;
+  justify-content: center; /* Horizontally center content */
+  align-items: center; /* Vertically center content */
+}
+
 .searchInputs {
   margin-top: 20px; /* Adjusted margin for better positioning */
   display: flex;

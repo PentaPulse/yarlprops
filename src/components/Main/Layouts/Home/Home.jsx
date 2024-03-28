@@ -19,7 +19,9 @@ function Home({handleBuy}) {
         </Row>
         <Row>
           <Col><Categories/></Col>
-          <Col md='auto'><ProductsContents handleBuy={handleBuy}/></Col>
+        </Row>
+        <Row>
+          <Col><ProductsContents handleBuy={handleBuy}/></Col>
         </Row>
       </Container>
     </>

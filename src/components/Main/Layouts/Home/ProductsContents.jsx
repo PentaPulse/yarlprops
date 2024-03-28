@@ -30,13 +30,22 @@ const blogData = [
         title: 'Bording for girls at Hilton Bourding',
         description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt, asperiores eaque quibusdam eum quod cum nesciunt.',
         //link: 'https:www.twitter.com'
+    },
+    {
+        id: 4,
+        image: require('./images/im11.jpeg'),
+    
+        title: 'DSI Bicycle for rent',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt, asperiores eaque quibusdam eum quod cum nesciunt.',
+        //link: 'https:www.twitter.com'
     }
+
 ]
 
 const renderCard = (blog) => (
-    <Col sm={4} key={blog.id}>
+    <Col xs={2} md={3} key={blog.id}>
         <div className='holder'>
-            <Card style={{ width: '18rem', height: '30rem' }}>
+            <Card style={{ width: '18rem', height: '30rem'}}>
                 <Card.Img variant="top" src={blog.image} />
                 <Card.Body>
                     <Card.Title style={{ textAlign: 'center', fontStyle: 'italic', fontWeight: '550' }}>{blog.title}</Card.Title>
@@ -54,14 +63,18 @@ const renderCard = (blog) => (
 
 function ProductsContents() {
     return (
-        <div>
-            <section id="blog" className="block blog-block mt-4">
+        <div className='d-flex justify-content-center align-items-center'>
+            <section id="blog" className="block blog-block mt-5">
                 <Container fluid>
                     <Row>
                         {blogData.map(renderCard)}
                     </Row>
                     <br />
                     {/* Example for rendering the cards again */}
+                    <Row>
+                        {blogData.map(renderCard)}
+                    </Row>
+                    <br/>
                     <Row>
                         {blogData.map(renderCard)}
                     </Row>

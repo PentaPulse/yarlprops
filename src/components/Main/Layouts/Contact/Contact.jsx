@@ -36,7 +36,7 @@ function Photos() {
                             <img className={styles.image} src='/sample/Charith.jpg' alt='memberImage02'/>
                         </div>
                         <div className={styles.caption}>
-                            <h3>Charith Rajapaksha</h3>
+                            <h3>Charith Gayashan</h3>
                             <p>Team member</p>
 
                         </div>
