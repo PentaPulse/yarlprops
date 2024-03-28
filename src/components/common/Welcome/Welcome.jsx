@@ -132,7 +132,6 @@ export function Register({ handleBack }) {
                 </div>
 
                 <TextField inputProps={inputStyle} label="Display name" value={dname} />
-                <TextField inputProps={inputStyle}  type='file' />
                 <TextField inputProps={inputStyle} label="Email" value={email} onChange={(e)=>setEmail(e.target.value)} required/>
                 <TextField inputProps={inputStyle} label="Password" type='password' value={password} onChange={(e)=>setPassword(e.target.value)} required />
                 {/*<TextField inputProps={inputStyle} label="Confirm Password" type='password' />*/}
