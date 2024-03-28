@@ -5,6 +5,7 @@ import Home from './Main/Layouts/Home/Home';
 import Guide from './Main/Layouts/Guide/Guide';
 import Contact from './Main/Layouts/Contact/Contact';
 import UserProfile from './Main/Profiles/UserProfile';
+import Admin from './Main/Dashboards/Admin';
 
 function Routings() {
   return (
@@ -15,7 +16,9 @@ function Routings() {
           <Route exact path='/' element={<Home/>}/>
           <Route path='/guide' element={<Guide/>}/>
           <Route path='/contact' element={<Contact/>}/>
-           <Route path='/profile' element={<UserProfile/>}/>
+          <Route path='/profile' element={<UserProfile/>}/>
+          <Route path='/admin' element={<Admin/>}/>
+
           {/* <Route path="/" element={ProductsContents} />
           <Route path="/product/:id" elementt={ProductPage} /> */}
         </Routes>
