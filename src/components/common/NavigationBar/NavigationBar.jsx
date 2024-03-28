@@ -10,11 +10,11 @@ function Profile({ show, handleClose }) {
     const [cookies,setCookie]=useCookies(['photo','dpn'])
     const navigate=useNavigate()
     const handleSignout = () => {
-        authUser.signOut()
-        setCookie([])
-        navigate('/')
-    }
-    return (
+    authUser.signOut()
+    setCookie([])
+    navigate('/')
+}
+return (
         <>
             <Offcanvas show={show} onHide={handleClose} placement='end' scroll>
                 <Offcanvas.Header closeButton>

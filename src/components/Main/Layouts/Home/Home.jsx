@@ -1,8 +1,9 @@
-import React from 'react'
-import { Col, Container, Row } from 'react-bootstrap'
-import Slidshow from './Slidshow'
-import SearchAndFilters from './SearchAndFilters/SearchAndFilters'
-import ProductsContents from './ProductsContents'
+import React from 'react';
+import { Col, Container, Row } from 'react-bootstrap';
+import Slidshow from './Slidshow';
+import SearchAndFilters from './SearchAndFilters/SearchAndFilters';
+import ProductsContents from './ProductsContents';
+import Categories from './Categories';
 
 function Home({handleBuy}) {
   return (
@@ -14,12 +15,15 @@ function Home({handleBuy}) {
           </Col>
         </Row>
         <Row className='mt-3'>
-          <Col ><SearchAndFilters /></Col>
-          <Col md="auto" ><ProductsContents handleBuy={handleBuy}/></Col>
+          <Col><SearchAndFilters /></Col>
+        </Row>
+        <Row>
+          <Col><Categories/></Col>
+          <Col md='auto'><ProductsContents handleBuy={handleBuy}/></Col>
         </Row>
       </Container>
     </>
   )
 }
 
-export default Home
+export default Home;
