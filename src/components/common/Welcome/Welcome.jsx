@@ -1,8 +1,7 @@
 import { GoogleAuthProvider, createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import React, { useState } from 'react'
 import { authUser } from '../../../backend/autharization';
-import { toast } from 'react-toastify';
-import { Alert, Button, ButtonGroup, TextField } from '@mui/material';
+import { Button, ButtonGroup, TextField } from '@mui/material';
 import { addUser } from '../../../backend/database';
 
 const googleStyle = {
@@ -26,8 +25,8 @@ export function Welcome({ toLogin, toRegister }) {
                 window.location.reload(0)
             })
             .catch((error) => {
-                const errorCode = error.code
-                const errorMessage = error.message
+                //const errorCode = error.code
+                //const errorMessage = error.message
             })
     }
     return (
@@ -59,8 +58,8 @@ export function Login({ handleBack }) {
             window.location.reload(0)
         })
         .catch((error)=>{
-            const errorMassege = error.massage
-            const errorCode = error.code
+            //const errorMassege = error.massage
+            //const errorCode = error.code
         })
     }
     const handleResetPassword=()=>{
@@ -116,8 +115,8 @@ export function Register({ handleBack }) {
             window.location.reload(0)
         })
         .catch((error)=>{
-            const errorMassege = error.massage
-            const errorCode = error.code
+           // const errorMassege = error.massage
+           // const errorCode = error.code
         })
     }
     return (
