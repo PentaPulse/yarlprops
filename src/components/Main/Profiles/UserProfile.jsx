@@ -2,20 +2,23 @@ import React from 'react';
 import { authUser } from '../../../backend/autharization';
 import { Col, Form, Row, Accordion, Card, Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { useCookies } from 'react-cookie';
+import { useSessionStorage } from 'react-storage-complete';
 
-function Photos() {
-  const [cookies,setCookie]=useCookies(['uid','photo','dpn','email','phone'])
+export default function Profile() {
   const navigate = useNavigate()
+  const [dpname, setDpname] = useSessionStorage('name', 'Your name')
+  const [photo, setPhoto] = useSessionStorage('photo', 'sample/profile.svg')
+  const [email, setEmail] = useSessionStorage('email', 'example@gmail.com')
+  //const [phone, setPhone] = useSessionStorage('phone', '+94 12 345 6789')
 
   const user = authUser.currentUser
   if (user) {
-    setCookie('uid',user.uid)
-    setCookie('photo',user.photoURL)
-    setCookie('dpn',user.displayName)
-    setCookie('email',user.email)
-    setCookie('phone',user.phoneNumber)
-    console.log(cookies)
+    setDpname(user.displayName)
+    setPhoto(user.photoURL)
+    setEmail(user.email)
+    //setPhone(user.phoneNumber)
+
+    console.log("Logged")
   }
   else {
     navigate('/')
@@ -24,14 +27,14 @@ function Photos() {
     <Container className='d-flex flex-column align-items-center flex-wrap'>
       <div className='d-flex align-items-center' style={{ marginTop: '140px' }}>
         <div>
-          <img src={cookies.photo} alt='pic' width='40%' style={{ borderRadius: '100%', width: '90%', height: 'auto' }} />
+          <img src={photo} alt='pic' width='40%' style={{ borderRadius: '100%', width: '90%', height: 'auto' }} />
         </div>
         <div style={{ marginLeft: 'auto' }}>
           <Card border="dark" style={{ width: '50rem' }}>
             <Card.Body>
-              <Card.Title><h1>{cookies.dpn || 'Display name'}</h1></Card.Title>
-              <Card.Body><h4>{cookies.email || 'Your email'}</h4></Card.Body>
-              <Card.Body><h4>{cookies.phone || 'Your phonenumber'}</h4></Card.Body>
+              <Card.Title><h1>{dpname}</h1></Card.Title>
+              <Card.Body><h4>{email}</h4></Card.Body>
+              <Card.Body><h4>{'phone'}</h4></Card.Body>
             </Card.Body>
           </Card>
         </div>
@@ -101,5 +104,3 @@ function Photos() {
     </Container>
   );
 }
-
-export default Photos;
