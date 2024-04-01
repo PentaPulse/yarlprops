@@ -1,4 +1,3 @@
-import react from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import styles from './Categories.module.css';
