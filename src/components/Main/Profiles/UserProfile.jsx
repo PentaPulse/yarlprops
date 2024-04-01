@@ -6,19 +6,23 @@ import { useSessionStorage } from 'react-storage-complete';
 
 export default function Profile() {
   const navigate = useNavigate()
-  const [dpname, setDpname] = useSessionStorage('name', 'Your name')
-  const [photo, setPhoto] = useSessionStorage('photo', 'sample/profile.svg')
-  const [email, setEmail] = useSessionStorage('email', 'example@gmail.com')
-  //const [phone, setPhone] = useSessionStorage('phone', '+94 12 345 6789')
+  const authInfo = {
+    displayName: 'Your name',
+    email: 'example@example.com',
+    phone: '+94 12 345 6789',
+    photo: 'sample/profile.svg'
+  }
+  const [authProfile, setAuthProfile] = useSessionStorage('user', authInfo)
 
   const user = authUser.currentUser
   if (user) {
-    setDpname(user.displayName)
-    setPhoto(user.photoURL)
-    setEmail(user.email)
-    //setPhone(user.phoneNumber)
-
-    console.log("Logged")
+    setAuthProfile({
+      displayName: user.displayName,
+      email: user.email,
+      phone: user.phoneNumber,
+      photo: user.photoURL
+    })
+    console.log(user)
   }
   else {
     navigate('/')
@@ -27,14 +31,14 @@ export default function Profile() {
     <Container className='d-flex flex-column align-items-center flex-wrap'>
       <div className='d-flex align-items-center' style={{ marginTop: '140px' }}>
         <div>
-          <img src={photo} alt='pic' width='40%' style={{ borderRadius: '100%', width: '90%', height: 'auto' }} />
+          <img src={authProfile.photo} alt='pic' width='40%' style={{ borderRadius: '100%', width: '90%', height: 'auto' }} />
         </div>
         <div style={{ marginLeft: 'auto' }}>
           <Card border="dark" style={{ width: '50rem' }}>
             <Card.Body>
-              <Card.Title><h1>{dpname}</h1></Card.Title>
-              <Card.Body><h4>{email}</h4></Card.Body>
-              <Card.Body><h4>{'phone'}</h4></Card.Body>
+              <Card.Title><h1>{authProfile.displayName}</h1></Card.Title>
+              <Card.Body><h4>{authProfile.email}</h4></Card.Body>
+              <Card.Body><h4>{authProfile.phone}</h4></Card.Body>
             </Card.Body>
           </Card>
         </div>

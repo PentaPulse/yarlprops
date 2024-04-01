@@ -103,18 +103,18 @@ function ContactComps() {
                 <div className="d-flex flex-row mt-4">
                     <div className="left d-flex flex-column w-50 text-center mt-4">
                         <div className="address mb-4">
-                            <img src="./images/address.svg" alt="address" />
+                            <img src="social-icons/address.svg" alt="address" width={30}/>
                             <div class="topic">Address</div>
                             <div class="text-one">Ramanathan Rd, </div>
                             <div class="text-two">Jaffna</div>
                         </div>
                         <div className="phone mb-4">
-                            <img src="./images/phone.svg" alt="phone" />
+                            <img src="social-icons/phone.svg" alt="phone" width={30}/>
                             <div class="topic">Phone</div>
                             <div class="text-one">+94 12 345 6789</div>
                         </div>
                         <div className="email">
-                            <img src="./images/email.svg" alt="email" />
+                            <img src="social-icons/email.svg" alt="email" width={30}/>
                             <div class="topic">Email</div>
                             <div class="text-one">penta5pulse@gmail.com</div>
                         </div>
