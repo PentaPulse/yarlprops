@@ -1,5 +1,6 @@
 import React from 'react';
 import '@fortawesome/fontawesome-free/css/all.css';
+import './Footer.css';
 
 const Footer = () => {
     return (
@@ -22,9 +23,6 @@ const Footer = () => {
                             <ul>
                                 <li className="nav-item">
                                     <a className="" href="/">Services</a>
-                                </li>
-                                <li className="nav-item">
-                                    <a className="" href="/">Portfolio</a>
                                 </li>
                                 <li className="nav-item">
                                     <a className="" href="/">Contact Us</a>

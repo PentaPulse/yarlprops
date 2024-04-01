@@ -2,13 +2,13 @@ import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import Slidshow from './Slidshow';
 import SearchAndFilters from './SearchAndFilters/SearchAndFilters';
-import ProductsContents from './ProductsContents';
 import Categories from './Categories';
+import ProductsContents from './ProductsContents';
 
 function Home({handleBuy}) {
   return (
     <>
-      <Container>
+      <Container> 
         <Row>
           <Col className='mt-2'>
             <Slidshow />
@@ -17,11 +17,11 @@ function Home({handleBuy}) {
         <Row className='mt-3'>
           <Col><SearchAndFilters /></Col>
         </Row>
-        <Row>
+        <Row className='mt-3'>
           <Col><Categories/></Col>
         </Row>
-        <Row>
-          <Col><ProductsContents handleBuy={handleBuy}/></Col>
+        <Row className='mt-3'>
+          <ProductsContents/>
         </Row>
       </Container>
     </>
