@@ -1,90 +1,73 @@
-import React from 'react'
-import { Card } from 'react-bootstrap'
+import React from 'react';
+import { Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { FaAngleRight } from "react-icons/fa";
-//import { Link } from 'react-router-dom';
+import Card from 'react-bootstrap/Card';
+import { products } from './productData';
 
-const blogData = [
-    {
-        id: 1,
-        image: require('./images/im8.jpeg'),
-
-        title: 'Bordings for boys in Kokuvil',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt, asperiores eaque quibusdam eum quod cum nesciunt.',
-        //link: 'https:www.google.com'
-    },
-    {
-        id: 2,
-        image: require('./images/im6.jpeg'),
-
-        title: 'Double mattress',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt, asperiores eaque quibusdam eum quod cum nesciunt.',
-        //link: 'https:www.facebook.com'
-    },
-    {
-        id: 3,
-        image: require('./images/im8.jpeg'),
-
-        title: 'Bording for girls at Hilton Bourding',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt, asperiores eaque quibusdam eum quod cum nesciunt.',
-        //link: 'https:www.twitter.com'
-    },
-    {
-        id: 4,
-        image: require('./images/im11.jpeg'),
-    
-        title: 'DSI Bicycle for rent',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt, asperiores eaque quibusdam eum quod cum nesciunt.',
-        //link: 'https:www.twitter.com'
-    }
-
-]
-
-const renderCard = (blog) => (
-    <Col xs={2} md={3} key={blog.id}>
-        <div className='holder'>
-            <Card style={{ width: '18rem', height: '30rem'}}>
-                <Card.Img variant="top" src={blog.image} />
-                <Card.Body>
-                    <Card.Title style={{ textAlign: 'center', fontStyle: 'italic', fontWeight: '550' }}>{blog.title}</Card.Title>
-                    <Card.Text style={{ textAlign: 'justify' }}>
-                        {blog.description}
-                    </Card.Text>
-                    {/* Add your link */}
-                    {/* <Link to={`/product/${blog.id}`} className="btn btn-primary" style={{ position: 'absolute', left: '29%', top: '85%' }}>Read More <FaAngleRight /></Link> */}
-                    <a href={blog.link} className="btn btn-primary" style={{ position: 'absolute', left: '29%', top: '85%' }}>Read More <FaAngleRight /></a>
-                </Card.Body>
-            </Card>
-        </div>
-    </Col>
-);
-
-function ProductsContents() {
+const ProductsContents = () => {
     return (
-        <div className='d-flex justify-content-center align-items-center'>
-            <section id="blog" className="block blog-block mt-5">
-                <Container fluid>
-                    <Row>
-                        {blogData.map(renderCard)}
-                    </Row>
-                    <br />
-                    {/* Example for rendering the cards again */}
-                    <Row>
-                        {blogData.map(renderCard)}
-                    </Row>
-                    <br/>
-                    <Row>
-                        {blogData.map(renderCard)}
-                    </Row>
-                </Container>
-            </section>
-        </div>
+        <section id='products' className='block products-block mt-5'>
+            <Container fluid='md'>
+                <Row xs={1} md={2} lg={3} xl={4}> {/* Display one column for extra small screens and up to four columns for extra large screens */}
+                    {products.map((product) => (
+                        <Col key={product.id}> {/* Each card takes one column on extra small screens and up to four columns on extra large screens */}
+                            <Card style={{ width: '18rem', height: '35rem', margin: '0.5rem'}}>
+                                <Card.Img variant="top" src={product.mainimage} style={{ width: '35wh', height: '35vh' }}/>
+                                <Card.Body>                    
+                                    <Card.Title style={{ textAlign: 'center', fontWeight: 'bold' }}>
+                                        {product.title}
+                                    </Card.Title>
+                                    <Card.Text style={{ textAlign: 'justify' }}>
+                                        {product.description1}
+                                    </Card.Text>
+                                    <Link to={`/product/${product.id}`} className="btn btn-primary" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', bottom: '1rem' }}>
+                                        Read More
+                                    </Link>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                    ))}
+                </Row>
+            </Container>
+        </section>
     );
 }
 
 export default ProductsContents;
+
+// const blogData = [
+//     {
+//         id: 1,
+//         image: require('./images/im8.jpeg'),
+
+//         title: 'Bordings for boys in Kokuvil',
+//         description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt, asperiores eaque quibusdam eum quod cum nesciunt.',
+//     },
+//     {
+//         id: 2,
+//         image: require('./images/im6.jpeg'),
+
+//         title: 'Double mattress',
+//         description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt, asperiores eaque quibusdam eum quod cum nesciunt.',
+//     },
+//     {
+//         id: 3,
+//         image: require('./images/im8.jpeg'),
+
+//         title: 'Bording for girls at Hilton Bourding',
+//         description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt, asperiores eaque quibusdam eum quod cum nesciunt.',
+//     },
+//     {
+//         id: 4,
+//         image: require('./images/im11.jpeg'),
+    
+//         title: 'DSI Bicycle for rent',
+//         description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt, asperiores eaque quibusdam eum quod cum nesciunt.',
+//     }
+
+// ]
 
 // function ProductsContents() {
 //     return (
@@ -148,4 +131,3 @@ export default ProductsContents;
 // }
 
 // export default ProductsContents;
-

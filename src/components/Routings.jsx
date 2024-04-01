@@ -6,6 +6,7 @@ import Guide from './Main/Layouts/Guide/Guide';
 import Contact from './Main/Layouts/Contact/Contact';
 import UserProfile from './Main/Profiles/UserProfile';
 import Admin from './Main/Dashboards/Admin';
+import ProductPage from './Main/Layouts/Home/ProductPage';
 
 function Routings() {
   return (
@@ -18,9 +19,7 @@ function Routings() {
           <Route path='/contact' element={<Contact/>}/>
           <Route path='/profile' element={<UserProfile/>}/>
           <Route path='/admin' element={<Admin/>}/>
-
-          {/* <Route path="/" element={ProductsContents} />
-          <Route path="/product/:id" elementt={ProductPage} /> */}
+          <Route path="/product/:id" element={<ProductPage/>} />
         </Routes>
       </Layout>
     </Router>

@@ -2,13 +2,12 @@ import React from 'react';
 import Carousel from 'react-bootstrap/Carousel';
 import './SlideShow.css';
 
-const h = "80vh"
 function slideShow() {
   return (
     <Carousel>
 
       <Carousel.Item>
-        <img style={{height:"80vh"}} className="d-block w-100" src="/slideshow/rent.jpg" alt="First slide" />
+        <img style={{height:"80vh"}} className="d-block w-100" src="/slideshow/rent_img.jpg" alt="First slide" />
         <Carousel.Caption>
           <h3 style={{fontWeight: 'bolder'}}>RENTING BORDING HOUSES & ROOMS</h3>
           <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
