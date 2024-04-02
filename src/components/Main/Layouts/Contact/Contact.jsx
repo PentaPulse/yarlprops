@@ -23,7 +23,7 @@ function Photos() {
                     <div className={styles.profileCard}>
 
                         <div className={styles.imageContainer}>
-                            <img className={styles.image} src='/sample/sachi02.jpg' alt='memberImage01'/>
+                            <img className={styles.image} src='/sample/sachi.jpg' alt='memberImage01'/>
                         </div>
                         <div className={styles.caption}>
                             <h3>Sachintha Wijerathna</h3>
@@ -33,7 +33,7 @@ function Photos() {
                     </div>
                     <div className={styles.profileCard}>
                         <div className={styles.imageContainer}>
-                            <img className={styles.image} src='/sample/Charith.jpg' alt='memberImage02'/>
+                            <img className={styles.image} src='/sample/charith.jpg' alt='memberImage02'/>
                         </div>
                         <div className={styles.caption}>
                             <h3>Charith Gayashan</h3>
@@ -53,7 +53,7 @@ function Photos() {
                     </div>
                     <div className={styles.profileCard}>
                         <div className={styles.imageContainer}>
-                            <img className={styles.image} src='/sample/priya01.jpg' alt='memberImage04'/>
+                            <img className={styles.image} src='/sample/priya.jpg' alt='memberImage04'/>
                         </div>
                         <div className={styles.caption}>
                             <h3>R.Priyadarshani</h3>
@@ -63,7 +63,7 @@ function Photos() {
                     </div>
                     <div className={styles.profileCard}>
                         <div className={styles.imageContainer}>
-                            <img className={styles.image} src='/sample/jan1.jpg' alt='memberImage05'/>
+                            <img className={styles.image} src='sample/jan.jpg' alt='memberImage05'/>
                         </div>
                         <div className={styles.caption}>
                             <h3>Janani Welipitiya</h3>

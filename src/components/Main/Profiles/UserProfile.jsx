@@ -12,6 +12,7 @@ export default function Profile() {
     phone: '+94 12 345 6789',
     photo: 'sample/profile.svg'
   }
+  const [personalInfo,setPersonalInfo]=useSessionStorage('personal',)
   const [authProfile, setAuthProfile] = useSessionStorage('user', authInfo)
 
   const user = authUser.currentUser
@@ -22,7 +23,7 @@ export default function Profile() {
       phone: user.phoneNumber,
       photo: user.photoURL
     })
-    console.log(user)
+    console.log(authProfile)
   }
   else {
     navigate('/')
