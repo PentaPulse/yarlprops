@@ -37,6 +37,7 @@
 
 .Footer h5 {
     color: #0d6efd;
+    font-weight: bold;
 }
 
 .ft-2 ul {
@@ -49,9 +50,14 @@
     font-weight: 500;
 }
 
-.ft-2 ul a {
+.ft-2 ul li a {
     text-decoration: none;
     color: #000;
+}
+
+.ft-2 ul li a:hover {
+    font-weight: 500;
+    color: #0d6efd;
 }
 
 .ft-3 p {
