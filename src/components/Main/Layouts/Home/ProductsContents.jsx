@@ -6,8 +6,10 @@ import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import { products } from './productData';
 
+
 const ProductsContents = () => {
     return (
+        <>
         <section id='products' className='block products-block mt-5'>
             <Container fluid='md'>
                 <Row xs={1} md={2} lg={3} xl={4}> {/* Display one column for extra small screens and up to four columns for extra large screens */}
@@ -32,6 +34,9 @@ const ProductsContents = () => {
                 </Row>
             </Container>
         </section>
+        
+        
+        </>
     );
 }
 
