@@ -1,7 +1,16 @@
 import React, { useState } from 'react'
 import styles from './Contact.module.css'
-import { Button, TextField ,Container} from '@mui/material'
+//import { Button, TextField ,Container} from '@mui/material'
 import { sendMessage } from '../../../../backend/database'
+import Image1 from "./images/contact1.jpg"
+import Image2 from "./images/aboutus.avif"
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Image from 'react-bootstrap/Image';
+import img3 from './images/hello2a.png';
+import Card from 'react-bootstrap/Card';
+
 
 function About() {
     return (
@@ -15,64 +24,115 @@ function About() {
 function Photos() {
     return (
         <>
+
+<section className={styles.hero1} style={{backgroundImage:`url(${Image2})`}}>
+    <div className={styles.content1}>
+    <h1>About Us</h1>
+    
+    </div>
+    </section>
+       {/*// <section className={styles.hero1} >
+   // <div className={styles.content2}>
+   
+   // </div>
+   // </section>
+       
+       
+
+        
             <div className="d-flex flex-column text-center mt-4">
                 <h1 className={`${styles.centerHeading}`}>Our Team</h1>
                 <div className={styles.homeContainer}>
 
 
-                    <div className={styles.profileCard}>
+                        <div className={styles.profileCard}>
 
-                        <div className={styles.imageContainer}>
-                            <img className={styles.image} src='/sample/sachi02.jpg' alt='memberImage01'/>
-                        </div>
-                        <div className={styles.caption}>
-                            <h3>Sachintha Wijerathna</h3>
-                            <p>Team Leader</p>
+                            <div className={styles.imageContainer}>
+                                <img className={styles.image} src='/sample/sachi.jpg' alt='memberImage01' />
+                            </div>
+                            <div className={styles.caption}>
+                                <h3>Sachintha Wijerathna</h3>
+                                <p>Team Leader</p>
 
+                            </div>
                         </div>
-                    </div>
-                    <div className={styles.profileCard}>
-                        <div className={styles.imageContainer}>
-                            <img className={styles.image} src='/sample/Charith.jpg' alt='memberImage02'/>
-                        </div>
-                        <div className={styles.caption}>
-                            <h3>Charith Gayashan</h3>
-                            <p>Team member</p>
+                        <div className={styles.profileCard}>
+                            <div className={styles.imageContainer}>
+                                <img className={styles.image} src='/sample/charith.jpg' alt='memberImage02' />
+                            </div>
+                            <div className={styles.caption}>
+                                <h3>Charith Gayashan</h3>
+                                <p>Team member</p>
 
+                            </div>
                         </div>
-                    </div>
-                    <div className={styles.profileCard}>
-                        <div className={styles.imageContainer}>
-                            <img className={styles.image} src='/sample/mith.jpeg' alt='memberImage03'/>
-                        </div>
-                        <div className={styles.caption}>
-                            <h3>Mith Jayakodi</h3>
-                            <p>Team member</p>
+                        <div className={styles.profileCard}>
+                            <div className={styles.imageContainer}>
+                                <img className={styles.image} src='/sample/mith.jpeg' alt='memberImage03' />
+                            </div>
+                            <div className={styles.caption}>
+                                <h3>Mith Jayakodi</h3>
+                                <p>Team member</p>
 
+                            </div>
                         </div>
-                    </div>
-                    <div className={styles.profileCard}>
-                        <div className={styles.imageContainer}>
-                            <img className={styles.image} src='/sample/priya01.jpg' alt='memberImage04'/>
-                        </div>
-                        <div className={styles.caption}>
-                            <h3>R.Priyadarshani</h3>
-                            <p>Team member</p>
+                        <div className={styles.profileCard}>
+                            <div className={styles.imageContainer}>
+                                <img className={styles.image} src='/sample/priya.jpg' alt='memberImage04' />
+                            </div>
+                            <div className={styles.caption}>
+                                <h3>R.Priyadarshani</h3>
+                                <p>Team member</p>
 
+                            </div>
                         </div>
-                    </div>
-                    <div className={styles.profileCard}>
-                        <div className={styles.imageContainer}>
-                            <img className={styles.image} src='/sample/jan1.jpg' alt='memberImage05'/>
-                        </div>
-                        <div className={styles.caption}>
-                            <h3>Janani Welipitiya</h3>
-                            <p>Team member</p>
+                        <div className={styles.profileCard}>
+                            <div className={styles.imageContainer}>
+                                <img className={styles.image} src='sample/jan.jpg' alt='memberImage05' />
+                            </div>
+                            <div className={styles.caption}>
+                                <h3>Janani Welipitiya</h3>
+                                <p>Team member</p>
 
                         </div>
                     </div>
                 </div>
             </div>
+            
+*/
+<section>
+  <h1 className={styles.topic}>Our Team</h1>
+  <Row xs={1} md={5} className="g-2">
+    {[
+      {imageUrl: '/sample/sachi02.jpg', title: 'Sachintha Wijerathna', text: 'Text for Sachintha'},
+      {imageUrl: '/sample/Charith.jpg', title: 'Charith Gayashan', text: 'Text for Charith'},
+      {imageUrl: '/sample/mith.jpeg', title: 'Mith Jayakodi', text: 'Text for Mith'},
+      {imageUrl: '/sample/priya01.jpg', title: 'R.Priyadarshani', text: 'Text for Priyadarshani'},
+      {imageUrl: '/sample/jan1.jpg', title: 'Janani Welipitiya', text: 'Text for Janani'}
+    ].map((item, idx) => (
+      <Col key={idx} className="g-5">
+        
+        <Card className={styles.customCard}>
+       
+          <Card.Img variant="top" src={item.imageUrl} alt={`memberImage${idx + 1}`}  className={styles.cardImage} />
+          <Card.Body>
+            <Card.Title className={styles.customTitle}>{item.title}</Card.Title>
+            <Card.Text className={styles.customText}>{item.text}</Card.Text>
+          </Card.Body>
+          
+        </Card>
+        
+      </Col>
+    ))}
+  </Row>
+</section>
+
+       }  
+       <br/>
+    
+
+
+
         </>
     )
 }
@@ -80,6 +140,21 @@ function Photos() {
 function InfoPP() {
     return (
         <>
+     {/*  <Container>
+            
+                <h3 align='center'>Welcome all for YarlProps System. In our system you can buy and rent any item as your wish.  </h3>
+    </Container>*/}
+
+            <section className={styles.hero} style={{ backgroundImage: `url(${Image1})` }}>
+                <div className={styles.content1}>
+                    <h1>Contact Us</h1>
+                    <h4>We are committed to supporting you, first and foremost! We continually strive to exceed expectations and deliver superior 24/7 Days Support.
+                        You can always count on us for live help whenever you need assistance. Call us now!</h4>
+                </div>
+            </section>
+        </>
+
+
             <Container>
                 <div className={styles.aboutUs}>
                     <h2>About Us - Who We Are?</h2><br/>
@@ -128,11 +203,11 @@ function InfoPP() {
 }
 
 function ContactComps() {
-    const [name,setName]=useState('')
-    const [email,setEmail]=useState('')
-    const [message,setMessage]=useState('')
-    const handleSubmit=()=>{
-        sendMessage(name,email,message)
+    const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
+    const [message, setMessage] = useState('')
+    const handleSubmit = () => {
+        sendMessage(name, email, message)
         setName('')
         setEmail('')
         setMessage('')
