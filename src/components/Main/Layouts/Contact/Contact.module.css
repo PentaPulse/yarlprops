@@ -3,22 +3,22 @@
     margin-top: 40px;
   }*/
 
-  .hero{
+.hero {
     display: flex;
     height: 90vh;
     background-size: cover;
     backdrop-filter: blur(150px);
-    box-shadow: inset 0 0 2000px rgb(0,0,0,0.9);
-  }
+    box-shadow: inset 0 0 2000px rgb(0, 0, 0, 0.9);
+}
 
-  .hero1{
+.hero1 {
     display: flex;
     height: 60vh;
     background-size: cover;
     backdrop-filter: blur(150px);
-  }
+}
 
-  .content2{
+.content2 {
     display: flex;
     flex-direction: column;
     max-width: 1200px;
@@ -29,17 +29,17 @@
     text-align: center;
     color: black;
 
-    h1{
+    h1 {
         font-size: 100px;
         font-weight: 300px;
         font-family: 'Pacifico', cursive;
 
     }
 
-  }
-  
+}
 
-  .content1{
+
+.content1 {
     display: flex;
     flex-direction: column;
     max-width: 1200px;
@@ -50,32 +50,33 @@
     text-align: center;
     color: white;
 
-    h1{
+    h1 {
         font-size: 100px;
         font-weight: 2900px;
-       /* font-family: 'Pacifico', cursive;*/
-       margin-top: 10px;
+        /* font-family: 'Pacifico', cursive;*/
+        margin-top: 10px;
 
     }
-    h4{
+
+    h4 {
         font-weight: 800px;
         font-size: 25px;
 
     }
 
-  }
+}
 
 
 
-  .homeContainer {
+.homeContainer {
     width: 100%;
     height: 40vh;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-top: 10px;
-   /* background-color: #0c52a1;*/
- }
+    /* background-color: #0c52a1;*/
+}
 
 .profileCard {
     position: relative;
@@ -85,27 +86,30 @@
     /*box-shadow: -5px 8px 45px rgba(51, 51, 51, 0.126);*/
     /*border-radius: 85%;*/
     transition: all .4s;
-    margin: 20px 30px 20px 20px ;
+    margin: 20px 30px 20px 20px;
 }
 
-.profileCard:hover{
+.profileCard:hover {
     background-color: whitesmoke;
     border-radius: 10px;
     box-shadow: -5px 8px 45px rgba(51, 51, 51, 0.126);
     height: 200px;
 }
-.image{
+
+.image {
     width: 150px;
     height: 150px;
     border: 10px double #0d6efd;
     border-radius: 100%;
 }
-.profileCard:hover img{
+
+.profileCard:hover img {
     scale: 103%;
     border: none;
     border-radius: 10px;
     transform: translateY(-70px);
-} 
+}
+
 /*.imageContainer{
     object-fit: fill;
     width: 100%;
@@ -114,7 +118,7 @@
     transition: all .4s;
     z-index: 99;
 }*/
-.caption{
+.caption {
     text-align: center;
     transform: translateY(-90px);
     opacity: 0;
@@ -126,7 +130,8 @@
     opacity: 1;
     pointer-events: all;
 }
-.caption h3{
+
+.caption h3 {
     padding-top: 20px;
     font-size: 21px;
     color: #0d6efd;
@@ -142,12 +147,12 @@
 
 
 
-.contact{
+.contact {
     height: 90%;
     max-width: 1000px;
     margin-top: 100px;
     margin-left: 40px;
-    
+
     display: flex;
     align-items: center;
     gap: 20px;
@@ -159,97 +164,101 @@
 
 
 
-.textContainer{
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    
-
-    h1{
-        
-        font-size: 30px;
-        line-height: 88px;
-        font-weight: 600;
-       
-        
-    
-    }
-    span{
-        font-weight: 300;
-         
-    }
-
-    h5{
-        font-weight: 600;
-    }
-
-
-}
-
-.formContainer{
-    flex: 1;
-    position: relative;
-
-    .phoneSvg{
-        stroke: orange;
-        position: absolute;
-        margin: auto;
-
-    }
-
-    form{
+    .textContainer {
+        flex: 1;
         display: flex;
         flex-direction: column;
         gap: 20px;
-    
 
-    
-   
-    input,textarea{
-        padding:12px;
-        background-color: transparent;
-        border: 1px solid white;
-        color: white;
-        border-radius: 15px;
-        outline: none;
-        
 
-    }
+        h1 {
 
-    button{
-        padding:12px;
-        border: none;
-        background-color: orange;
-        
-        font-weight:500 ;
-        border-radius: 5px;
-        cursor: pointer;
+            font-size: 30px;
+            line-height: 88px;
+            font-weight: 600;
+
+
 
         }
+
+        span {
+            font-weight: 300;
+
+        }
+
+        h5 {
+            font-weight: 600;
+        }
+
+
     }
-  }
+
+    .formContainer {
+        flex: 1;
+        position: relative;
+
+        .phoneSvg {
+            stroke: orange;
+            position: absolute;
+            margin: auto;
+
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+
+
+
+
+            input,
+            textarea {
+                padding: 12px;
+                background-color: transparent;
+                border: 1px solid white;
+                color: white;
+                border-radius: 15px;
+                outline: none;
+
+
+            }
+
+            button {
+                padding: 12px;
+                border: none;
+                background-color: orange;
+
+                font-weight: 500;
+                border-radius: 5px;
+                cursor: pointer;
+
+            }
+        }
+    }
 }
 
-.hero3{
+.hero3 {
     margin-top: 100px;
-   
-   
-    
 
-  }
 
-  .gmap{
-    margin-top:100px ;
+
+
+}
+
+.gmap {
+    margin-top: 100px;
     margin-left: 5px;
-    
 
-  }
 
-  @media screen and (max-width: 768px) {
+}
+
+@media screen and (max-width: 768px) {
+
     .formContainer input,
     .formContainer textarea,
     .formContainer button {
-      width: calc(100% - 24px); /* Adjust padding */
+        width: calc(100% - 24px);
+        /* Adjust padding */
     }
-  }
+}
