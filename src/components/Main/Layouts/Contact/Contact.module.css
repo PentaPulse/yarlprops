@@ -3,53 +3,50 @@
     margin-top: 40px;
   }*/
 
-  .topic{
+.topic {
     text-align: center;
     font-size: 2em;
     margin-top: 50px;
-    text-decoration: underline  rgb(46, 40, 40) 1px solid;
-    
-    
-  }
+    text-decoration: underline rgb(46, 40, 40) 1px solid;
 
 
-  .cardImage{
+}
+
+
+.cardImage {
     width: 220px;
     height: 240px;
-    
-    
-  }
-  .customCard {
-    
+
+
+}
+
+.customCard {
+
     width: 260px;
     height: 320px;
-   /* box-shadow: 0 4px 8px rgba(10, 9, 9, 0.1);*/
-   background-color: #f0f0f0; /* Background color */
-   border-radius: 20px; /* Rounded corners */
-   padding: 20px; /* Padding for content */
-   box-shadow: 5px 5px 10px #665f5f, /* Soft shadow */
-               -5px -5px 10px #d6c7c7; /* Highlight */
-    
-   
-    
-  }
-  
-  
-  .customTitle {
+    /* box-shadow: 0 4px 8px rgba(10, 9, 9, 0.1);*/
+    background-color: #f0f0f0;
+    /* Background color */
+    border-radius: 20px;
+    /* Rounded corners */
+    padding: 20px;
+    /* Padding for content */
+    box-shadow: 5px 5px 10px #665f5f,
+        /* Soft shadow */
+        -5px -5px 10px #d6c7c7;
+}
+
+.customTitle {
     font-size: 14px;
     color: #0d6efd;
-    font-weight: 520; 
-  }
-  .customText{
+    font-weight: 520;
+}
+
+.customText {
     font-size: 12px;
-  }
-  
-  
-  
+}
 
-
-
-  .hero{
+.hero {
     display: flex;
     height: 70vh;
     background-size: cover;
@@ -197,8 +194,8 @@
     height: 90%;
     max-width: 1400px;
     margin-top: 100px;
-   /* margin-left: 10px;*/
-    
+    /* margin-left: 10px;*/
+
     display: flex;
     align-items: center;
     gap: 20px;
@@ -217,25 +214,26 @@
         gap: 20px;
 
 
-    h1{
-        
-        font-size: 30px;
-        line-height: 88px;
-        font-weight: 600;
-        
-       
-        
-    
-    }
-    span{
-        font-weight: 300;
-         
-    }
+        h1 {
 
-    h5{
-        font-weight: 600;
-        
-    }
+            font-size: 30px;
+            line-height: 88px;
+            font-weight: 600;
+
+
+
+
+        }
+
+        span {
+            font-weight: 300;
+
+        }
+
+        h5 {
+            font-weight: 600;
+
+        }
 
 
     }
@@ -244,7 +242,7 @@
         flex: 1;
         position: relative;
 
-   /* .phoneSvg{
+        /* .phoneSvg{
         stroke: orange;
         position: absolute;
         margin: auto;
@@ -271,26 +269,26 @@
 
             }
 
-    button{
-        padding:12px;
-        border: none;
-        background-color: #0d6efd;
-        color: white;
-        font-weight:500 ;
-        border-radius: 10px;
-        cursor: pointer;
+            button {
+                padding: 12px;
+                border: none;
+                background-color: #0d6efd;
+                color: white;
+                font-weight: 500;
+                border-radius: 10px;
+                cursor: pointer;
 
             }
         }
     }
 }
 
-.hero3{
+.hero3 {
     margin-top: 150px;
-    
-   
-   
-    
+
+
+
+
 
 }
 

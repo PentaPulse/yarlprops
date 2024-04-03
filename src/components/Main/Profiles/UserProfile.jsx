@@ -3,6 +3,8 @@ import { authUser } from '../../../backend/autharization';
 import { Col, Form, Row, Accordion, Card, Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useSessionStorage } from 'react-storage-complete';
+import { TextField } from '@mui/material';
+import { getUserInfo } from '../../../backend/database';
 
 export default function Profile() {
   const navigate = useNavigate()
@@ -23,7 +25,8 @@ export default function Profile() {
       phone: user.phoneNumber,
       photo: user.photoURL
     })
-    console.log(authProfile)
+    console.log(user)
+    //console.log(getUserInfo(user.uid))
   }
   else {
     navigate('/')
@@ -54,7 +57,7 @@ export default function Profile() {
                 <Row>
                   <Row>
                     <Col>
-                      <Form.Control size="lg" placeholder="First name" />
+                      <TextField id='filled-basic' label='First name' variant='filled'/>
                     </Col>
                     <Col>
                       <Form.Control size="lg" placeholder="Last name" />

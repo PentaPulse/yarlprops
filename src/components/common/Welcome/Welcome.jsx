@@ -2,7 +2,7 @@ import { GoogleAuthProvider, createUserWithEmailAndPassword, sendPasswordResetEm
 import React, { useState } from 'react'
 import { authUser } from '../../../backend/autharization';
 import { Button, ButtonGroup, TextField } from '@mui/material';
-import { addUser } from '../../../backend/database';
+import { initializeUser } from '../../../backend/database';
 
 const googleStyle = {
     "border-radius": "100px",
@@ -111,7 +111,7 @@ export function Register({ handleBack }) {
             const user = result.user;
             user.displayName = dname;
             console.log("uid : "+user.uid)
-            addUser(user.uid,fname,lname,email)
+            initializeUser(user.uid,fname,lname,email)
             window.location.reload(0)
         })
         .catch((error)=>{
