@@ -6,7 +6,7 @@ import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import { Login, Register, Welcome } from '../common/Welcome/Welcome';
 import NavigationBar from '../common/NavigationBar/NavigationBar';
-import Footer from '../common/Footer';
+import Footer from '../common/Footer/Footer';
 import { ToastContainer } from 'react-toastify';
 
 const style = {

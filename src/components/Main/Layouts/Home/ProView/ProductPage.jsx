@@ -3,7 +3,8 @@ import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { Container, Row, Col, Image, Carousel } from 'react-bootstrap';
 import styles from './ProductPage.module.css';
-import { products } from './productData';
+import { products } from '../Data/productData';
+import Table from 'react-bootstrap/Table';
 
 const ProductPage = () => {
   const { id } = useParams();
@@ -54,6 +55,45 @@ const ProductPage = () => {
             </Carousel>
           </Col>
           <Col md={6}>
+            <Table striped bordered hover variant="dark">
+              <tbody>
+                <tr>
+                <td colSpan={2} style={{ textAlign: 'center'}}>{product.title}</td>
+                </tr>
+                <tr style={{ textAlign: 'center'}}>
+                  <td>Category</td>
+                  <td>{product.category}</td>
+                </tr>
+                <tr>
+                  <td style={{ textAlign: 'center'}}>Description</td>
+                  <td>
+                  <ul>
+                    <li>{product.descriptionLine1}</li> 
+                    <li>{product.descriptionLine2}</li> 
+                    <li>{product.descriptionLine3}</li> 
+                    <li>{product.descriptionLine4}</li> 
+                    <li>{product.descriptionLine5}</li> 
+                    <li>{product.descriptionLine6}</li>
+                  </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <td colSpan={2} style={{ textAlign: 'center'}}>Seller/Renter Details</td>
+                </tr>
+                <tr style={{ textAlign: 'center'}}>
+                  <td>Name</td>
+                  <td>{product.sellerName}</td>
+                </tr>
+                <tr style={{ textAlign: 'center'}}>
+                  <td>Location</td>
+                  <td>{product.Location}</td>
+                </tr>
+                <tr style={{ textAlign: 'center'}}>
+                  <td>Contact No</td>
+                  <td>{product.telephone}</td>
+                </tr>
+              </tbody>
+            </Table>
             <div className={styles.productDetailsSection}>
               {/* Product Details */}
               <h2>{product.title}</h2>

@@ -74,3 +74,13 @@
     font-weight: 500;
     margin: 2px 0 12px 0;
 }
+
+.aboutUs{
+    text-align: justify;
+    font-size: 18px;
+    margin-bottom: 3rem;
+}
+
+.aboutUs h2{
+    text-align: center;
+}

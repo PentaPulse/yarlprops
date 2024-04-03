@@ -81,7 +81,47 @@ function InfoPP() {
     return (
         <>
             <Container>
-                <p align='center'>Welcome all for YarlProps System. In our system you can buy and rent any item as your wish.  </p>
+                <div className={styles.aboutUs}>
+                    <h2>About Us - Who We Are?</h2><br/>
+                    <p>
+                        At University of Jaffna Boarding and Vehicle Rent Management
+                        System, we are dedicated to revolutionizing the way university
+                        students manage their accommodation and transportation needs.
+                    </p>
+                    <p>
+                        Our platform is designed with the aim of simplifying the process
+                        of finding suitable boarding accommodations and renting vehicles
+                        for students, ensuring convenience, accessibility, and
+                        affordability.
+                    </p>
+                    <p>
+                        With years of experience in understanding the unique challenges
+                        faced by university students, we have developed a comprehensive
+                        system that caters specifically to their needs. Whether you're a
+                        freshman looking for your first boarding house or a senior seeking
+                        a reliable vehicle for your commute, our platform offers a
+                        seamless solution tailored just for you.
+                    </p>
+                    <p>
+                        Our team is comprised of passionate individuals who are committed
+                        to providing top-notch services and support to our users. We
+                        strive to maintain transparency, integrity, and professionalism in
+                        all our interactions, ensuring that every user feels valued and
+                        supported throughout their journey with us.
+                    </p>
+                    <p>
+                        By leveraging cutting-edge technology and innovative solutions, we
+                        aim to empower university students to take control of their
+                        accommodation and transportation arrangements, allowing them to
+                        focus on what truly matters – their education and personal growth.
+                    </p>
+                    <p>
+                        Thank you for choosing University of Jaffna Boarding and Vehicle
+                        Rent Management System. We look forward to serving you and being a
+                        part of your university experience
+                    </p>
+                </div>
+                <p style={{ fontSize: '22px', textAlign: 'center', fontWeight: 'bold'}}>Welcome all for YarlProps System. In our system you can buy and rent any item as your wish.  </p>
             </Container>
         </>
     )
@@ -99,7 +139,7 @@ function ContactComps() {
     }
     return (
         <>
-            <Container maxWidth='lg' className='' >{/*sx={{ bgcolor: '#cfe8fc'}}*/}
+            <Container maxWidth='lg' style={{ fontSize: '20px'}} >{/*sx={{ bgcolor: '#cfe8fc'}}*/}
                 <div className="d-flex flex-row mt-4">
                     <div className="left d-flex flex-column w-50 text-center mt-4">
                         <div className="address mb-4">
@@ -124,7 +164,7 @@ function ContactComps() {
                         <TextField label='Your Name' value={name} onChange={(e)=>setName(e.target.value)}/>
                         <TextField label='Your Email' value={email} onChange={(e)=>setEmail(e.target.value)}/>
                         <TextField label='Your Message' value={message} onChange={(e)=>setMessage(e.target.value)}/>
-                        <Button variant='contained' onClick={handleSubmit}>Send Message</Button>
+                        <Button style={{ backgroundColor: '#0d6efd'}} variant='contained' onClick={handleSubmit}>Send Message</Button>
                     </div>
                 </div>
             </Container>

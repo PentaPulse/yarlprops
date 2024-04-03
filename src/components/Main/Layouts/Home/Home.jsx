@@ -1,9 +1,9 @@
 import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
-import Slidshow from './Slidshow';
+import Slidshow from './Slideshow/Slidshow';
 import SearchAndFilters from './SearchAndFilters/SearchAndFilters';
-import Categories from './Categories';
-import ProductsContents from './ProductsContents';
+import Categories from './Filters/Categories';
+import ProductsContents from './ProContent/ProductsContents';
 
 function Home({handleBuy}) {
   return (
