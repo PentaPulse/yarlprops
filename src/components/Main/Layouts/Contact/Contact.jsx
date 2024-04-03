@@ -3,12 +3,13 @@ import styles from './Contact.module.css'
 //import { Button, TextField ,Container} from '@mui/material'
 import { sendMessage } from '../../../../backend/database'
 import Image1 from "./images/contact1.jpg"
-//import Image2 from "./images/aboutus.avif"
+import Image2 from "./images/aboutus.avif"
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
 import img3 from './images/hello2a.png';
+import Card from 'react-bootstrap/Card';
 
 
 function About() {
@@ -23,18 +24,25 @@ function About() {
 function Photos() {
     return (
         <>
-            <section className={styles.hero1} >
-                <div className={styles.content2}>
 
-                </div>
-            </section>
+<section className={styles.hero1} style={{backgroundImage:`url(${Image2})`}}>
+    <div className={styles.content1}>
+    <h1>About Us</h1>
+    
+    </div>
+    </section>
+       {/*// <section className={styles.hero1} >
+   // <div className={styles.content2}>
+   
+   // </div>
+   // </section>
+       
+       
 
-
-
-            <section>
-                <div className="d-flex flex-column text-center mt-4">
-                    <h1 className={`${styles.centerHeading}`}>Our Team</h1>
-                    <div className={styles.homeContainer}>
+        
+            <div className="d-flex flex-column text-center mt-4">
+                <h1 className={`${styles.centerHeading}`}>Our Team</h1>
+                <div className={styles.homeContainer}>
 
 
                         <div className={styles.profileCard}>
@@ -86,14 +94,42 @@ function Photos() {
                                 <h3>Janani Welipitiya</h3>
                                 <p>Team member</p>
 
-                            </div>
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
+            
+*/
+<section>
+  <h1 className={styles.topic}>Our Team</h1>
+  <Row xs={1} md={5} className="g-2">
+    {[
+      {imageUrl: '/sample/sachi02.jpg', title: 'Sachintha Wijerathna', text: 'Text for Sachintha'},
+      {imageUrl: '/sample/Charith.jpg', title: 'Charith Gayashan', text: 'Text for Charith'},
+      {imageUrl: '/sample/mith.jpeg', title: 'Mith Jayakodi', text: 'Text for Mith'},
+      {imageUrl: '/sample/priya01.jpg', title: 'R.Priyadarshani', text: 'Text for Priyadarshani'},
+      {imageUrl: '/sample/jan1.jpg', title: 'Janani Welipitiya', text: 'Text for Janani'}
+    ].map((item, idx) => (
+      <Col key={idx} className="g-5">
+        
+        <Card className={styles.customCard}>
+       
+          <Card.Img variant="top" src={item.imageUrl} alt={`memberImage${idx + 1}`}  className={styles.cardImage} />
+          <Card.Body>
+            <Card.Title className={styles.customTitle}>{item.title}</Card.Title>
+            <Card.Text className={styles.customText}>{item.text}</Card.Text>
+          </Card.Body>
+          
+        </Card>
+        
+      </Col>
+    ))}
+  </Row>
+</section>
 
-
-
+       }  
+       <br/>
+    
 
 
 
@@ -104,10 +140,10 @@ function Photos() {
 function InfoPP() {
     return (
         <>
-            <Container>
-
+     {/*  <Container>
+            
                 <h3 align='center'>Welcome all for YarlProps System. In our system you can buy and rent any item as your wish.  </h3>
-            </Container>
+    </Container>*/}
 
             <section className={styles.hero} style={{ backgroundImage: `url(${Image1})` }}>
                 <div className={styles.content1}>
