@@ -1,13 +1,9 @@
 import React, { useState } from 'react'
-import Backdrop from '@mui/material/Backdrop';
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
-import Fade from '@mui/material/Fade';
+import {Backdrop,Box,Modal,Fade,Container }from '@mui/material';
+import { ToastContainer } from 'react-toastify';
 import { Login, Register, Welcome } from '../common/Welcome/Welcome';
 import NavigationBar from '../common/NavigationBar/NavigationBar';
 import Footer from '../common/Footer/Footer';
-import { ToastContainer } from 'react-toastify';
-import Container from '@mui/material/Container';
 
 const style = {
     position: 'absolute',

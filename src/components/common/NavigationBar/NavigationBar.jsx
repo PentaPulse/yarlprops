@@ -8,7 +8,7 @@ const pages = ['Home', 'Guide', 'About', 'Contact'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 const modes = ['Default', 'Light', 'Dark']
 
-export default function NavigationBar({handleLoginButton}) {
+export default function NavigationBar({ handleLoginButton }) {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const [anchorElMode, setAnchorElMode] = React.useState(null);
