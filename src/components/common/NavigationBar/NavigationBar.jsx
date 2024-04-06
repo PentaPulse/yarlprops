@@ -33,6 +33,9 @@ export default function NavigationBar({ handleLoginButton }) {
     const handleCloseMode = () => {
         setAnchorElMode(null);
     };
+    const handleMode=(e)=>{
+        console.log(e.currentTarget)
+    }
 
     return (
         <AppBar position="fixed" sx={{
@@ -154,7 +157,7 @@ export default function NavigationBar({ handleLoginButton }) {
                         >
                             {modes.map((mode) => (
                                 <MenuItem key={mode} onClick={handleCloseMode}>
-                                    <Typography textAlign={'center'}>{mode}</Typography>
+                                    <Typography onClick={handleMode} textAlign={'center'}>{mode}</Typography>
                                 </MenuItem>
                             ))}
                         </Menu>
