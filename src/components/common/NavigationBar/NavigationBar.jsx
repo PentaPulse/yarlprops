@@ -3,7 +3,7 @@ import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, 
 import MenuIcon from '@mui/icons-material/Menu';
 import AdbIcon from '@mui/icons-material/Adb';
 
-const pages = ['Home', 'About', 'Contact'];
+const pages = ['Home','Guide', 'About', 'Contact'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 export default function NavigationBar() {
@@ -86,7 +86,7 @@ export default function NavigationBar() {
                         >
                             {pages.map((page) => (
                                 <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                    <Typography textAlign="center" sx={{color:'black'}}>{page}</Typography>
+                                    <Typography textAlign="center" sx={{color:'black'}} href={`${'/'} ${page}`}>{page}</Typography>
                                 </MenuItem>
                             ))}
                         </Menu>
@@ -115,7 +115,7 @@ export default function NavigationBar() {
                             <Button
                                 key={page}
                                 onClick={handleCloseNavMenu}
-                                sx={{ my: 2, color: 'white', display: 'block' }}
+                                sx={{ my: 2, color: 'black', display: 'block' }} href={`/${page.toLowerCase()}`}
                             >
                                 {page}
                             </Button>
@@ -125,7 +125,7 @@ export default function NavigationBar() {
                     <Box sx={{ flexGrow: 0 }}>
                         <Tooltip title="Open settings">
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                                <Avatar alt="Remy Sharp" src="sample/profile.svg" />
                             </IconButton>
                         </Tooltip>
                         <Menu

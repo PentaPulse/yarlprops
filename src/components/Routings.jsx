@@ -15,6 +15,7 @@ function Routings() {
       <Layout>
         <Routes>
           <Route exact path='/' element={<Home/>}/>
+          <Route exact path='/home' element={<Home/>}/>
           <Route path='/guide' element={<Guide/>}/>
           <Route path='/contact' element={<Contact/>}/>
           <Route path='/profile' element={<UserProfile/>}/>

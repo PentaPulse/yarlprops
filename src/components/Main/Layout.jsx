@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-//import { Modal } from 'react-bootstrap';
 import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
@@ -8,6 +7,7 @@ import { Login, Register, Welcome } from '../common/Welcome/Welcome';
 import NavigationBar from '../common/NavigationBar/NavigationBar';
 import Footer from '../common/Footer/Footer';
 import { ToastContainer } from 'react-toastify';
+import Container from '@mui/material/Container';
 
 const style = {
     position: 'absolute',
@@ -73,9 +73,9 @@ function Layout({ children }) {
                     </Fade>
                 </Modal>
             </div>
-            <div className='mt-5'>
+            <Container sx={{marginTop:'85px'}}>
                 {children}
-            </div>
+            </Container>
             <Footer />
         </>
     )
