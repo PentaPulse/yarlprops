@@ -51,7 +51,7 @@ function Layout({ children }) {
 
     return (
         <>
-            <NavigationBar handleSigninButton={showWelcome} />
+            <NavigationBar handleLoginButton={showWelcome} />
             <ToastContainer/>
             <div className='d-flex justify-content-center align-items-center mt-30 text-center'>
                 <Modal

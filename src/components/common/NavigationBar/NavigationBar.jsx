@@ -2,19 +2,25 @@ import * as React from 'react';
 import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Button, Tooltip, MenuItem } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AdbIcon from '@mui/icons-material/Adb';
+import { authUser } from '../../../backend/autharization'
 
-const pages = ['Home','Guide', 'About', 'Contact'];
+const pages = ['Home', 'Guide', 'About', 'Contact'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const modes = ['Default', 'Light', 'Dark']
 
-export default function NavigationBar() {
+export default function NavigationBar({handleLoginButton}) {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
+    const [anchorElMode, setAnchorElMode] = React.useState(null);
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
+    };
+    const handleOpenMode = (event) => {
+        setAnchorElMode(event.currentTarget);
     };
 
     const handleCloseNavMenu = () => {
@@ -24,6 +30,9 @@ export default function NavigationBar() {
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
+    const handleCloseMode = () => {
+        setAnchorElMode(null);
+    };
 
     return (
         <AppBar position="fixed" sx={{
@@ -32,7 +41,7 @@ export default function NavigationBar() {
             borderRadius: '0 0 10px 10px',
             border: '1px solid rgba(255, 255, 255, 0.18)',
             backdropFilter: 'blur(3px)',
-            color:'black'
+            color: 'black'
         }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
@@ -81,12 +90,12 @@ export default function NavigationBar() {
                             open={Boolean(anchorElNav)}
                             onClose={handleCloseNavMenu}
                             sx={{
-                                display: { xs: 'block', md: 'none' }, color:'black'
+                                display: { xs: 'block', md: 'none' }, color: 'black'
                             }}
                         >
                             {pages.map((page) => (
                                 <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                    <Typography textAlign="center" sx={{color:'black'}} href={`${'/'} ${page}`}>{page}</Typography>
+                                    <Typography textAlign="center" sx={{ color: 'black' }} href={`${'/'} ${page}`}>{page}</Typography>
                                 </MenuItem>
                             ))}
                         </Menu>
@@ -121,11 +130,10 @@ export default function NavigationBar() {
                             </Button>
                         ))}
                     </Box>
-
-                    <Box sx={{ flexGrow: 0 }}>
-                        <Tooltip title="Open settings">
-                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <Avatar alt="Remy Sharp" src="sample/profile.svg" />
+                    <Box>
+                        <Tooltip title="Mode">
+                            <IconButton onClick={handleOpenMode}>
+                                <Avatar alt='Mode selecter' src='mode/sun.svg' />
                             </IconButton>
                         </Tooltip>
                         <Menu
@@ -141,16 +149,47 @@ export default function NavigationBar() {
                                 vertical: 'top',
                                 horizontal: 'right',
                             }}
-                            open={Boolean(anchorElUser)}
-                            onClose={handleCloseUserMenu}
+                            open={Boolean(anchorElMode)}
+                            onClose={handleCloseMode}
                         >
-                            {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                    <Typography textAlign="center">{setting}</Typography>
+                            {modes.map((mode) => (
+                                <MenuItem key={mode} onClick={handleCloseMode}>
+                                    <Typography textAlign={'center'}>{mode}</Typography>
                                 </MenuItem>
                             ))}
                         </Menu>
                     </Box>
+
+                    {!authUser.currentUser ? <Button variant='dark' onClick={handleLoginButton}>Login</Button> :
+                        <Box sx={{ flexGrow: 0 }}>
+                            <Tooltip title="Open settings">
+                                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                    <Avatar alt="Remy Sharp" src="sample/profile.svg" />
+                                </IconButton>
+                            </Tooltip>
+                            <Menu
+                                sx={{ mt: '45px' }}
+                                id="menu-appbar"
+                                anchorEl={anchorElUser}
+                                anchorOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                keepMounted
+                                transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                open={Boolean(anchorElUser)}
+                                onClose={handleCloseUserMenu}
+                            >
+                                {settings.map((setting) => (
+                                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                                        <Typography textAlign="center" href={`/${setting.toLowerCase()}`}>{setting}</Typography>
+                                    </MenuItem>
+                                ))}
+                            </Menu>
+                        </Box>}
                 </Toolbar>
             </Container>
         </AppBar>
