@@ -11,7 +11,7 @@ const Footer = () => {
                         <div className="col-md-6 col-lg-5 col-12 ft-1">
                             <h3><span>YARL</span>PROPS</h3>
                             <h4>Do You Have Questions ?</h4>
-                            <p>Feel Free to contact us.</p>
+                            <p>Feel Free to Contact Us.</p>
                             {/* <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Laborum ea quo ex ullam laboriosam magni totam, facere eos iure voluptate.</p> */}
                             <div className="footer-icons">
                                 <i className="fa-brands fa-facebook"></i>

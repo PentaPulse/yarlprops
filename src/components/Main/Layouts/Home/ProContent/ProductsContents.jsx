@@ -10,15 +10,15 @@ import { products } from '../Data/productData';
 const ProductsContents = () => {
     return (
         <>
-        <section id='products' className='block products-block mt-5'>
-            <Container fluid='md'>
-                <Row xs={1} md={2} lg={3} xl={4}> {/* Display one column for extra small screens and up to four columns for extra large screens */}
+        <section id='products' className='d-fiex justify-content-center align-items-center mt-5'>
+            <Container fluid>
+                <Row xs={1} sm={2} md={2} lg={3} xl={4}> {/* Display one column for extra small screens and up to four columns for extra large screens */}
                     {products.map((product) => (
                         <Col key={product.id}> {/* Each card takes one column on extra small screens and up to four columns on extra large screens */}
-                            <Card style={{ width: '18rem', height: '35rem', margin: '0.5rem'}}>
+                            <Card style={{ width: '17rem', height: '35rem', margin: '0.5rem', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>
                                 <Card.Img variant="top" src={product.mainimage} style={{ width: '35wh', height: '35vh' }}/>
                                 <Card.Body>                    
-                                    <Card.Title style={{ textAlign: 'center', fontWeight: 'bold' }}>
+                                    <Card.Title style={{ textAlign: 'center', fontWeight: 'bold', height: '2.8rem' }}>
                                         {product.title}
                                     </Card.Title>
                                     <Card.Text style={{ textAlign: 'justify' }}>
@@ -34,8 +34,6 @@ const ProductsContents = () => {
                 </Row>
             </Container>
         </section>
-        
-        
         </>
     );
 }
