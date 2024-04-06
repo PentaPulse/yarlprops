@@ -1,89 +1,158 @@
-import React, { useEffect, useState } from 'react'
-import { Button, Container, Nav,  Navbar, Offcanvas } from 'react-bootstrap'
-import styles from "./Navigation.module.css"
-import { onAuthStateChanged } from 'firebase/auth';
-import { authUser } from '../../../backend/autharization';
-import { Link, useNavigate } from 'react-router-dom';
+import * as React from 'react';
+import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Button, Tooltip, MenuItem } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import AdbIcon from '@mui/icons-material/Adb';
 
-function Profile({ show, handleClose }) {
-    const navigate=useNavigate()
-    const handleSignout = () => {
-    authUser.signOut()
-    navigate('/')
-}
-return (
-        <>
-            <Offcanvas show={show} onHide={handleClose} placement='end' scroll>
-                <Offcanvas.Header closeButton>
-                    <Offcanvas.Title><img alt='pp' src={authUser.currentUser.photoURL} className='rounded' width={50} />{authUser.currentUser.displayName}</Offcanvas.Title>
-                </Offcanvas.Header>
-                <hr />
-                <Offcanvas.Body>
-                    <Link to='/profile' onClick={handleClose}>Your Profile</Link>
-                    <hr />
-                    <Button onClick={handleSignout}>Sign out</Button>
-                </Offcanvas.Body>
-            </Offcanvas>
-        </>
-    );
-}
+const pages = ['Home', 'About', 'Contact'];
+const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-function NavigationBar({ handleSigninButton }) {
-    const [show, setShow] = useState(false);
+export default function NavigationBar() {
+    const [anchorElNav, setAnchorElNav] = React.useState(null);
+    const [anchorElUser, setAnchorElUser] = React.useState(null);
 
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const handleOpenNavMenu = (event) => {
+        setAnchorElNav(event.currentTarget);
+    };
+    const handleOpenUserMenu = (event) => {
+        setAnchorElUser(event.currentTarget);
+    };
 
-    const [user, setUser] = useState(null);
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(authUser, (user) => {
-            setUser(user);
-        });
+    const handleCloseNavMenu = () => {
+        setAnchorElNav(null);
+    };
 
-        return () => {
-            unsubscribe();
-        };
-    }, []);
-    let photo = ''
-    try {
-        if (authUser.currentUser.photoURL) {
-            photo = authUser.currentUser.photoURL
-        }
-        else {
-            photo = '/sample/profile.svg'
-        }
-
-    } catch (e) {
-        console.log(e)
-    }
+    const handleCloseUserMenu = () => {
+        setAnchorElUser(null);
+    };
 
     return (
-        <>
-            <Navbar fixed='top' expand="md" className={styles.navigationBarContainer}>
-                <Container className='ml-4'>
-                    <Navbar.Brand href="/" className='m-0'>YarlProps</Navbar.Brand >
-                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                    <Nav.Link><img alt="" src='mode/sun.svg' width={30} /></Nav.Link>
-                    <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
-                        <Nav>
-                            <Nav.Link href="/">Home</Nav.Link>
-                            <Nav.Link href='/guide'>Guide</Nav.Link>
-                            <Nav.Link href='/contact'>Contact</Nav.Link>
-                            {user ?
-                                <div className={styles.naviToggle}>
-                                    <Nav.Link onClick={handleShow}><img alt='pp' src={photo} style={{ borderRadius: '100%' , width:40}} /></Nav.Link>
-                                    <Profile show={show} handleClose={handleClose} photo={photo} />
-                                </div>
-                                :
-                                <Button variant='dark' onClick={handleSigninButton}>Login</Button>
-                            }
-                        </Nav>
-                    </Navbar.Collapse>
-                </Container>
-            </Navbar>
-            <br />
-        </>
+        <AppBar position="fixed" sx={{
+            background: 'rgba(255, 255, 255, 0.5)',
+            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+            borderRadius: '0 0 10px 10px',
+            border: '1px solid rgba(255, 255, 255, 0.18)',
+            backdropFilter: 'blur(3px)',
+            color:'black'
+        }}>
+            <Container maxWidth="xl">
+                <Toolbar disableGutters>
+                    <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+                    <Typography
+                        variant="h6"
+                        noWrap
+                        component="a"
+                        href="#app-bar-with-responsive-menu"
+                        sx={{
+                            mr: 2,
+                            display: { xs: 'none', md: 'flex' },
+                            fontFamily: 'monospace',
+                            fontWeight: 700,
+                            letterSpacing: '.3rem',
+                            color: 'inherit',
+                            textDecoration: 'none',
+                        }}
+                    >
+                        LOGO
+                    </Typography>
+
+                    <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+                        <IconButton
+                            size="large"
+                            aria-label="account of current user"
+                            aria-controls="menu-appbar"
+                            aria-haspopup="true"
+                            onClick={handleOpenNavMenu}
+                            color="inherit"
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                        <Menu
+                            id="menu-appbar"
+                            anchorEl={anchorElNav}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'left',
+                            }}
+                            keepMounted
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'left',
+                            }}
+                            open={Boolean(anchorElNav)}
+                            onClose={handleCloseNavMenu}
+                            sx={{
+                                display: { xs: 'block', md: 'none' }, color:'black'
+                            }}
+                        >
+                            {pages.map((page) => (
+                                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                                    <Typography textAlign="center" sx={{color:'black'}}>{page}</Typography>
+                                </MenuItem>
+                            ))}
+                        </Menu>
+                    </Box>
+                    <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+                    <Typography
+                        variant="h5"
+                        noWrap
+                        component="a"
+                        href="#app-bar-with-responsive-menu"
+                        sx={{
+                            mr: 2,
+                            display: { xs: 'flex', md: 'none' },
+                            flexGrow: 1,
+                            fontFamily: 'monospace',
+                            fontWeight: 700,
+                            letterSpacing: '.3rem',
+                            color: 'inherit',
+                            textDecoration: 'none',
+                        }}
+                    >
+                        LOGO
+                    </Typography>
+                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                        {pages.map((page) => (
+                            <Button
+                                key={page}
+                                onClick={handleCloseNavMenu}
+                                sx={{ my: 2, color: 'white', display: 'block' }}
+                            >
+                                {page}
+                            </Button>
+                        ))}
+                    </Box>
+
+                    <Box sx={{ flexGrow: 0 }}>
+                        <Tooltip title="Open settings">
+                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                            </IconButton>
+                        </Tooltip>
+                        <Menu
+                            sx={{ mt: '45px' }}
+                            id="menu-appbar"
+                            anchorEl={anchorElUser}
+                            anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            keepMounted
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            open={Boolean(anchorElUser)}
+                            onClose={handleCloseUserMenu}
+                        >
+                            {settings.map((setting) => (
+                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                                    <Typography textAlign="center">{setting}</Typography>
+                                </MenuItem>
+                            ))}
+                        </Menu>
+                    </Box>
+                </Toolbar>
+            </Container>
+        </AppBar>
     );
 }
-
-export default NavigationBar;

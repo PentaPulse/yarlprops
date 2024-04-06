@@ -10,7 +10,7 @@ function Home({handleBuy}) {
     <>
       <Container> 
         <Row>
-          <Col className='mt-2'>
+          <Col className='mt-5'>
             <Slidshow />
           </Col>
         </Row>
