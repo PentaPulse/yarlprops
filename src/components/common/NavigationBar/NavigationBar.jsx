@@ -37,6 +37,13 @@ export default function NavigationBar({ handleLoginButton }) {
         console.log(e.currentTarget)
     }
 
+    const handleSettings=(e)=>{
+        console.log(e.target.value)
+        if(e.target.value==="Logout"){
+            authUser.signOut()
+        }
+    }
+
     return (
         <AppBar position="fixed" sx={{
             background: 'rgba(255, 255, 255, 0.5)',
@@ -188,7 +195,7 @@ export default function NavigationBar({ handleLoginButton }) {
                             >
                                 {settings.map((setting) => (
                                     <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                        <Typography textAlign="center" href={`/${setting.toLowerCase()}`}>{setting}</Typography>
+                                        <Typography textAlign="center" onClick={handleSettings} href={`${'/'} ${setting}`}>{setting}</Typography>
                                     </MenuItem>
                                 ))}
                             </Menu>

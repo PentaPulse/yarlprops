@@ -1,6 +1,8 @@
 import './App.css';
+import {ThemeProvider}from '@mui/material/styles'
 import Routings from './components/Routings';
 import Maintain from './components/Maintain';
+import { LightTheme } from './components/themes/Themes';
 
 function App() {
   const web_status = true;
@@ -14,6 +16,14 @@ function App() {
   else {
     return (<Maintain />)
   }
+}
+
+function Themed(){
+  return(
+    <ThemeProvider theme={<LightTheme/>}>
+      <Routings/>
+    </ThemeProvider>
+  )
 }
 
 export default App;
