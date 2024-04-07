@@ -145,7 +145,7 @@ export default function NavigationBar({ handleLoginButton ,handleMode}) {
                         <Box sx={{ flexGrow: 0 }}>
                             <Tooltip title="Open settings">
                                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                    <Avatar alt="Remy Sharp" src="sample/profile.svg" />
+                                    <Avatar alt="Remy Sharp" src={authUser.currentUser.photoURL} />
                                 </IconButton>
                             </Tooltip>
                             <Menu
