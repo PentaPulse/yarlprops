@@ -3,7 +3,6 @@ import * as React from 'react'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Routings from './components/Routings';
 import Maintain from './components/Maintain';
-import { LightTheme } from './components/themes/Themes';
 import CssBaseline from '@mui/material/CssBaseline';
 
 function App() {
@@ -30,6 +29,7 @@ function Themed(){
           mode:  modeC ? 'dark' : 'light',
         },
       }),
+      [modeC],
   );
   const handleTheme = () => {
     setModec(!modeC)

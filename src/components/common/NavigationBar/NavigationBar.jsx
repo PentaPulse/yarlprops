@@ -9,7 +9,6 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 
 const pages = ['Home', 'Guide', 'About', 'Contact'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-const modes = ['Default', 'Light', 'Dark']
 
 export default function NavigationBar({ handleLoginButton ,handleMode}) {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
