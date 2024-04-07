@@ -8,11 +8,11 @@ import UserProfile from './Main/Profiles/UserProfile';
 import Admin from './Main/Dashboards/Admin';
 import ProductPage from './Main/Layouts/Home/ProView/ProductPage';
 
-function Routings() {
+function Routings({handleMode}) {
   return (
     <>
     <Router>
-      <Layout>
+      <Layout handleMode={handleMode}>
         <Routes>
           <Route exact path='/' element={<Home/>}/>
           <Route exact path='/home' element={<Home/>}/>

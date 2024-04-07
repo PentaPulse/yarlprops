@@ -1,26 +1,26 @@
 import * as React from 'react';
 import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Button, Tooltip, MenuItem } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import AdbIcon from '@mui/icons-material/Adb';
 import { authUser } from '../../../backend/autharization'
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 
 const pages = ['Home', 'Guide', 'About', 'Contact'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 const modes = ['Default', 'Light', 'Dark']
 
-export default function NavigationBar({ handleLoginButton }) {
+export default function NavigationBar({ handleLoginButton ,handleMode}) {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
-    const [anchorElMode, setAnchorElMode] = React.useState(null);
+    const theme = useTheme();
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
-    };
-    const handleOpenMode = (event) => {
-        setAnchorElMode(event.currentTarget);
     };
 
     const handleCloseNavMenu = () => {
@@ -30,16 +30,10 @@ export default function NavigationBar({ handleLoginButton }) {
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
-    const handleCloseMode = () => {
-        setAnchorElMode(null);
-    };
-    const handleMode=(e)=>{
-        console.log(e.currentTarget)
-    }
 
-    const handleSettings=(e)=>{
+    const handleSettings = (e) => {
         console.log(e.target.value)
-        if(e.target.value==="Logout"){
+        if (e.target.value === "Logout") {
             authUser.signOut()
         }
     }
@@ -142,32 +136,10 @@ export default function NavigationBar({ handleLoginButton }) {
                     </Box>
                     <Box>
                         <Tooltip title="Mode">
-                            <IconButton onClick={handleOpenMode}>
-                                <Avatar alt='Mode selecter' src='mode/sun.svg' />
+                            <IconButton sx={{ ml: 1 }} onClick={handleMode} color="inherit">
+                                {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
                             </IconButton>
                         </Tooltip>
-                        <Menu
-                            sx={{ mt: '45px' }}
-                            id="menu-appbar"
-                            anchorEl={anchorElUser}
-                            anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            open={Boolean(anchorElMode)}
-                            onClose={handleCloseMode}
-                        >
-                            {modes.map((mode) => (
-                                <MenuItem key={mode} onClick={handleCloseMode}>
-                                    <Typography onClick={handleMode} textAlign={'center'}>{mode}</Typography>
-                                </MenuItem>
-                            ))}
-                        </Menu>
                     </Box>
 
                     {!authUser.currentUser ? <Button variant='dark' onClick={handleLoginButton}>Login</Button> :

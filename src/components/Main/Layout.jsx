@@ -21,7 +21,7 @@ const style = {
     textAlign:"center"
 };
 
-function Layout({ children }) {
+function Layout({ children ,handleMode}) {
     const [open, setOpen] = useState(false);
     const [welcome,setWelcome]=useState(false)
     const [login,setLogin]=useState(false)
@@ -47,7 +47,7 @@ function Layout({ children }) {
 
     return (
         <>
-            <NavigationBar handleLoginButton={showWelcome} />
+            <NavigationBar handleLoginButton={showWelcome} handleMode={handleMode}/>
             <ToastContainer/>
             <div className='d-flex justify-content-center align-items-center mt-30 text-center'>
                 <Modal

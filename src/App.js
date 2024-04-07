@@ -1,15 +1,17 @@
 import './App.css';
-import {ThemeProvider}from '@mui/material/styles'
+import * as React from 'react'
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Routings from './components/Routings';
 import Maintain from './components/Maintain';
 import { LightTheme } from './components/themes/Themes';
+import CssBaseline from '@mui/material/CssBaseline';
 
 function App() {
   const web_status = true;
   if (web_status) {
     return (
         <div>
-          <Routings />
+          <Themed />
         </div>
     );
   }
@@ -19,9 +21,23 @@ function App() {
 }
 
 function Themed(){
+  const [modeC, setModec] = React.useState(false)
+
+  const theme = React.useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode:  modeC ? 'dark' : 'light',
+        },
+      }),
+  );
+  const handleTheme = () => {
+    setModec(!modeC)
+  }
   return(
-    <ThemeProvider theme={<LightTheme/>}>
-      <Routings/>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Routings handleMode={handleTheme} />
     </ThemeProvider>
   )
 }
