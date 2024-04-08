@@ -1,6 +1,15 @@
 import * as React from 'react';
-import Image1 from "./images/contact.jpg"
+import Image1 from "./images/contact1.jpg"
 import {Box,Typography} from  "@mui/material"
+import Grid from '@mui/system/Unstable_Grid';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import SendIcon from '@mui/icons-material/Send';
+
+
+
 
 function Contact() {
   return (
@@ -26,7 +35,7 @@ function Contact() {
                 padding:{xs:3,sm:2,md:20},
             }}
             >
-                <Box sx={{background:"white",opacity:"0.8",padding:{xs:3}}}>
+                <Box sx={{background:"white",opacity:"0.8", borderRadius: 3,padding:{xs:3}}}>
                 <Typography variant={"h1"} color="black" align="center" pt={8}>
               <b>Contact Us</b>
             </Typography>
@@ -49,7 +58,49 @@ function Contact() {
             </Typography>
     </Box>
     <Box>
-      
+    <Grid container rowSpacing={3}>
+        <Grid xs={8}>
+        <Card style={{ maxWidth: 450, padding: "20px 5px",borderRadius: 4, margin: "0 auto" }}>
+          <CardContent>
+            <Typography gutterBottom variant="h5">
+             <b>Get in touch</b> 
+          </Typography> 
+            <Typography variant="body2" color="textSecondary" component="p" gutterBottom>
+              Fill up the form and our team will get back to you within 24 hours.
+          </Typography> 
+            <form>
+              <Grid container spacing={1}>
+                <Grid xs={12} sm={6} item>
+                  <TextField placeholder="Enter first name" label="First Name" variant="outlined" fullWidth required />
+                </Grid>
+                <Grid xs={12} sm={6} item>
+                  <TextField placeholder="Enter last name" label="Last Name" variant="outlined" fullWidth required />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField type="email" placeholder="Enter email" label="Email" variant="outlined" fullWidth required />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField type="number" placeholder="Enter phone number" label="Phone" variant="outlined" fullWidth required />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField label="Message" multiline rows={4} placeholder="Type your message here" variant="outlined" fullWidth required />
+                </Grid>
+                <Grid item xs={12}>
+                  <Button type="submit" variant="contained" endIcon={<SendIcon/>} fullWidth>Send</Button>
+                </Grid>
+
+              </Grid>
+            </form>
+          </CardContent>
+        </Card>
+        </Grid>
+        <Grid xs={4}>
+          <Box>
+          
+          </Box>
+        </Grid>
+        </Grid>
+
     </Box>
       
     </div>
