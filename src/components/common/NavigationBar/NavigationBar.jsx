@@ -3,7 +3,7 @@ import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, 
 import { useTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import AdbIcon from '@mui/icons-material/Adb';
-import { authUser, useAuth } from '../../../backend/autharization'
+import { authUser } from '../../../backend/autharization'
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 
@@ -15,11 +15,13 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const theme = useTheme();
     const user = authUser.currentUser
+    if(user){
     sessionStorage.setItem('photo', user.photoURL)
+    }
 
     const handleLogout = () => {
         sessionStorage.removeItem('photo');
-        authUser.currentUser.signOut()
+        authUser.currentUser.signout()
         window.location.reload(0)
     }
 
@@ -148,7 +150,7 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
                         </Tooltip>
                     </Box>
 
-                    {Boolean(sessionStorage.getItem('photo')) ? <Button sx={{ color: (theme) => (theme.palette.mode === 'light' ? '#000000' : '#FFFFFF') }} onClick={handleLoginButton}>Login</Button> :
+                    {!Boolean(sessionStorage.getItem('photo')) ? <Button sx={{ color: (theme) => (theme.palette.mode === 'light' ? '#000000' : '#FFFFFF') }} onClick={handleLoginButton}>Login</Button> :
                         <Box sx={{ flexGrow: 0 }}>
                             <Tooltip title="Open settings">
                                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -172,7 +174,7 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
                                 onClose={handleCloseUserMenu}
                             >
                                 {settings.map((setting) => (
-                                    <MenuItem key={setting} onClick={setting === "logout" ? handleLogout : handleCloseUserMenu}>
+                                    <MenuItem key={setting} onClick={setting === "Logout" ? handleLogout : handleCloseUserMenu}>
                                         <Typography textAlign="center" onClick={handleSettings} href={`/${setting.toLowerCase()}`}>{setting}</Typography>
                                     </MenuItem>
                                 ))}
