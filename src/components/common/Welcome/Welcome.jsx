@@ -4,14 +4,6 @@ import { authUser } from '../../../backend/autharization';
 import { Button, ButtonGroup, TextField } from '@mui/material';
 import { initializeUser } from '../../../backend/database';
 
-const googleStyle = {
-    "border-radius": "100px",
-    width: "80%"
-}
-const inputStyle = {
-    "border-radius": "100px"
-}
-
 export function Welcome({ toLogin, toRegister }) {
     const handleGoogle = () => {
         const provider = new GoogleAuthProvider();
@@ -33,10 +25,12 @@ export function Welcome({ toLogin, toRegister }) {
         <>
             <div className='d-flex justify-content-center flex-column text-center'>
                 <h2>Welcome to YarlProps</h2>
-                <span className=" btn border gap-4" style={googleStyle} onClick={handleGoogle}><img src="social-icons/google.svg" alt="G" width={30} /> Connect with Google</span>
+                <Button sx={{ borderRadius: '100px', width: '80%', border: '1px solid white', gap: 3,display:'block',margin:'auto' }} onClick={handleGoogle}>
+                    <img src="social-icons/google.svg" alt="G" width={30} /> Connect with Google
+                </Button>
                 <h5>OR</h5>
                 <div className="text-center">
-                    <ButtonGroup aria-label='Basic button group' variant='contained'>
+                    <ButtonGroup aria-label='Vertical button group' className='gap-3'>
                         <Button variant='contained' onClick={toLogin}>Login</Button>
                         <Button variant='contained' onClick={toRegister}>Register</Button>
                     </ButtonGroup>
@@ -47,44 +41,44 @@ export function Welcome({ toLogin, toRegister }) {
 }
 
 export function Login({ handleBack }) {
-    const [email,setEmail]=useState('')
-    const [password,setPassword]=useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
     const handleLogin = (e) => {
         e.preventDefault()
-        signInWithEmailAndPassword(authUser,email,password)
-        .then((result)=>{
-            const user = result.user
-            console.log("uid : "+user.uid)
-            window.location.reload(0)
-        })
-        .catch((error)=>{
-            //const errorMassege = error.massage
-            //const errorCode = error.code
-        })
+        signInWithEmailAndPassword(authUser, email, password)
+            .then((result) => {
+                const user = result.user
+                console.log("uid : " + user.uid)
+                window.location.reload(0)
+            })
+            .catch((error) => {
+                //const errorMassege = error.massage
+                //const errorCode = error.code
+            })
     }
-    const handleResetPassword=()=>{
-        sendPasswordResetEmail(authUser,email)
-        .then((result)=>{
-            alert("check "+email+" inbox")
-            console.log("email sent"+result)
-        })
+    const handleResetPassword = () => {
+        sendPasswordResetEmail(authUser, email)
+            .then((result) => {
+                alert("check " + email + " inbox")
+                console.log("email sent" + result)
+            })
     }
     return (
         <>
-        <div className="d-flex flex-column gap-2">
-            <h2>Login</h2>
-            <hr />
-            <div className="d-flex flex-column gap-4">
-            <TextField inputProps={inputStyle} label="Email" value={email} onChange={(e)=>setEmail(e.target.value)}/>
-            <TextField inputProps={inputStyle} label="Password" value={password} onChange={(e)=>setPassword(e.target.value)}/>            
-            <span className="btn" onClick={handleResetPassword}>Forgot Your Password?</span>
-            </div>
-            <div className="text-center">
-            <ButtonGroup aria-label='Vertical button group' className='gap-3'>
-                <Button variant='contained' onClick={handleBack}>Back</Button>
-                <Button variant='contained' onClick={handleLogin}>Login</Button>
-            </ButtonGroup>
-            </div>
+            <div className="d-flex flex-column gap-2">
+                <h2>Login</h2>
+                <hr />
+                <div className="d-flex flex-column gap-4">
+                    <TextField label="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                    <TextField label="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                    <span className="btn" onClick={handleResetPassword}>Forgot Your Password?</span>
+                </div>
+                <div className="text-center">
+                    <ButtonGroup aria-label='Vertical button group' className='gap-3'>
+                        <Button variant='contained' onClick={handleBack}>Back</Button>
+                        <Button variant='contained' onClick={handleLogin}>Login</Button>
+                    </ButtonGroup>
+                </div>
             </div>
         </>
     )
@@ -107,39 +101,39 @@ export function Register({ handleBack }) {
     const handleRegister = (e) => {
         e.preventDefault()
         createUserWithEmailAndPassword(authUser, email, password)
-        .then((result)=>{
-            const user = result.user;
-            user.displayName = dname;
-            console.log("uid : "+user.uid)
-            initializeUser(user.uid,fname,lname,email)
-            window.location.reload(0)
-        })
-        .catch((error)=>{
-           // const errorMassege = error.massage
-           // const errorCode = error.code
-        })
+            .then((result) => {
+                const user = result.user;
+                user.displayName = dname;
+                console.log("uid : " + user.uid)
+                initializeUser(user.uid, fname, lname, email)
+                window.location.reload(0)
+            })
+            .catch((error) => {
+                // const errorMassege = error.massage
+                // const errorCode = error.code
+            })
     }
     return (
         <>
             <div className="d-flex flex-column justify-content-center text-center">
                 <h2>Create account</h2>
-                <hr/>
+                <hr />
                 <div className="d-flex flex-column gap-3">
-                <div className="d-flex gap-4 w-100">
-                    <TextField className='w-50' inputProps={inputStyle} label="First name" value={fname} onChange={handleFname} required/>
-                    <TextField className='w-50' inputProps={inputStyle} label="Last name" value={lname} onChange={handleLname} required />
-                </div>
+                    <div className="d-flex gap-4 w-100">
+                        <TextField className='w-50' label="First name" value={fname} onChange={handleFname} required />
+                        <TextField className='w-50' label="Last name" value={lname} onChange={handleLname} required />
+                    </div>
 
-                <TextField inputProps={inputStyle} label="Display name" value={dname} />
-                <TextField inputProps={inputStyle} label="Email" value={email} onChange={(e)=>setEmail(e.target.value)} required/>
-                <TextField inputProps={inputStyle} label="Password" type='password' value={password} onChange={(e)=>setPassword(e.target.value)} required />
-                {/*<TextField inputProps={inputStyle} label="Confirm Password" type='password' />*/}
-                <div className="text-center">
-                    <ButtonGroup aria-label='Vertical button group' className='gap-3 text-center'>
-                        <Button variant='contained' onClick={handleBack}>Back</Button>
-                        <Button variant='contained' onClick={handleRegister}>Register</Button>
-                    </ButtonGroup>
-                </div>
+                    <TextField label="Display name" value={dname} />
+                    <TextField label="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                    <TextField label="Password" type='password' value={password} onChange={(e) => setPassword(e.target.value)} required />
+                    {/*<TextField label="Confirm Password" type='password' />*/}
+                    <div className="text-center">
+                        <ButtonGroup aria-label='Vertical button group' className='gap-3 text-center'>
+                            <Button variant='contained' onClick={handleBack}>Back</Button>
+                            <Button variant='contained' onClick={handleRegister}>Register</Button>
+                        </ButtonGroup>
+                    </div>
                 </div>
             </div>
         </>
