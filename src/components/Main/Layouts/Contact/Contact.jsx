@@ -1,185 +1,47 @@
-import React, { useState } from 'react'
-import styles from './Contact.module.css'
-import { sendMessage } from '../../../../backend/database'
+import * as React from 'react';
 import Image1 from "./images/contact1.jpg"
-import Image2 from "./images/aboutus.avif"
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Image from 'react-bootstrap/Image';
-//import img3 from './images/hello2a.png';
-//import Card from 'react-bootstrap/Card';
+import {Box,Typography} from  "@mui/material"
 
+function Contact() {
+  return (
+    <div>
+        <Box  sx={{
+            backgroundImage:`url(${Image1})`,
+            backgroundRepeat:"no-repeat",
+            backgroundColor:"black",
+            backgroundAttachment:"fixed",
+            backgroundPosition:"center",
+            backgroundSize:"cover",
+            height:600,
+            width:"100%",
+            display:"flex",
+            justifyContent:"center",
+            
+            
 
-function About() {
-    return (
-        <>
-            <Photos />
-            <InfoPP />
-        </>
-    )
+        }}>
+            <Box
+            sx={{
+                width:{xs:"100%",sm:"100%",md:"100%"},
+                padding:{xs:3,sm:2,md:20},
+            }}
+            >
+                <Box sx={{background:"white",opacity:"0.8",padding:{xs:3}}}>
+                <Typography variant={"h1"} color="black" align="center" pt={8}>
+              <b>Contact Us</b>
+            </Typography>
+
+            <Typography variant="body1" align="center"  pb={8}>
+            We are committed to supporting you, first and foremost! We continually strive to exceed expectations and deliver superior 24/7 Days Support.
+         You can always count on us for live help whenever you need assistance. Call us now!
+            </Typography>
+
+                </Box>
+            </Box>
+    </Box>
+      
+    </div>
+  )
 }
 
-function Photos() {
-    return (
-            <div className="d-flex flex-column text-center mt-4">
-                <h1 className={`${styles.centerHeading}`}>Our Team</h1>
-                <div className={styles.homeContainer}>
-
-
-                        <div className={styles.profileCard}>
-
-                            <div className={styles.imageContainer}>
-                                <img className={styles.image} src='/sample/sachi.jpg' alt='memberImage01' />
-                            </div>
-                            <div className={styles.caption}>
-                                <h3>Sachintha Wijerathna</h3>
-                                <p>Team Leader</p>
-                            </div>
-                        </div>
-                        <div className={styles.profileCard}>
-                            <div className={styles.imageContainer}>
-                                <img className={styles.image} src='/sample/charith.jpg' alt='memberImage02' />
-                            </div>
-                            <div className={styles.caption}>
-                                <h3>Charith Gayashan</h3>
-                                <p>Team member</p>
-
-                            </div>
-                        </div>
-                        <div className={styles.profileCard}>
-                            <div className={styles.imageContainer}>
-                                <img className={styles.image} src='/sample/mith.jpeg' alt='memberImage03' />
-                            </div>
-                            <div className={styles.caption}>
-                                <h3>Mith Jayakodi</h3>
-                                <p>Team member</p>
-
-                            </div>
-                        </div>
-                        <div className={styles.profileCard}>
-                            <div className={styles.imageContainer}>
-                                <img className={styles.image} src='/sample/priya.jpg' alt='memberImage04' />
-                            </div>
-                            <div className={styles.caption}>
-                                <h3>R.Priyadarshani</h3>
-                                <p>Team member</p>
-
-                            </div>
-                        </div>
-                        <div className={styles.profileCard}>
-                            <div className={styles.imageContainer}>
-                                <img className={styles.image} src='sample/jan.jpg' alt='memberImage05' />
-                            </div>
-                            <div className={styles.caption}>
-                                <h3>Janani Welipitiya</h3>
-                                <p>Team member</p>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-    )
-};
-
-function InfoPP() {
-    return (
-            <Container>
-                <div className={styles.aboutUs}>
-                    <h2>About Us - Who We Are?</h2><br/>
-                    <p>
-                        At University of Jaffna Boarding and Vehicle Rent Management
-                        System, we are dedicated to revolutionizing the way university
-                        students manage their accommodation and transportation needs.
-                    </p>
-                    <p>
-                        Our platform is designed with the aim of simplifying the process
-                        of finding suitable boarding accommodations and renting vehicles
-                        for students, ensuring convenience, accessibility, and
-                        affordability.
-                    </p>
-                    <p>
-                        With years of experience in understanding the unique challenges
-                        faced by university students, we have developed a comprehensive
-                        system that caters specifically to their needs. Whether you're a
-                        freshman looking for your first boarding house or a senior seeking
-                        a reliable vehicle for your commute, our platform offers a
-                        seamless solution tailored just for you.
-                    </p>
-                    <p>
-                        Our team is comprised of passionate individuals who are committed
-                        to providing top-notch services and support to our users. We
-                        strive to maintain transparency, integrity, and professionalism in
-                        all our interactions, ensuring that every user feels valued and
-                        supported throughout their journey with us.
-                    </p>
-                    <p>
-                        By leveraging cutting-edge technology and innovative solutions, we
-                        aim to empower university students to take control of their
-                        accommodation and transportation arrangements, allowing them to
-                        focus on what truly matters – their education and personal growth.
-                    </p>
-                    <p>
-                        Thank you for choosing University of Jaffna Boarding and Vehicle
-                        Rent Management System. We look forward to serving you and being a
-                        part of your university experience
-                    </p>
-                </div>
-                <p style={{ fontSize: '22px', textAlign: 'center', fontWeight: 'bold'}}>Welcome all for YarlProps System. In our system you can buy and rent any item as your wish.  </p>
-            </Container>
-    )
-}
-
-function ContactComps() {
-    const [name, setName] = useState('')
-    const [email, setEmail] = useState('')
-    const [message, setMessage] = useState('')
-    const handleSubmit = () => {
-        sendMessage(name, email, message)
-        setName('')
-        setEmail('')
-        setMessage('')
-    }
-    return (
-        <>
-            <Container maxWidth='lg' style={{ fontSize: '20px'}} >{/*sx={{ bgcolor: '#cfe8fc'}}*/}
-                <div className="d-flex flex-row mt-4">
-                    <div className="left d-flex flex-column w-50 text-center mt-4">
-                        <div className="address mb-4">
-                            <img src="social-icons/address.svg" alt="address" width={30}/>
-                            <div class="topic">Address</div>
-                            <div class="text-one">Ramanathan Rd, </div>
-                            <div class="text-two">Jaffna</div>
-                        </div>
-                        <div className="phone mb-4">
-                            <img src="social-icons/phone.svg" alt="phone" width={30}/>
-                            <div class="topic">Phone</div>
-                            <div class="text-one">+94 12 345 6789</div>
-                        </div>
-                        <div className="email">
-                            <img src="social-icons/email.svg" alt="email" width={30}/>
-                            <div class="topic">Email</div>
-                            <div class="text-one">penta5pulse@gmail.com</div>
-                        </div>
-                    </div>
-                    <div className="right d-flex flex-column w-50 gap-3">
-                        <h3>Send us a Message</h3>
-                        {/* <TextField label='Your Name' value={name} onChange={(e)=>setName(e.target.value)}/>
-                        <TextField label='Your Email' value={email} onChange={(e)=>setEmail(e.target.value)}/>
-                        <TextField label='Your Message' value={message} onChange={(e)=>setMessage(e.target.value)}/>
-    <Button style={{ backgroundColor: '#0d6efd'}} variant='contained' onClick={handleSubmit}>Send Message</Button>*/}
-                    </div>
-                </div>
-            </Container>
-        </>
-    )
-}
-
-export default function Contact() {
-    return (
-        <>
-            <About />
-            <ContactComps />
-        </>
-    )
-}
+export default Contact
