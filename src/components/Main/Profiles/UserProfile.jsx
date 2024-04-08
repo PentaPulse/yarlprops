@@ -1,8 +1,13 @@
 import * as React from 'react';
-import { Container, Box, Avatar, TextField,Button } from '@mui/material'
+import { Container, Box, Avatar, TextField, Button } from '@mui/material'
+import { authUser } from '../../../backend/autharization';
 
 export default function Profile() {
-  sessionStorage.
+  const [user, setUser] = React.useState(null)
+  React.useEffect(() => {
+    setUser(authUser.currentUser)
+  }, [user])
+  sessionStorage.setItem('')
   return (
     <Container>
       <Box sx={{ display: 'flex', }}>

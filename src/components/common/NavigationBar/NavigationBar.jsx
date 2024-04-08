@@ -10,15 +10,27 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 const pages = ['Home', 'Guide', 'About', 'Contact'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-export default function NavigationBar({ handleLoginButton ,handleMode}) {
+export default function NavigationBar({ handleLoginButton, handleMode }) {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
+    const [user, setUser] = React.useState(false)
     const theme = useTheme();
-    const [user,setUser]=React.useState(null)
+    const [photo, setPhoto] = React.useState('')
+    
+    sessionStorage.setItem('photo', authUser.currentUser.photoURL)
+    sessionStorage.setItem('userStatus', authUser.currentUser)
 
-    React.useEffect(()=>{
-        setUser(authUser.currentUser)
-    },[user])
+    React.useEffect(() => {
+        if (sessionStorage.getItem('photo'))
+        setUser(true)
+            setPhoto(sessionStorage.getItem('photo'))
+    }, [photo])
+    /*
+    React.useEffect(() => {
+        if (sessionStorage.getItem('userStatus')) {
+            setUser(true)
+        }
+    }, [user])*/
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -52,7 +64,7 @@ export default function NavigationBar({ handleLoginButton ,handleMode}) {
         }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1,color:(theme) => (theme.palette.mode === 'light' ? '#000000' : '#FFFFFF')}} />
+                    <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, color: (theme) => (theme.palette.mode === 'light' ? '#000000' : '#FFFFFF') }} />
                     <Typography
                         variant="h6"
                         noWrap
@@ -65,7 +77,7 @@ export default function NavigationBar({ handleLoginButton ,handleMode}) {
                             fontWeight: 700,
                             letterSpacing: '.3rem',
                             textDecoration: 'none',
-                            color:(theme) => (theme.palette.mode === 'light' ? '#000000' : '#FFFFFF'),
+                            color: (theme) => (theme.palette.mode === 'light' ? '#000000' : '#FFFFFF'),
                         }}
                     >
                         LOGO
@@ -107,7 +119,7 @@ export default function NavigationBar({ handleLoginButton ,handleMode}) {
                             ))}
                         </Menu>
                     </Box>
-                    <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 ,color:(theme) => (theme.palette.mode === 'light' ? '#000000' : '#FFFFFF')}} />
+                    <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1, color: (theme) => (theme.palette.mode === 'light' ? '#000000' : '#FFFFFF') }} />
                     <Typography
                         variant="h5"
                         noWrap
@@ -131,7 +143,7 @@ export default function NavigationBar({ handleLoginButton ,handleMode}) {
                             <Button
                                 key={page}
                                 onClick={handleCloseNavMenu}
-                                sx={{ my: 2,  display: 'block' }} href={`/${page.toLowerCase()}`}
+                                sx={{ my: 2, display: 'block' }} href={`/${page.toLowerCase()}`}
                             >
                                 {page}
                             </Button>
@@ -145,11 +157,11 @@ export default function NavigationBar({ handleLoginButton ,handleMode}) {
                         </Tooltip>
                     </Box>
 
-                    {!user ? <Button sx={{color:(theme) => (theme.palette.mode === 'light' ? '#000000' : '#FFFFFF')}} onClick={handleLoginButton}>Login</Button> :
+                    {!user ? <Button sx={{ color: (theme) => (theme.palette.mode === 'light' ? '#000000' : '#FFFFFF') }} onClick={handleLoginButton}>Login</Button> :
                         <Box sx={{ flexGrow: 0 }}>
                             <Tooltip title="Open settings">
                                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                    <Avatar alt="DP" src={user.photoURL} />
+                                    <Avatar alt="DP" src={photo} />
                                 </IconButton>
                             </Tooltip>
                             <Menu
