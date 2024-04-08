@@ -14,23 +14,33 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const [user, setUser] = React.useState(false)
-    const theme = useTheme();
     const [photo, setPhoto] = React.useState('')
-    
+    const theme = useTheme();
+
     sessionStorage.setItem('photo', authUser.currentUser.photoURL)
     sessionStorage.setItem('userStatus', authUser.currentUser)
 
     React.useEffect(() => {
-        if (sessionStorage.getItem('photo'))
-        setUser(true)
-            setPhoto(sessionStorage.getItem('photo'))
-    }, [photo])
-    /*
-    React.useEffect(() => {
-        if (sessionStorage.getItem('userStatus')) {
-            setUser(true)
+        const storedPhoto = sessionStorage.getItem('photo');        
+        if (storedPhoto) {
+            setPhoto(storedPhoto);
         }
-    }, [user])*/
+    }, []);
+
+    React.useEffect(() => {
+        const storedUserStatus = sessionStorage.getItem('userStatus');
+        if (storedUserStatus) {
+            setUser(true);
+        }
+    }, []);
+    const handleLogout = () => {
+        sessionStorage.removeItem('photo');
+        sessionStorage.removeItem('userStatus');
+        setPhoto('sample/profile.svg');
+        setUser(false);
+        authUser.currentUser.signOut();
+        window.location.reload(0)
+    }
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -181,7 +191,7 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
                                 onClose={handleCloseUserMenu}
                             >
                                 {settings.map((setting) => (
-                                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                                    <MenuItem key={setting} onClick={setting === "logout" ? handleLogout : handleCloseUserMenu}>
                                         <Typography textAlign="center" onClick={handleSettings} href={`/${setting.toLowerCase()}`}>{setting}</Typography>
                                     </MenuItem>
                                 ))}
