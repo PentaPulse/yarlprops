@@ -43,7 +43,7 @@ function App() {
 }
 
 function Themed() {
-  const [mode, setMode] = React.useState(false)
+  const [mode, setMode] = React.useState(true)
   
   const handleTheme = () => {
     setMode(!mode)
