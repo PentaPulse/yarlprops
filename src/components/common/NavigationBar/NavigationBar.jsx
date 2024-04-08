@@ -166,7 +166,7 @@ export default function NavigationBar({ handleLoginButton ,handleMode}) {
                             >
                                 {settings.map((setting) => (
                                     <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                        <Typography textAlign="center" onClick={handleSettings} href={`${'/'} ${setting}`}>{setting}</Typography>
+                                        <Typography textAlign="center" onClick={handleSettings} href={`/${setting.toLowerCase()}`}>{setting}</Typography>
                                     </MenuItem>
                                 ))}
                             </Menu>

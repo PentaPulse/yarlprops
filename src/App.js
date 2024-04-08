@@ -4,7 +4,24 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Routings from './components/Routings';
 import Maintain from './components/Maintain';
 import CssBaseline from '@mui/material/CssBaseline';
-import { light } from '@mui/material/styles/createPalette';
+
+  const lightTheme = createTheme({
+    palette:{
+      mode:'light',
+      primary:{
+        main:'#7AA2E3'
+      }
+    }
+  })
+
+  const darkTheme =createTheme({
+    palette:{
+      mode:'dark',
+      primary:{
+        main:'#8CABFF'
+      }
+    }
+  })
 
 function App() {
   const web_status = true;
@@ -22,41 +39,11 @@ function App() {
 
 function Themed(){
   const [modeC, setModec] = React.useState(false)
-  const lightTheme = createTheme({
-    palette:{
-      primary:{
-        main:'#7AA2E3'
-      }
-    }
-  })
-
-  const darkTheme =createTheme({
-    palette:{
-      primary:{
-        main:'#8CABFF'
-      }
-    }
-  })
-
-  const theme = React.useMemo(
-    () =>
-      createTheme({
-        palette: {
-          mode:  !modeC ? 'dark' : 'light',
-        },
-      }),
-      [modeC],
-  );
   const handleTheme = () => {
     setModec(!modeC)
   }
-  const changeTheme=()=>{
-    if(modeC){
-
-    }
-  }
   return(
-    <ThemeProvider theme={/*modeC?darkTheme:lightTheme*/theme}>
+    <ThemeProvider theme={modeC?darkTheme:lightTheme/*theme*/}>
       <CssBaseline />
       <Routings handleMode={handleTheme} />
     </ThemeProvider>
