@@ -60,7 +60,7 @@ function Contact() {
     <Box>
     <Grid container rowSpacing={3}>
         <Grid xs={12} sm={8}>
-        <Box sx={{background:"white",opacity:"0.8",borderRadius:3,padding:{xs:3}}}>
+        <Box sx={{background:"white",opacity:"0.8",padding:{xs:3},borderRadius:4}}>
           <CardContent>
             <Typography gutterBottom variant="h5">
              <b>Get in touch</b> 
