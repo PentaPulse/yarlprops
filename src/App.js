@@ -1,4 +1,3 @@
-import './App.css';
 import * as React from 'react'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Routings from './components/Routings';
@@ -8,23 +7,23 @@ import CssBaseline from '@mui/material/CssBaseline';
 const lightTheme = createTheme({
   palette: {
     mode: 'light',
-    primary:{
-      main:'#000000'
+    primary: {
+      main: '#000000'
     },
     background: {
-      default: '#FFFFFF', // blue to black gradient
-    }
+      default: '#FFFFFF', 
+    },
   }
 })
 
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
-    primary:{
-      main:'#FFFFFF'
+    primary: {
+      main: '#FFFFFF'
     },
     background: {
-      default: 'linear-gradient(135deg, #0000FF, #FFFFFF)', // blue to white gradient
+      default: 'linear-gradient(to bottom, #0000FF, #FFFFFF)', 
     },
   }
 })
@@ -45,9 +44,18 @@ function App() {
 
 function Themed() {
   const [mode, setMode] = React.useState(false)
+  
   const handleTheme = () => {
     setMode(!mode)
-  }
+    const newTheme = mode ? 'dark' : 'light';
+    localStorage.setItem('isLight', newTheme);
+  };
+  React.useEffect(() => {
+    const storedTheme = localStorage.getItem('isLight');
+    if (storedTheme) {
+      setMode(storedTheme);
+    }
+  }, []);
   return (
     <ThemeProvider theme={mode ? darkTheme : lightTheme}>
       <CssBaseline />
@@ -57,56 +65,3 @@ function Themed() {
 }
 
 export default App;
-
-// import React, { useState, useEffect } from 'react';
-// import Routings from './components/Routings';
-// import { ThemeProvider } from 'styled-components';
-
-// Define your theme
-// const lightTheme = {
-//   body: '#FFF',
-//   text: '#363537',
-// };
-
-// const darkTheme = {
-//   body: '#363537',
-//   text: '#FAFAFA',
-// };
-
-// const ToggleButton = ({ theme, toggleTheme }) => {
-//   return (
-//     <button onClick={toggleTheme}>
-//       {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
-//     </button>
-//   );
-// };
-
-// const App = () => {
-//   const [theme, setTheme] = useState('light');
-
-//   const toggleTheme = () => {
-//     const newTheme = theme === 'light' ? 'dark' : 'light';
-//     setTheme(newTheme);
-//     localStorage.setItem('theme', newTheme); // Store user preference
-//   };
-
-//   useEffect(() => {
-//     const storedTheme = localStorage.getItem('theme');
-//     if (storedTheme) {
-//       setTheme(storedTheme);
-//     }
-//   }, []);
-
-//   return (
-//     <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
-//       <div className="App">
-//         <div style={{ marginTop: '60px'}}>
-//           <ToggleButton theme={theme} toggleTheme={toggleTheme} />
-//         </div>
-//         <Routings/>
-//       </div>
-//     </ThemeProvider>
-//   );
-// };
-
-// export default App;

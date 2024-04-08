@@ -3,8 +3,10 @@ import React, { useState } from 'react'
 import { authUser } from '../../../backend/autharization';
 import { Button, ButtonGroup, TextField } from '@mui/material';
 import { initializeUser } from '../../../backend/database';
+import { useTheme } from '@mui/material/styles';
 
 export function Welcome({ toLogin, toRegister }) {
+    const theme = useTheme()
     const handleGoogle = () => {
         const provider = new GoogleAuthProvider();
         signInWithPopup(authUser, provider)
@@ -25,7 +27,7 @@ export function Welcome({ toLogin, toRegister }) {
         <>
             <div className='d-flex justify-content-center flex-column text-center'>
                 <h2>Welcome to YarlProps</h2>
-                <Button sx={{ borderRadius: '100px', width: '80%', border: '1px solid white', gap: 3,display:'block',margin:'auto' }} onClick={handleGoogle}>
+                <Button sx={{ borderRadius: '100px', width: '80%', border: `1px solid ${theme.palette.mode==='light'?'#FFFFFF':'#000000'}`, gap: 3,display:'block',margin:'auto' }} onClick={handleGoogle}>
                     <img src="social-icons/google.svg" alt="G" width={30} /> Connect with Google
                 </Button>
                 <h5>OR</h5>
