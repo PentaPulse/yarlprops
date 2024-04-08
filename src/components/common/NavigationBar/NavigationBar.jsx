@@ -3,7 +3,7 @@ import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, 
 import { useTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import AdbIcon from '@mui/icons-material/Adb';
-import { authUser } from '../../../backend/autharization'
+import { authUser, useAuth } from '../../../backend/autharization'
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 
@@ -13,32 +13,13 @@ const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 export default function NavigationBar({ handleLoginButton, handleMode }) {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
-    const [user, setUser] = React.useState(false)
-    const [photo, setPhoto] = React.useState('')
     const theme = useTheme();
+    const user = authUser.currentUser
+    sessionStorage.setItem('photo', user.photoURL)
 
-    sessionStorage.setItem('photo', authUser.currentUser.photoURL)
-    sessionStorage.setItem('userStatus', authUser.currentUser)
-
-    React.useEffect(() => {
-        const storedPhoto = sessionStorage.getItem('photo');        
-        if (storedPhoto) {
-            setPhoto(storedPhoto);
-        }
-    }, []);
-
-    React.useEffect(() => {
-        const storedUserStatus = sessionStorage.getItem('userStatus');
-        if (storedUserStatus) {
-            setUser(true);
-        }
-    }, []);
     const handleLogout = () => {
         sessionStorage.removeItem('photo');
-        sessionStorage.removeItem('userStatus');
-        setPhoto('sample/profile.svg');
-        setUser(false);
-        authUser.currentUser.signOut();
+        authUser.currentUser.signOut()
         window.location.reload(0)
     }
 
@@ -167,11 +148,11 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
                         </Tooltip>
                     </Box>
 
-                    {!user ? <Button sx={{ color: (theme) => (theme.palette.mode === 'light' ? '#000000' : '#FFFFFF') }} onClick={handleLoginButton}>Login</Button> :
+                    {Boolean(sessionStorage.getItem('photo')) ? <Button sx={{ color: (theme) => (theme.palette.mode === 'light' ? '#000000' : '#FFFFFF') }} onClick={handleLoginButton}>Login</Button> :
                         <Box sx={{ flexGrow: 0 }}>
                             <Tooltip title="Open settings">
                                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                    <Avatar alt="DP" src={photo} />
+                                    <Avatar alt="DP" src={sessionStorage.getItem('photo')} />
                                 </IconButton>
                             </Tooltip>
                             <Menu
