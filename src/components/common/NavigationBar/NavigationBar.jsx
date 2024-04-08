@@ -14,6 +14,11 @@ export default function NavigationBar({ handleLoginButton ,handleMode}) {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const theme = useTheme();
+    const [user,setUser]=React.useState(null)
+
+    React.useEffect(()=>{
+        setUser(authUser.currentUser)
+    },[user])
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -44,11 +49,10 @@ export default function NavigationBar({ handleLoginButton ,handleMode}) {
             borderRadius: '0 0 10px 10px',
             border: '1px solid rgba(255, 255, 255, 0.18)',
             backdropFilter: 'blur(3px)',
-            color: 'black'
         }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+                    <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1,color:(theme) => (theme.palette.mode === 'light' ? '#000000' : '#FFFFFF')}} />
                     <Typography
                         variant="h6"
                         noWrap
@@ -60,8 +64,8 @@ export default function NavigationBar({ handleLoginButton ,handleMode}) {
                             fontFamily: 'monospace',
                             fontWeight: 700,
                             letterSpacing: '.3rem',
-                            color: 'inherit',
                             textDecoration: 'none',
+                            color:(theme) => (theme.palette.mode === 'light' ? '#000000' : '#FFFFFF'),
                         }}
                     >
                         LOGO
@@ -103,7 +107,7 @@ export default function NavigationBar({ handleLoginButton ,handleMode}) {
                             ))}
                         </Menu>
                     </Box>
-                    <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+                    <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 ,color:(theme) => (theme.palette.mode === 'light' ? '#000000' : '#FFFFFF')}} />
                     <Typography
                         variant="h5"
                         noWrap
@@ -134,18 +138,18 @@ export default function NavigationBar({ handleLoginButton ,handleMode}) {
                         ))}
                     </Box>
                     <Box>
-                        <Tooltip title="Mode">
-                            <IconButton sx={{ ml: 1 }} onClick={handleMode} color="inherit">
+                        <Tooltip title="Change mode">
+                            <IconButton sx={{ ml: 1 }} onClick={handleMode} color={theme.palette.mode}>
                                 {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
                             </IconButton>
                         </Tooltip>
                     </Box>
 
-                    {!authUser.currentUser ? <Button variant='dark' onClick={handleLoginButton}>Login</Button> :
+                    {!user ? <Button sx={{color:(theme) => (theme.palette.mode === 'light' ? '#000000' : '#FFFFFF')}} onClick={handleLoginButton}>Login</Button> :
                         <Box sx={{ flexGrow: 0 }}>
                             <Tooltip title="Open settings">
                                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                    <Avatar alt="Remy Sharp" src={authUser.currentUser.photoURL} />
+                                    <Avatar alt="DP" src={user.photoURL} />
                                 </IconButton>
                             </Tooltip>
                             <Menu

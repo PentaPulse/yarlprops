@@ -1,4 +1,3 @@
-import './App.css';
 import * as React from 'react'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Routings from './components/Routings';
@@ -13,7 +12,7 @@ const lightTheme = createTheme({
     },
     background: {
       default: '#FFFFFF', // blue to black gradient
-    }
+    },
   }
 })
 
@@ -24,7 +23,7 @@ const darkTheme = createTheme({
       main:'#FFFFFF'
     },
     background: {
-      default: 'linear-gradient(135deg, #0000FF, #FFFFFF)', // blue to white gradient
+      default: 'linear-gradient(to bottom, #0000FF, #FFFFFF)', // blue to white gradient
     },
   }
 })
