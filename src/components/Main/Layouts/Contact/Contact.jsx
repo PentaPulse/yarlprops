@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Image1 from "./images/contact1.jpg"
+import Image1 from "./images/contact.jpg"
 import {Box,Typography} from  "@mui/material"
 
 function Contact() {
@@ -13,7 +13,7 @@ function Contact() {
             backgroundPosition:"center",
             backgroundSize:"cover",
             height:600,
-            width:"100%",
+            width:{xs:"100%",sm:"100%",md:"100%"},
             display:"flex",
             justifyContent:"center",
             
