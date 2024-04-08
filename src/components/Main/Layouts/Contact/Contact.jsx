@@ -59,7 +59,7 @@ function Contact() {
     </Box>
     <Box>
     <Grid container rowSpacing={3}>
-        <Grid xs={8}>
+        <Grid xs={12} sm={8}>
         <Card style={{ maxWidth: 450, padding: "20px 5px",borderRadius: 4, margin: "0 auto" }}>
           <CardContent>
             <Typography gutterBottom variant="h5">
@@ -86,7 +86,7 @@ function Contact() {
                   <TextField label="Message" multiline rows={4} placeholder="Type your message here" variant="outlined" fullWidth required />
                 </Grid>
                 <Grid item xs={12}>
-                  <Button type="submit" variant="contained" endIcon={<SendIcon/>} fullWidth>Send</Button>
+                  <Button type="submit" variant="contained" endIcon={<SendIcon/>}  fullWidth>Send</Button>
                 </Grid>
 
               </Grid>
@@ -94,7 +94,7 @@ function Contact() {
           </CardContent>
         </Card>
         </Grid>
-        <Grid xs={4}>
+        <Grid item xs={12} sm={4}>
           <Box>
           
           </Box>
