@@ -4,7 +4,7 @@ import {Box,Typography} from  "@mui/material"
 import Grid from '@mui/system/Unstable_Grid';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
+//import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import SendIcon from '@mui/icons-material/Send';
 
@@ -60,7 +60,7 @@ function Contact() {
     <Box>
     <Grid container rowSpacing={3}>
         <Grid xs={12} sm={8}>
-        <Card style={{ maxWidth: 450, padding: "20px 5px",borderRadius: 4, margin: "0 auto" }}>
+        <Box sx={{background:"white",opacity:"0.8",borderRadius:3,padding:{xs:3}}}>
           <CardContent>
             <Typography gutterBottom variant="h5">
              <b>Get in touch</b> 
@@ -92,7 +92,7 @@ function Contact() {
               </Grid>
             </form>
           </CardContent>
-        </Card>
+        </Box>
         </Grid>
         <Grid item xs={12} sm={4}>
           <Box>
