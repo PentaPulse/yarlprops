@@ -26,7 +26,7 @@ function Contact() {
                 padding:{xs:3,sm:2,md:20},
             }}
             >
-                <Box sx={{background:"white",opacity:"0.9",padding:{xs:3}}}>
+                <Box sx={{background:"white",opacity:"0.8",padding:{xs:3}}}>
                 <Typography variant={"h1"} color="black" align="center" pt={8}>
               <b>Contact Us</b>
             </Typography>
