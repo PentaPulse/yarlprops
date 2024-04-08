@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { Container, Row, Col, Image, Carousel } from 'react-bootstrap';
+import {  Row, Col, Image, Carousel } from 'react-bootstrap';
+import {Container} from '@mui/material'
 import styles from './ProductPage.module.css';
 import { products } from '../Data/productData';
+import { useTheme } from '@mui/material/styles';
 
 
 const ProductPage = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
+  const theme = useTheme();
 
   useEffect(() => {
     const selectedProduct = products.find((p) => p.id === parseInt(id));
@@ -21,7 +24,7 @@ const ProductPage = () => {
 
   return (
     <div className={styles.productPageContainer}>
-      <Container fluid>
+      <Container fluid sx={{backgroundColor:theme.palette.blackground}}>
         <Row>
           <Col xs={11} md={5} lg={5} className={styles.productImageSection}>
             {/* Product Image */}

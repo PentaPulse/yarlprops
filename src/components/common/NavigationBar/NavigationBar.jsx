@@ -98,7 +98,7 @@ export default function NavigationBar({ handleLoginButton ,handleMode}) {
                         >
                             {pages.map((page) => (
                                 <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                    <Typography textAlign="center" sx={{ color: 'black' }} href={`${'/'} ${page}`}>{page}</Typography>
+                                    <Typography textAlign="center" href={`/${page.toLowerCase()}`}>{page}</Typography>
                                 </MenuItem>
                             ))}
                         </Menu>
@@ -127,7 +127,7 @@ export default function NavigationBar({ handleLoginButton ,handleMode}) {
                             <Button
                                 key={page}
                                 onClick={handleCloseNavMenu}
-                                sx={{ my: 2, color: 'black', display: 'block' }} href={`/${page.toLowerCase()}`}
+                                sx={{ my: 2,  display: 'block' }} href={`/${page.toLowerCase()}`}
                             >
                                 {page}
                             </Button>

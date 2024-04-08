@@ -5,31 +5,32 @@ import Routings from './components/Routings';
 import Maintain from './components/Maintain';
 import CssBaseline from '@mui/material/CssBaseline';
 
-  const lightTheme = createTheme({
-    palette:{
-      mode:'light',
-      primary:{
-        main:'#7AA2E3'
-      }
-    }
-  })
+const lightTheme = createTheme({
+  palette: {
+    mode: 'light',
 
-  const darkTheme =createTheme({
-    palette:{
-      mode:'dark',
-      primary:{
-        main:'#8CABFF'
-      }
+    background: {
+      default: 'linear-gradient(135deg, #0000FF, #0000FF)', // blue to black gradient
     }
-  })
+  }
+})
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    background: {
+      default: 'linear-gradient(135deg, #0000FF, #FFFFFF)', // blue to white gradient
+    },
+  }
+})
 
 function App() {
   const web_status = true;
   if (web_status) {
     return (
-        <div>
-          <Themed />
-        </div>
+      <div>
+        <Themed />
+      </div>
     );
   }
   else {
@@ -37,13 +38,13 @@ function App() {
   }
 }
 
-function Themed(){
-  const [modeC, setModec] = React.useState(false)
+function Themed() {
+  const [mode, setMode] = React.useState(false)
   const handleTheme = () => {
-    setModec(!modeC)
+    setMode(!mode)
   }
-  return(
-    <ThemeProvider theme={modeC?darkTheme:lightTheme/*theme*/}>
+  return (
+    <ThemeProvider theme={mode ? darkTheme : lightTheme}>
       <CssBaseline />
       <Routings handleMode={handleTheme} />
     </ThemeProvider>

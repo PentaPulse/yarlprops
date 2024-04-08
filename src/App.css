@@ -1,33 +1,3 @@
-body {
-    background-color: #ffffff;
-    background-image: linear-gradient(315deg, #ffffff 0%, #91a6ff 74%);
-}
-
-body .dark {
-    background-color: #130f40;
-    background-image: linear-gradient(315deg, #130f40 0%, #000000 74%);
-    color: white;
-}
-
-/*
-
-dark
-background-color: #130f40;
-background-image: linear-gradient(315deg, #130f40 0%, #000000 74%);
-
-light 
-background-color: #ffffff;
-background-image: linear-gradient(315deg, #ffffff 0%, #91a6ff 74%);
-
-background-color: #fce055;
-background-image: linear-gradient(319deg, #fce055 0%, #256eff 37%, #46237a 100%);
-
-background-color: #2b4162;
-background-image: linear-gradient(315deg, #2b4162 0%, #12100e 74%);
-
-
-*/
-
 @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap");
 .App {
     display: flex;
