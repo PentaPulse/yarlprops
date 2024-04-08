@@ -23,7 +23,7 @@ const ProductPage = () => {
     <div className={styles.productPageContainer}>
       <Container fluid>
         <Row>
-          <Col xs={10} md={5} className={styles.productImageSection}>
+          <Col xs={11} md={5} lg={5} className={styles.productImageSection}>
             {/* Product Image */}
             
               <Image style={{ width: '70vw', height: '50vh', borderRadius: '10px', paddingBottom: '20px' }} src={product.mainimage} fluid />
