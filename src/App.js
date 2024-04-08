@@ -12,7 +12,7 @@ const lightTheme = createTheme({
       main:'#000000'
     },
     background: {
-      default: 'linear-gradient(135deg, #0000FF, #0000FF)', // blue to black gradient
+      default: '#FFFFFF', // blue to black gradient
     }
   }
 })
@@ -21,7 +21,7 @@ const darkTheme = createTheme({
   palette: {
     mode: 'dark',
     primary:{
-      main:'#ffffff'
+      main:'#FFFFFF'
     },
     background: {
       default: 'linear-gradient(135deg, #0000FF, #FFFFFF)', // blue to white gradient
