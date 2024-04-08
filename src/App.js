@@ -8,7 +8,9 @@ import CssBaseline from '@mui/material/CssBaseline';
 const lightTheme = createTheme({
   palette: {
     mode: 'light',
-
+    primary:{
+      main:'#000000'
+    },
     background: {
       default: 'linear-gradient(135deg, #0000FF, #0000FF)', // blue to black gradient
     }
@@ -18,6 +20,9 @@ const lightTheme = createTheme({
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
+    primary:{
+      main:'#ffffff'
+    },
     background: {
       default: 'linear-gradient(135deg, #0000FF, #FFFFFF)', // blue to white gradient
     },
