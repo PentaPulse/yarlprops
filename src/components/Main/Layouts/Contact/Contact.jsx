@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Image1 from "./images/contact1.jpg"
+import Image1 from "./images/contact.jpg"
 import {Box,Typography} from  "@mui/material"
 
 function Contact() {
@@ -31,9 +31,9 @@ function Contact() {
               <b>Contact Us</b>
             </Typography>
 
-            <Typography variant="body1" align="center"  pb={8}>
+            <Typography variant="body1" color="black" align="center"  pb={8}>
             We are committed to supporting you, first and foremost! We continually strive to exceed expectations and deliver superior 24/7 Days Support.
-         You can always count on us for live help whenever you need assistance. Call us now!
+         You can always count on us for live help whenever you need assistance.Call us now!
             </Typography>
 
                 </Box>
