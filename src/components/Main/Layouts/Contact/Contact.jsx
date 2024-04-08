@@ -1,5 +1,7 @@
 import * as React from 'react';
 import Image1 from "./images/contact1.jpg"
+import Image2 from "./images/hi1.png"
+
 import {Box,Typography} from  "@mui/material"
 import Grid from '@mui/system/Unstable_Grid';
 import TextField from '@mui/material/TextField';
@@ -96,7 +98,7 @@ function Contact() {
         </Grid>
         <Grid item xs={12} sm={4}>
           <Box>
-          
+          <img src={Image2} alt="Image 2" style={{ maxWidth: '90%', height: 'auto' ,marginLeft:30}} />
           </Box>
         </Grid>
         </Grid>
