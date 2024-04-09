@@ -8,7 +8,7 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 
 const pages = ['Home', 'Guide', 'About', 'Contact'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const settings = ['Profile', 'Account', 'Dashboard'];
 
 export default function NavigationBar({ handleLoginButton, handleMode }) {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -41,7 +41,7 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
         setAnchorElUser(null);
     };
 
-    const signOut=()=>{
+    const handleSignout=()=>{
         authUser.signOut()
     }
 
@@ -148,13 +148,17 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
                         </Tooltip>
                     </Box>
 
-                    {!authUser.currentUser ? <Button sx={{ color: (theme) => (theme.palette.mode === 'light' ? '#000000' : '#FFFFFF') }} onClick={handleLoginButton}>Login</Button> :
-                        <Box sx={{ flexGrow: 0 }}>
+                    {!authUser.currentUser ? <Button sx={{ color: (theme) => (theme.palette.mode === 'light' ? '#000000' : '#FFFFFF') }} onClick={handleLoginButton}>Signin</Button> :
+                        <Box sx={{ flexGrow: 0 ,display:'flex',border:'1px solid ',borderRadius:'5px 25px',width:'17%',padding:'0 10px'}}>
                             <Tooltip title="Open settings">
                                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                                     <Avatar alt="DP" src={photo} />
                                 </IconButton>
                             </Tooltip>
+                            <Box sx={{textAlign:'center',}}>
+                            <Typography color={theme.palette.mode==='light'?'black':'white'} sx={{}}>{authUser.currentUser.displayName}</Typography>
+                            <Button variant='contained' onClick={handleSignout}>Sign Out</Button>
+                            </Box>
                             <Menu
                                 sx={{ mt: '45px' }}
                                 id="menu-appbar"
@@ -172,7 +176,7 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
                                 onClose={handleCloseUserMenu}
                             >
                                 {settings.map((setting) => (
-                                    <MenuItem key={setting} onClick={setting === "Logout" ? signOut : handleCloseUserMenu}>
+                                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
                                         <Typography textAlign="center" href={`/${setting.toLowerCase()}`}>{setting}</Typography>
                                     </MenuItem>
                                 ))}
