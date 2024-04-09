@@ -13,7 +13,7 @@ const lightTheme = createTheme({
     background: {
       default: '#91a6ff',
     },
-  }
+  },
 })
 
 const darkTheme = createTheme({
