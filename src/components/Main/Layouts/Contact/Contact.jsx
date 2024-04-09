@@ -46,10 +46,10 @@ function Contact() {
       </Box>
       </Box>
       <Box>
-        <Typography variant={"h3"} color="black" align="left" pt={8}>
+        <Typography variant={"h3"}  align="left" pt={8}>
           <b>Contact <b style={{ color: "#0d6efd" }}>Yarl</b>Props</b>
         </Typography>
-        <Typography variant="body1" color="black" align="left" pb={8}>
+        <Typography variant="body1"  align="left" pb={8}>
           If you want to know more about our service or  have any issue simply get in touch with us, fill in the form here or please call one of our toll-free numbers below or email using the contact form below.
         </Typography>
       </Box>
