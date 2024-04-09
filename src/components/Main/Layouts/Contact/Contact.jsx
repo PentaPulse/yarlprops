@@ -6,7 +6,7 @@ import {Box,Typography} from  "@mui/material"
 import Grid from '@mui/system/Unstable_Grid';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-//import Card from '@mui/material/Card';
+import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import SendIcon from '@mui/icons-material/Send';
 
@@ -62,9 +62,10 @@ function Contact() {
     <Box>
     <Grid container rowSpacing={3}>
         <Grid xs={12} sm={8}>
-        <Box sx={{background:"white",opacity:"0.8",padding:{xs:3},borderRadius:4}}>
+        <Card sx={{ backgroundColor: "rgba(255, 255, 255, 0.8)",padding: { xs: 3 }, borderRadius: 4 }}>
+
           <CardContent>
-            <Typography gutterBottom variant="h5">
+            <Typography gutterBottom color="black" variant="h5">
              <b>Get in touch</b> 
           </Typography> 
             <Typography variant="body2" color="textSecondary" component="p" gutterBottom>
@@ -73,9 +74,9 @@ function Contact() {
             <form>
               <Grid container spacing={1}>
                 <Grid xs={12} sm={6} item>
-                  <TextField placeholder="Enter first name" label="First Name" variant="outlined" fullWidth required />
+                  <TextField placeholder="Enter first name" label="First Name" variant="outlined" fullWidth required/>
                 </Grid>
-                <Grid xs={12} sm={6} item>
+                <Grid xs={12} sm={6} item >
                   <TextField placeholder="Enter last name" label="Last Name" variant="outlined" fullWidth required />
                 </Grid>
                 <Grid item xs={12}>
@@ -88,13 +89,13 @@ function Contact() {
                   <TextField label="Message" multiline rows={4} placeholder="Type your message here" variant="outlined" fullWidth required />
                 </Grid>
                 <Grid item xs={12}>
-                  <Button type="submit" variant="contained" endIcon={<SendIcon/>}  fullWidth>Send</Button>
+                  <Button type="submit" variant="contained" endIcon={<SendIcon/>} style={{ backgroundColor: "#0d6efd" }} fullWidth>Send</Button>
                 </Grid>
 
               </Grid>
             </form>
           </CardContent>
-        </Box>
+        </Card>
         </Grid>
         <Grid item xs={12} sm={4}>
           <Box>
