@@ -11,7 +11,7 @@ const lightTheme = createTheme({
       main: '#000000'
     },
     background: {
-      default: '#91a6ff', 
+      default: '#91a6ff',
     },
   }
 })
