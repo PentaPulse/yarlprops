@@ -28,22 +28,22 @@ function Contact() {
         display: "flex",
         justifyContent: "center",
       }}>
-        <Box
-          sx={{
-            width: { xs: "100%", sm: "100%", md: "100%" },
-            padding: { xs: 3, sm: 2, md: 20 },
+      <Box
+        sx={{
+        width: { xs: "100%", sm: "100%", md: "100%" },
+        padding: { xs: 3, sm: 2, md: 20 },
           }}
-        >
-          <Box sx={{ background: "white", opacity: "0.8", borderRadius: 3, padding: { xs: 3 } }}>
-            <Typography variant={"h1"} color="black" align="center" pt={8}>
-              <b>Contact Us</b>
-            </Typography>
-            <Typography variant="body1" color="black" align="center" pb={8}>
-              We are committed to supporting you, first and foremost! We continually strive to exceed expectations and deliver superior 24/7 Days Support.
-              You can always count on us for live help whenever you need assistance.Call us now!
-            </Typography>
-          </Box>
-        </Box>
+          >
+      <Box sx={{ background: "white", opacity: "0.8", borderRadius: 3, padding: { xs: 3 } }}>
+        <Typography variant={"h1"} color="black" align="center" pt={8}>
+        <b>Contact Us</b>
+         </Typography>
+        <Typography variant="body1" color="black" align="center" pb={8}>
+            We are committed to supporting you, first and foremost! We continually strive to exceed expectations and deliver superior 24/7 Days Support.
+            You can always count on us for live help whenever you need assistance.Call us now!
+        </Typography>
+      </Box>
+      </Box>
       </Box>
       <Box>
         <Typography variant={"h3"} color="black" align="left" pt={8}>
@@ -95,7 +95,13 @@ function Contact() {
             </Box>
           </Grid>
         </Grid>
+
       </Box>
+      <Box sx={{ width: "100%", marginTop: 10 }}>
+  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3932.966514762512!2d80.02048177450527!3d9.683898978395154!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3afe55d8c70c5db9%3A0xc4ee5d6945ad9bbd!2sUniversity%20of%20Jaffna!5e0!3m2!1sen!2slk!4v1712031159798!5m2!1sen!2slk" 
+    width="100%" height="450" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+</Box>
+
     </div>
   )
 }
