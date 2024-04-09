@@ -62,10 +62,10 @@ function Contact() {
     <Box>
     <Grid container rowSpacing={3}>
         <Grid xs={12} sm={8}>
-        <Card sx={{ backgroundColor: "rgba(255, 255, 255, 0.8)",padding: { xs: 3 }, borderRadius: 4 }}>
+        <Card sx={{ backgroundColor: "rgba(255, 255, 255, 0.3)",padding: { xs: 3 }, borderRadius: 4 }}>
 
           <CardContent>
-            <Typography gutterBottom color="black" variant="h5">
+            <Typography gutterBottom  variant="h5">
              <b>Get in touch</b> 
           </Typography> 
             <Typography variant="body2" color="textSecondary" component="p" gutterBottom>
@@ -89,7 +89,7 @@ function Contact() {
                   <TextField label="Message" multiline rows={4} placeholder="Type your message here" variant="outlined" fullWidth required />
                 </Grid>
                 <Grid item xs={12}>
-                  <Button type="submit" variant="contained" endIcon={<SendIcon/>} style={{ backgroundColor: "#0d6efd" }} fullWidth>Send</Button>
+                  <Button type="submit" variant="contained" endIcon={<SendIcon/>}  fullWidth>Send</Button>
                 </Grid>
 
               </Grid>
