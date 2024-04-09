@@ -3,7 +3,7 @@ import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, 
 import { useTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import AdbIcon from '@mui/icons-material/Adb';
-import { authUser } from '../../../backend/autharization'
+import { authUser} from '../../../backend/autharization'
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 
@@ -13,17 +13,18 @@ const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 export default function NavigationBar({ handleLoginButton, handleMode }) {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
+    const [photo, setPhoto] = React.useState('')
+    
     const theme = useTheme();
     const user = authUser.currentUser
     if(user){
-    sessionStorage.setItem('photo', user.photoURL)
+    sessionStorage.setItem('photo', authUser.currentUser.photoURL)
     }
-
-    const handleLogout = () => {
-        sessionStorage.removeItem('photo');
-        authUser.currentUser.signout()
-        window.location.reload(0)
-    }
+    React.useEffect(()=>{
+        if(user){
+        setPhoto(sessionStorage.getItem('photo'))
+        }
+    },[user])
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -40,11 +41,8 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
         setAnchorElUser(null);
     };
 
-    const handleSettings = (e) => {
-        console.log(e.target.value)
-        if (e.target.value === "Logout") {
-            authUser.signOut()
-        }
+    const signOut=()=>{
+        authUser.signOut()
     }
 
     return (
@@ -150,11 +148,11 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
                         </Tooltip>
                     </Box>
 
-                    {!Boolean(sessionStorage.getItem('photo')) ? <Button sx={{ color: (theme) => (theme.palette.mode === 'light' ? '#000000' : '#FFFFFF') }} onClick={handleLoginButton}>Login</Button> :
+                    {!authUser.currentUser ? <Button sx={{ color: (theme) => (theme.palette.mode === 'light' ? '#000000' : '#FFFFFF') }} onClick={handleLoginButton}>Login</Button> :
                         <Box sx={{ flexGrow: 0 }}>
                             <Tooltip title="Open settings">
                                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                    <Avatar alt="DP" src={sessionStorage.getItem('photo')} />
+                                    <Avatar alt="DP" src={photo} />
                                 </IconButton>
                             </Tooltip>
                             <Menu
@@ -174,8 +172,8 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
                                 onClose={handleCloseUserMenu}
                             >
                                 {settings.map((setting) => (
-                                    <MenuItem key={setting} onClick={setting === "Logout" ? handleLogout : handleCloseUserMenu}>
-                                        <Typography textAlign="center" onClick={handleSettings} href={`/${setting.toLowerCase()}`}>{setting}</Typography>
+                                    <MenuItem key={setting} onClick={setting === "Logout" ? signOut : handleCloseUserMenu}>
+                                        <Typography textAlign="center" href={`/${setting.toLowerCase()}`}>{setting}</Typography>
                                     </MenuItem>
                                 ))}
                             </Menu>
