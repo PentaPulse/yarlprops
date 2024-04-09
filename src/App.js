@@ -11,7 +11,7 @@ const lightTheme = createTheme({
       main: '#000000'
     },
     background: {
-      default: '#91a6ff',
+      default: '#E3E1D9',
     },
   },
 })
@@ -47,7 +47,7 @@ function Themed() {
   
   const handleTheme = () => {
     setMode(!mode)
-    const newTheme = mode ? 'dark' : 'light';
+    const newTheme = !mode ;
     localStorage.setItem('isLight', newTheme);
   };
   React.useEffect(() => {

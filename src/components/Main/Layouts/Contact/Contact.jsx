@@ -35,10 +35,10 @@ function Contact() {
           }}
           >
       <Box sx={{ background: "white", opacity: "0.8", borderRadius: 3, padding: { xs: 3 } }}>
-        <Typography variant={"h1"} color="black" align="center" pt={8}>
+        <Typography variant={"h1"} align="center" pt={8}>
         <b>Contact Us</b>
          </Typography>
-        <Typography variant="body1" color="black" align="center" pb={8}>
+        <Typography variant="body1" align="center" pb={8}>
             We are committed to supporting you, first and foremost! We continually strive to exceed expectations and deliver superior 24/7 Days Support.
             You can always count on us for live help whenever you need assistance.Call us now!
         </Typography>
