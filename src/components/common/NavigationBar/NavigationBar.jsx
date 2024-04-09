@@ -141,7 +141,7 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
                         ))}
                     </Box>
                     <Box>
-                        <Tooltip title="Current mode">
+                        <Tooltip title={`${theme.palette.mode} mode`}>
                             <IconButton sx={{ ml: 1 }} onClick={handleMode} color={theme.palette.mode}>
                                 {theme.palette.mode === 'light' ? <Brightness7Icon /> : <Brightness4Icon />}
                             </IconButton>
