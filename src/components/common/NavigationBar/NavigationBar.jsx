@@ -3,7 +3,7 @@ import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, 
 import { useTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import AdbIcon from '@mui/icons-material/Adb';
-import { authUser } from '../../../backend/autharization'; // Assuming this is correct
+import { authUser } from '../../../backend/autharization';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 
@@ -12,7 +12,7 @@ const settings = ['Profile', 'Account', 'Dashboard'];
 
 export default function NavigationBar({ handleLoginButton, handleMode }) {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
-    const [user, setUser] = React.useState(false);
+    const [isLogged,setIsLogged] = React.useState(false);
     const theme = useTheme();
 
     const handleOpenNavMenu = (event) => {
@@ -22,15 +22,19 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
         setAnchorElNav(null);
     };
     React.useEffect(() => {
-        const user = authUser.currentUser
-        if (user) {
-            setUser(true)
-            sessionStorage.setItem('pp', user.photoURL)
-            sessionStorage.setItem('displayName', user.displayName)
-        } else {
-            setUser(false)
-        }
-    },[user])
+        const unsubscribe = authUser.onAuthStateChanged((user) => {
+            if (user) {
+                setIsLogged(true);
+                sessionStorage.setItem('pp', user.photoURL);
+                sessionStorage.setItem('displayName', user.displayName);
+            } else {
+                setIsLogged(false);
+            }
+        });
+    
+        // Cleanup subscription on unmount
+        return () => unsubscribe();
+    }, [])
 
     return (
         <AppBar position="fixed" sx={{
@@ -138,10 +142,10 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
                         </Tooltip>
                     </Box>
 
-                    {user ? (
+                    {isLogged ? (
+                        <ProfileBox isLogged={isLogged} />
+                    ) : (                        
                         <Button sx={{ color: theme.palette.primary }} onClick={handleLoginButton}>Sign In</Button>
-                    ) : (
-                        <ProfileBox user={user} />
                     )}
                 </Toolbar>
             </Container>
@@ -149,7 +153,7 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
     );
 }
 
-function ProfileBox({ user }) {
+function ProfileBox({ isLogged }) {
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const theme = useTheme();
 
@@ -162,7 +166,11 @@ function ProfileBox({ user }) {
     };
 
     const handleSignout = () => {
-        authUser.signOut();
+        isLogged = false
+        authUser.signOut()
+        const them = sessionStorage.getItem('isLight')
+        sessionStorage.clear();
+        sessionStorage.setItem('isLight',them)
         setAnchorElUser(null);
     };
 
