@@ -3,22 +3,18 @@ import { Container, Box, Avatar, TextField, Button } from '@mui/material'
 import { authUser } from '../../../backend/autharization';
 
 export default function Profile() {
-  const [user, setUser] = React.useState(null)
-  React.useEffect(() => {
-    setUser(authUser.currentUser)
-  }, [user])
-  sessionStorage.setItem('')
+  
   return (
     <Container>
       <Box sx={{ display: 'flex', }}>
         <div>
-          <Avatar alt='Display Picture' src='sample/profile.svg' />
+          <Avatar alt='Display Picture' src={sessionStorage.getItem('pp')} />
         </div>
         <div>
           <TextField
             id="outlined-read-only-input"
             label="Display name"
-            defaultValue="Display name"
+            defaultValue={sessionStorage.getItem('displayName')}
             InputProps={{
               readOnly: true,
             }}

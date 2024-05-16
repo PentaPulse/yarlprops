@@ -18,7 +18,7 @@ function Routings({handleMode}) {
           <Route exact path='/home' element={<Home/>}/>
           <Route path='/guide' element={<Guide/>}/>
           <Route path='/contact' element={<Contact/>}/>
-          <Route path='/profile' element={<UserProfile/>}/>
+          <Route exact path='/profile' element={<UserProfile/>}/>
           <Route path='/admin' element={<Admin/>}/>
           <Route path="/product/:id" element={<ProductPage/>} />
         </Routes>
