@@ -3,7 +3,7 @@ import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, 
 import { useTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import AdbIcon from '@mui/icons-material/Adb';
-import { authUser} from '../../../backend/autharization'
+import { authUser } from '../../../backend/autharization'
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 
@@ -12,38 +12,14 @@ const settings = ['Profile', 'Account', 'Dashboard'];
 
 export default function NavigationBar({ handleLoginButton, handleMode }) {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
-    const [anchorElUser, setAnchorElUser] = React.useState(null);
-    const [photo, setPhoto] = React.useState('')
-    
     const theme = useTheme();
-    const user = authUser.currentUser
-    if(user){
-    sessionStorage.setItem('photo', authUser.currentUser.photoURL)
-    }
-    React.useEffect(()=>{
-        if(user){
-        setPhoto(sessionStorage.getItem('photo'))
-        }
-    },[user])
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };
-    const handleOpenUserMenu = (event) => {
-        setAnchorElUser(event.currentTarget);
-    };
-
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
     };
-
-    const handleCloseUserMenu = () => {
-        setAnchorElUser(null);
-    };
-
-    const handleSignout=()=>{
-        authUser.signOut()
-    }
 
     return (
         <AppBar position="fixed" sx={{
@@ -60,7 +36,7 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
                         variant="h6"
                         noWrap
                         component="a"
-                        href="#app-bar-with-responsive-menu"
+                        href="/"
                         sx={{
                             mr: 2,
                             display: { xs: 'none', md: 'flex' },
@@ -115,7 +91,7 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
                         variant="h5"
                         noWrap
                         component="a"
-                        href="#app-bar-with-responsive-menu"
+                        href="/"
                         sx={{
                             mr: 2,
                             display: { xs: 'flex', md: 'none' },
@@ -148,42 +124,72 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
                         </Tooltip>
                     </Box>
 
-                    {!authUser.currentUser ? <Button sx={{ color: (theme) => (theme.palette.mode === 'light' ? '#000000' : '#FFFFFF') }} onClick={handleLoginButton}>Signin</Button> :
-                        <Box sx={{ flexGrow: 0 ,display:'flex',border:'1px solid ',borderRadius:'5px 25px',width:'17%',padding:'0 10px'}}>
-                            <Tooltip title="Open settings">
-                                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                    <Avatar alt="DP" src={photo} />
-                                </IconButton>
-                            </Tooltip>
-                            <Box sx={{textAlign:'center',}}>
-                            <Typography color={theme.palette.mode==='light'?'black':'white'} sx={{}}>{authUser.currentUser.displayName}</Typography>
-                            <Button variant='contained' onClick={handleSignout}>Sign Out</Button>
-                            </Box>
-                            <Menu
-                                sx={{ mt: '45px' }}
-                                id="menu-appbar"
-                                anchorEl={anchorElUser}
-                                anchorOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                keepMounted
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                open={Boolean(anchorElUser)}
-                                onClose={handleCloseUserMenu}
-                            >
-                                {settings.map((setting) => (
-                                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                        <Typography textAlign="center" href={`/${setting.toLowerCase()}`}>{setting}</Typography>
-                                    </MenuItem>
-                                ))}
-                            </Menu>
-                        </Box>}
+                    {!authUser.currentUser ? <Button sx={{ color: (theme) => (theme.palette.mode === 'light' ? '#000000' : '#FFFFFF') }} onClick={handleLoginButton}>Signin</Button> : <ProfileBox />}
                 </Toolbar>
             </Container>
         </AppBar>
     );
+}
+
+function ProfileBox() {
+    const [anchorElUser, setAnchorElUser] = React.useState(null);
+    const [photo, setPhoto] = React.useState('')
+    const theme = useTheme();
+
+    const user = authUser.currentUser
+    if (user) {
+        sessionStorage.setItem('photo', authUser.currentUser.photoURL)
+    }
+    React.useEffect(() => {
+        if (user) {
+            setPhoto(sessionStorage.getItem('photo'))
+        }
+    }, [user])
+
+    const handleOpenUserMenu = (event) => {
+        setAnchorElUser(event.currentTarget);
+    };
+
+    const handleCloseUserMenu = () => {
+        setAnchorElUser(null);
+    };
+
+    const handleSignout = () => {
+        authUser.signOut()
+    }
+    return (
+        <Box sx={{ flexGrow: 0, display: 'flex', border: '1px solid ', borderRadius: '5px 25px', width: '17%', padding: '0 10px' }}>
+            <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <Avatar alt="DP" src={photo} />
+                </IconButton>
+            </Tooltip>
+            <Box sx={{ textAlign: 'center', }}>
+                <Typography color={theme.palette.mode === 'light' ? 'black' : 'white'} sx={{}}>{authUser.currentUser.displayName}</Typography>
+                <Button variant='contained' onClick={handleSignout}>Sign Out</Button>
+            </Box>
+            <Menu
+                sx={{ mt: '45px' }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+            >
+                {settings.map((setting) => (
+                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                        <Typography textAlign="center" href={`/${setting.toLowerCase()}`}>{setting}</Typography>
+                    </MenuItem>
+                ))}
+            </Menu>
+        </Box>
+    )
 }

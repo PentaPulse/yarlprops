@@ -1,4 +1,4 @@
-import * as React from 'react'
+import * as React from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Routings from './components/Routings';
 import Maintain from './components/Maintain';
@@ -14,7 +14,7 @@ const lightTheme = createTheme({
       default: '#E3E1D9',
     },
   },
-})
+});
 
 const darkTheme = createTheme({
   palette: {
@@ -26,7 +26,7 @@ const darkTheme = createTheme({
       default: 'linear-gradient(to bottom, #0000FF, #FFFFFF)', 
     },
   }
-})
+});
 
 function App() {
   const web_status = true;
@@ -36,32 +36,38 @@ function App() {
         <Themed />
       </div>
     );
-  }
-  else {
-    return (<Maintain />)
+  } else {
+    return (<Maintain />);
   }
 }
 
 function Themed() {
-  const [mode, setMode] = React.useState(true)
-  
+  const [mode, setMode] = React.useState(() => {
+    const storedTheme = sessionStorage.getItem('isLight');
+    return storedTheme === null ? true : storedTheme === 'true';
+  });
+
   const handleTheme = () => {
-    setMode(!mode)
-    const newTheme = !mode ;
-    localStorage.setItem('isLight', newTheme);
+    setMode((prevMode) => {
+      const newMode = !prevMode;
+      sessionStorage.setItem('isLight', newMode);
+      return newMode;
+    });
   };
+
   React.useEffect(() => {
-    const storedTheme = localStorage.getItem('isLight');
-    if (storedTheme) {
-      setMode(storedTheme);
+    const storedTheme = sessionStorage.getItem('isLight');
+    if (storedTheme !== null) {
+      setMode(storedTheme === 'true');
     }
   }, []);
+
   return (
-    <ThemeProvider theme={mode ? darkTheme : lightTheme}>
+    <ThemeProvider theme={mode ? lightTheme : darkTheme}>
       <CssBaseline />
       <Routings handleMode={handleTheme} />
     </ThemeProvider>
-  )
+  );
 }
 
 export default App;
