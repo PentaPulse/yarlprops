@@ -9,9 +9,10 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 
 const pages = ['Home', 'Guide', 'About', 'Contact'];
 const settings = ['Profile', 'Account', 'Dashboard'];
-let pp = ''
+
 export default function NavigationBar({ handleLoginButton, handleMode }) {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
+    const [user, setUser] = React.useState(false);
     const theme = useTheme();
 
     const handleOpenNavMenu = (event) => {
@@ -20,12 +21,16 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
     };
-    sessionStorage.setItem('user', authUser.currentUser)
-    const user = sessionStorage.getItem('user')
-    if (user) {
-        sessionStorage.setItem('pp', user.photoURL)
-        pp = sessionStorage.getItem('pp')
-    }
+    React.useEffect(() => {
+        const user = authUser.currentUser
+        if (user) {
+            setUser(true)
+            sessionStorage.setItem('pp', user.photoURL)
+            sessionStorage.setItem('displayName', user.displayName)
+        } else {
+            setUser(false)
+        }
+    },[user])
 
     return (
         <AppBar position="fixed" sx={{
@@ -87,7 +92,7 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
                         >
                             {pages.map((page) => (
                                 <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                    <Typography component="a" textAlign="center" href={`/${page.toLowerCase()}`} sx={{ textDecoration: 'none', color: 'inherit' }}>
+                                    <Typography component="a" textAlign="center" href={`/${page.toLowerCase()}`} sx={{ textDecoration: 'none', color: theme.palette.primary }}>
                                         {page}
                                     </Typography>
                                 </MenuItem>
@@ -118,7 +123,7 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
                             <Button
                                 key={page}
                                 onClick={handleCloseNavMenu}
-                                sx={{ my: 2, display: 'block', color: 'inherit' }}
+                                sx={{ my: 2, display: 'block', color: theme.palette.primary }}
                                 href={`/${page.toLowerCase()}`}
                             >
                                 {page}
@@ -127,14 +132,14 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
                     </Box>
                     <Box>
                         <Tooltip title={`${theme.palette.mode} mode`}>
-                            <IconButton sx={{ ml: 1 }} onClick={handleMode} color="inherit">
+                            <IconButton sx={{ ml: 1, color: theme.palette.primary }} onClick={handleMode}>
                                 {theme.palette.mode === 'light' ? <Brightness7Icon /> : <Brightness4Icon />}
                             </IconButton>
                         </Tooltip>
                     </Box>
 
-                    {!user ? (
-                        <Button sx={{ color: 'inherit' }} onClick={handleLoginButton}>Sign In</Button>
+                    {user ? (
+                        <Button sx={{ color: theme.palette.primary }} onClick={handleLoginButton}>Sign In</Button>
                     ) : (
                         <ProfileBox user={user} />
                     )}
@@ -146,14 +151,7 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
 
 function ProfileBox({ user }) {
     const [anchorElUser, setAnchorElUser] = React.useState(null);
-    const [photo, setPhoto] = React.useState('');
     const theme = useTheme();
-
-    React.useEffect(() => {
-        if (user) {
-            setPhoto(sessionStorage.getItem('pp'));
-        }
-    }, [user]);
 
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
@@ -172,12 +170,12 @@ function ProfileBox({ user }) {
         <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center', border: '1px solid', borderRadius: '5px 25px', padding: '0 10px' }}>
             <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt="User Profile" src={photo} />
+                    <Avatar alt="User Profile" src={sessionStorage.getItem('pp')} />
                 </IconButton>
             </Tooltip>
             <Box sx={{ textAlign: 'center', ml: 1 }}>
                 <Typography color={theme.palette.mode === 'light' ? 'black' : 'white'}>
-                    {user?.displayName}
+                    {sessionStorage.getItem('displayName')}
                 </Typography>
                 <Button variant="contained" onClick={handleSignout}>Sign Out</Button>
             </Box>
