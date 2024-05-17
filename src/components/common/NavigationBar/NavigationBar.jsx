@@ -7,9 +7,10 @@ import { authUser } from '../../../backend/autharization';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { useNavigate } from 'react-router-dom';
+import { CheckUserAccess, adminEmails, auth } from '../../../backend/user/admin';
+import { onAuthStateChanged } from 'firebase/auth';
 
 const pages = ['Home', 'Guide', 'About', 'Contact'];
-const settings = ['Profile', 'Account', 'Dashboard'];
 
 export default function NavigationBar({ handleLoginButton, handleMode }) {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -177,6 +178,30 @@ function ProfileBox({ isLogged }) {
         navigate('/')
     };
 
+    const gotoProfile=()=>{
+        handleCloseUserMenu()
+        navigate('/profile')
+    }
+
+    const CheckUserAccess=()=>{
+    onAuthStateChanged(auth, user => {
+        if (user) {
+            const userEmail = user.email;
+            if (adminEmails.includes(userEmail)) {
+                console.log("Access granted to /admin path");
+                navigate('/admin')
+            } else {
+                console.log("Access denied to /admin path");
+                navigate('/')
+            }
+        } else {
+            console.log("No user is signed in");
+            navigate('/')
+        }
+    });
+    handleCloseUserMenu()
+    }
+
     return (
         <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center', borderWidth: '1px', borderStyle: 'solid', borderColor: theme.palette.mode === 'light' ? 'black' : 'white', borderRadius: '5px 25px', padding: '0 10px' }}>
             <Tooltip title="Open settings">
@@ -206,13 +231,12 @@ function ProfileBox({ isLogged }) {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
             >
-                {settings.map((setting) => (
-                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                        <Typography textAlign="center" component="a" href={`/${setting.toLowerCase()}`} sx={{ textDecoration: 'none', color: 'inherit' }}>
-                            {setting}
-                        </Typography>
-                    </MenuItem>
-                ))}
+                <MenuItem onClick={gotoProfile}>
+                    Profile
+                </MenuItem>
+                <MenuItem onClick={CheckUserAccess}>
+                    Dashboard
+                </MenuItem>
             </Menu>
         </Box>
     );
