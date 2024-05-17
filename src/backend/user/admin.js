@@ -2,8 +2,7 @@ import firebase from "firebase/compat/app";
 import "firebase/firestore";
 import { firebaseConfig } from "../secrets";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import { getAuth } from "firebase/auth";
 
 const app = firebase.initializeApp(firebaseConfig)
 
