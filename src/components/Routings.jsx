@@ -5,10 +5,11 @@ import Home from './Main/Layouts/Home/Home';
 import Guide from './Main/Layouts/Guide/Guide';
 import Contact from './Main/Layouts/Contact/Contact';
 import UserProfile from './Main/Profiles/UserProfile';
-import Admin from './Main/Dashboards/Admin';
+import Admin from './Main/Dashboards/Admin1';
 import ProductPage from './Main/Layouts/Home/ProView/ProductPage';
 
 function Routings({handleMode}) {
+  
   
   return (
     <>

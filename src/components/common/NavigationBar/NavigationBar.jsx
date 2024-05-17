@@ -13,7 +13,7 @@ const settings = ['Profile', 'Account', 'Dashboard'];
 
 export default function NavigationBar({ handleLoginButton, handleMode }) {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
-    const [isLogged,setIsLogged] = React.useState(false);
+    const [isLogged, setIsLogged] = React.useState(false);
     const theme = useTheme();
 
     const handleOpenNavMenu = (event) => {
@@ -32,7 +32,7 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
                 setIsLogged(false);
             }
         });
-    
+
         // Cleanup subscription on unmount
         return () => unsubscribe();
     }, [])
@@ -145,7 +145,7 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
 
                     {isLogged ? (
                         <ProfileBox isLogged={isLogged} />
-                    ) : (                        
+                    ) : (
                         <Button sx={{ color: theme.palette.primary }} onClick={handleLoginButton}>Sign In</Button>
                     )}
                 </Toolbar>
@@ -172,13 +172,13 @@ function ProfileBox({ isLogged }) {
         authUser.signOut()
         const them = sessionStorage.getItem('isLight')
         sessionStorage.clear();
-        sessionStorage.setItem('isLight',them)
+        sessionStorage.setItem('isLight', them)
         setAnchorElUser(null);
         navigate('/')
     };
 
     return (
-        <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center', border: '1px solid', borderRadius: '5px 25px', padding: '0 10px' }}>
+        <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center', borderWidth: '1px', borderStyle: 'solid', borderColor: theme.palette.mode === 'light' ? 'black' : 'white', borderRadius: '5px 25px', padding: '0 10px' }}>
             <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                     <Avatar alt="User Profile" src={sessionStorage.getItem('pp')} />

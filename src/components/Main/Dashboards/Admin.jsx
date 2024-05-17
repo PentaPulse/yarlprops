@@ -1,23 +1,11 @@
-import { useState } from 'react'
-import './Admin.css'
-import Header from './Header'
-import Sidebar from './Sidebar'
-import Home from './Home'
+import React from 'react'
 
 function Admin() {
-  const [openSidebarToggle, setOpenSidebarToggle] = useState(false)
+    return (
+        <div>
 
-  const OpenSidebar = () => {
-    setOpenSidebarToggle(!openSidebarToggle)
-  }
-
-  return (
-    <div className='grid-container'>
-      <Header OpenSidebar={OpenSidebar}/>
-      <Sidebar openSidebarToggle={openSidebarToggle} OpenSidebar={OpenSidebar}/>
-      <Home />
-    </div>
-  )
+        </div>
+    )
 }
 
 export default Admin
