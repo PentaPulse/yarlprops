@@ -9,6 +9,7 @@ import Admin from './Main/Dashboards/Admin';
 import ProductPage from './Main/Layouts/Home/ProView/ProductPage';
 
 function Routings({handleMode}) {
+  
   return (
     <>
     <Router>

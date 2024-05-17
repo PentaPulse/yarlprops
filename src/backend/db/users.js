@@ -1,16 +1,14 @@
 import firebase from "firebase/compat/app";
 import "firebase/firestore";
-import { firebaseConfig } from "./secrets";
+import { firebaseConfig } from "../secrets";
 import { doc, setDoc, getFirestore, collection, getDoc } from "firebase/firestore";
 
 const app = firebase.initializeApp(firebaseConfig)
 
 const db = getFirestore(app);
-//references
-const userRef = collection(db, "users")
-const productRef = collection(db, "products")
-const contactRef = collection(db, "contactUs")
 
+//reference
+const userRef = collection(db, "users")
 
 //functions
 //initialize the user initially in the registering process
@@ -20,23 +18,6 @@ export const initializeUser = async (uid, fName, lName, email) => {
         firstName: fName,
         lastName: lName,
         email: email
-    })
-}
-
-// adding products
-export const addProduct = async (productId, type, name, description) => {
-    await setDoc(doc(productRef, productId), {
-        name: name,
-        description: description
-    })
-}
-
-// contact us responses
-export const sendMessage = async (name, email, message) => {
-    await setDoc(doc(contactRef, email), {
-        custName: name,
-        custEmail: email,
-        custMessage: message
     })
 }
 

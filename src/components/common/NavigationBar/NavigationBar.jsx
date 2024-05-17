@@ -6,6 +6,7 @@ import AdbIcon from '@mui/icons-material/Adb';
 import { authUser } from '../../../backend/autharization';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
+import { useNavigate } from 'react-router-dom';
 
 const pages = ['Home', 'Guide', 'About', 'Contact'];
 const settings = ['Profile', 'Account', 'Dashboard'];
@@ -156,6 +157,7 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
 function ProfileBox({ isLogged }) {
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const theme = useTheme();
+    const navigate = useNavigate()
 
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
@@ -172,6 +174,7 @@ function ProfileBox({ isLogged }) {
         sessionStorage.clear();
         sessionStorage.setItem('isLight',them)
         setAnchorElUser(null);
+        navigate('/')
     };
 
     return (

@@ -2,7 +2,7 @@ import { GoogleAuthProvider, createUserWithEmailAndPassword, sendPasswordResetEm
 import React, { useState } from 'react'
 import { authUser } from '../../../backend/autharization';
 import { Button, ButtonGroup, TextField } from '@mui/material';
-import { initializeUser } from '../../../backend/database';
+import { initializeUser } from '../../../backend/db/users';
 import { useTheme } from '@mui/material/styles';
 
 export function Welcome({ toLogin, toRegister }) {
@@ -43,6 +43,7 @@ export function Welcome({ toLogin, toRegister }) {
 }
 
 export function Login({ handleBack }) {
+    const theme = useTheme()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const handleLogin = (e) => {
@@ -68,7 +69,7 @@ export function Login({ handleBack }) {
     return (
         <>
             <div className="d-flex flex-column gap-2">
-                <h2>Login</h2>
+                <h2 color={theme.palette.welcomeTopics}>Login</h2>
                 <hr />
                 <div className="d-flex flex-column gap-4">
                     <TextField label="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
