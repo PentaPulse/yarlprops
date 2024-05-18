@@ -7,7 +7,7 @@ import { authUser } from '../../../backend/autharization';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { useNavigate } from 'react-router-dom';
-import { admins } from '../../../backend/user/users';
+import { CheckUserAccess, admins } from '../../../backend/user/users';
 import { onAuthStateChanged } from 'firebase/auth';
 
 const pages = ['Home', 'Guide', 'About', 'Contact'];
@@ -183,21 +183,17 @@ function ProfileBox({ isLogged }) {
         navigate('/profile')
     }
 
-    const CheckUserAccess = () => {
-        onAuthStateChanged(authUser, user => {
-            if (user) {
-                const userEmail = user.email;
-                if (admins.includes(userEmail)) {
-                    console.log("Access granted to /admin path");
-                    navigate('/admin')
-                } else {
-                    console.log("Access denied to /admin path");
-                    navigate('/')
-                }
-            } else {
-                console.log("No user is signed in");
-                navigate('/')
+    const gotoDashboards = () => {
+        CheckUserAccess().then(access => {
+            if (access === 'admin') {
+                window.location.href = '/admin';
+            } else if (access === 'user') {
+                window.location.href = '/user';
+            } else if (access === '') {
+                window.location.href = '/';
             }
+        }).catch(error => {
+            console.error("Error checking user access:", error);
         });
         handleCloseUserMenu()
     }
@@ -234,7 +230,7 @@ function ProfileBox({ isLogged }) {
                 <MenuItem onClick={gotoProfile}>
                     Profile
                 </MenuItem>
-                <MenuItem onClick={CheckUserAccess}>
+                <MenuItem onClick={gotoDashboards}>
                     Dashboard
                 </MenuItem>
             </Menu>
