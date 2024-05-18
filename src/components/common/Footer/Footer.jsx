@@ -38,7 +38,7 @@ const Footer = () => {
                             <h5>More Details</h5>
                             <p><i className="fa-solid fa-phone-volume"></i> +94 77 1234567</p>
                             <p><i className="fa-solid fa-envelope"></i> PentaPulse@gmail.com</p>
-                            <p><i class="fa-solid fa-location-dot"></i> Ramanathan Road, Thirunelvely, Jaffna</p>
+                            <p><i className="fa-solid fa-location-dot"></i> Ramanathan Road, Thirunelvely, Jaffna</p>
                         </div>
                     </div>
                 </div>
