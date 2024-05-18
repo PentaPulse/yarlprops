@@ -7,7 +7,7 @@ import { authUser } from '../../../backend/autharization';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { useNavigate } from 'react-router-dom';
-import { adminEmails, auth } from '../../../backend/user/admin';
+import { admins } from '../../../backend/user/admin';
 import { onAuthStateChanged } from 'firebase/auth';
 
 const pages = ['Home', 'Guide', 'About', 'Contact'];
@@ -178,28 +178,28 @@ function ProfileBox({ isLogged }) {
         navigate('/')
     };
 
-    const gotoProfile=()=>{
+    const gotoProfile = () => {
         handleCloseUserMenu()
         navigate('/profile')
     }
 
-    const CheckUserAccess=()=>{
-    onAuthStateChanged(auth, user => {
-        if (user) {
-            const userEmail = user.email;
-            if (adminEmails.includes(userEmail)) {
-                console.log("Access granted to /admin path");
-                navigate('/admin')
+    const CheckUserAccess = () => {
+        onAuthStateChanged(authUser, user => {
+            if (user) {
+                const userEmail = user.email;
+                if (admins.includes(userEmail)) {
+                    console.log("Access granted to /admin path");
+                    navigate('/admin')
+                } else {
+                    console.log("Access denied to /admin path");
+                    navigate('/')
+                }
             } else {
-                console.log("Access denied to /admin path");
+                console.log("No user is signed in");
                 navigate('/')
             }
-        } else {
-            console.log("No user is signed in");
-            navigate('/')
-        }
-    });
-    handleCloseUserMenu()
+        });
+        handleCloseUserMenu()
     }
 
     return (

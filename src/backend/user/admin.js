@@ -24,6 +24,6 @@ async function fetchAdminEmails() {
     }
 }
 
-const adminEmails = await fetchAdminEmails();
+const admins = await fetchAdminEmails();
 
-export { adminEmails,auth}
+export { admins,auth}
