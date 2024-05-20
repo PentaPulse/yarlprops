@@ -13,9 +13,6 @@ const lightTheme = createTheme({
     background: {
       default: '#E3E1D9',
     },
-    welcomeTopics:{
-      default:'#0000ff'
-    }
   }
 });
 
@@ -26,11 +23,8 @@ const darkTheme = createTheme({
       main: '#FFFFFF'
     },
     background: {
-      default: 'linear-gradient(to bottom, #0000FF, #FFFFFF)',
+      default: '#222255',
     },
-    welcomeTopics:{
-      default:'#ff0000'
-    }
   },
 });
 

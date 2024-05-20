@@ -7,8 +7,7 @@ import { authUser } from '../../../backend/autharization';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { useNavigate } from 'react-router-dom';
-import { CheckUserAccess, admins } from '../../../backend/user/users';
-import { onAuthStateChanged } from 'firebase/auth';
+import { CheckUserAccess} from '../../../backend/user/users';
 
 const pages = ['Home', 'Guide', 'About', 'Contact'];
 
@@ -184,17 +183,7 @@ function ProfileBox({ isLogged }) {
     }
 
     const gotoDashboards = () => {
-        CheckUserAccess().then(access => {
-            if (access === 'admin') {
-                window.location.href = '/admin';
-            } else if (access === 'user') {
-                window.location.href = '/user';
-            } else if (access === '') {
-                window.location.href = '/';
-            }
-        }).catch(error => {
-            console.error("Error checking user access:", error);
-        });
+        CheckUserAccess()
         handleCloseUserMenu()
     }
 

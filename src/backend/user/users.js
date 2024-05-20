@@ -2,55 +2,75 @@ import firebase from "firebase/compat/app";
 import "firebase/firestore";
 import { firebaseConfig } from "../secrets";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import { authUser } from "../autharization";
-import * as React from 'react'
-import { useNavigate } from "react-router-dom";
 
 const app = firebase.initializeApp(firebaseConfig)
 
 const db = getFirestore(app);
-//const auth = getAuth(app)
 
 //reference
 const adminRef = collection(db, "admins")
+const sellerRef = collection(db, "sellers")
+const userRef = collection(db, "users")
 
-
-async function fetchAdminEmails() {
+// fetching lists
+async function fetchAdminList() {
     try {
-        const collectionRef = collection(db, "admins");
-        const querySnapshot = await getDocs(collectionRef);
-        const adminEmails = querySnapshot.docs.map(doc => doc.data().email);
-        return adminEmails;
+        const querySnapshot = await getDocs(adminRef);
+        const adminList = querySnapshot.docs.map(doc => doc.data().email);
+        return adminList;
     } catch (error) {
         console.error("Error fetching admin emails:", error);
         return [];
     }
 }
+async function fetchSellerList() {
+    try {
+        const querySnapshot = await getDocs(sellerRef);
+        const sellerList = querySnapshot.docs.map(doc => doc.data().email);
+        return sellerList;
+    } catch (error) {
+        console.error("Error fetching seller emails:", error);
+        return [];
+    }
+}
+async function fetchUserList() {
+    try {
+        const querySnapshot = await getDocs(userRef)
+        const userList = querySnapshot.docs.map(doc => doc.data().email)
+        return userList
+    } catch (e) {
+        console.error("Error fetching user emails:", e)
+        return []
+    }
+}
 
-// Function to check if the current user is an admin
+
+//checking accesses
 async function CheckUserAccess() {
-    const adminEmails = await fetchAdminEmails();
+    const adminList = await fetchAdminList();
+    const sellerList = await fetchSellerList();
+    const userList = await fetchUserList();
 
-    return new Promise((resolve, reject) => {
-        onAuthStateChanged(authUser, user => {
-            if (user) {
-                const userEmail = user.email;
-                if (adminEmails.includes(userEmail)) {
-                    console.log("Access granted to /admin path");
-                    resolve('admin');
-                } else {
-                    console.log("Access denied to /admin path");
-                    resolve('not-authorized');
-                }
-            } else {
-                console.log("No user is signed in");
-                resolve('not-signed-in');
+    onAuthStateChanged(authUser, user => {
+        if (user) {
+            const userEmail = user.email;
+            if (adminList.includes(userEmail)) {
+                console.log("Admin Access granted");
+                window.location.href = '/admin';
+            } else if (sellerList.includes(userEmail)) {
+                console.log("Seller Access granted");
+                window.location.href = '/seller';
             }
-        }, error => {
-            console.error("Error with onAuthStateChanged:", error);
-            reject(error);
-        });
+            if (userList.includes(userEmail)) {
+                console.log("User Access granted");
+                window.location.href = '/user'
+            }
+        } else {
+            console.log("No user is signed in");
+            window.location.href = '/'
+        }
     });
 }
 export { CheckUserAccess };
