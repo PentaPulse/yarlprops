@@ -58,13 +58,16 @@ async function CheckUserAccess() {
             const userEmail = user.email;
             if (adminList.includes(userEmail)) {
                 console.log("Admin Access granted");
+                sessionStorage.setItem('usr','*');
                 window.location.href = '/admin';
             } else if (sellerList.includes(userEmail)) {
                 console.log("Seller Access granted");
+                sessionStorage.setItem('usr','+')
                 window.location.href = '/seller';
             }
             if (userList.includes(userEmail)) {
                 console.log("User Access granted");
+                sessionStorage.setItem('usr','-')
                 window.location.href = '/user'
             }
         } else {

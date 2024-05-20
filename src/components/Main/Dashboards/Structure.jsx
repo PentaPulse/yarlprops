@@ -1,4 +1,4 @@
-import { Box, Grid, Paper, styled } from '@mui/material'
+import { Box, Grid, Menu, MenuItem, Paper, Typography, styled } from '@mui/material'
 import React from 'react'
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -12,9 +12,12 @@ const Item = styled(Paper)(({ theme }) => ({
 function Structure() {
     return (
         <>
-            <Box sx={{ flexGrow: 1 }}>
+            <Box sx={{ flexGrow: 1 ,marginTop:'50px'}}>
                 <Grid container spacing={2}>
                     <Grid item md={4}>
+                        <Menu>
+                            <MenuItem>Dashboard</MenuItem>
+                        </Menu>
                         ll
                         <Item>md=4</Item>
                     </Grid>

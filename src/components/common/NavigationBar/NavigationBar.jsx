@@ -47,7 +47,7 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
         }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, color: theme.palette.mode === 'light' ? '#000000' : '#FFFFFF' }} />
+                    <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, color: theme.palette.mode === 'light' ? '#000000' : '#FFFFff' }} />
                     <Typography
                         variant="h6"
                         noWrap
@@ -58,12 +58,12 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
                             display: { xs: 'none', md: 'flex' },
                             fontFamily: 'monospace',
                             fontWeight: 700,
-                            letterSpacing: '.3rem',
+                            letterSpacing: '.2rem',
                             textDecoration: 'none',
                             color: theme.palette.mode === 'light' ? '#000000' : '#FFFFFF',
                         }}
                     >
-                        LOGO
+                        YarlProps
                     </Typography>
 
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -121,7 +121,7 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
                             textDecoration: 'none',
                         }}
                     >
-                        LOGO
+                        YarlProps
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         {pages.map((page) => (
