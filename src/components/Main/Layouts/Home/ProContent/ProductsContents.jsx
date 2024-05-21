@@ -1,13 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
-import { products } from '../Data/productData';
+import { fetchProducts } from '../../../../../backend/db/products';
 
 
 const ProductsContents = () => {
+    const [products,setProducts] = useState([]);
+    useEffect(()=>{
+        const getProducts = async ()=>{
+            const productList = await fetchProducts();
+            setProducts(productList);
+        };
+        getProducts();
+    },[]);
     return (
         <>
         <section id='products' className='d-fiex justify-content-center align-items-center mt-5'>
@@ -19,10 +27,16 @@ const ProductsContents = () => {
                                 <Card.Img variant="top" src={product.mainimage} style={{ width: '35wh', height: '35vh' }}/>
                                 <Card.Body>                    
                                     <Card.Title style={{ textAlign: 'center', fontWeight: 'bold', height: '2.8rem' }}>
-                                        {product.title}
+                                        {product.name}
                                     </Card.Title>
                                     <Card.Text style={{ textAlign: 'justify' }}>
-                                        {product.description1}
+                                        {product.type}
+                                    </Card.Text>
+                                    <Card.Text style={{ textAlign: 'justify' }}>
+                                        {product.subtype}
+                                    </Card.Text>
+                                    <Card.Text style={{ textAlign: 'justify' }}>
+                                        {product.location}
                                     </Card.Text>
                                     <Link to={`/product/${product.id}`} className="btn btn-primary" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', bottom: '1rem' }}>
                                         Read More

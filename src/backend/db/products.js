@@ -1,7 +1,7 @@
 import firebase from "firebase/compat/app";
 import "firebase/firestore";
-import { firebaseConfig } from "./secrets";
-import { doc, setDoc, getFirestore, collection, getDoc } from "firebase/firestore";
+import { firebaseConfig } from "../secrets";
+import { doc, setDoc, getFirestore, collection,  getDocs } from "firebase/firestore";
 
 const app = firebase.initializeApp(firebaseConfig)
 
@@ -11,11 +11,27 @@ const productRef = collection(db, "products")
 
 
 //functions
-
 // adding products
-export const addProduct = async (productId, type, name, description) => {
+const addProduct = async (productId, name,type,subtype,location,price, description) => {
     await setDoc(doc(productRef, productId), {
         name: name,
+        type: type,
+        subtype:subtype,
+        location:location,
+        price:price,
         description: description
     })
 }
+
+const fetchProducts = async()=>{
+    try {
+        const qSnapshot = await getDocs(productRef);
+        const productList = qSnapshot.docs.map(doc => doc.data());
+        return productList;
+    } catch (error) {
+        console.error("Error fetching products:", error);
+        return [];
+    }
+}
+
+export {addProduct,fetchProducts}

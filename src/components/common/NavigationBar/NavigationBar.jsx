@@ -7,7 +7,7 @@ import { authUser } from '../../../backend/autharization';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { useNavigate } from 'react-router-dom';
-import { CheckUserAccess} from '../../../backend/user/users';
+import { CheckUserAccess } from '../../../backend/db/users';
 
 const pages = ['Home', 'Guide', 'About', 'Contact'];
 
