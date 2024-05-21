@@ -1,7 +1,7 @@
 import firebase from "firebase/compat/app";
 import "firebase/firestore";
 import { firebaseConfig } from "../secrets";
-import { doc, setDoc, getFirestore, collection,  getDocs } from "firebase/firestore";
+import { doc, setDoc, getFirestore, collection,  getDocs, getDoc } from "firebase/firestore";
 
 const app = firebase.initializeApp(firebaseConfig)
 
@@ -23,6 +23,7 @@ const addProduct = async (productId, name,type,subtype,location,price, descripti
     })
 }
 
+//fetching all the documents without conditions
 const fetchProducts = async()=>{
     try {
         const qSnapshot = await getDocs(productRef);
@@ -34,4 +35,18 @@ const fetchProducts = async()=>{
     }
 }
 
-export {addProduct,fetchProducts}
+// fetch documents with conditions / applying filters
+
+
+//fetching readmore clicked document
+const fetchProduct = async(productId)=>{
+    try{
+        const qSnapshot = await getDoc(productRef,productId)
+        const product = qSnapshot.data()
+        return product;
+    } catch(e){
+        console.error("Error fetching product: ",e);
+        return []
+    }
+}
+export {addProduct,fetchProducts,fetchProduct}

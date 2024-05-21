@@ -1,38 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import {  Row, Col, Image, Carousel } from 'react-bootstrap';
-import {Container} from '@mui/material'
+import { Row, Col, Image, Carousel } from 'react-bootstrap';
+import { Container } from '@mui/material'
 import styles from './ProductPage.module.css';
-import { products } from '../Data/productData';
 import { useTheme } from '@mui/material/styles';
 
 
-const ProductPage = () => {
-  const { id } = useParams();
+function ProductPage({productId}) {
   const [product, setProduct] = useState(null);
   const theme = useTheme();
 
-  useEffect(() => {
+  /*useEffect(() => {
     const selectedProduct = products.find((p) => p.id === parseInt(id));
     setProduct(selectedProduct);
   }, [id]);
-
+*/
   if (!product) {
     return <div>Loading...</div>;
   }
 
   return (
     <div className={styles.productPageContainer}>
-      <Container fluid sx={{backgroundColor:theme.palette.blackground}}>
+      <Container fluid sx={{ backgroundColor: theme.palette.blackground }}>
         <Row>
           <Col xs={11} md={5} lg={5} className={styles.productImageSection}>
             {/* Product Image */}
-            
-              <Image style={{ width: '70vw', height: '50vh', borderRadius: '10px', paddingBottom: '20px' }} src={product.mainimage} fluid />
-            
+
+            <Image style={{ width: '70vw', height: '50vh', borderRadius: '10px', paddingBottom: '20px' }} src={product.mainimage} fluid />
+
             {/* Small Image Slide Show */}
-          
+
             <Carousel>
               <Carousel.Item>
                 <img
@@ -64,15 +61,15 @@ const ProductPage = () => {
             <div className={styles.productDetailsSection}>
               {/* Product Details */}
               <h2>{product.title}</h2>
-              <h4 style={{ textAlign: 'center', fontStyle: 'italic'}}>Category : {product.category}</h4><br/>
-              <div style={{marginLeft: '0.6rem', marginRight: '0rem'}}>
+              <h4 style={{ textAlign: 'center', fontStyle: 'italic' }}>Category : {product.category}</h4><br />
+              <div style={{ marginLeft: '0.6rem', marginRight: '0rem' }}>
                 <h4>Description</h4>
                 <ul>
-                  <li>{product.descriptionLine1}</li> 
-                  <li>{product.descriptionLine2}</li> 
-                  <li>{product.descriptionLine3}</li> 
-                  <li>{product.descriptionLine4}</li> 
-                  <li>{product.descriptionLine5}</li> 
+                  <li>{product.descriptionLine1}</li>
+                  <li>{product.descriptionLine2}</li>
+                  <li>{product.descriptionLine3}</li>
+                  <li>{product.descriptionLine4}</li>
+                  <li>{product.descriptionLine5}</li>
                   <li>{product.descriptionLine6}</li>
                 </ul>
               </div>
@@ -91,7 +88,7 @@ const ProductPage = () => {
         </Row>
         <Row>
           <Col>
-              <Link to="/" className="btn btn-primary"><i class="fa-solid fa-arrow-left"></i> Back</Link>
+            <Link to="/" className="btn btn-primary"><i class="fa-solid fa-arrow-left"></i> Back</Link>
           </Col>
         </Row>
       </Container>
