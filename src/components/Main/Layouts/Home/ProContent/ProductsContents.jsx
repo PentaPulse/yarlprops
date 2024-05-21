@@ -32,7 +32,7 @@ const ProductsContents = () => {
                                         <Typography gutterBottom variant='h4' component='div'>
                                             {product.name}
                                         </Typography>
-                                        <Button onClick={() => setProduct(product.id)} size="small">Learn More</Button>
+                                        <Button onClick={() => setProduct(product.id)} size="small">Read More</Button>
                                     </CardContent>
                                 </Card>
                             </Grid>
