@@ -1,27 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Row, Col, Image, Carousel } from 'react-bootstrap';
 import { Container } from '@mui/material'
 import styles from './ProductPage.module.css';
 import { useTheme } from '@mui/material/styles';
+import { fetchSelectedProduct } from '../../../../../backend/db/products';
 
 
 function ProductPage() {
-  const [product, setProduct] = useState(null);
+  const [product, setProduct] = useState([]);
+  const { id } = useParams()
   const theme = useTheme();
 
   useEffect(() => {
-    const selectedProduct = products.find((p) => p.id === parseInt(id));
-    setProduct(selectedProduct);
+    const fetchProduct = async () => {
+      const productData = await fetchSelectedProduct(id);
+      setProduct(productData);
+    };
+
+    fetchProduct();
   }, [id]);
 
   if (!product) {
     return <div>Loading...</div>;
   }
 
+  console.log(product.name)
+
   return (
     <div className={styles.productPageContainer}>
-      <Container fluid sx={{ backgroundColor: theme.palette.blackground }}>
+      <Container sx={{ backgroundColor: theme.palette.blackground }}>
         <Row>
           <Col xs={11} md={5} lg={5} className={styles.productImageSection}>
             {/* Product Image */}
@@ -65,7 +73,7 @@ function ProductPage() {
               <div style={{ marginLeft: '0.6rem', marginRight: '0rem' }}>
                 <h4>Description</h4>
                 <ul>
-                  <li>{product.descriptionLine1}</li>
+                  <li>{product.name}</li>
                   <li>{product.descriptionLine2}</li>
                   <li>{product.descriptionLine3}</li>
                   <li>{product.descriptionLine4}</li>
@@ -77,18 +85,18 @@ function ProductPage() {
             <div className={styles.sellerDetailsSection}>
               {/* Seller Details */}
               <h3>Seller/Renter Details</h3>
-              <h4><i class="fa-solid fa-user"></i> Name</h4>
+              <h4><i className="fa-solid fa-user"></i> Name</h4>
               <p>{product.sellerName}</p>
-              <h4><i class="fa-solid fa-location-dot"></i> Location</h4>
+              <h4><i className="fa-solid fa-location-dot"></i> Location</h4>
               <p>{product.Location}</p>
-              <h4><i class="fa-solid fa-phone"></i> Contact No</h4>
+              <h4><i className="fa-solid fa-phone"></i> Contact No</h4>
               <p>{product.telephone}</p>
             </div>
           </Col>
         </Row>
         <Row>
           <Col>
-            <Link to="/" className="btn btn-primary"><i class="fa-solid fa-arrow-left"></i> Back</Link>
+            <Link to="/" className="btn btn-primary"><i className="fa-solid fa-arrow-left"></i> Back</Link>
           </Col>
         </Row>
       </Container>

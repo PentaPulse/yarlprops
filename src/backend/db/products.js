@@ -1,7 +1,7 @@
 import firebase from "firebase/compat/app";
 import "firebase/firestore";
 import { firebaseConfig } from "../secrets";
-import { doc, setDoc, getFirestore, collection,  getDocs, getDoc } from "firebase/firestore";
+import { doc, setDoc, getFirestore, collection, getDocs, query, where } from "firebase/firestore";
 
 const app = firebase.initializeApp(firebaseConfig)
 
@@ -12,19 +12,19 @@ const productRef = collection(db, "products")
 
 //functions
 // adding products
-const addProduct = async (productId, name,type,subtype,location,price, description) => {
+const addProduct = async (productId, name, type, subtype, location, price, description) => {
     await setDoc(doc(productRef, productId), {
         name: name,
         type: type,
-        subtype:subtype,
-        location:location,
-        price:price,
+        subtype: subtype,
+        location: location,
+        price: price,
         description: description
     })
 }
 
 //fetching all the documents without conditions
-const fetchProducts = async()=>{
+const fetchProducts = async () => {
     try {
         const qSnapshot = await getDocs(productRef);
         const productList = qSnapshot.docs.map(doc => doc.data());
@@ -39,14 +39,15 @@ const fetchProducts = async()=>{
 
 
 //fetching readmore clicked document
-const fetchProduct = async(productId)=>{
-    try{
-        const qSnapshot = await getDoc(productRef,productId)
-        const product = qSnapshot.data()
-        return product;
-    } catch(e){
-        console.error("Error fetching product: ",e);
+const fetchSelectedProduct = async (pid) => {
+    const q = query(productRef, where('pid', '==', pid))
+    try {
+        const qSnapshot = await getDocs(q)
+        const product = qSnapshot.docs[0]
+        return product.data();
+    } catch (e) {
+        console.error("Error fetching product: ", e);
         return []
     }
 }
-export {addProduct,fetchProducts,fetchProduct}
+export { addProduct, fetchProducts, fetchSelectedProduct }
