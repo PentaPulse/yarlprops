@@ -1,12 +1,12 @@
 
 // Slideshow.js
 import React, { useState } from 'react';
-import { Box, Button, IconButton } from '@mui/material';
+import { Box, IconButton } from '@mui/material';
 import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
 import { styled } from '@mui/system';
 
 const images = [
-    'https://via.placeholder.com/600x400?text=Image+1',
+    '/slideshow/rent_img.jpg',
     'https://via.placeholder.com/600x400?text=Image+2',
     'https://via.placeholder.com/600x400?text=Image+3',
 ];

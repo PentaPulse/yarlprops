@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { fetchProducts } from '../../../../../backend/db/products';
 import { Button, Card, CardContent, CardMedia, Container, Grid, Typography } from '@mui/material';
-import ProductPage from '../ProView/ProductPage';
 import { useNavigate } from 'react-router-dom';
 
 
 const ProductsContents = () => {
     const [products, setProducts] = useState([]);
-    const [product, setProduct] = useState('')
     const navigate = useNavigate()
     useEffect(() => {
         const getProducts = async () => {
@@ -18,7 +16,7 @@ const ProductsContents = () => {
     }, []);
 
     const handleCardClick = (e) => {
-        <ProductPage e />
+        navigate(`/product/${e}`)
     }
     return (
         <>

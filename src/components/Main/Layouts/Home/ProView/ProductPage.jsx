@@ -6,15 +6,15 @@ import styles from './ProductPage.module.css';
 import { useTheme } from '@mui/material/styles';
 
 
-function ProductPage({productId}) {
+function ProductPage() {
   const [product, setProduct] = useState(null);
   const theme = useTheme();
 
-  /*useEffect(() => {
+  useEffect(() => {
     const selectedProduct = products.find((p) => p.id === parseInt(id));
     setProduct(selectedProduct);
   }, [id]);
-*/
+
   if (!product) {
     return <div>Loading...</div>;
   }
