@@ -2,7 +2,7 @@ import React from 'react';
 import Carousel from 'react-bootstrap/Carousel';
 import './SlideShow.css';
 
-function slideShow() {
+function SlideShow() {
   return (
     <Carousel>
 
@@ -42,4 +42,4 @@ function slideShow() {
   );
 }
 
-export default slideShow;
+export default SlideShow;
