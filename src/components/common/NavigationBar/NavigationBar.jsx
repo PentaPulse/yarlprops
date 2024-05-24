@@ -142,7 +142,7 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
                                 {theme.palette.mode === 'light' ? <Brightness7Icon /> : <Brightness4Icon />}
                     </IconButton>*/}
                             <FormControlLabel
-                                control={<MaterialUISwitch sx={{ m: 1 }} checked={theme.palette.mode==='light'?false:true} onClick={handleMode}/>}
+                                control={<MaterialUISwitch sx={{ m: 1 }} checked={theme.palette.mode === 'light' ? false : true} onClick={handleMode} />}
                             />
                         </Tooltip>
                     </Box>
@@ -186,8 +186,9 @@ function ProfileBox({ isLogged }) {
         navigate('/profile')
     }
 
-    const gotoDashboards = () => {
-        CheckUserAccess()
+    const gotoDashboards = async() => {
+        await CheckUserAccess()
+        navigate(`/${sessionStorage.getItem('usr')}`)
         handleCloseUserMenu()
     }
 
