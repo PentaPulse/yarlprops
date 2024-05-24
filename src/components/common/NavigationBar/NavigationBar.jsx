@@ -142,7 +142,7 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
                                 {theme.palette.mode === 'light' ? <Brightness7Icon /> : <Brightness4Icon />}
                     </IconButton>*/}
                             <FormControlLabel
-                                control={<MaterialUISwitch sx={{ m: 1 }} checked={theme.palette.mode === 'light' ? false : true} onClick={handleMode} />}
+                                control={<MaterialUISwitch sx={{ m: 1 }} checked={theme.palette.mode==='light'?false:true} onClick={handleMode}/>}
                             />
                         </Tooltip>
                     </Box>
@@ -186,9 +186,8 @@ function ProfileBox({ isLogged }) {
         navigate('/profile')
     }
 
-    const gotoDashboards = async() => {
-        await CheckUserAccess()
-        navigate(`/${sessionStorage.getItem('usr')}`)
+    const gotoDashboards = () => {
+        CheckUserAccess()
         handleCloseUserMenu()
     }
 
@@ -196,7 +195,7 @@ function ProfileBox({ isLogged }) {
         <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center', borderWidth: '1px', borderStyle: 'solid', borderColor: theme.palette.mode === 'light' ? 'black' : 'white', borderRadius: '5px 25px', padding: '0 10px' }}>
             <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt="User Profile" src={sessionStorage.getItem('pp')} />
+                    <Avatar alt="User Profile" src={sessionStorage.getItem('pp')}/>
                 </IconButton>
             </Tooltip>
             <Box sx={{ textAlign: 'center', ml: 1 }}>

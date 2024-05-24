@@ -80,14 +80,19 @@ async function CheckUserAccess() {
             const userEmail = user.email;
             if (adminList.includes(userEmail)) {
                 console.log("Admin Access granted");
-                sessionStorage.setItem('usr','admin');
+                sessionStorage.setItem('usra',true);
+                return 'admin'
             } else if (sellerList.includes(userEmail)) {
                 console.log("Seller Access granted");
-                sessionStorage.setItem('usr','seller')
+                sessionStorage.setItem('usra',false)
+                sessionStorage.setItem('usrs',true)
+                return 'seller'
             }
             if (userList.includes(userEmail)) {
                 console.log("User Access granted");
-                sessionStorage.setItem('usr','user')
+                sessionStorage.setItem('usra',false)
+                sessionStorage.setItem('usrs',false)
+                return ''
             }
         } else {
             console.log("No user is signed in");
