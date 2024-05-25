@@ -9,7 +9,6 @@ import ProductPage from './Main/Layouts/Home/ProView/ProductPage';
 import Structure from './Main/Dashboards/Structure';
 
 function Routings({ handleMode }) {
-  const accessa = sessionStorage.getItem('usra')
   return (
     <>
       <Router>
@@ -20,7 +19,7 @@ function Routings({ handleMode }) {
             <Route path='/guide' element={<Guide />} />
             <Route path='/contact' element={<Contact />} />
             <Route exact path='/profile' element={<UserProfile />} />
-            {accessa ? <Route path='/dashboard' element={<Structure admin />} /> : <Route path='/dashboard' element={<Structure seller />} />}
+            <Route path='/dashboard/:id' element={<Structure/>} />
             <Route path="/product/:id" element={<ProductPage />} />
           </Routes>
         </Layout>

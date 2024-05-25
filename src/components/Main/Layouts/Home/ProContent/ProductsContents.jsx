@@ -28,7 +28,7 @@ const ProductsContents = () => {
                                 <Card>
                                     <CardMedia
                                         sx={{ height: '20rem' }}
-                                        image={product.imageUrl || 'https://picsum.photos/id/11/200/300'}
+                                        image={product.images[0] || 'https://picsum.photos/id/11/200/300'}
                                         title={product.name}
                                     />
                                     <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>

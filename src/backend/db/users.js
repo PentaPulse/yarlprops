@@ -57,6 +57,7 @@ async function fetchSellerList() {
         return [];
     }
 }
+
 async function fetchUserList() {
     try {
         const querySnapshot = await getDocs(userRef)
@@ -68,12 +69,13 @@ async function fetchUserList() {
     }
 }
 
+const adminList = await fetchAdminList();
+const sellerList = await fetchSellerList();
 
 //checking accesses
 async function CheckUserAccess() {
     const adminList = await fetchAdminList();
     const sellerList = await fetchSellerList();
-    const userList = await fetchUserList();
 
     onAuthStateChanged(authUser, user => {
         if (user) {
@@ -81,18 +83,11 @@ async function CheckUserAccess() {
             if (adminList.includes(userEmail)) {
                 console.log("Admin Access granted");
                 sessionStorage.setItem('usra',true);
-                return 'admin'
+                return true
             } else if (sellerList.includes(userEmail)) {
                 console.log("Seller Access granted");
                 sessionStorage.setItem('usra',false)
-                sessionStorage.setItem('usrs',true)
-                return 'seller'
-            }
-            if (userList.includes(userEmail)) {
-                console.log("User Access granted");
-                sessionStorage.setItem('usra',false)
-                sessionStorage.setItem('usrs',false)
-                return ''
+                return false
             }
         } else {
             console.log("No user is signed in");
@@ -100,4 +95,17 @@ async function CheckUserAccess() {
         }
     });
 }
-export { initializeUser,getUserInfo, CheckUserAccess };
+
+//check for normal user
+async function isNUser(){
+    const nUserList = await fetchUserList();
+    onAuthStateChanged(authUser,user=>{
+        if(user){
+            const userEmail=user.email
+            if(nUserList.includes(userEmail)){
+                return true;
+            }
+        }
+    })
+}
+export { initializeUser,getUserInfo,adminList,sellerList, CheckUserAccess ,isNUser};

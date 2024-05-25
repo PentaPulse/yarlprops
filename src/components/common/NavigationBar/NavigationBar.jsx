@@ -4,10 +4,7 @@ import { styled, useTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import AdbIcon from '@mui/icons-material/Adb';
 import { authUser } from '../../../backend/autharization';
-//import Brightness4Icon from '@mui/icons-material/Brightness4';
-//import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { useNavigate } from 'react-router-dom';
-import { CheckUserAccess } from '../../../backend/db/users';
 
 const pages = ['Home', 'Guide', 'About', 'Contact'];
 
@@ -142,13 +139,13 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
                                 {theme.palette.mode === 'light' ? <Brightness7Icon /> : <Brightness4Icon />}
                     </IconButton>*/}
                             <FormControlLabel
-                                control={<MaterialUISwitch sx={{ m: 1 }} checked={theme.palette.mode==='light'?false:true} onClick={handleMode}/>}
+                                control={<MaterialUISwitch sx={{ m: 1 }} checked={theme.palette.mode === 'light' ? false : true} onClick={handleMode} />}
                             />
                         </Tooltip>
                     </Box>
 
                     {isLogged ? (
-                        <ProfileBox isLogged={isLogged} />
+                        <ProfileBox isLogged={isLogged}/>
                     ) : (
                         <Button sx={{ color: theme.palette.primary }} onClick={handleLoginButton}>Sign In</Button>
                     )}
@@ -181,13 +178,13 @@ function ProfileBox({ isLogged }) {
         navigate('/')
     };
 
-    const gotoProfile = () => {
-        handleCloseUserMenu()
+    const handleProfile = () => {
         navigate('/profile')
+        handleCloseUserMenu()
     }
 
-    const gotoDashboards = () => {
-        CheckUserAccess()
+    const handleDashboards = (e) => {
+        navigate(`/dashboard/${e}`)
         handleCloseUserMenu()
     }
 
@@ -195,7 +192,7 @@ function ProfileBox({ isLogged }) {
         <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center', borderWidth: '1px', borderStyle: 'solid', borderColor: theme.palette.mode === 'light' ? 'black' : 'white', borderRadius: '5px 25px', padding: '0 10px' }}>
             <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt="User Profile" src={sessionStorage.getItem('pp')}/>
+                    <Avatar alt="User Profile" src={sessionStorage.getItem('pp')} />
                 </IconButton>
             </Tooltip>
             <Box sx={{ textAlign: 'center', ml: 1 }}>
@@ -204,29 +201,29 @@ function ProfileBox({ isLogged }) {
                 </Typography>
                 <Button variant="contained" onClick={handleSignout}>Sign Out</Button>
             </Box>
-            <Menu
-                sx={{ mt: '45px' }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
-            >
-                <MenuItem onClick={gotoProfile}>
-                    Profile
-                </MenuItem>
-                <MenuItem onClick={gotoDashboards}>
-                    Dashboard
-                </MenuItem>
-            </Menu>
+                <Menu
+                    sx={{ mt: '45px' }}
+                    id="menu-appbar"
+                    anchorEl={anchorElUser}
+                    anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                    open={Boolean(anchorElUser)}
+                    onClose={handleCloseUserMenu}
+                >
+                    <MenuItem onClick={handleProfile}>
+                        Profile
+                    </MenuItem>
+                    <MenuItem onClick={handleDashboards}>
+                        Dashboard
+                    </MenuItem>
+                </Menu>
         </Box>
     );
 }
