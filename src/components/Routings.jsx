@@ -6,22 +6,8 @@ import Guide from './Main/Layouts/Guide/Guide';
 import Contact from './Main/Layouts/Contact/Contact';
 import ProductPage from './Main/Layouts/Home/ProView/ProductPage';
 import Structure from './Main/Dashboards/Structure';
-import { onAuthStateChanged } from 'firebase/auth';
-import { authUser } from '../backend/autharization';
 
 function Routings({ handleMode }) {
-  const [status, setStatus] = React.useState(false)
-  React.useEffect(() => {
-    const unsubscribe = onAuthStateChanged(authUser, user => {
-      if (user) {
-        setStatus(true)
-      } else {
-        setStatus(false)
-      }
-    })
-
-    return () => unsubscribe();
-  })
   return (
     <>
       <Router>
@@ -31,7 +17,7 @@ function Routings({ handleMode }) {
             <Route exact path='/home' element={<Home />} />
             <Route path='/guide' element={<Guide />} />
             <Route path='/contact' element={<Contact />} />
-            {status ? <Route path='/dashboard' element={<Structure />} /> : <Route path='/' element={<Home />} />}
+            <Route path='/dashboard' element={<Structure />} />
             <Route path="/product/:id" element={<ProductPage />} />
           </Routes>
         </Layout>

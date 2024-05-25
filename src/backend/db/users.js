@@ -27,11 +27,11 @@ const initializeUser = async (uid, fName, lName, email) => {
 
 // getting user info
 const getUserInfo = async (uid) => {
-    const userSnap = await getDoc(userRef,uid)
-    if(userSnap.exists()){
-        console.log(" doc data: ",userSnap.data());
+    const userSnap = await getDoc(userRef, uid)
+    if (userSnap.exists()) {
+        console.log(" doc data: ", userSnap.data());
         return userSnap.data();
-    }else{
+    } else {
         console.log("No such docs")
     }
 }
@@ -69,9 +69,6 @@ async function fetchUserList() {
     }
 }
 
-const adminList = await fetchAdminList();
-const sellerList = await fetchSellerList();
-
 //checking accesses
 async function CheckUserAccess() {
     const adminList = await fetchAdminList();
@@ -82,11 +79,11 @@ async function CheckUserAccess() {
             const userEmail = user.email;
             if (adminList.includes(userEmail)) {
                 console.log("Admin Access granted");
-                sessionStorage.setItem('usra',true);
+                sessionStorage.setItem('usra', true);
                 return true
             } else if (sellerList.includes(userEmail)) {
                 console.log("Seller Access granted");
-                sessionStorage.setItem('usra',false)
+                sessionStorage.setItem('usra', false)
                 return false
             }
         } else {
@@ -97,15 +94,15 @@ async function CheckUserAccess() {
 }
 
 //check for normal user
-async function isNUser(){
+async function isNUser() {
     const nUserList = await fetchUserList();
-    onAuthStateChanged(authUser,user=>{
-        if(user){
-            const userEmail=user.email
-            if(nUserList.includes(userEmail)){
+    onAuthStateChanged(authUser, user => {
+        if (user) {
+            const userEmail = user.email
+            if (nUserList.includes(userEmail)) {
                 return true;
             }
         }
     })
 }
-export { initializeUser,getUserInfo,adminList,sellerList, CheckUserAccess ,isNUser};
+export { initializeUser, getUserInfo, fetchAdminList, fetchSellerList, fetchUserList, CheckUserAccess, isNUser };
