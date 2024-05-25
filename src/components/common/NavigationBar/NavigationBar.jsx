@@ -156,17 +156,8 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
 }
 
 function ProfileBox({ isLogged }) {
-    const [anchorElUser, setAnchorElUser] = React.useState(null);
     const theme = useTheme();
     const navigate = useNavigate()
-
-    const handleOpenUserMenu = (event) => {
-        setAnchorElUser(event.currentTarget);
-    };
-
-    const handleCloseUserMenu = () => {
-        setAnchorElUser(null);
-    };
 
     const handleSignout = () => {
         isLogged = false
@@ -174,24 +165,17 @@ function ProfileBox({ isLogged }) {
         const them = sessionStorage.getItem('isLight')
         sessionStorage.clear();
         sessionStorage.setItem('isLight', them)
-        setAnchorElUser(null);
         navigate('/')
     };
 
-    const handleProfile = () => {
-        navigate('/profile')
-        handleCloseUserMenu()
-    }
-
     const handleDashboards = (e) => {
-        navigate(`/dashboard/${e}`)
-        handleCloseUserMenu()
+        navigate(`/dashboard`)
     }
 
     return (
         <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center', borderWidth: '1px', borderStyle: 'solid', borderColor: theme.palette.mode === 'light' ? 'black' : 'white', borderRadius: '5px 25px', padding: '0 10px' }}>
             <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <IconButton onClick={handleDashboards} sx={{ p: 0 }}>
                     <Avatar alt="User Profile" src={sessionStorage.getItem('pp')} />
                 </IconButton>
             </Tooltip>
@@ -201,29 +185,6 @@ function ProfileBox({ isLogged }) {
                 </Typography>
                 <Button variant="contained" onClick={handleSignout}>Sign Out</Button>
             </Box>
-                <Menu
-                    sx={{ mt: '45px' }}
-                    id="menu-appbar"
-                    anchorEl={anchorElUser}
-                    anchorOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right',
-                    }}
-                    keepMounted
-                    transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right',
-                    }}
-                    open={Boolean(anchorElUser)}
-                    onClose={handleCloseUserMenu}
-                >
-                    <MenuItem onClick={handleProfile}>
-                        Profile
-                    </MenuItem>
-                    <MenuItem onClick={handleDashboards}>
-                        Dashboard
-                    </MenuItem>
-                </Menu>
         </Box>
     );
 }

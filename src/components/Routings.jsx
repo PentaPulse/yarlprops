@@ -4,7 +4,6 @@ import Layout from './Main/Layout';
 import Home from './Main/Layouts/Home/Home';
 import Guide from './Main/Layouts/Guide/Guide';
 import Contact from './Main/Layouts/Contact/Contact';
-import UserProfile from './Main/Profiles/UserProfile';
 import ProductPage from './Main/Layouts/Home/ProView/ProductPage';
 import Structure from './Main/Dashboards/Structure';
 
@@ -18,8 +17,7 @@ function Routings({ handleMode }) {
             <Route exact path='/home' element={<Home />} />
             <Route path='/guide' element={<Guide />} />
             <Route path='/contact' element={<Contact />} />
-            <Route exact path='/profile' element={<UserProfile />} />
-            <Route path='/dashboard/:id' element={<Structure/>} />
+            <Route path='/dashboard' element={<Structure/>} />
             <Route path="/product/:id" element={<ProductPage />} />
           </Routes>
         </Layout>

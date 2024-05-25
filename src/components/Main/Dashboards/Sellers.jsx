@@ -1,11 +1,11 @@
 import React from 'react'
 
-function Seller() {
+function Sellers() {
   return (
     <div>
-      seller
+      Sellers
     </div>
   )
 }
 
-export default Seller
+export default Sellers
