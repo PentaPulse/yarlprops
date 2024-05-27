@@ -2,7 +2,7 @@ import { Box, Grid, MenuItem, MenuList, Paper } from '@mui/material'
 import * as React from 'react'
 import Profile from './UserProfile'
 import Overview from './Overview'
-import Sellers from './Sellers'
+//import Sellers from './Sellers'
 import Renters from './Renters'
 import Products from './Products'
 import Users from './Users'
@@ -12,11 +12,11 @@ import SellerOrders from './Seller/Orders'
 import { onAuthStateChanged } from 'firebase/auth'
 import { authUser } from '../../../backend/autharization'
 import { useNavigate } from 'react-router-dom'
-import { fetchAdminList, fetchSellerList, fetchUserList } from '../../../backend/db/users'
+//import { fetchAdminList, fetchSellerList, fetchUserList } from '../../../backend/db/users'
 
 //only for debugging
 //let email = authUser.currentUser.email
-const admins = ['1']
+const admins = ['tharindu.sachintha.xyz1@gmail.com']
 const sellers = ['rathnayakep749@gmail.com']
 const users = ['rathnayakep749@gmail.com']
 
@@ -26,7 +26,7 @@ const sellerRenterMenu = ['Overview', 'Products','Orders' ,'My Profile', 'Sign o
 const userMenu = ['Overview', 'My Profile', 'Sign out']
 
 //boards
-const adminBoard = [<Overview />, <Sellers />, <Renters />, <Products />, <Users />, <Profile />]
+const adminBoard = [<Overview />, <SellerOverview />, <Renters />, <Products />, <Users />, <Profile />]
 const sellerBoard = [<SellerOverview />, <SellerProducts />,<SellerOrders />, <Profile />]
 const userBoard = [<Overview />, <Profile />]
 
@@ -36,9 +36,9 @@ function Structure() {
     const navigate = useNavigate()
     React.useEffect(() => {
         const fetchLists = async () => {
-            const adminList = await fetchAdminList();
-            const sellerList = await fetchSellerList()
-            const usersList = await fetchUserList();
+            //const adminList = await fetchAdminList();
+            //const sellerList = await fetchSellerList()
+            //const usersList = await fetchUserList();
             const unsubscribe = onAuthStateChanged(authUser, user => {
                 if (user) {
                     if (admins.includes(user.email)) {
