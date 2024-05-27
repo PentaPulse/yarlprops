@@ -6,6 +6,9 @@ import Sellers from './Sellers'
 import Renters from './Renters'
 import Products from './Products'
 import Users from './Users'
+import SellerOverview from './Seller/Overviev' 
+import SellerProducts from './Seller/Products'
+import SellerOrders from './Seller/Orders'
 import { onAuthStateChanged } from 'firebase/auth'
 import { authUser } from '../../../backend/autharization'
 import { useNavigate } from 'react-router-dom'
@@ -13,18 +16,18 @@ import { fetchAdminList, fetchSellerList, fetchUserList } from '../../../backend
 
 //only for debugging
 //let email = authUser.currentUser.email
-//const admins = ['email']
-//const sellers = ['email']
-//onst users = ['email']
+const admins = ['1']
+const sellers = ['rathnayakep749@gmail.com']
+const users = ['rathnayakep749@gmail.com']
 
 //menus
 const adminMenu = ['Overview', 'Sellers', 'Renters', 'Products', 'Users', 'My Profile', 'Sign out']
-const sellerRenterMenu = ['Overview', 'Products', 'My Profile', 'Sign out']
+const sellerRenterMenu = ['Overview', 'Products','Orders' ,'My Profile', 'Sign out']
 const userMenu = ['Overview', 'My Profile', 'Sign out']
 
 //boards
 const adminBoard = [<Overview />, <Sellers />, <Renters />, <Products />, <Users />, <Profile />]
-const sellerBoard = [<Overview />, <Products />, <Profile />]
+const sellerBoard = [<SellerOverview />, <SellerProducts />,<SellerOrders />, <Profile />]
 const userBoard = [<Overview />, <Profile />]
 
 function Structure() {
@@ -34,15 +37,15 @@ function Structure() {
     React.useEffect(() => {
         const fetchLists = async () => {
             const adminList = await fetchAdminList();
-            const sellersList = await fetchSellerList()
+            const sellerList = await fetchSellerList()
             const usersList = await fetchUserList();
             const unsubscribe = onAuthStateChanged(authUser, user => {
                 if (user) {
-                    if (adminList.includes(user.email)) {
+                    if (admins.includes(user.email)) {
                         setStatus('admin');
-                    } else if (sellersList.includes(user.email)) {
+                    } else if (sellers.includes(user.email)) {
                         setStatus('seller');
-                    } else if (usersList.includes(user.email)) {
+                    } else if (users.includes(user.email)) {
                         setStatus('user');
                     }
                 } else {
