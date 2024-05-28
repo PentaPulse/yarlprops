@@ -13,9 +13,9 @@ import { fetchAdminList, fetchSellerList, fetchUserList } from '../../../backend
 
 //only for debugging
 //let email = authUser.currentUser.email
-//const admins = ['email']
-//const sellers = ['email']
-//onst users = ['email']
+//const admins = ['jan@gmail.com']
+//const sellers = ['jan@gmail.com']
+//const users = ['jan@gmail.com']
 
 //menus
 const adminMenu = ['Overview', 'Sellers', 'Renters', 'Products', 'Users', 'My Profile', 'Sign out']
@@ -38,7 +38,7 @@ function Structure() {
             const usersList = await fetchUserList();
             const unsubscribe = onAuthStateChanged(authUser, user => {
                 if (user) {
-                    if (adminList.includes(user.email)) {
+                    if(adminList.includes(user.email)) {
                         setStatus('admin');
                     } else if (sellersList.includes(user.email)) {
                         setStatus('seller');
