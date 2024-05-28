@@ -47,16 +47,33 @@ async function fetchAdminList() {
         return [];
     }
 }
+
 async function fetchSellerList() {
     try {
         const querySnapshot = await getDocs(sellerRef);
-        const sellerList = querySnapshot.docs.map(doc => doc.data().email);
+        const sellerList = querySnapshot.docs.map(doc => {
+            const data = doc.data();
+            return {
+                email: data.email,
+                role: data.role
+            };
+        });
         return sellerList;
     } catch (error) {
         console.error("Error fetching seller emails:", error);
         return [];
     }
 }
+/*
+async function fetchRole(){
+    try{
+        const querySnapshot = await getDocs(sellerRef)
+        const chooseRole = querySnapshot.docs.map(doc=>doc.data().role);
+        return chooseRole;
+    } catch(e){
+        console.log("Error fetching seller renter role: ",e)
+    }
+}*/
 
 async function fetchUserList() {
     try {
@@ -67,30 +84,6 @@ async function fetchUserList() {
         console.error("Error fetching user emails:", e)
         return []
     }
-}
-
-//checking accesses
-async function CheckUserAccess() {
-    const adminList = await fetchAdminList();
-    const sellerList = await fetchSellerList();
-
-    onAuthStateChanged(authUser, user => {
-        if (user) {
-            const userEmail = user.email;
-            if (adminList.includes(userEmail)) {
-                console.log("Admin Access granted");
-                sessionStorage.setItem('usra', true);
-                return true
-            } else if (sellerList.includes(userEmail)) {
-                console.log("Seller Access granted");
-                sessionStorage.setItem('usra', false)
-                return false
-            }
-        } else {
-            console.log("No user is signed in");
-            window.location.href = '/'
-        }
-    });
 }
 
 //check for normal user
@@ -105,4 +98,4 @@ async function isNUser() {
         }
     })
 }
-export { initializeUser, getUserInfo, fetchAdminList, fetchSellerList, fetchUserList, CheckUserAccess, isNUser };
+export { initializeUser, getUserInfo, fetchAdminList, fetchSellerList, fetchUserList, isNUser };
