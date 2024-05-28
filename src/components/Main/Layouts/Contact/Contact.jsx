@@ -91,14 +91,14 @@ function Contact() {
           </Grid>
           <Grid item xs={12} sm={4}>
             <Box>
-              <img src={Image2} alt="Image 2" style={{ maxWidth: '90%', height: 'auto', marginLeft: 30 }} />
+              <img src={Image2} alt=" 2" style={{ maxWidth: '90%', height: 'auto', marginLeft: 30 }} />
             </Box>
           </Grid>
         </Grid>
 
       </Box>
       <Box sx={{ width: "100%", marginTop: 10 }}>
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3932.966514762512!2d80.02048177450527!3d9.683898978395154!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3afe55d8c70c5db9%3A0xc4ee5d6945ad9bbd!2sUniversity%20of%20Jaffna!5e0!3m2!1sen!2slk!4v1712031159798!5m2!1sen!2slk"
+        <iframe title='our-map' src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3932.966514762512!2d80.02048177450527!3d9.683898978395154!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3afe55d8c70c5db9%3A0xc4ee5d6945ad9bbd!2sUniversity%20of%20Jaffna!5e0!3m2!1sen!2slk!4v1712031159798!5m2!1sen!2slk"
           width="100%" height="450" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       </Box>
 

@@ -2,29 +2,32 @@ import { Box, Grid, MenuItem, MenuList, Paper } from '@mui/material'
 import * as React from 'react'
 import Profile from './UserProfile'
 import Overview from './Overview'
-import Sellers from './Sellers'
+//import Sellers from './Sellers'
 import Renters from './Renters'
 import Products from './Products'
 import Users from './Users'
+import SellerOverview from './Seller/Overviev' 
+import SellerProducts from './Seller/Products'
+import SellerOrders from './Seller/Orders'
 import { onAuthStateChanged } from 'firebase/auth'
 import { authUser } from '../../../backend/autharization'
 import { useNavigate } from 'react-router-dom'
-import { fetchAdminList, fetchSellerList, fetchUserList } from '../../../backend/db/users'
+//import { fetchAdminList, fetchSellerList, fetchUserList } from '../../../backend/db/users'
 
 //only for debugging
 //let email = authUser.currentUser.email
-//const admins = ['jan@gmail.com']
-//const sellers = ['jan@gmail.com']
-//const users = ['jan@gmail.com']
+const admins = ['tharindu.sachintha.xyz1@gmail.com']
+const sellers = ['rathnayakep749@gmail.com']
+const users = ['rathnayakep749@gmail.com']
 
 //menus
 const adminMenu = ['Overview', 'Sellers', 'Renters', 'Products', 'Users', 'My Profile', 'Sign out']
-const sellerRenterMenu = ['Overview', 'Products', 'My Profile', 'Sign out']
+const sellerRenterMenu = ['Overview', 'Products','Orders' ,'My Profile', 'Sign out']
 const userMenu = ['Overview', 'My Profile', 'Sign out']
 
 //boards
-const adminBoard = [<Overview />, <Sellers />, <Renters />, <Products />, <Users />, <Profile />]
-const sellerBoard = [<Overview />, <Products />, <Profile />]
+const adminBoard = [<Overview />, <SellerOverview />, <Renters />, <Products />, <Users />, <Profile />]
+const sellerBoard = [<SellerOverview />, <SellerProducts />,<SellerOrders />, <Profile />]
 const userBoard = [<Overview />, <Profile />]
 
 function Structure() {
@@ -33,16 +36,16 @@ function Structure() {
     const navigate = useNavigate()
     React.useEffect(() => {
         const fetchLists = async () => {
-            const adminList = await fetchAdminList();
-            const sellersList = await fetchSellerList()
-            const usersList = await fetchUserList();
+            //const adminList = await fetchAdminList();
+            //const sellerList = await fetchSellerList()
+            //const usersList = await fetchUserList();
             const unsubscribe = onAuthStateChanged(authUser, user => {
                 if (user) {
-                    if(adminList.includes(user.email)) {
+                    if (admins.includes(user.email)) {
                         setStatus('admin');
-                    } else if (sellersList.includes(user.email)) {
+                    } else if (sellers.includes(user.email)) {
                         setStatus('seller');
-                    } else if (usersList.includes(user.email)) {
+                    } else if (users.includes(user.email)) {
                         setStatus('user');
                     }
                 } else {
