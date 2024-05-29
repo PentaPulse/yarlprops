@@ -12,6 +12,7 @@ const db = getFirestore(app);
 //reference
 const adminRef = collection(db, "admins")
 const sellerRef = collection(db, "sellers")
+const renterRef = collection(db, "renters")
 const userRef = collection(db, "users")
 
 //functions
@@ -47,11 +48,23 @@ async function fetchAdminList() {
         return [];
     }
 }
+
 async function fetchSellerList() {
     try {
         const querySnapshot = await getDocs(sellerRef);
         const sellerList = querySnapshot.docs.map(doc => doc.data().email);
         return sellerList;
+    } catch (error) {
+        console.error("Error fetching seller emails:", error);
+        return [];
+    }
+}
+
+async function fetchRenterList() {
+    try {
+        const querySnapshot = await getDocs(renterRef);
+        const renterList = querySnapshot.docs.map(doc => doc.data().email);
+        return renterList;
     } catch (error) {
         console.error("Error fetching seller emails:", error);
         return [];
@@ -69,30 +82,6 @@ async function fetchUserList() {
     }
 }
 
-//checking accesses
-async function CheckUserAccess() {
-    const adminList = await fetchAdminList();
-    const sellerList = await fetchSellerList();
-
-    onAuthStateChanged(authUser, user => {
-        if (user) {
-            const userEmail = user.email;
-            if (adminList.includes(userEmail)) {
-                console.log("Admin Access granted");
-                sessionStorage.setItem('usra', true);
-                return true
-            } else if (sellerList.includes(userEmail)) {
-                console.log("Seller Access granted");
-                sessionStorage.setItem('usra', false)
-                return false
-            }
-        } else {
-            console.log("No user is signed in");
-            window.location.href = '/'
-        }
-    });
-}
-
 //check for normal user
 async function isNUser() {
     const nUserList = await fetchUserList();
@@ -105,4 +94,4 @@ async function isNUser() {
         }
     })
 }
-export { initializeUser, getUserInfo, fetchAdminList, fetchSellerList, fetchUserList, CheckUserAccess, isNUser };
+export { initializeUser, getUserInfo, fetchAdminList, fetchSellerList, fetchRenterList, fetchUserList, isNUser };
