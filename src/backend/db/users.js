@@ -12,6 +12,7 @@ const db = getFirestore(app);
 //reference
 const adminRef = collection(db, "admins")
 const sellerRef = collection(db, "sellers")
+const renterRef = collection(db, "renters")
 const userRef = collection(db, "users")
 
 //functions
@@ -51,29 +52,24 @@ async function fetchAdminList() {
 async function fetchSellerList() {
     try {
         const querySnapshot = await getDocs(sellerRef);
-        const sellerList = querySnapshot.docs.map(doc => {
-            const data = doc.data();
-            return {
-                email: data.email,
-                role: data.role
-            };
-        });
+        const sellerList = querySnapshot.docs.map(doc => doc.data().email);
         return sellerList;
     } catch (error) {
         console.error("Error fetching seller emails:", error);
         return [];
     }
 }
-/*
-async function fetchRole(){
-    try{
-        const querySnapshot = await getDocs(sellerRef)
-        const chooseRole = querySnapshot.docs.map(doc=>doc.data().role);
-        return chooseRole;
-    } catch(e){
-        console.log("Error fetching seller renter role: ",e)
+
+async function fetchRenterList() {
+    try {
+        const querySnapshot = await getDocs(renterRef);
+        const renterList = querySnapshot.docs.map(doc => doc.data().email);
+        return renterList;
+    } catch (error) {
+        console.error("Error fetching seller emails:", error);
+        return [];
     }
-}*/
+}
 
 async function fetchUserList() {
     try {
@@ -98,4 +94,4 @@ async function isNUser() {
         }
     })
 }
-export { initializeUser, getUserInfo, fetchAdminList, fetchSellerList, fetchUserList, isNUser };
+export { initializeUser, getUserInfo, fetchAdminList, fetchSellerList, fetchRenterList, fetchUserList, isNUser };

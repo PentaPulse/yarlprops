@@ -12,18 +12,18 @@ import SellerOrders from './Seller/Orders'
 import { onAuthStateChanged } from 'firebase/auth'
 import { authUser } from '../../../backend/autharization'
 import { useNavigate } from 'react-router-dom'
-import { fetchAdminList, fetchSellerList, fetchUserList } from '../../../backend/db/users'
+import { fetchAdminList, fetchRenterList, fetchSellerList, fetchUserList } from '../../../backend/db/users'
 
 //menus
 const adminMenu = ['Overview', 'Sellers', 'Renters', 'Products', 'Users', 'My Profile', 'Sign out']
 const sellerMenu = ['Overview', 'Products', 'Orders', 'My Profile', 'Sign out']
-const renterMenu = ['Overview', 'Products',  'My Profile', 'Sign out']
+const renterMenu = ['Overview', 'Products', 'My Profile', 'Sign out']
 const userMenu = ['Overview', 'My Profile', 'Sign out']
 
 //boards
 const adminBoard = [<Overview />, <Sellers />, <Renters />, <Products />, <Users />, <Profile />]
 const sellerBoard = [<SellerOverview />, <SellerProducts />, <SellerOrders />, <Profile />]
-const renterBoard = [<Overview />, <Products />,  <Profile />]
+const renterBoard = [<Overview />, <Products />, <Profile />]
 const userBoard = [<Overview />, <Profile />]
 
 function Structure() {
@@ -39,22 +39,25 @@ function Structure() {
                         if (adminList.includes(user.email)) {
                             setStatus('admin')
                         }
-                        else{/*
-                        
-                            fetchSellerList().then(sellerList => {
-                                sellerList.forEach((seller, index) => {
-                                    console.log(`Seller ${index + 1} email:`, seller.email,seller.role);
-                                });
-                            })
-                        */
+                        else {
                             fetchSellerList().then(sellerList => {
                                 if (sellerList.includes(user.email)) {
                                     setStatus('seller')
                                 }
-                                else{
-                                    fetchUserList().then(userList => {
-                                        if (userList.includes(user.email)) {
-                                            setStatus('user')
+                                else {
+                                    fetchRenterList().then(renterList => {
+                                        if (renterList.includes(user.email)) {
+                                            setStatus('renter')
+                                        }
+                                        else {
+                                            fetchUserList().then(userList => {
+                                                if (userList.includes(user.email)) {
+                                                    setStatus('user')
+                                                }
+                                                else{
+                                                    navigate('/')
+                                                }
+                                            })
                                         }
                                     })
                                 }
