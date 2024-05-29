@@ -16,9 +16,9 @@ import { useNavigate } from 'react-router-dom'
 
 //only for debugging
 //let email = authUser.currentUser.email
-const admins = ['tharindu.sachintha.xyz1@gmail.com']
-const sellers = ['rathnayakep749@gmail.com']
-const users = ['rathnayakep749@gmail.com']
+const admins = ['jan@gmail.com']
+const sellers = ['jan@gmail.com']
+const users = ['jan@gmail.com']
 
 //menus
 const adminMenu = ['Overview', 'Sellers', 'Renters', 'Products', 'Users', 'My Profile', 'Sign out']
