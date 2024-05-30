@@ -76,7 +76,7 @@ function Structure() {
     return (
         <>
             <Box >
-                <Grid container spacing={2} columns={{ xs: 2, sm: 4, md: 12, lg: 12 }}>
+                <Grid container spacing={2} columns={{ xs: 2, sm: 6, md: 12, lg: 12 }}>
                     <Grid justifyContent="center" alignItems="center" item xs={2} sm={4} md={3} lg={3}>
                         <Paper>
                             <MenuList variant='selectedMenu'>

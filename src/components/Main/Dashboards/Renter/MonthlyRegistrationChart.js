@@ -1,6 +1,6 @@
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { Container, Typography, Box, Paper } from '@mui/material';
+import { Container, Typography, } from '@mui/material';
 import { styled } from '@mui/system';
 
 const data = [

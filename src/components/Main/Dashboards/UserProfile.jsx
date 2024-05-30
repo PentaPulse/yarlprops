@@ -2,10 +2,18 @@ import * as React from 'react';
 import { Container, Box, Avatar, TextField, Button, Grid } from '@mui/material'
 //import { authUser } from '../../../backend/autharization';
 
+const details = ['First name','Last name','Email','Phone number','Date of Birth']
+
 export default function Profile() {
-  
+const [user,setUser]=React.useState([])
   return (
-    <Container>
+    <>
+    <Grid container spacing={2} columns={12}>
+      <Grid item >
+
+      </Grid>
+    </Grid>
+
       <Box sx={{ display: 'flex', }}>
         <Grid container spacing={2} columns={12}>
 
@@ -116,6 +124,6 @@ export default function Profile() {
         <Button>Change Email</Button>
         <Button>Delete Account</Button>
       </Box>
-    </Container>
+    </>
   );
 }

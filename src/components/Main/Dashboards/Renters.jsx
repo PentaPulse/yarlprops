@@ -1,10 +1,9 @@
-import React from 'react'
+import * as React from 'react'
+import Renter from './Renter/Renters'
 
 function Renters() {
     return (
-        <div>
-            Renters
-        </div>
+        <Renter/>
     )
 }
 

@@ -43,7 +43,7 @@ const Users = () => {
 
     return (
         <div style={{ textAlign: 'center' }}>
-            <h1>Manage Users</h1>
+            <h1>Users</h1>
 
             <Paper sx={{ width: '90%', marginLeft: '5%' }}>
                 <TableContainer sx={{ maxHeight: 450 }}>

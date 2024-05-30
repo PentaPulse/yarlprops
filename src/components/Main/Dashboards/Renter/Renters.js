@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { TextField, Button, Checkbox, FormControlLabel, Container, Typography } from '@mui/material';
+import React, { useState ,useEffect} from 'react';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper ,TextField, Button, Checkbox, FormControlLabel, Container, Typography } from '@mui/material';
 
 const RentersForm = ({ currentRenter, onSave }) => {
   const [formValues, setFormValues] = useState({
@@ -137,5 +137,70 @@ const RentersForm = ({ currentRenter, onSave }) => {
     </Container>
   );
 };
+const RentersList = ({ renters, onEdit, onDelete }) => {
+  return (
+    <TableContainer component={Paper}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Name</TableCell>
+            <TableCell>Mobile Number</TableCell>
+            <TableCell>Address</TableCell>
+            <TableCell>Monthly Rental Price</TableCell>
+            <TableCell>Facilities</TableCell>
+            <TableCell>Actions</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {renters.map((renter, index) => (
+            <TableRow key={index}>
+              <TableCell>{renter.name}</TableCell>
+              <TableCell>{renter.mobileNumber}</TableCell>
+              <TableCell>{renter.address}</TableCell>
+              <TableCell>{renter.monthlyRentalPrice}</TableCell>
+              <TableCell>{renter.facilities.join(', ')}</TableCell>
+              <TableCell>
+                <Button variant="contained" color="primary" onClick={() => onEdit(renter)}>Edit</Button>
+                <Button variant="contained" color="secondary" onClick={() => onDelete(renter)}>Delete</Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+};
 
-export default RentersForm;
+const Renter = () => {
+  const [renters, setRenters] = useState([]);
+  const [currentRenter, setCurrentRenter] = useState(null);
+
+  const handleSaveRenter = (renter) => {
+    if (currentRenter) {
+      setRenters(renters.map(r => r === currentRenter ? renter : r));
+      setCurrentRenter(null);
+    } else {
+      setRenters([...renters, renter]);
+    }
+  };
+
+  const handleEditRenter = (renter) => {
+    setCurrentRenter(renter);
+  };
+
+  const handleDeleteRenter = (renter) => {
+    setRenters(renters.filter(r => r !== renter));
+  };
+
+  return (
+    <Container>
+      <Typography variant="h3" component="h1" gutterBottom>
+        Renters Management
+      </Typography>
+      <RentersForm currentRenter={currentRenter} onSave={handleSaveRenter} />
+      <RentersList renters={renters} onEdit={handleEditRenter} onDelete={handleDeleteRenter} />
+    </Container>
+  );
+};
+
+export default Renter;
