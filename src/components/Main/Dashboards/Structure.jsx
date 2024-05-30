@@ -54,7 +54,7 @@ function Structure() {
                                                 if (userList.includes(user.email)) {
                                                     setStatus('user')
                                                 }
-                                                else{
+                                                else {
                                                     navigate('/')
                                                 }
                                             })
@@ -68,8 +68,6 @@ function Structure() {
                     navigate('/');
                 }
             });
-
-            // Cleanup subscription on unmount
             return () => unsubscribe();
         };
 
@@ -83,7 +81,7 @@ function Structure() {
                         <Paper>
                             <MenuList variant='selectedMenu'>
                                 {status === 'admin' && adminMenu.map((item, index) => (
-                                    <MenuItem key={index} sx={{ height: '5rem', textAlign: 'center' }} onClick={() => setBoard(index)}>{item}</MenuItem>
+                                    <MenuItem key={index} sx={{ height: '5rem' }} onClick={() => setBoard(index)}>{item}</MenuItem>
                                 ))}
                                 {status === 'seller' && sellerMenu.map((item, index) => (
                                     <MenuItem key={index} sx={{ height: '5rem' }} onClick={() => setBoard(index)}>{item}</MenuItem>
