@@ -41,7 +41,7 @@ export default function Profile() {
         </div>
       </Box>
       <Box>
-        <h2>Personel details</h2>
+        <h2>Personal details</h2>
         <TextField
           id="outlined-read-only-input"
           label="First name"

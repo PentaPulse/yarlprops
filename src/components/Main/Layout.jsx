@@ -69,7 +69,7 @@ function Layout({ children ,handleMode}) {
                     </Fade>
                 </Modal>
             </div>
-            <Container sx={{marginTop:'85px'}}>
+            <Container sx={{marginTop:'15vh'}}>
                 {children}
             </Container>
             <Footer />

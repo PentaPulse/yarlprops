@@ -1,33 +1,43 @@
 import * as React from 'react';
 import Slidshow from './Slideshow/Slidshow';
-import SearchAndFilters from './SearchAndFilters/SearchAndFilters';
 import Categories from './Filters/Categories';
 import ProductsContents from './ProContent/ProductsContents';
-import { Box, Grid } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import { Button, Divider, Grid, Pagination, TextField } from '@mui/material';
 
 function Home() {
 
   return (
     <>
-      <Box>
-        {/** this is implented only for destop view */}
-        <Grid container spacing={2} >
-          <Grid item xs={2} sm={4} md={12} lg={12}>
-            <Slidshow />
-          </Grid>
+      <Grid container justifyContent='center' spacing={3} columns={12}>
+        <Grid item xs={11} sm={11} md={11} lg={11}>
+          <Slidshow />
         </Grid>
-        <Grid container spacing={3} columns={4} >
-          <Grid item md={1}>
-            <SearchAndFilters />
-            <Categories />
-          </Grid>
-          <Grid item md={3}>
-            <ProductsContents />
-          </Grid>
+        <Divider />
+        <Grid item xs={11} sm={11} md={11} lg={11}>
+          <Search />
         </Grid>
-      </Box>
+        <Grid item md={3}>
+          <Categories />
+        </Grid>
+        <Grid item md={9}>
+          <ProductsContents />
+          <Pagination count={10} />
+        </Grid>
+      </Grid>
     </>
   )
 }
 
 export default Home;
+
+function Search() {
+  return (
+    <>
+      <TextField sx={{ height: '2rem', width: '90%' }}></TextField>
+      <Button sx={{ backgroundColor: '', height: '3.5rem',textAlign:'center',width:'10%' }}>
+        <SearchIcon />
+      </Button>
+    </>
+  )
+}
