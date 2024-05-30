@@ -3,7 +3,9 @@ import Slidshow from './Slideshow/Slidshow';
 import Categories from './Filters/Categories';
 import ProductsContents from './ProContent/ProductsContents';
 import SearchIcon from '@mui/icons-material/Search';
-import { Button, Divider, Grid, Pagination, TextField } from '@mui/material';
+import { Divider, Grid, List, ListItem, ListItemText, Pagination, TextField } from '@mui/material';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '../../../../backend/db/products';
 
 function Home() {
 
@@ -22,7 +24,7 @@ function Home() {
         </Grid>
         <Grid item md={9}>
           <ProductsContents />
-          <Pagination count={10} />
+          <Pagination sx={{width:'100%'}} count={10} />
         </Grid>
       </Grid>
     </>
@@ -32,12 +34,39 @@ function Home() {
 export default Home;
 
 function Search() {
+  const [searchTerm, setSearchTerm] = React.useState('');
+  const [results, setResults] = React.useState([]);
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      if (searchTerm) {
+        const q = query(collection(db, 'products'), where('name', '>=', searchTerm), where('name', '<=', searchTerm + '\uf8ff'));
+        const querySnapshot = await getDocs(q);
+        const items = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setResults(items);
+      } else {
+        setResults([]);
+      }
+    };
+
+    fetchData();
+  }, [searchTerm]);
   return (
     <>
-      <TextField sx={{ height: '2rem', width: '90%' }}></TextField>
-      <Button sx={{ backgroundColor: '', height: '3.5rem',textAlign:'center',width:'10%' }}>
-        <SearchIcon />
-      </Button>
+    <TextField
+        label="Search"
+        variant="outlined"
+        fullWidth
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />      
+      <List>
+        {results.map((result) => (
+          <ListItem key={result.id}>
+            <ListItemText primary={result.name} />
+          </ListItem>
+        ))}
+      </List>
     </>
   )
 }

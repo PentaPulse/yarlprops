@@ -50,4 +50,4 @@ const fetchSelectedProduct = async (pid) => {
         return []
     }
 }
-export { addProduct, fetchProducts, fetchSelectedProduct }
+export { db, addProduct, fetchProducts, fetchSelectedProduct }
