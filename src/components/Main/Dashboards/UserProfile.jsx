@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Container, Box, Avatar, TextField, Button } from '@mui/material'
+import { Container, Box, Avatar, TextField, Button, Grid } from '@mui/material'
 //import { authUser } from '../../../backend/autharization';
 
 export default function Profile() {
@@ -7,6 +7,9 @@ export default function Profile() {
   return (
     <Container>
       <Box sx={{ display: 'flex', }}>
+        <Grid container spacing={2} columns={12}>
+
+        </Grid>
         <div>
           <Avatar alt='Display Picture' src={sessionStorage.getItem('pp')} />
         </div>

@@ -10,17 +10,18 @@ function Home() {
   return (
     <>
       <Box>
+        {/** this is implented only for destop view */}
         <Grid container spacing={2} >
           <Grid item xs={2} sm={4} md={12} lg={12}>
             <Slidshow />
           </Grid>
         </Grid>
-        <Grid container spacing={2} columns={{ xs: 2, sm: 4, md: 12, lg: 12 }} >
-          <Grid item>
+        <Grid container spacing={3} columns={4} >
+          <Grid item md={1}>
             <SearchAndFilters />
             <Categories />
           </Grid>
-          <Grid item>
+          <Grid item md={3}>
             <ProductsContents />
           </Grid>
         </Grid>

@@ -22,9 +22,9 @@ const ProductsContents = () => {
         <>
             <section id='products' className='d-fiex justify-content-center align-items-center mt-5'>
                 <Container fixed>
-                    <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 2, sm: 8, md: 12, lg: 12 }}>
+                    <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 1, sm: 2, md: 3, lg: 3 }}>
                         {products.map((product, index) => (
-                            <Grid item xs={2} sm={4} md={4} lg={3} key={index}>
+                            <Grid item xs={1} sm={1} md={1} lg={1} key={index}>
                                 <Card>
                                     <CardMedia
                                         sx={{ height: '20rem' }}
