@@ -35,18 +35,3 @@ function Home() {
 }
 
 export default Home;
-
-function Search() {
-  const [searchTerm, setSearchTerm] = React.useState('');
-  return (
-    <>
-      <TextField
-        label="Search"
-        variant="outlined"
-        fullWidth
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
-    </>
-  )
-}
