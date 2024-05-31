@@ -12,16 +12,23 @@ const productRef = collection(db, "products")
 
 //functions
 // adding products
-const addProduct = async (productId, name, type, subtype, location, price, description) => {
-    await setDoc(doc(productRef, productId), {
+const addProduct = async (productId, name, category, type, location, price, description, imageArray, address) => {
+    try{
+        await setDoc(doc(productRef), {
+        pid: productId,
         name: name,
-        type: type,
-        subtype: subtype,
+        type: category,
+        subtype: type,
         location: location,
         price: price,
-        description: description
-    })
-}
+        description: description,
+        images: imageArray,
+        address: address
+    })} catch(e){
+        console.error(e)
+    }
+    
+};
 
 //fetching all the documents without conditions
 const fetchProducts = async () => {
