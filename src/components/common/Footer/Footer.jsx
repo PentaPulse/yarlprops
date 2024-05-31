@@ -15,7 +15,7 @@ const Footer = () => {
                             {/* <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Laborum ea quo ex ullam laboriosam magni totam, facere eos iure voluptate.</p> */}
                             <div className="footer-icons">
                                 <i className="fa-brands fa-facebook"></i>
-                                <i className="fa-brands fa-twitter"></i>
+                                <i className="fa-brands fa-x-twitter"></i>
                                 <i className="fa-brands fa-instagram"></i>
                                 <i className="fa-brands fa-linkedin-in"></i>
                             </div>
