@@ -53,10 +53,10 @@ function Structure() {
                                             fetchUserList().then(userList => {
                                                 if (userList.includes(user.email)) {
                                                     setStatus('user')
-                                                }
+                                                }/*
                                                 else {
                                                     navigate('/')
-                                                }
+                                                }*/
                                             })
                                         }
                                     })
@@ -64,9 +64,9 @@ function Structure() {
                             })
                         }
                     })
-                } else {
+                }/* else {
                     navigate('/');
-                }
+                }*/
             });
             return () => unsubscribe();
         };

@@ -1,27 +1,22 @@
-import { GoogleAuthProvider, createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import React, { useState } from 'react'
 import { authUser } from '../../../backend/autharization';
 import { Button, ButtonGroup, TextField } from '@mui/material';
 import { initializeUser } from '../../../backend/db/users';
 import { useTheme } from '@mui/material/styles';
+import { useAuth } from '../../../backend/AuthContext';
 
-export function Welcome({ toLogin, toRegister }) {
+export function Welcome({ toLogin, toRegister ,closeBox}) {
     const theme = useTheme()
-    const handleGoogle = () => {
-        const provider = new GoogleAuthProvider();
-        signInWithPopup(authUser, provider)
-            .then((result) => {
-                const credential = GoogleAuthProvider.credentialFromResult(result)
-                const token = credential.accessToken
-                const user = result.user
-                console.log(token)
-                console.log(user)
-                window.location.reload(0)
-            })
-            .catch((error) => {
-                //const errorCode = error.code
-                //const errorMessage = error.message
-            })
+    const {google}=useAuth();
+    const handleGoogle = async(e)=>{
+        e.preventDefault();
+        try{
+            await google();
+            closeBox();
+        } catch(error){
+            console.error(error)
+        }
     }
     return (
         <>
@@ -46,25 +41,23 @@ export function Login({ handleBack }) {
     const theme = useTheme()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const handleLogin = (e) => {
-        e.preventDefault()
-        signInWithEmailAndPassword(authUser, email, password)
-            .then((result) => {
-                const user = result.user
-                console.log("uid : " + user.uid)
-                window.location.reload(0)
-            })
-            .catch((error) => {
-                //const errorMassege = error.massage
-                //const errorCode = error.code
-            })
+    const {login,reset}=useAuth();
+    
+    const handleLogin = async(e)=>{
+        e.preventDefault();
+        try{
+            await login(email,password);
+        } catch(error){
+            console.error(error)
+        }
     }
-    const handleResetPassword = () => {
-        sendPasswordResetEmail(authUser, email)
-            .then((result) => {
-                alert("check " + email + " inbox")
-                console.log("email sent" + result)
-            })
+    const handleReset = async(e)=>{
+        e.preventDefault();
+        try{
+            await reset(email);
+        } catch(error){
+            console.error(error)
+        }
     }
     return (
         <>
@@ -74,7 +67,7 @@ export function Login({ handleBack }) {
                 <div className="d-flex flex-column gap-4">
                     <TextField label="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                     <TextField label="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                    <span className="btn" onClick={handleResetPassword}>Forgot Your Password?</span>
+                    <span className="btn" onClick={handleReset}>Forgot Your Password?</span>
                 </div>
                 <div className="text-center">
                     <ButtonGroup aria-label='Vertical button group' className='gap-3'>

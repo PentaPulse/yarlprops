@@ -4,6 +4,7 @@ import { ToastContainer } from 'react-toastify';
 import { Login, Register, Welcome } from '../common/Welcome/Welcome';
 import NavigationBar from '../common/NavigationBar/NavigationBar';
 import Footer from '../common/Footer/Footer';
+import { useNavigate } from 'react-router-dom';
 
 const style = {
     position: 'absolute',
@@ -25,6 +26,7 @@ function Layout({ children ,handleMode}) {
     const [open, setOpen] = useState(false);
     const [welcome,setWelcome]=useState(false)
     const [login,setLogin]=useState(false)
+    const navigate = useNavigate();
 
     const showWelcome = () => {
         setOpen(!open);
@@ -32,6 +34,11 @@ function Layout({ children ,handleMode}) {
     }
     const handleClose = () => {
         setOpen(!open);
+    }
+
+    const closeBox =()=>{
+        navigate('/dashboard')  
+        setOpen(!open);              
     }
     const handleLoginButton=()=>{
         setLogin(true)
@@ -64,7 +71,7 @@ function Layout({ children ,handleMode}) {
                     }}>
                     <Fade in={open}>
                         <Box sx={style}>
-                            {welcome?<Welcome toLogin={handleLoginButton} toRegister={handleRegisterButton}/>:(login?<Login handleBack={handleBackButton}/>:<Register handleBack={handleBackButton}/>)}
+                            {welcome?<Welcome toLogin={handleLoginButton} toRegister={handleRegisterButton} closeBox={closeBox}/>:(login?<Login handleBack={handleBackButton} closeBox={closeBox}/>:<Register handleBack={handleBackButton} closeBox={closeBox}/>)}
                         </Box>
                     </Fade>
                 </Modal>
