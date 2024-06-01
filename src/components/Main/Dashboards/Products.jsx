@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { addProduct } from '../../../backend/db/products';
-import { Button, Container, TextField, Typography } from '@mui/material';
+import { Button, Container, Input, TextField, Typography } from '@mui/material';
+import { uploadImagesAndGetUrls } from '../../../backend/storage';
 
 function Products() {
     return (
@@ -18,13 +19,17 @@ const ProductForm = () => {
     const [location, setLocation] = useState('');
     const [price, setPrice] = useState('');
     const [description, setDescription] = useState('');
-    const [imageArray, setImageArray] = useState('');
+    const [imageFiles, setImageFiles] = useState([]);
     const [address, setAddress] = useState('');
 
+    const handleFileChange = (e) => {
+        setImageFiles(e.target.files);
+    };
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const images = imageArray.split(',').map(img => img.trim());
-        await addProduct(productId, name, category, type, location, parseFloat(price), description, images, address);
+        const folderPath = `storage/a/propictures/${productId}`;
+        const imageArray = await uploadImagesAndGetUrls(Array.from(imageFiles), folderPath);
+        await addProduct(productId, name, category, type, location, parseFloat(price), description, imageArray, address);
         alert('Product added successfully!');
         // Clear form fields after submission
         setProductId('');
@@ -34,7 +39,7 @@ const ProductForm = () => {
         setLocation('');
         setPrice('');
         setDescription('');
-        setImageArray('');
+        setImageFiles([]);
         setAddress('');
     };
 
@@ -91,12 +96,13 @@ const ProductForm = () => {
                     margin="normal"
                     required
                 />
-                <TextField
-                    label="Images (comma separated URLs)"
-                    value={imageArray}
-                    onChange={(e) => setImageArray(e.target.value)}
+                <Input
+                    type="file"
+                    inputProps={{ multiple: true }}
+                    onChange={handleFileChange}
                     fullWidth
                     margin="normal"
+                    required
                 />
                 <TextField
                     label="Address"

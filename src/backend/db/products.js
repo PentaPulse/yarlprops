@@ -1,7 +1,7 @@
 import firebase from "firebase/compat/app";
 import "firebase/firestore";
 import { firebaseConfig } from "../secrets";
-import { doc, setDoc, getFirestore, collection, getDocs, query, where } from "firebase/firestore";
+import { setDoc, getFirestore, collection, getDocs, query, where, addDoc } from "firebase/firestore";
 
 const app = firebase.initializeApp(firebaseConfig)
 
@@ -12,22 +12,25 @@ const productRef = collection(db, "products")
 
 //functions
 // adding products
-const addProduct = async (productId, name, category, type, location, price, description, imageArray, address) => {
-    try{
-        await setDoc(doc(productRef), {
-        pid: productId,
-        name: name,
-        type: category,
-        subtype: type,
-        location: location,
-        price: price,
-        description: description,
-        images: imageArray,
-        address: address
-    })} catch(e){
+const addProduct = async (name, category, type, location, price, description, imageArray, address) => {
+    try {
+        const docRef = await addDoc(collection(db, 'products'), {
+            name: name,
+            type: category,
+            subtype: type,
+            location: location,
+            price: price,
+            description: description,
+            images: imageArray,
+            address: address
+        })
+        await setDoc(docRef, { pid: docRef.id }, { merge: true });
+        return docRef.id;
+
+    } catch (e) {
         console.error(e)
     }
-    
+
 };
 
 //fetching all the documents without conditions

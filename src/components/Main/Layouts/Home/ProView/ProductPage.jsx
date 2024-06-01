@@ -14,8 +14,12 @@ function ProductPage() {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      const productData = await fetchSelectedProduct(id);
-      setProduct(productData);
+      try {
+        const productData = await fetchSelectedProduct(id);
+        setProduct(productData);
+      } catch (error) {
+        console.error("Error fetching product:", error);
+      }
     };
 
     fetchProduct();

@@ -5,7 +5,7 @@ import { firebaseConfig } from "./secrets";
 
 const app=firebase.initializeApp(firebaseConfig)
 const storage = getStorage(app);
-
+/*
 function uploadProfilePicture(user, pp) {
     const storageRef = ref(storage, `users/profilePictures/${user.uid}`);
     uploadBytes(storageRef, pp).then((snapshot) => {
@@ -16,7 +16,7 @@ function uploadProfilePicture(user, pp) {
         })
     })
 }
-/*
+
 updateProfile(user, {
                     displayName: displayName,
                 }).then(() => {
@@ -37,4 +37,14 @@ updateProfile(user, {
                 })
 */
 
-export { storage, uploadProfilePicture }
+const uploadImagesAndGetUrls = async (files, folderPath) => {
+    const uploadPromises = files.map(file => {
+        const storageRef = ref(storage, `${folderPath}/${file.name}`);
+        return uploadBytes(storageRef, file).then(async snapshot => {
+            return await getDownloadURL(snapshot.ref);
+        });
+    });
+    return Promise.all(uploadPromises);
+};
+
+export { storage, uploadImagesAndGetUrls }
