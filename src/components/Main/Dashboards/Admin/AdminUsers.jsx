@@ -23,7 +23,7 @@ const AdminUsers = () => {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
-    const [users,setUsers]=useState([])
+    const [users, setUsers] = useState([])
     const [rows, setRows] = useState([]);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -31,6 +31,7 @@ const AdminUsers = () => {
     const [viewOpen, setViewOpen] = useState(false);
     const [newUser, setNewUser] = useState({ id: '', name: '', email: '', phone: '', address: '', status: 'Active' });
     const [selectedUser, setSelectedUser] = useState(null);
+    const [count, setCount] = useState(0)
 
     const handleAddUser = () => {
         setOpen(true);
@@ -72,7 +73,7 @@ const AdminUsers = () => {
             try {
                 const q = query(collection(db, "systemusers"))
                 const qSnapshot = await getDocs(q)
-                if(!qSnapshot.empty){
+                if (!qSnapshot.empty) {
                     const userList = qSnapshot.docs.map(doc => doc.data());
                     setUsers(userList)
                 }
@@ -111,10 +112,10 @@ const AdminUsers = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {users.map((user,index)=>(
+                            {users.map((user, index) => (
                                 <TableRow>
                                     <TableCell>
-                                        0
+                                        {index }
                                     </TableCell>
                                     <TableCell>
                                         {user.fname || user.name}
@@ -126,16 +127,16 @@ const AdminUsers = () => {
                                         {user.phone}
                                     </TableCell>
                                     <TableCell>
-                                        
+
                                     </TableCell>
                                     <TableCell>
-                                    {user.role}
+                                        {user.role}
                                     </TableCell>
                                     <TableCell>
-                                    <Box display="flex" gap={1}>
-                                                            <Button variant="outlined" color="secondary" size="small">View</Button>
-                                                            <Button variant="outlined" color="error" size="small" >Delete</Button>
-                                                        </Box>
+                                        <Box display="flex" gap={1}>
+                                            <Button variant="outlined" color="secondary" size="small">View</Button>
+                                            <Button variant="outlined" color="error" size="small" >Delete</Button>
+                                        </Box>
                                     </TableCell>
                                 </TableRow>
                             ))}
