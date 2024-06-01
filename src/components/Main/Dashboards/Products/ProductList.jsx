@@ -1,35 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, TablePagination, CircularProgress, Alert } from '@mui/material';
+import { db } from './firebase';
+import { collection, getDocs, deleteDoc, doc} from 'firebase/firestore';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, TablePagination } from '@mui/material';
 
 const ProductList = () => {
     const [products, setProducts] = useState([]);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);    
-    const [totalProducts, setTotalProducts] = useState(0);    
-    const [loading, setLoading] = useState(true);    
-    const [error, setError] = useState(null);    
-
-
+    
     useEffect(() => {
-        setLoading(true);
-        axios.get(`/products?page=${page + 1}&limit=${rowsPerPage}`)
-        .then(response => {
-            setProducts(response.data.products);
-            setTotalProducts(response.data.total);
-            setLoading(false);
-        })
-        .catch(error => {
-            setError('Failed to fetch products');
-            setLoading(false);
-        });
-    }, [page, rowsPerPage]);
+        const fetchProducts = async () => {
+            const querySnapshot = await getDocs(collection(db, 'products'));
+            const productsArray = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setProducts(productsArray);
+        };
+        fetchProducts();
+    }, []);
 
-    const handleDelete = (id) => {
-        axios.delete(`/products/${id}`)
-        .then(() => setProducts(products.filter(product => product.id !== id)))
-        .catch(error => console.error(error));
+    const handleDelete = async (id) => {
+        await deleteDoc(doc(db, 'products, id'));
+        setProducts(products.filter(product => product.id !== id));
     };
 
     const handleChangePage = (event, newPage) => {
@@ -40,9 +31,6 @@ const ProductList = () => {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
-
-    if (loading) return <CircularProgress />;
-    if (error) return <Alert severity="error">{error}</Alert>;
 
     return (
         <Paper>
@@ -59,7 +47,7 @@ const ProductList = () => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {products.map(product => (
+                    {products.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(product => (
                         <TableRow key={product.id}>
                             <TableCell>{product.id}</TableCell>
                             <TableCell>{product.title}</TableCell>
@@ -79,7 +67,7 @@ const ProductList = () => {
         <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={totalProducts} // Ideally, this should come from the API as well
+            count={products.length} 
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

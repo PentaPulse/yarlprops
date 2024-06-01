@@ -1,10 +1,10 @@
 Admin Dashboard Product Components:
 
-ProductList: Display the list of products with options to edit, delete, and view details.
+1) ProductList: Display the list of products with options to edit, delete, and view details.
 
-ProductForm: Form for adding and editing products.
+2) ProductForm: Form for adding and editing products.
 
-ProductDetail: View detailed information about a product.
+3) ProductDetail: View detailed information about a product.
 
 Product Example:
 
