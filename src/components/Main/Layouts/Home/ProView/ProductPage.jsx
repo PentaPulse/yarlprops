@@ -47,7 +47,7 @@ function ProductPage() {
                 <img
                   style={{ width: '70vw', height: '35vh', borderRadius: '10px' }}/*Changed to viewport height & Width*/
                   className="d-block w-100"
-                  src={product.image1}
+                  src={product.images[0]}
                   alt="First slide"
                 />
               </Carousel.Item>

@@ -12,8 +12,8 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
             if (currentUser) {
-                const userDoc = await getDoc(doc(db, "systemUsers", currentUser.email));
-                setUser({ ...currentUser, ...userDoc.data() });
+                const userDoc = await getDoc(doc(db, "systemusers", currentUser.email));
+                setUser({  ...userDoc.data(), ...currentUser });
             } else {
                 setUser(null);
             }

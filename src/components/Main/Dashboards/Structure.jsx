@@ -1,10 +1,8 @@
 import { Box, Grid, MenuItem, MenuList, Paper } from '@mui/material'
 import * as React from 'react'
 import Profile from './UserProfile'
-import { onAuthStateChanged } from 'firebase/auth'
-import { authUser } from '../../../backend/autharization'
-import { useNavigate } from 'react-router-dom'
-import { fetchAdminList, fetchRenterList, fetchSellerList, fetchUserList } from '../../../backend/db/users'
+import { useAuth } from '../../../backend/AuthContext'
+
 //Admin imports
 import AdminOverview from './Admin/AdminOverview'
 import AdminSellers from './Admin/AdminSellers'
@@ -22,7 +20,6 @@ import RenterProducts from './Renter/RenterProducts'
 //user imports
 import UserOverview from './User/UserOverview'
 
-
 //menus
 const adminMenu = ['Overview', 'Sellers', 'Renters', 'Users', 'Products', 'My Profile', 'Sign out']
 const sellerMenu = ['Overview', 'Products', 'Orders', 'My Profile', 'Sign out']
@@ -31,57 +28,19 @@ const userMenu = ['Overview', 'My Profile', 'Sign out']
 
 //boards
 const adminBoard = [<AdminOverview />, <AdminSellers />, <AdminRenters />, <AdminUsers />, <AdminProducts />, <Profile />]
-const sellerBoard = [<SellerOverview/>,<SellerOrders/>,<SellerProducts/>,<Profile/>]
-const renterBoard = [<RenterOverview/>,<RenterOrders/>,<RenterProducts/>,<Profile/>]
-const userBoard = [<UserOverview/>,<Profile/>]
+const sellerBoard = [<SellerOverview />, <SellerOrders />, <SellerProducts />, <Profile />]
+const renterBoard = [<RenterOverview />, <RenterOrders />, <RenterProducts />, <Profile />]
+const userBoard = [<UserOverview />, <Profile />]
 
 function Structure() {
     const [board, setBoard] = React.useState(0)
     const [status, setStatus] = React.useState('')
-    const navigate = useNavigate()
+    const { user } = useAuth()
 
     React.useEffect(() => {
-        const fetchLists = async () => {
-            const unsubscribe = onAuthStateChanged(authUser, user => {
-                if (user) {
-                    fetchAdminList().then(adminList => {
-                        if (adminList.includes(user.email)) {
-                            setStatus('admin')
-                        }
-                        else {
-                            fetchSellerList().then(sellerList => {
-                                if (sellerList.includes(user.email)) {
-                                    setStatus('seller')
-                                }
-                                else {
-                                    fetchRenterList().then(renterList => {
-                                        if (renterList.includes(user.email)) {
-                                            setStatus('renter')
-                                        }
-                                        else {
-                                            fetchUserList().then(userList => {
-                                                if (userList.includes(user.email)) {
-                                                    setStatus('user')
-                                                }/*
-                                                else {
-                                                    navigate('/')
-                                                }*/
-                                            })
-                                        }
-                                    })
-                                }
-                            })
-                        }
-                    })
-                }/* else {
-                    navigate('/');
-                }*/
-            });
-            return () => unsubscribe();
-        };
-
-        fetchLists();
-    }, [navigate, status]);
+        setStatus(user.role)
+        console.log(user)
+    }, [user]);
     return (
         <>
             <Box >
