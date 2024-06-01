@@ -1,30 +1,39 @@
 import { Box, Grid, MenuItem, MenuList, Paper } from '@mui/material'
 import * as React from 'react'
 import Profile from './UserProfile'
-import Overview from './Overview'
-import Sellers from './Sellers'
-import Renters from './Renters'
-import Products from './Products'
-import Users from './Users'
-import SellerOverview from './Seller/Overviev'
-import SellerProducts from './Seller/Products'
-import SellerOrders from './Seller/Orders'
 import { onAuthStateChanged } from 'firebase/auth'
 import { authUser } from '../../../backend/autharization'
 import { useNavigate } from 'react-router-dom'
 import { fetchAdminList, fetchRenterList, fetchSellerList, fetchUserList } from '../../../backend/db/users'
+//Admin imports
+import AdminOverview from './Admin/AdminOverview'
+import AdminSellers from './Admin/AdminSellers'
+import AdminRenters from './Admin/AdminRenters'
+import AdminUsers from './Admin/AdminUsers'
+import AdminProducts from './Admin/AdminProducts'
+//seller imports
+import SellerOverview from './Seller/SellerOverview'
+import SellerOrders from './Seller/SellerOrders'
+import SellerProducts from './Seller/SellerProducts'
+//renter imports
+import RenterOverview from './Renter/RenterOverview'
+import RenterOrders from './Renter/RenterOrders'
+import RenterProducts from './Renter/RenterProducts'
+//user imports
+import UserOverview from './User/UserOverview'
+
 
 //menus
-const adminMenu = ['Overview', 'Sellers', 'Renters', 'Products', 'Users', 'My Profile', 'Sign out']
+const adminMenu = ['Overview', 'Sellers', 'Renters', 'Users', 'Products', 'My Profile', 'Sign out']
 const sellerMenu = ['Overview', 'Products', 'Orders', 'My Profile', 'Sign out']
-const renterMenu = ['Overview', 'Products', 'My Profile', 'Sign out']
+const renterMenu = ['Overview', 'Products', 'Orders', 'My Profile', 'Sign out']
 const userMenu = ['Overview', 'My Profile', 'Sign out']
 
 //boards
-const adminBoard = [<Overview />, <Sellers />, <Renters />, <Products />, <Users />, <Profile />]
-const sellerBoard = [<SellerOverview />, <SellerProducts />, <SellerOrders />, <Profile />]
-const renterBoard = [<Overview />, <Products />, <Profile />]
-const userBoard = [<Overview />, <Profile />]
+const adminBoard = [<AdminOverview />, <AdminSellers />, <AdminRenters />, <AdminUsers />, <AdminProducts />, <Profile />]
+const sellerBoard = [<SellerOverview/>,<SellerOrders/>,<SellerProducts/>,<Profile/>]
+const renterBoard = [<RenterOverview/>,<RenterOrders/>,<RenterProducts/>,<Profile/>]
+const userBoard = [<UserOverview/>,<Profile/>]
 
 function Structure() {
     const [board, setBoard] = React.useState(0)

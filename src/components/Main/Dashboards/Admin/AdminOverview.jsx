@@ -1,10 +1,10 @@
-import { Box, Grid, Typography } from '@mui/material'
+import { Grid, Typography } from '@mui/material'
 import React from 'react'
 
 const countNames = ['Products','Users']
 const count =[12,45]
 
-function Overview() {
+function AdminOverview() {
     return (
         <>
             <Grid container columns={12}>
@@ -19,4 +19,4 @@ function Overview() {
     )
 }
 
-export default Overview
+export default AdminOverview
