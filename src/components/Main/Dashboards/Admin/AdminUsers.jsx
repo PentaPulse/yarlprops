@@ -1,4 +1,4 @@
-import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Grid } from "@mui/material";
+import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Grid, Modal, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
 import AddIcon from '@mui/icons-material/Add';
 
@@ -8,9 +8,8 @@ const AdminUsers = () => {
         { id: 'name', name: 'Name' },
         { id: 'email', name: 'Email' },
         { id: 'phone', name: 'Phone' },
+        { id: 'address', name: 'Address' },
         { id: 'status', name: 'Status' },
-        { id: 'role', name: 'Role' }, 
-        { id: 'requestStatus', name: 'Request Status' },
         { id: 'action', name: 'Action' },
     ];
 
@@ -23,30 +22,48 @@ const AdminUsers = () => {
         setPage(0);
     };
 
+    const [rows, setRows] = useState([]);
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [open, setOpen] = useState(false);
+    const [viewOpen, setViewOpen] = useState(false);
+    const [newUser, setNewUser] = useState({ id: '', name: '', email: '', phone: '', address: '', status: 'Active' });
+    const [selectedUser, setSelectedUser] = useState(null);
+
+    const handleAddUser = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+        setNewUser({ id: '', name: '', email: '', phone: '', address: '', status: 'Active' });
+    };
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setNewUser({ ...newUser, [name]: value });
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        setRows([...rows, { ...newUser, id: rows.length + 1 }]);
+        handleClose();
+    };
+
     const handleView = (row) => {
-        console.log("View row:", row);
+        setSelectedUser(row);
+        setViewOpen(true);
+    };
+
+    const handleViewClose = () => {
+        setViewOpen(false);
+        setSelectedUser(null);
     };
 
     const handleDelete = (rowId) => {
         console.log("Delete row with id:", rowId);
         setRows(rows.filter(row => row.id !== rowId));
     };
-
-    const handleAddUser = () => {
-        console.log("Add user clicked");
-    };
-
-    const initialRows = [
-        { id: 1, name: 'Sadamali Jayarathna', email: 'sada@gmail.com', phone: '0774566079', status: 'Active', role: 'Seller', requestStatus: 'Accepted' },
-        { id: 2, name: 'Nayana Munasinhe', email: 'naya@gmail.com', phone: '0778964563', status: 'Inactive', role: 'Renter', requestStatus: 'Rejected' },
-        { id: 3, name: 'Janani Welipitiya', email: 'jana@gmail.com', phone: '0778564573', status: 'Active', role: 'User', requestStatus: 'Pending' },
-        { id: 4, name: 'Ruchi Welipitiya', email: 'ruchi@gmail.com', phone: '0778964565', status: 'Inactive', role: 'Renter', requestStatus: 'Accepted' },
-        { id: 5, name: 'Sathya Jayasundara', email: 'sathya@gmail.com', phone: '0778969563', status: 'Inactive', role: 'Renter', requestStatus: 'Pending' },
-    ];
-
-    const [rows, setRows] = useState(initialRows);
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(5);
 
     return (
         <Box sx={{ textAlign: 'center', width: '80%', margin: 'auto' }}>
@@ -89,10 +106,6 @@ const AdminUsers = () => {
                                                             <Button variant="outlined" color="secondary" size="small" onClick={() => handleView(row)}>View</Button>
                                                             <Button variant="outlined" color="error" size="small" onClick={() => handleDelete(row.id)}>Delete</Button>
                                                         </Box>
-                                                    ) : column.id === 'requestStatus' ? (
-                                                        <span style={{ color: value === 'Accepted' ? 'green' : value === 'Rejected' ? 'red' : value === 'Pending' ? 'blue' : 'inherit' }}>
-                                                            {value}
-                                                        </span>
                                                     ) : value}
                                                 </TableCell>
                                             );
@@ -112,9 +125,126 @@ const AdminUsers = () => {
                     onRowsPerPageChange={handleRowsPerPageChange}
                 />
             </Paper>
+
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="add-user-modal-title"
+                aria-describedby="add-user-modal-description"
+            >
+                <Box 
+                    component="form"
+                    onSubmit={handleSubmit}
+                    sx={{ 
+                        position: 'absolute', 
+                        top: '50%', 
+                        left: '50%', 
+                        transform: 'translate(-50%, -50%)', 
+                        width: 400, 
+                        bgcolor: 'background.paper', 
+                        border: '2px solid #000', 
+                        boxShadow: 24, 
+                        p: 4 
+                    }}
+                >
+                    <Typography id="add-user-modal-title" variant="h6" component="h2">
+                        Add New User
+                    </Typography>
+                    <TextField
+                        fullWidth
+                        margin="normal"
+                        name="name"
+                        label="Name"
+                        value={newUser.name}
+                        onChange={handleInputChange}
+                    />
+                    <TextField
+                        fullWidth
+                        margin="normal"
+                        name="email"
+                        label="Email"
+                        value={newUser.email}
+                        onChange={handleInputChange}
+                    />
+                    <TextField
+                        fullWidth
+                        margin="normal"
+                        name="phone"
+                        label="Phone"
+                        value={newUser.phone}
+                        onChange={handleInputChange}
+                    />
+                    <TextField
+                        fullWidth
+                        margin="normal"
+                        name="address"
+                        label="Address"
+                        value={newUser.address}
+                        onChange={handleInputChange}
+                    />
+                    <TextField
+                        fullWidth
+                        margin="normal"
+                        name="status"
+                        label="Status"
+                        value={newUser.status}
+                        onChange={handleInputChange}
+                    />
+                    <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
+                        Add User
+                    </Button>
+                </Box>
+            </Modal>
+
+            {selectedUser && (
+                <Modal
+                    open={viewOpen}
+                    onClose={handleViewClose}
+                    aria-labelledby="view-user-modal-title"
+                    aria-describedby="view-user-modal-description"
+                >
+                    <Box 
+                        sx={{ 
+                            position: 'absolute', 
+                            top: '50%', 
+                            left: '50%', 
+                            transform: 'translate(-50%, -50%)', 
+                            width: 400, 
+                            bgcolor: 'background.paper', 
+                            border: '2px solid #000', 
+                            boxShadow: 24, 
+                            p: 4 
+                        }}
+                    >
+                        <Typography id="view-user-modal-title" variant="h6" component="h2">
+                            User Details
+                        </Typography>
+                        <Typography id="view-user-modal-description" sx={{ mt: 2 }}>
+                            <strong>Id:</strong> {selectedUser.id}
+                        </Typography>
+                        <Typography id="view-user-modal-description" sx={{ mt: 2 }}>
+                            <strong>Name:</strong> {selectedUser.name}
+                        </Typography>
+                        <Typography id="view-user-modal-description" sx={{ mt: 2 }}>
+                            <strong>Email:</strong> {selectedUser.email}
+                        </Typography>
+                        <Typography id="view-user-modal-description" sx={{ mt: 2 }}>
+                            <strong>Phone:</strong> {selectedUser.phone}
+                        </Typography>
+                        <Typography id="view-user-modal-description" sx={{ mt: 2 }}>
+                            <strong>Address:</strong> {selectedUser.address}
+                        </Typography>
+                        <Typography id="view-user-modal-description" sx={{ mt: 2 }}>
+                            <strong>Status:</strong> {selectedUser.status}
+                        </Typography>
+                        <Button onClick={handleViewClose} variant="contained" color="primary" sx={{ mt: 2 }}>
+                            Close
+                        </Button>
+                    </Box>
+                </Modal>
+            )}
         </Box>
     );
 }
 
 export default AdminUsers;
-
