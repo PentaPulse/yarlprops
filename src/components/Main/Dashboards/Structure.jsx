@@ -19,15 +19,17 @@ import RenterOrders from './Renter/RenterOrders'
 import RenterProducts from './Renter/RenterProducts'
 //user imports
 import UserOverview from './User/UserOverview'
+import ContactusReqs from './Admin/ContactusReqs'
+import Admins from './Admin/Admins'
 
 //menus
-const adminMenu = ['Overview', 'Sellers', 'Renters', 'Users', 'Products', 'My Profile', 'Sign out']
+const adminMenu = ['Overview','Admins', 'Sellers', 'Renters', 'Users', 'Products','Contact us requests', 'My Profile', 'Sign out']
 const sellerMenu = ['Overview', 'Products', 'Orders', 'My Profile', 'Sign out']
 const renterMenu = ['Overview', 'Products', 'Orders', 'My Profile', 'Sign out']
 const userMenu = ['Overview', 'My Profile', 'Sign out']
 
 //boards
-const adminBoard = [<AdminOverview />, <AdminSellers />, <AdminRenters />, <AdminUsers />, <AdminProducts />, <Profile />]
+const adminBoard = [<AdminOverview />,<Admins/>, <AdminSellers />, <AdminRenters />, <AdminUsers />, <AdminProducts />,<ContactusReqs/>, <Profile />]
 const sellerBoard = [<SellerOverview />, <SellerOrders />, <SellerProducts />, <Profile />]
 const renterBoard = [<RenterOverview />, <RenterOrders />, <RenterProducts />, <Profile />]
 const userBoard = [<UserOverview />, <Profile />]
@@ -39,7 +41,6 @@ function Structure() {
 
     React.useEffect(() => {
         setStatus(user.role)
-        console.log(user)
     }, [user]);
     return (
         <>
@@ -49,7 +50,7 @@ function Structure() {
                         <Paper>
                             <MenuList variant='selectedMenu'>
                                 {status === 'admin' && adminMenu.map((item, index) => (
-                                    <MenuItem key={index} sx={{ height: '5rem' }} onClick={() => setBoard(index)}>{item}</MenuItem>
+                                    <MenuItem key={index} sx={{ height: '4rem' }} onClick={() => setBoard(index)}>{item}</MenuItem>
                                 ))}
                                 {status === 'seller' && sellerMenu.map((item, index) => (
                                     <MenuItem key={index} sx={{ height: '5rem' }} onClick={() => setBoard(index)}>{item}</MenuItem>

@@ -1,97 +1,53 @@
-import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Grid, Modal, TextField, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import AddIcon from '@mui/icons-material/Add';
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "../../../../backend/secrets";
+import { collection, getDocs, query, where } from 'firebase/firestore'
+import React, { useEffect, useState } from 'react'
+import { db } from '../../../../backend/secrets'
 
-const AdminUsers = () => {
-    const columns = [
-        { id: 'id', name: 'Id' },
-        { id: 'name', name: 'Name' },
-        { id: 'email', name: 'Email' },
-        { id: 'phone', name: 'Phone' },
-        { id: 'address', name: 'Address' },
-        { id: 'status', name: 'Status' },
-        { id: 'action', name: 'Action' },
-    ];
-
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-
-    const handleRowsPerPageChange = (event) => {
-        setRowsPerPage(+event.target.value);
-        setPage(0);
-    };
-    const [users,setUsers]=useState([])
-    const [rows, setRows] = useState([]);
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(5);
-    const [open, setOpen] = useState(false);
-    const [viewOpen, setViewOpen] = useState(false);
-    const [newUser, setNewUser] = useState({ id: '', name: '', email: '', phone: '', address: '', status: 'Active' });
-    const [selectedUser, setSelectedUser] = useState(null);
-
-    const handleAddUser = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-        setNewUser({ id: '', name: '', email: '', phone: '', address: '', status: 'Active' });
-    };
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setNewUser({ ...newUser, [name]: value });
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        setRows([...rows, { ...newUser, id: rows.length + 1 }]);
-        handleClose();
-    };
-
-    const handleView = (row) => {
-        setSelectedUser(row);
-        setViewOpen(true);
-    };
-
-    const handleViewClose = () => {
-        setViewOpen(false);
-        setSelectedUser(null);
-    };
-
-    const handleDelete = (rowId) => {
-        console.log("Delete row with id:", rowId);
-        setRows(rows.filter(row => row.id !== rowId));
-    };
+function Admins() {
+    const [admins, setAdmins] = useState([])
 
     useEffect(() => {
-        const fetchUsers = async () => {
+        const fetchAdmins = async () => {
             try {
-                const q = query(collection(db, "systemusers"))
-                const qSnapshot = await getDocs(q)
-                if(!qSnapshot.empty){
-                    const userList = qSnapshot.docs.map(doc => doc.data());
-                    setUsers(userList)
+                const q = query(collection(db, 'systemusers'), where('role', '==', 'admin'));
+                const querySnapshot = await getDocs(q);
+                if (!querySnapshot.empty) {
+                    const adminsData = querySnapshot.docs.map(doc => doc.data());
+                    console.log(adminsData)
+                    setAdmins(adminsData);
+                } else {
+                    console.log('No admin documents found');
                 }
-            } catch (e) {
-                console.log(e)
+            } catch (error) {
+                console.error('Error fetching admins:', error);
             }
-        }
-        fetchUsers()
-    })
+        };
+
+        fetchAdmins();
+    }, []);
 
     return (
+        <>
+            <h2>Admins</h2>
+            {admins.length > 0 ? (
+                <ul>
+                    {admins.map((admin, index) => (
+                        <li key={index}>
+                            Email: {admin.fname}, Role: {admin.role}
+                        </li>
+                    ))}
+                </ul>
+            ) : (
+                <p>No admins found</p>
+            )}
+            {/*
         <Box sx={{ textAlign: 'center', width: '80%', margin: 'auto' }}>
             <Grid container alignItems="center" justifyContent="center" sx={{ mb: 2 }}>
                 <Grid item sx={{ mt: 5 }}>
-                    <h1>Users</h1>
+                    <h1>AdminUsers</h1>
                 </Grid>
                 <Grid item sx={{ ml: 50, mt: 5 }}>
-                    <Button
-                        variant="contained"
+                    <Button 
+                        variant="contained" 
                         sx={{ backgroundColor: 'green', color: 'white' }}
                         startIcon={<AddIcon />}
                         onClick={handleAddUser}
@@ -100,7 +56,7 @@ const AdminUsers = () => {
                     </Button>
                 </Grid>
             </Grid>
-            <Paper sx={{ width: '100%', mb: 4 }}>
+            <Paper sx={{ width: '100%',  mb: 4}}>
                 <TableContainer sx={{ maxHeight: 450 }}>
                     <Table stickyHeader>
                         <TableHead>
@@ -111,34 +67,6 @@ const AdminUsers = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {users.map((user,index)=>(
-                                <TableRow>
-                                    <TableCell>
-                                        0
-                                    </TableCell>
-                                    <TableCell>
-                                        {user.fname || user.name}
-                                    </TableCell>
-                                    <TableCell>
-                                        {user.email}
-                                    </TableCell>
-                                    <TableCell>
-                                        {user.phone}
-                                    </TableCell>
-                                    <TableCell>
-                                        
-                                    </TableCell>
-                                    <TableCell>
-                                    {user.role}
-                                    </TableCell>
-                                    <TableCell>
-                                    <Box display="flex" gap={1}>
-                                                            <Button variant="outlined" color="secondary" size="small">View</Button>
-                                                            <Button variant="outlined" color="error" size="small" >Delete</Button>
-                                                        </Box>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
                             {rows && rows
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row) => (
@@ -178,19 +106,19 @@ const AdminUsers = () => {
                 aria-labelledby="add-user-modal-title"
                 aria-describedby="add-user-modal-description"
             >
-                <Box
+                <Box 
                     component="form"
                     onSubmit={handleSubmit}
-                    sx={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        width: 400,
-                        bgcolor: 'background.paper',
-                        border: '2px solid #000',
-                        boxShadow: 24,
-                        p: 4
+                    sx={{ 
+                        position: 'absolute', 
+                        top: '50%', 
+                        left: '50%', 
+                        transform: 'translate(-50%, -50%)', 
+                        width: 400, 
+                        bgcolor: 'background.paper', 
+                        border: '2px solid #000', 
+                        boxShadow: 24, 
+                        p: 4 
                     }}
                 >
                     <Typography id="add-user-modal-title" variant="h6" component="h2">
@@ -249,17 +177,17 @@ const AdminUsers = () => {
                     aria-labelledby="view-user-modal-title"
                     aria-describedby="view-user-modal-description"
                 >
-                    <Box
-                        sx={{
-                            position: 'absolute',
-                            top: '50%',
-                            left: '50%',
-                            transform: 'translate(-50%, -50%)',
-                            width: 400,
-                            bgcolor: 'background.paper',
-                            border: '2px solid #000',
-                            boxShadow: 24,
-                            p: 4
+                    <Box 
+                        sx={{ 
+                            position: 'absolute', 
+                            top: '50%', 
+                            left: '50%', 
+                            transform: 'translate(-50%, -50%)', 
+                            width: 400, 
+                            bgcolor: 'background.paper', 
+                            border: '2px solid #000', 
+                            boxShadow: 24, 
+                            p: 4 
                         }}
                     >
                         <Typography id="view-user-modal-title" variant="h6" component="h2">
@@ -289,8 +217,9 @@ const AdminUsers = () => {
                     </Box>
                 </Modal>
             )}
-        </Box>
-    );
+        </Box>*/}
+        </>
+    )
 }
 
-export default AdminUsers;
+export default Admins
