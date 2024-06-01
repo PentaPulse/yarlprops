@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { db, storage } from './firebase';
-import { collection, doc, addDoc, updateDoc, getDoc } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { addProduct, fetchSelectedProduct } from '../../../../backend/db/products';
 import { TextField, Button, Paper, Typography, Grid } from '@mui/material';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { storage } from '../../../../backend/storage';
 
 const ProductForm = () => {
   const { id } = useParams();
@@ -16,11 +16,10 @@ const ProductForm = () => {
   useEffect(() => {
     if (id) {
       const fetchProduct = async () => {
-        const docRef = doc(db, 'products', id);
-        const docSnap = await getDoc(docRef);
-        if(docSnap.exists()){
-          setProduct(docSnap.data());
-          setImageURL(docSnap.data().image || []);
+        const fetchedProduct = await fetchSelectedProduct(id);
+        if(fetchedProduct){
+          setProduct(fetchedProduct);
+          setImagePreviews(fetchedProduct.image || []);
         } else {
           console.log('No such document!');
         }
@@ -58,20 +57,14 @@ const ProductForm = () => {
       return await getDownloadURL(imageRef);
     }));
 
-    const productData = {
-      title: product.title,
-      category: product.category,
-      type: product.type,
-      description: product.description,
-      image: imageUrl,
-    };
-
-    if(id){
-      await updateDoc(doc(db, 'products', id), productData);
-    } else {
-      await addDoc(collection(db, 'products'), productData);
+    try {
+      await addProduct(product.title, product.category, product.type, product.description, imageUrls);
+      setProduct({ title: '', category: '', type: '', description: '', images: [] });//Clear the form data
+      setImagePreviews([]); //Clear the image previews
+      navigate('/products');
+    } catch (e) {
+      console.error("Error adding product: ", e);
     }
-    navigate('/products');
   };
 
   return (
@@ -85,6 +78,7 @@ const ProductForm = () => {
           onChange={handleChange}
           fullWidth
           margin="normal"
+          required
         />
         <TextField
           label="Category"
@@ -93,6 +87,7 @@ const ProductForm = () => {
           onChange={handleChange}
           fullWidth
           margin="normal"
+          required
         />
         <TextField
           label="Type"
@@ -101,6 +96,7 @@ const ProductForm = () => {
           onChange={handleChange}
           fullWidth
           margin="normal"
+          required
         />
         <TextField
           label="Description"
@@ -109,12 +105,14 @@ const ProductForm = () => {
           onChange={handleChange}
           fullWidth
           margin="normal"
+          required
         />
         <input 
           type='file'
           accept='image/*'
           multiple
           onChange={handleImageChange}
+          required
         />
         <Grid container spacing={2}>
           {imagePreviews.map((src, index) => (
@@ -124,7 +122,7 @@ const ProductForm = () => {
           ))}
         </Grid>
         {validationMessage && <Typography color="error">{validationMessage}</Typography>}
-        <Button type="submit" variant="contained" color="primary">
+        <Button type="submit" variant="contained" color="primary" style={{ marginTop : '20px'}}>
           Save
         </Button>
       </form>
