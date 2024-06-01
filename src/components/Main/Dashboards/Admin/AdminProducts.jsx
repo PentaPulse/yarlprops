@@ -29,7 +29,7 @@ const ProductForm = () => {
         event.preventDefault();
         const folderPath = `storage/a/propictures/${productId}`;
         const imageArray = await uploadImagesAndGetUrls(Array.from(imageFiles), folderPath);
-        await addProduct(productId, name, category, type, location, parseFloat(price), description, imageArray, address);
+        await addProduct(name, category, type, location, parseFloat(price), description, imageArray, address);
         alert('Product added successfully!');
         // Clear form fields after submission
         setProductId('');

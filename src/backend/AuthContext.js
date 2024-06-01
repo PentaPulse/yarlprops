@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { GoogleAuthProvider, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth';
 import { db, auth } from './secrets';
-import { collection,  getDocs, query,  where } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 
 const AuthContext = createContext();
 
@@ -12,13 +12,8 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
             if (currentUser) {
-                const q = query(collection(db, 'systemUsers'), where('email', '==', currentUser.email))
-                const userDocs = await getDocs(q);
-                if (!userDocs.empty) {
-                    const userDoc = userDocs.docs[0]
-                    setUser({ ...currentUser, ...userDoc.data() });
-                }
-
+                const userDoc = await getDoc(doc(db, "systemUsers", currentUser.email));
+                setUser({ ...currentUser, ...userDoc.data() });
             } else {
                 setUser(null);
             }
