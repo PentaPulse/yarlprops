@@ -1,31 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
-import { Paper, Typography, Alert, CircularProgress } from '@mui/material';
+import { db } from './firebase';
+import { doc, getDoc } from 'firebase/firestore';
+import { Paper, Typography, CircularProgress } from '@mui/material';
 
 const ProductDetail = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.get(`/products/${id}`)
-      .then(response => {
-        setProduct(response.data);
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error(error);
-        setError('Failed to fetch product details');
-        setLoading(false);
-      });
+    const fetchProduct = async () => {
+      const docRef = doc(db, 'products', id);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()){
+        setProduct(docSnap.data());
+      } else {
+        console.log('No such document!');
+      }
+      setLoading(false);
+    };
+    fetchProduct();
   }, [id]);
 
   if (loading) return <CircularProgress />;
-  if (error) return <Alert severity='error'>{error}</Alert>
-  if(!product) return null;
-
+  
   return (
     <Paper style={{ padding: 16 }}>
       <Typography variant="h5">{product.title}</Typography>
@@ -34,7 +33,7 @@ const ProductDetail = () => {
       <Typography variant="body1">Description: {product.description}</Typography>
       {product.image && (
         <img 
-          src={`/uploads/${product.image}`} 
+          src={product.image} 
           alt={product.title} 
           style={{ maxWidth: '100%', marginTop: '16px' }}
         />
