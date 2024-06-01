@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { db, storage } from './firebase';
-import { collection, doc, addDoc, updateDoc, detDoc } from 'firebase/firestore';
+import { collection, doc, addDoc, updateDoc, getDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { TextField, Button, Paper, Typography } from '@mui/material';
+import { TextField, Button, Paper, Typography, Grid } from '@mui/material';
 
 const ProductForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [product, setProduct] = useState({title:'', category:'', type:'', description: '', image: null});
-  const [imageURL, setImageURL] = useState(null);
+  const [product, setProduct] = useState({title:'', category:'', type:'', description: '', images: [] });
+  const [imagePreviews, setImagePreviews] = useState([]);
+  const [validationMessage, setValidationMessage] = useState('');
+
 
   useEffect(() => {
     if (id) {
@@ -18,7 +20,7 @@ const ProductForm = () => {
         const docSnap = await getDoc(docRef);
         if(docSnap.exists()){
           setProduct(docSnap.data());
-          setImageURL(docSnap.data().image);
+          setImageURL(docSnap.data().image || []);
         } else {
           console.log('No such document!');
         }
@@ -33,19 +35,28 @@ const ProductForm = () => {
   };
 
   const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    setProduct({ ...product, image: file});
+    const files = Array.from(event.target.files);
+    setProduct({ ...product, image: files });
+
+    const previews = files.map(file => URL.createObjectURL(file));
+    setImagePreviews(previews);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    let imageUrl = imageURL;
 
-    if(product.image){
-      const imageRef = ref(storage, `images/${product.image.name}`);
-      const snapshot = await uploadBytes(imageRef, product.image);
-      imageUrl = await getDownloadURL(snapshot.ref);
+    if (product.images.length < 3 || product.images.length > 6) {
+      setValidationMessage('You must upload at least 3 images and no more than 6 images.');
+      return;
     }
+
+    setValidationMessage(''); // Clear validation message if validation passes
+
+    const imageUrls = await Promise.all(product.images.map(async (image) => {
+      const imageRef = ref(storage, `images/${image.name}`);
+      await uploadBytes(imageRef, image);
+      return await getDownloadURL(imageRef);
+    }));
 
     const productData = {
       title: product.title,
@@ -53,7 +64,7 @@ const ProductForm = () => {
       type: product.type,
       description: product.description,
       image: imageUrl,
-    }
+    };
 
     if(id){
       await updateDoc(doc(db, 'products', id), productData);
@@ -102,9 +113,17 @@ const ProductForm = () => {
         <input 
           type='file'
           accept='image/*'
+          multiple
           onChange={handleImageChange}
-          style={{ margin: '16px 0' }}
         />
+        <Grid container spacing={2}>
+          {imagePreviews.map((src, index) => (
+            <Grid item key={index}>
+              <img src={src} alt={`Preview ${index}`} style={{ width: 100, height: 100, objectFit: 'cover' }} />
+            </Grid>
+          ))}
+        </Grid>
+        {validationMessage && <Typography color="error">{validationMessage}</Typography>}
         <Button type="submit" variant="contained" color="primary">
           Save
         </Button>
