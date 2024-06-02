@@ -1,7 +1,7 @@
 import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Grid, Modal, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import AddIcon from '@mui/icons-material/Add';
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, query } from "firebase/firestore";
 import { db } from "../../../../backend/secrets";
 
 const AdminUsers = () => {
@@ -31,7 +31,7 @@ const AdminUsers = () => {
     const [viewOpen, setViewOpen] = useState(false);
     const [newUser, setNewUser] = useState({ id: '', name: '', email: '', phone: '', address: '', status: 'Active' });
     const [selectedUser, setSelectedUser] = useState(null);
-    const [count, setCount] = useState(0)
+    //const [count, setCount] = useState(0)
 
     const handleAddUser = () => {
         setOpen(true);

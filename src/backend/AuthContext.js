@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { GoogleAuthProvider, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth';
 import { db, auth } from './secrets';
-import { doc, getDoc } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
+import { addUser } from './db/users';
 
 const AuthContext = createContext();
 
@@ -12,8 +13,13 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
             if (currentUser) {
-                const userDoc = await getDoc(doc(db, "systemusers", currentUser.email));
-                setUser({  ...userDoc.data(), ...currentUser });
+                const q = query(collection(db, "systemusers"), where("email", "==", currentUser.email));
+                    const querySnapshot = await getDocs(q);
+                    if(!querySnapshot.empty){
+                        const userDoc = querySnapshot.docs[0]
+                        setUser({ ...userDoc.data(), ...currentUser });
+                    }
+                
             } else {
                 setUser(null);
             }
@@ -27,7 +33,12 @@ export const AuthProvider = ({ children }) => {
 
     //login
     const provider = new GoogleAuthProvider();
-    const google = () => signInWithPopup(auth, provider)//.then(()=>window.location.reload(0))
+    const google = () => signInWithPopup(auth, provider)
+        .then((result) => {
+            const user = result.user;
+            const userid = user.uid
+            addUser(userid, "", "", user.email, user.phoneNumber, "", user.photoURL, "")
+        })
 
     const login = (email, password) => signInWithEmailAndPassword(auth, email, password);
     //reset password

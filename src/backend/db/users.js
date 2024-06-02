@@ -1,7 +1,7 @@
 import firebase from "firebase/compat/app";
 import "firebase/firestore";
 import { firebaseConfig } from "../secrets";
-import { doc, setDoc, getFirestore, collection, getDoc, getDocs } from "firebase/firestore";
+import { doc, setDoc, getFirestore, collection, getDoc, getDocs, addDoc, query } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { authUser } from "../autharization";
 
@@ -17,9 +17,30 @@ const userRef = collection(db, "users")
 
 //functions
 //initialize the user initially in the registering process
-const initializeUser = async (uid, fName, lName, email) => {
+const addUser = async (uid, fname, lname, email, phone, gender, picture, address) => {
+    try {
+        const userRef = doc(db, 'systemusers', uid);
+        
+        await setDoc(userRef, {
+            fname: fname,
+            lname: lname,
+            email: email,
+            phone: phone,
+            gender: gender,
+            picture: picture,
+            address: address,
+            role: "buyer"
+        });
+
+        console.log('User added successfully');
+    } catch (e) {
+        console.error('Error adding user: ', e);
+    }
+};
+
+const initializeUser = async (uid, fName, lName, email, role) => {
     await setDoc(doc(userRef, uid), {
-        role: "customer",
+        role: role,
         firstName: fName,
         lastName: lName,
         email: email
@@ -94,4 +115,4 @@ async function isNUser() {
         }
     })
 }
-export { initializeUser, getUserInfo, fetchAdminList, fetchSellerList, fetchRenterList, fetchUserList, isNUser };
+export { initializeUser, addUser, getUserInfo, fetchAdminList, fetchSellerList, fetchRenterList, fetchUserList, isNUser };

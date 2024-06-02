@@ -1,20 +1,20 @@
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import React, { useState } from 'react'
 import { authUser } from '../../../backend/autharization';
-import { Button, ButtonGroup, TextField } from '@mui/material';
+import { Button, ButtonGroup, Radio, RadioGroup, TextField } from '@mui/material';
 import { initializeUser } from '../../../backend/db/users';
 import { useTheme } from '@mui/material/styles';
 import { useAuth } from '../../../backend/AuthContext';
 
-export function Welcome({ toLogin, toRegister ,closeBox}) {
+export function Welcome({ toLogin, toRegister, closeBox }) {
     const theme = useTheme()
-    const {google}=useAuth();
-    const handleGoogle = async(e)=>{
+    const { google } = useAuth();
+    const handleGoogle = async (e) => {
         e.preventDefault();
-        try{
+        try {
             await google();
             closeBox();
-        } catch(error){
+        } catch (error) {
             console.error(error)
         }
     }
@@ -22,7 +22,7 @@ export function Welcome({ toLogin, toRegister ,closeBox}) {
         <>
             <div className='d-flex justify-content-center flex-column text-center'>
                 <h2>Welcome to YarlProps</h2>
-                <Button sx={{ borderRadius: '100px', width: '80%', border: `1px solid ${theme.palette.mode==='light'?'#FFFFFF':'#000000'}`, gap: 3,display:'block',margin:'auto' }} onClick={handleGoogle}>
+                <Button sx={{ borderRadius: '100px', width: '80%', border: `1px solid ${theme.palette.mode === 'light' ? '#FFFFFF' : '#000000'}`, gap: 3, display: 'block', margin: 'auto' }} onClick={handleGoogle}>
                     <img src="social-icons/google.svg" alt="G" width={30} /> Connect with Google
                 </Button>
                 <h5>OR</h5>
@@ -41,21 +41,21 @@ export function Login({ handleBack }) {
     const theme = useTheme()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const {login,reset}=useAuth();
-    
-    const handleLogin = async(e)=>{
+    const { login, reset } = useAuth();
+
+    const handleLogin = async (e) => {
         e.preventDefault();
-        try{
-            await login(email,password);
-        } catch(error){
+        try {
+            await login(email, password);
+        } catch (error) {
             console.error(error)
         }
     }
-    const handleReset = async(e)=>{
+    const handleReset = async (e) => {
         e.preventDefault();
-        try{
+        try {
             await reset(email);
-        } catch(error){
+        } catch (error) {
             console.error(error)
         }
     }
@@ -86,6 +86,8 @@ export function Register({ handleBack }) {
     const [dname, setDname] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    //const [role, setRole] = useState('')
+
     const handleFname = (e) => {
         setFname(e.target.value)
         setDname(e.target.value + " " + lname)
@@ -101,6 +103,7 @@ export function Register({ handleBack }) {
                 const user = result.user;
                 user.displayName = dname;
                 console.log("uid : " + user.uid)
+                //warning-----------------------------------------------------------------------------------------------------------
                 initializeUser(user.uid, fname, lname, email)
                 window.location.reload(0)
             })
@@ -109,6 +112,9 @@ export function Register({ handleBack }) {
                 // const errorCode = error.code
             })
     }
+    /*const handleRoleChange = (event) => {
+        setRole(event.target.value);
+    };*/
     return (
         <>
             <div className="d-flex flex-column justify-content-center text-center">
@@ -121,6 +127,10 @@ export function Register({ handleBack }) {
                     </div>
 
                     <TextField label="Display name" value={dname} />
+                    <RadioGroup row>
+                    <Radio value='buyer' ckecked label='Customer'/><label>Customer</label>
+                    <Radio value={'buyer'} ckecked label='Customer'/>Customer
+                    </RadioGroup>
                     <TextField label="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
                     <TextField label="Password" type='password' value={password} onChange={(e) => setPassword(e.target.value)} required />
                     {/*<TextField label="Confirm Password" type='password' />*/}

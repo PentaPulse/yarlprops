@@ -1,6 +1,7 @@
 import { collection, getDocs, query, where } from 'firebase/firestore'
 import React, { useEffect, useState } from 'react'
 import { db } from '../../../../backend/secrets'
+import { Box, Button, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 
 function Admins() {
     const [admins, setAdmins] = useState([])
@@ -25,32 +26,22 @@ function Admins() {
         fetchAdmins();
     }, []);
 
+    const columns = ["Display Name","First name","Last name","Email","Gender"]
+
     return (
         <>
-            <h2>Admins</h2>
-            {admins.length > 0 ? (
-                <ul>
-                    {admins.map((admin, index) => (
-                        <li key={index}>
-                            Email: {admin.fname}, Role: {admin.role}
-                        </li>
-                    ))}
-                </ul>
-            ) : (
-                <p>No admins found</p>
-            )}
-            {/*
+            {
         <Box sx={{ textAlign: 'center', width: '80%', margin: 'auto' }}>
             <Grid container alignItems="center" justifyContent="center" sx={{ mb: 2 }}>
                 <Grid item sx={{ mt: 5 }}>
-                    <h1>AdminUsers</h1>
+                    <h1>Adminstrators</h1>
                 </Grid>
                 <Grid item sx={{ ml: 50, mt: 5 }}>
                     <Button 
                         variant="contained" 
                         sx={{ backgroundColor: 'green', color: 'white' }}
-                        startIcon={<AddIcon />}
-                        onClick={handleAddUser}
+                        //startIcon={<AddIcon />}
+                        //onClick={handleAddUser}
                     >
                         Add User
                     </Button>
@@ -62,44 +53,25 @@ function Admins() {
                         <TableHead>
                             <TableRow>
                                 {columns.map((column) => (
-                                    <TableCell style={{ backgroundColor: 'black', color: 'white' }} key={column.id}>{column.name}</TableCell>
+                                    <TableCell style={{ backgroundColor: 'black', color: 'white' }} >{column}</TableCell>
                                 ))}
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {rows && rows
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((row) => (
-                                    <TableRow key={row.id}>
-                                        {columns.map((column) => {
-                                            let value = row[column.id];
-                                            return (
-                                                <TableCell key={column.id}>
-                                                    {column.id === 'action' ? (
-                                                        <Box display="flex" gap={1}>
-                                                            <Button variant="outlined" color="secondary" size="small" onClick={() => handleView(row)}>View</Button>
-                                                            <Button variant="outlined" color="error" size="small" onClick={() => handleDelete(row.id)}>Delete</Button>
-                                                        </Box>
-                                                    ) : value}
-                                                </TableCell>
-                                            );
-                                        })}
-                                    </TableRow>
-                                ))}
+                            {admins.map((admin)=>(
+                                <TableRow>
+                                    <TableCell>{admin.fname+" "+admin.lname}</TableCell>
+                                    <TableCell>{admin.fname}</TableCell>
+                                    <TableCell>{admin.lname}</TableCell>
+                                    <TableCell>{admin.email}</TableCell>
+                                    <TableCell>{admin.gender}</TableCell>
+                                </TableRow>
+                            ))}
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    count={rows.length}
-                    component="div"
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleRowsPerPageChange}
-                />
             </Paper>
-
+{/*
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -169,7 +141,7 @@ function Admins() {
                     </Button>
                 </Box>
             </Modal>
-
+                
             {selectedUser && (
                 <Modal
                     open={viewOpen}
@@ -216,8 +188,8 @@ function Admins() {
                         </Button>
                     </Box>
                 </Modal>
-            )}
-        </Box>*/}
+            )}*/}
+        </Box>}
         </>
     )
 }

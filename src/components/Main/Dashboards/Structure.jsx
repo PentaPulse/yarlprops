@@ -58,7 +58,7 @@ function Structure() {
                                 {status === 'renter' && renterMenu.map((item, index) => (
                                     <MenuItem key={index} sx={{ height: '5rem' }} onClick={() => setBoard(index)}>{item}</MenuItem>
                                 ))}
-                                {status === 'user' && userMenu.map((item, index) => (
+                                {status === "buyer" && userMenu.map((item, index) => (
                                     <MenuItem key={index} sx={{ height: '5rem' }} onClick={() => setBoard(index)}>{item}</MenuItem>
                                 ))}
                             </MenuList>
@@ -75,7 +75,7 @@ function Structure() {
                             {status === 'renter' && renterBoard.map((boardComponent, index) => (
                                 board === index && boardComponent
                             ))}
-                            {status === 'user' && userBoard.map((boardComponent, index) => (
+                            {status === "buyer" && userBoard.map((boardComponent, index) => (
                                 board === index && boardComponent
                             ))}
 

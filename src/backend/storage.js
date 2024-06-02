@@ -1,6 +1,6 @@
 import firebase from "firebase/compat/app";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
-import { updateProfile } from "firebase/auth";
+//import { updateProfile } from "firebase/auth";
 import { firebaseConfig } from "./secrets";
 
 const app=firebase.initializeApp(firebaseConfig)
