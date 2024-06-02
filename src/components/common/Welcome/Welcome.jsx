@@ -37,7 +37,7 @@ export function Welcome({ toLogin, toRegister, closeBox }) {
     )
 }
 
-export function Login({ handleBack }) {
+export function Login({ handleBack ,closeBox}) {
     const theme = useTheme()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -47,6 +47,7 @@ export function Login({ handleBack }) {
         e.preventDefault();
         try {
             await login(email, password);
+            closeBox()
         } catch (error) {
             console.error(error)
         }
