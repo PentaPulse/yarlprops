@@ -1,7 +1,7 @@
 import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Grid, Modal, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import AddIcon from '@mui/icons-material/Add';
-import { collection, getDocs, query } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../../../backend/secrets";
 
 const AdminUsers = () => {
@@ -31,7 +31,6 @@ const AdminUsers = () => {
     const [viewOpen, setViewOpen] = useState(false);
     const [newUser, setNewUser] = useState({ id: '', name: '', email: '', phone: '', address: '', status: 'Active' });
     const [selectedUser, setSelectedUser] = useState(null);
-    //const [count, setCount] = useState(0)
 
     const handleAddUser = () => {
         setOpen(true);
@@ -71,7 +70,7 @@ const AdminUsers = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const q = query(collection(db, "systemusers"))
+                const q = query(collection(db, "systemusers"),where("role","==","buyer"))
                 const qSnapshot = await getDocs(q)
                 if (!qSnapshot.empty) {
                     const userList = qSnapshot.docs.map(doc => doc.data());
@@ -118,16 +117,16 @@ const AdminUsers = () => {
                                         {index+1 }
                                     </TableCell>
                                     <TableCell>
-                                        {user.fname || user.name}
+                                        {(user.displayName?user.displayName:(user.fname," ",user.lname)) || "-"}
                                     </TableCell>
                                     <TableCell>
-                                        {user.email}
+                                        {user.email || "-"}
                                     </TableCell>
                                     <TableCell>
-                                        {user.phone}
+                                        {user.phone || "-"}
                                     </TableCell>
                                     <TableCell>
-
+                                    {user.address || "-"}
                                     </TableCell>
                                     <TableCell>
                                         {user.role}

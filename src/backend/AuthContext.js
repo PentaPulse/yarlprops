@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { GoogleAuthProvider, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth';
+import { GoogleAuthProvider, createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth';
 import { db, auth } from './secrets';
-import { collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import { addUser } from './db/users';
 
 const AuthContext = createContext();
@@ -13,13 +13,18 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
             if (currentUser) {
-                const q = query(collection(db, "systemusers"), where("email", "==", currentUser.email));
-                    const querySnapshot = await getDocs(q);
-                    if(!querySnapshot.empty){
-                        const userDoc = querySnapshot.docs[0]
+                try {
+                    // Get the user document using the UID
+                    const userDocRef = doc(db, 'systemusers', currentUser.uid);
+                    const userDoc = await getDoc(userDocRef);
+                    if (userDoc.exists()) {
                         setUser({ ...userDoc.data(), ...currentUser });
+                    } else {
+                        console.error('No such user document!');
                     }
-                
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                }
             } else {
                 setUser(null);
             }
@@ -29,7 +34,12 @@ export const AuthProvider = ({ children }) => {
         return () => unsubscribe();
     }, []);
     //registering
-
+    const register = (fname, lname, email, password,role) => createUserWithEmailAndPassword(auth, email, password)
+        .then((result) => {
+            const user = result.user;
+            const userid = user.uid
+            addUser(userid, fname, lname, email, "", "", "", "",role)
+        })
 
     //login
     const provider = new GoogleAuthProvider();
@@ -48,8 +58,8 @@ export const AuthProvider = ({ children }) => {
     const logout = () => signOut(auth);
 
     return (
-        <AuthContext.Provider value={{ user, login, logout, reset, google }}>
-            {!loading && children}
+        <AuthContext.Provider value={{ user, register, login, logout, reset, google }}>
+            {loading ? "" : children}
         </AuthContext.Provider>
     );
 };

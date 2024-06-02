@@ -1,8 +1,5 @@
-import { createUserWithEmailAndPassword } from 'firebase/auth';
 import React, { useState } from 'react'
-import { authUser } from '../../../backend/autharization';
-import { Button, ButtonGroup, Radio, RadioGroup, TextField } from '@mui/material';
-import { initializeUser } from '../../../backend/db/users';
+import { Button, ButtonGroup, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useAuth } from '../../../backend/AuthContext';
 
@@ -87,7 +84,8 @@ export function Register({ handleBack }) {
     const [dname, setDname] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    //const [role, setRole] = useState('')
+    const [role, setRole] = useState('buyer')
+    const {register}=useAuth()
 
     const handleFname = (e) => {
         setFname(e.target.value)
@@ -99,23 +97,11 @@ export function Register({ handleBack }) {
     }
     const handleRegister = (e) => {
         e.preventDefault()
-        createUserWithEmailAndPassword(authUser, email, password)
-            .then((result) => {
-                const user = result.user;
-                user.displayName = dname;
-                console.log("uid : " + user.uid)
-                //warning-----------------------------------------------------------------------------------------------------------
-                initializeUser(user.uid, fname, lname, email)
-                window.location.reload(0)
-            })
-            .catch((error) => {
-                // const errorMassege = error.massage
-                // const errorCode = error.code
-            })
+        register(fname,lname,email,password,role)
     }
-    /*const handleRoleChange = (event) => {
+    const handleRoleChange = (event) => {
         setRole(event.target.value);
-    };*/
+    };
     return (
         <>
             <div className="d-flex flex-column justify-content-center text-center">
@@ -128,10 +114,14 @@ export function Register({ handleBack }) {
                     </div>
 
                     <TextField label="Display name" value={dname} />
-                    <RadioGroup row>
-                    <Radio value='buyer' ckecked label='Customer'/><label>Customer</label>
-                    <Radio value={'buyer'} ckecked label='Customer'/>Customer
-                    </RadioGroup>
+                    <FormControl>
+                        <FormLabel id="demo-row-radio-buttons-group-label">Role</FormLabel>
+                        <RadioGroup row name="row-radio-buttons-group" aria-labelledby="demo-row-radio-buttons-group-label">
+                            <FormControlLabel value={()=>setRole("seller")} control={<Radio/>} label="Seller"/>
+                            <FormControlLabel value="renter" control={<Radio/>} label="Renter"/>
+                            <FormControlLabel value="buyer" control={<Radio/>} label="Buyer"/>
+                        </RadioGroup>
+                    </FormControl>
                     <TextField label="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
                     <TextField label="Password" type='password' value={password} onChange={(e) => setPassword(e.target.value)} required />
                     {/*<TextField label="Confirm Password" type='password' />*/}

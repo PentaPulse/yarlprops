@@ -38,7 +38,8 @@ function Layout({ children ,handleMode}) {
 
     const closeBox =()=>{
         navigate('/dashboard')  
-        setOpen(!open);              
+        setOpen(!open);
+        window.location('/dashboard')           
     }
     const handleLoginButton=()=>{
         setLogin(true)

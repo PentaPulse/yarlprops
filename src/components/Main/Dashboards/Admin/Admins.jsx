@@ -1,12 +1,14 @@
 import { collection, getDocs, query, where } from 'firebase/firestore'
-import React, { useEffect, useState } from 'react'
+import * as React from 'react'
 import { db } from '../../../../backend/secrets'
-import { Box, Button, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Box, Button, Grid, Modal, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material';
 
 function Admins() {
-    const [admins, setAdmins] = useState([])
+    const [admins, setAdmins] = React.useState([])
+    const [open,setOpen]=React.useState(false)
+    const [newAdmin,setNewAdmin]=React.useState({})
 
-    useEffect(() => {
+    React.useEffect(() => {
         const fetchAdmins = async () => {
             try {
                 const q = query(collection(db, 'systemusers'), where('role', '==', 'admin'));
@@ -26,8 +28,24 @@ function Admins() {
         fetchAdmins();
     }, []);
 
-    const columns = ["Display Name","First name","Last name","Email","Gender"]
+    const columns = ["index","Display Name","First name","Last name","Email","Gender"]
 
+const handleAssignAdimns=()=>{
+setOpen(!open)
+}
+
+const handleOpen=()=>{
+    setOpen(!open)
+}
+
+const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewAdmin({ ...newAdmin, [name]: value });
+};
+
+const handleSubmit =()=>{
+
+}
     return (
         <>
             {
@@ -41,9 +59,9 @@ function Admins() {
                         variant="contained" 
                         sx={{ backgroundColor: 'green', color: 'white' }}
                         //startIcon={<AddIcon />}
-                        //onClick={handleAddUser}
+                        onClick={handleAssignAdimns}
                     >
-                        Add User
+                        Assign admins
                     </Button>
                 </Grid>
             </Grid>
@@ -58,9 +76,10 @@ function Admins() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {admins.map((admin)=>(
+                            {admins.map((admin,index)=>(
                                 <TableRow>
-                                    <TableCell>{admin.fname+" "+admin.lname}</TableCell>
+                                    <TableCell>{index+1}</TableCell>
+                                    <TableCell>{admin.displayName}</TableCell>
                                     <TableCell>{admin.fname}</TableCell>
                                     <TableCell>{admin.lname}</TableCell>
                                     <TableCell>{admin.email}</TableCell>
@@ -71,10 +90,10 @@ function Admins() {
                     </Table>
                 </TableContainer>
             </Paper>
-{/*
+
             <Modal
                 open={open}
-                onClose={handleClose}
+                onClose={handleOpen}
                 aria-labelledby="add-user-modal-title"
                 aria-describedby="add-user-modal-description"
             >
@@ -101,7 +120,7 @@ function Admins() {
                         margin="normal"
                         name="name"
                         label="Name"
-                        value={newUser.name}
+                        value={newAdmin.name}
                         onChange={handleInputChange}
                     />
                     <TextField
@@ -109,7 +128,7 @@ function Admins() {
                         margin="normal"
                         name="email"
                         label="Email"
-                        value={newUser.email}
+                        value={newAdmin.email}
                         onChange={handleInputChange}
                     />
                     <TextField
@@ -117,7 +136,7 @@ function Admins() {
                         margin="normal"
                         name="phone"
                         label="Phone"
-                        value={newUser.phone}
+                        value={newAdmin.phone}
                         onChange={handleInputChange}
                     />
                     <TextField
@@ -125,7 +144,7 @@ function Admins() {
                         margin="normal"
                         name="address"
                         label="Address"
-                        value={newUser.address}
+                        value={newAdmin.address}
                         onChange={handleInputChange}
                     />
                     <TextField
@@ -133,7 +152,7 @@ function Admins() {
                         margin="normal"
                         name="status"
                         label="Status"
-                        value={newUser.status}
+                        value={newAdmin.status}
                         onChange={handleInputChange}
                     />
                     <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
@@ -141,7 +160,7 @@ function Admins() {
                     </Button>
                 </Box>
             </Modal>
-                
+{/*          
             {selectedUser && (
                 <Modal
                     open={viewOpen}
