@@ -57,8 +57,8 @@ const ProductList = () => {
                         <TableRow key={product.id}>
                             <TableCell>{product.id}</TableCell>
                             <TableCell>{product.title}</TableCell>
-                            <TableCell>{product.category}</TableCell>
                             <TableCell>{product.type}</TableCell>
+                            <TableCell>{product.subtype}</TableCell>
                             <TableCell>{product.description}</TableCell>
                             <TableCell>{product.quantity}</TableCell>
                             <TableCell>{product.location}</TableCell>
