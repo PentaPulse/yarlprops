@@ -12,17 +12,14 @@ const productRef = collection(db, "products")
 
 //functions
 // adding products
-const addProduct = async (name, category, type, location, price, description, imageArray, address) => {
+const addProduct = async (title, category, type, description, imageArray) => {
     try {
         const docRef = await addDoc(collection(db, 'products'), {
-            name: name,
-            type: category,
-            subtype: type,
-            location: location,
-            price: price,
+            title: title,
+            category: category,
+            type: type,
             description: description,
             images: imageArray,
-            address: address
         })
         await setDoc(docRef, { pid: docRef.id }, { merge: true });
         return docRef.id;
