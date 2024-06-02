@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Routings from './components/Routings';
 import Maintain from './components/Maintain';
@@ -65,7 +66,9 @@ function Themed() {
   return (
     <ThemeProvider theme={mode ? lightTheme : darkTheme}>
       <CssBaseline />
-      <Routings handleMode={handleTheme} />
+      <Router>
+        <Routings handleMode={handleTheme} />
+      </Router>
     </ThemeProvider>
   );
 }

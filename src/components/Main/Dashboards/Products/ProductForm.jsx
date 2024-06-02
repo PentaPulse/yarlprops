@@ -8,7 +8,7 @@ import { storage } from '../../../../backend/storage';
 const ProductForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [product, setProduct] = useState({title:'', category:'', type:'', description: '', images: [] });
+  const [product, setProduct] = useState({title:'', category:'', type:'', description: '', quantity: '', location: '', images: [] });
   const [imagePreviews, setImagePreviews] = useState([]);
   const [validationMessage, setValidationMessage] = useState('');
 
@@ -58,8 +58,8 @@ const ProductForm = () => {
     }));
 
     try {
-      await addProduct(product.title, product.category, product.type, product.description, imageUrls);
-      setProduct({ title: '', category: '', type: '', description: '', images: [] });//Clear the form data
+      await addProduct(product.title, product.category, product.type, product.description, product.quantity, product.location, imageUrls);
+      setProduct({ title: '', category: '', type: '', description: '', quantity: '', location: '', images: [] });//Clear the form data
       setImagePreviews([]); //Clear the image previews
       navigate('/products');
     } catch (e) {
@@ -107,6 +107,25 @@ const ProductForm = () => {
           margin="normal"
           required
         />
+        <TextField
+          label="Quantity"
+          name="quantity"
+          type="number"
+          value={product.quantity}
+          onChange={handleChange}
+          fullWidth
+          margin="normal"
+          required
+        />
+        <TextField
+          label="Location"
+          name="location"
+          value={product.location}
+          onChange={handleChange}
+          fullWidth
+          margin="normal"
+          required
+        />
         <input 
           type='file'
           accept='image/*'
@@ -122,7 +141,7 @@ const ProductForm = () => {
           ))}
         </Grid>
         {validationMessage && <Typography color="error">{validationMessage}</Typography>}
-        <Button type="submit" variant="contained" color="primary" style={{ marginTop : '20px'}}>
+        <Button type="submit" variant="contained" color="primary" style={{ marginTop : '25px'}}>
           Save
         </Button>
       </form>

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import Layout from './Main/Layout';
 import Home from './Main/Layouts/Home/Home';
 import Guide from './Main/Layouts/Guide/Guide';
@@ -8,14 +8,15 @@ import ProductPage from './Main/Layouts/Home/ProView/ProductPage';
 import Structure from './Main/Dashboards/Structure';
 import { AuthProvider } from '../backend/AuthContext';
 import PrivateRoute from '../backend/PrivateRoute';
+import AdminProducts from './Main/Dashboards/Admin/AdminProducts';
 
 function Routings({ handleMode }) {
   return (
     <>
-      <Router>
         <AuthProvider>
           <Layout handleMode={handleMode}>
             <Routes>
+              <Route path="/admin/products/*" element={<AdminProducts />} />
               <Route exact path='/' element={<Home />} />
               <Route exact path='/home' element={<Home />} />
               <Route path='/guide' element={<Guide />} />
@@ -25,7 +26,6 @@ function Routings({ handleMode }) {
             </Routes>
           </Layout>
         </AuthProvider>
-      </Router>
     </>
   )
 }

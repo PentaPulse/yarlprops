@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { db } from './firebase';
-import { collection, getDocs, deleteDoc, doc} from 'firebase/firestore';
+import { fetchProducts } from '../../../../backend/db/products';
+import { db } from '../../../../backend/db/products';
+import { deleteDoc, doc } from 'firebase/firestore';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, TablePagination } from '@mui/material';
 
 const ProductList = () => {
@@ -10,17 +11,20 @@ const ProductList = () => {
     const [rowsPerPage, setRowsPerPage] = useState(10);    
     
     useEffect(() => {
-        const fetchProducts = async () => {
-            const querySnapshot = await getDocs(collection(db, 'products'));
-            const productsArray = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            setProducts(productsArray);
+        const fetchProductList = async () => {
+            const fetchedProducts = await fetchProducts();
+            setProducts(fetchedProducts);
         };
-        fetchProducts();
+        fetchProductList();
     }, []);
 
     const handleDelete = async (id) => {
-        await deleteDoc(doc(db, 'products, id'));
-        setProducts(products.filter(product => product.id !== id));
+        try{
+            await deleteDoc(doc(db, 'products, id'));
+            setProducts(products.filter(product => product.id !== id));
+        } catch (error) {
+            console.error("Error deleting product: ", error);
+        }
     };
 
     const handleChangePage = (event, newPage) => {
@@ -43,6 +47,8 @@ const ProductList = () => {
                         <TableCell>Category</TableCell>
                         <TableCell>Type</TableCell>
                         <TableCell>Description</TableCell>
+                        <TableCell>Quantity</TableCell>
+                        <TableCell>Location</TableCell>
                         <TableCell>Actions</TableCell>
                     </TableRow>
                 </TableHead>
@@ -54,6 +60,8 @@ const ProductList = () => {
                             <TableCell>{product.category}</TableCell>
                             <TableCell>{product.type}</TableCell>
                             <TableCell>{product.description}</TableCell>
+                            <TableCell>{product.quantity}</TableCell>
+                            <TableCell>{product.location}</TableCell>
                             <TableCell>
                                 <Button component={Link} to={`/products/${product.id}`} variant="outlined">View</Button>
                                 <Button component={Link} to={`/products/${product.id}/edit`} variant="outlined">Edit</Button>

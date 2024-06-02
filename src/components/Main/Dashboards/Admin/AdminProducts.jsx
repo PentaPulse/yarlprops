@@ -1,16 +1,53 @@
+import React, { useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import ProductList from '../Products/ProductList';
+import ProductDetail from '../Products/ProductDetail';
+import ProductForm from '../Products/ProductForm';
+import Navbar from '../Products/Navbar'; // Ensure the correct path
+import { Container, Button } from '@mui/material';
+
+const AdminProducts = () => {
+  const [showAddProduct, setShowAddProduct] = useState(false);
+
+  const toggleAddProduct = () => {
+    setShowAddProduct(!showAddProduct);
+  };
+
+  return (
+    <>
+      <Navbar />
+      <Container>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={toggleAddProduct}
+          style={{ margin: '20px 0' }}
+        >
+          {showAddProduct ? "Back to Product List" : "Add Product"}
+        </Button>
+        {showAddProduct ? (
+          <ProductForm onSuccess={() => setShowAddProduct(false)} />
+        ) : (
+          <Routes>
+            <Route path="/" element={<ProductList />} />
+            <Route path="/products/:pid" element={<ProductDetail />} />
+            <Route path="/add-product" element={<ProductForm />} />
+            <Route path="/products/:pid/edit" element={<ProductForm />} />
+          </Routes>
+        )}
+      </Container>
+    </>
+  );
+};
+
+export default AdminProducts;
+
+
+
 //import { useState } from 'react';
 //import { addProduct } from '../../../../backend/db/products';
-import { Button, Container, Input, TextField, Typography } from '@mui/material';
+//import { Button, Container, Input, TextField, Typography } from '@mui/material';
 //import { uploadImagesAndGetUrls } from '../../../../backend/storage';
-import ProductForm from '../Products/ProductForm';
-
-function AdminProducts() {
-    return (
-        <div>
-            <ProductForm/>
-        </div>
-    )
-}
 
 // const ProductForm = () => {
 //     const [productId, setProductId] = useState('');
@@ -118,4 +155,4 @@ function AdminProducts() {
 //         </Container>
 //     );
 // };
-export default AdminProducts
+

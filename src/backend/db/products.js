@@ -12,13 +12,15 @@ const productRef = collection(db, "products")
 
 //functions
 // adding products
-const addProduct = async (title, category, type, description, imageArray) => {
+const addProduct = async (title, category, type, description, quantity, location, imageArray) => {
     try {
         const docRef = await addDoc(collection(db, 'products'), {
             title: title,
             category: category,
             type: type,
             description: description,
+            quantity: quantity,
+            location: location,
             images: imageArray,
         })
         await setDoc(docRef, { pid: docRef.id }, { merge: true });
@@ -27,14 +29,13 @@ const addProduct = async (title, category, type, description, imageArray) => {
     } catch (e) {
         console.error(e)
     }
-
 };
 
 //fetching all the documents without conditions
 const fetchProducts = async () => {
     try {
         const qSnapshot = await getDocs(productRef);
-        const productList = qSnapshot.docs.map(doc => doc.data());
+        const productList = qSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         return productList;
     } catch (error) {
         console.error("Error fetching products:", error);
@@ -54,7 +55,7 @@ const fetchSelectedProduct = async (pid) => {
         return product.data();
     } catch (e) {
         console.error("Error fetching product: ", e);
-        return []
+        return [];
     }
 }
 export { db, addProduct, fetchProducts, fetchSelectedProduct }
