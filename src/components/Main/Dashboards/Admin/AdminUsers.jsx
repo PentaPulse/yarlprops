@@ -115,7 +115,7 @@ const AdminUsers = () => {
                             {users.map((user, index) => (
                                 <TableRow>
                                     <TableCell>
-                                        {index }
+                                        {index+1 }
                                     </TableCell>
                                     <TableCell>
                                         {user.fname || user.name}

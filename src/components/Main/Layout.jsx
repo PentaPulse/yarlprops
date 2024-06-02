@@ -14,7 +14,7 @@ const style = {
     width: 600,
     boxShadow: '0 8px 32px 0 rgba( 31, 38, 135, 0.37 )',
     p: 4,
-    background: 'rgba( 255, 255, 255, 0.65 )',
+    background: 'background.paper',
     "box-shadow": '0 8px 32px 0 rgba( 31, 38, 135, 0.37 )',
     'backdrop-filter': 'blur( 11.5px )',
     '-webkit-backdrop-filter': 'blur( 11.5px )',
