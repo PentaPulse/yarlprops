@@ -3,12 +3,14 @@ import { GoogleAuthProvider, createUserWithEmailAndPassword, onAuthStateChanged,
 import { db, auth } from './secrets';
 import { doc, getDoc } from 'firebase/firestore';
 import { addUser } from './db/users';
+import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate()
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -57,8 +59,14 @@ export const AuthProvider = ({ children }) => {
     //logout
     const logout = () => signOut(auth);
 
+    //back to home
+    const home =()=>{
+        sessionStorage.setItem('dash',!sessionStorage.getItem('dash'))
+        navigate('/')
+    }
+
     return (
-        <AuthContext.Provider value={{ user, register, login, logout, reset, google }}>
+        <AuthContext.Provider value={{ user, register, login, logout, reset, google ,home}}>
             {loading ? "" : children}
         </AuthContext.Provider>
     );

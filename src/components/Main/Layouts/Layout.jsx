@@ -53,10 +53,13 @@ function Layout({ children ,handleMode}) {
     const handleBackButton=()=>{
         setWelcome(true)
     }
-
+const showDashboard=()=>{
+    setOpenDashboard(!openDashborad)
+    sessionStorage.setItem('dash',openDashborad)
+}
     return (
         <>
-            {!openDashborad && <NavigationBar handleLoginButton={showWelcome} handleMode={handleMode} showDashboard={()=>setOpenDashboard(!openDashborad)}/>}
+            {!sessionStorage.getItem('dash') && <NavigationBar handleLoginButton={showWelcome} handleMode={handleMode} showDashboard={showDashboard}/>}
             <ToastContainer/>
             <div className='d-flex justify-content-center align-items-center mt-30 text-center'>
                 <Modal
@@ -81,7 +84,7 @@ function Layout({ children ,handleMode}) {
             <Container sx={{marginTop:'15vh'}}>
                 {children}
             </Container>
-            {!openDashborad && <Footer />}
+            {!sessionStorage.getItem('dash') && <Footer />}
         </>
     )
 }

@@ -31,10 +31,10 @@ import Admins from './Admin/Admins'
 import { MaterialUISwitch, ProfileBox } from '../../common/NavigationBar/NavigationBar';
 
 //menus
-const adminMenu = ['Overview', 'Admins', 'Sellers', 'Renters', 'Users', 'Products', 'Contact us requests', 'My Profile', 'Sign out']
-const sellerMenu = ['Overview', 'Products', 'Orders', 'My Profile', 'Sign out']
-const renterMenu = ['Overview', 'Products', 'Orders', 'My Profile', 'Sign out']
-const userMenu = ['Overview', 'My Profile', 'Sign out']
+const adminMenu = ['Overview', 'Admins', 'Sellers', 'Renters', 'Users', 'Products', 'Contact us requests', 'My Profile', 'Back to Home']
+const sellerMenu = ['Overview', 'Products', 'Orders', 'My Profile', 'Back to Home']
+const renterMenu = ['Overview', 'Products', 'Orders', 'My Profile', 'Back to Home']
+const userMenu = ['Overview', 'My Profile', 'Back to Home']
 
 //boards
 const adminBoard = [<AdminOverview />, <Admins />, <AdminSellers />, <AdminRenters />, <AdminUsers />, <AdminProducts />, <ContactusReqs />, <Profile />]
@@ -70,7 +70,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     alignItems: 'center',
     justifyContent: 'flex-end',
     padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
     ...theme.mixins.toolbar,
 }));
 
@@ -112,7 +111,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 export default function Dashboards({ handleMode }) {
     const [board, setBoard] = React.useState(0)
     const [status, setStatus] = React.useState('')
-    const { user } = useAuth()
+    const { user, home } = useAuth()
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
 
@@ -127,6 +126,10 @@ export default function Dashboards({ handleMode }) {
     React.useEffect(() => {
         setStatus(user.role)
     }, [user]);
+    const showDashboard = () => {
+        const had = sessionStorage.getItem('dash')
+        sessionStorage.setItem('dash', !had)
+    }
     return (
         <>
             <Box >
@@ -148,15 +151,18 @@ export default function Dashboards({ handleMode }) {
                         <Typography variant="h6" noWrap component="div">
                             {capitalize(user.role)} DASHBOARD
                         </Typography>
-
-                        <Box>
-                            <Tooltip title={`${theme.palette.mode} mode`}>
-                                <FormControlLabel
-                                    control={<MaterialUISwitch sx={{ m: 1 }} checked={theme.palette.mode === 'light' ? false : true} onClick={handleMode} />}
-                                />
-                            </Tooltip>
-                        </Box >
-                        <ProfileBox/>
+                        <Box display={'flex'} >
+                            <Box>
+                                <Tooltip title={`${theme.palette.mode} mode`}>
+                                    <FormControlLabel
+                                        control={<MaterialUISwitch sx={{ m: 1 }} checked={theme.palette.mode === 'light' ? false : true} onClick={handleMode} />}
+                                    />
+                                </Tooltip>
+                            </Box >
+                            <Box>
+                                <ProfileBox showDashboard={showDashboard} />
+                            </Box>
+                        </Box>
                     </Toolbar >
                 </AppBar >
                 < Drawer variant="permanent" open={open} >
@@ -167,7 +173,7 @@ export default function Dashboards({ handleMode }) {
                     </DrawerHeader>
                     <Divider />
                     <List>
-                        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+                        {(user.role === 'admin' ? adminMenu : (user.role === 'seller' ? sellerMenu : (user.role === 'renter' ? renterMenu : userMenu))).map((text, index) => (
                             <ListItem key={text} disablePadding sx={{ display: 'block' }}>
                                 <ListItemButton
                                     sx={{
@@ -175,6 +181,7 @@ export default function Dashboards({ handleMode }) {
                                         justifyContent: open ? 'initial' : 'center',
                                         px: 2.5,
                                     }}
+                                    onClick={() => setBoard(index)}
                                 >
                                     <ListItemIcon
                                         sx={{
@@ -185,54 +192,18 @@ export default function Dashboards({ handleMode }) {
                                     >
                                         {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
                                     </ListItemIcon>
-                                    <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-                                </ListItemButton>
-                            </ListItem>
-                        ))}
-                    </List>
-                    <Divider />
-                    <List>
-                        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-                                <ListItemButton
-                                    sx={{
-                                        minHeight: 48,
-                                        justifyContent: open ? 'initial' : 'center',
-                                        px: 2.5,
-                                    }}
-                                >
-                                    <ListItemIcon
-                                        sx={{
-                                            minWidth: 0,
-                                            mr: open ? 3 : 'auto',
-                                            justifyContent: 'center',
-                                        }}
-                                    >
-                                        {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                                    </ListItemIcon>
-                                    <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                                    <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} onClick={() => setBoard(index)} />
                                 </ListItemButton>
                             </ListItem>
                         ))}
                     </List>
                 </Drawer >
-                
-                <Grid ml={7} container spacing={2} columns={{ xs: 2, sm: 6, md: 12, lg: 12 }}>                    
+
+                <Grid ml={7} container spacing={2} columns={{ xs: 2, sm: 6, md: 12, lg: 12 }}>
                     <Grid item md={9}>
-                        <Paper sx={{ height: '100%' }}>
-                            {status === 'admin' && adminBoard.map((boardComponent, index) => (
-                                board === index && boardComponent
-                            ))}
-                            {status === 'seller' && sellerBoard.map((boardComponent, index) => (
-                                board === index && boardComponent
-                            ))}
-                            {status === 'renter' && renterBoard.map((boardComponent, index) => (
-                                board === index && boardComponent
-                            ))}
-                            {status === "buyer" && userBoard.map((boardComponent, index) => (
-                                board === index && boardComponent
-                            ))}
-                        </Paper>
+                        {(user.role === 'admin' ? adminBoard : (user.role === 'seller' ? sellerBoard : (user.role === 'renter' ? renterBoard : userBoard))).map((boardComponent, index) => (
+                            board === index && boardComponent
+                        ))}
                     </Grid>
                 </Grid>
             </Box >
