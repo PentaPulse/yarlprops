@@ -134,10 +134,6 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
                     </Box>
                     <Box>
                         <Tooltip title={`${theme.palette.mode} mode`}>
-                            {/*}
-                            <IconButton sx={{ ml: 1, color: theme.palette.primary }} onClick={handleMode}>
-                                {theme.palette.mode === 'light' ? <Brightness7Icon /> : <Brightness4Icon />}
-                    </IconButton>*/}
                             <FormControlLabel
                                 control={<MaterialUISwitch sx={{ m: 1 }} checked={theme.palette.mode === 'light' ? false : true} onClick={handleMode} />}
                             />
@@ -145,7 +141,7 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
                     </Box>
 
                     {isLogged ? (
-                        <ProfileBox isLogged={isLogged}/>
+                        <ProfileBox isLogged={isLogged} />
                     ) : (
                         <Button sx={{ color: theme.palette.primary }} onClick={handleLoginButton}>Sign In</Button>
                     )}
@@ -155,7 +151,7 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
     );
 }
 
-function ProfileBox({ isLogged }) {
+export function ProfileBox({ isLogged }) {
     const theme = useTheme();
     const navigate = useNavigate()
 
@@ -189,7 +185,7 @@ function ProfileBox({ isLogged }) {
     );
 }
 
-const MaterialUISwitch = styled(Switch)(({ theme }) => ({
+export const MaterialUISwitch = styled(Switch)(({ theme }) => ({
     width: 62,
     height: 34,
     padding: 7,

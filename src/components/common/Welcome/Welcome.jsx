@@ -99,9 +99,6 @@ export function Register({ handleBack }) {
         e.preventDefault()
         register(fname,lname,email,password,role)
     }
-    const handleRoleChange = (event) => {
-        setRole(event.target.value);
-    };
     return (
         <>
             <div className="d-flex flex-column justify-content-center text-center">
