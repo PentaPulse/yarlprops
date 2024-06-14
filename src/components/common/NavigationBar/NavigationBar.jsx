@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 const pages = ['Home', 'Guide', 'About', 'Contact'];
 
-export default function NavigationBar({ handleLoginButton, handleMode }) {
+export default function NavigationBar({ handleLoginButton, handleMode ,showDashboard}) {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [isLogged, setIsLogged] = React.useState(false);
     const theme = useTheme();
@@ -141,7 +141,7 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
                     </Box>
 
                     {isLogged ? (
-                        <ProfileBox isLogged={isLogged} />
+                        <ProfileBox isLogged={isLogged} showDashboard={showDashboard}/>
                     ) : (
                         <Button sx={{ color: theme.palette.primary }} onClick={handleLoginButton}>Sign In</Button>
                     )}
@@ -151,7 +151,7 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
     );
 }
 
-export function ProfileBox({ isLogged }) {
+export function ProfileBox({ isLogged ,showDashboard}) {
     const theme = useTheme();
     const navigate = useNavigate()
 
@@ -165,12 +165,13 @@ export function ProfileBox({ isLogged }) {
     };
 
     const handleDashboards = (e) => {
+        showDashboard();
         navigate(`/dashboard`)
     }
 
     return (
         <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center', borderWidth: '1px', borderStyle: 'solid', borderColor: theme.palette.mode === 'light' ? 'black' : 'white', borderRadius: '5px 25px', padding: '0 10px' }}>
-            <Tooltip title="Open settings">
+            <Tooltip title="Open dashboard">
                 <IconButton onClick={handleDashboards} sx={{ p: 0 }}>
                     <Avatar alt="User Profile" src={sessionStorage.getItem('pp')} />
                 </IconButton>

@@ -1,14 +1,14 @@
 import * as React from 'react'
 import { Routes, Route } from 'react-router-dom'
-import Layout from './Main/Layout';
+import Layout from './Main/Layouts/Layout';
 import Home from './Main/Layouts/Home/Home';
 import Guide from './Main/Layouts/Guide/Guide';
 import Contact from './Main/Layouts/Contact/Contact';
 import ProductPage from './Main/Layouts/Home/ProView/ProductPage';
-import Structure from './Main/Dashboards/Structure';
 import { AuthProvider } from '../backend/AuthContext';
 import PrivateRoute from '../backend/PrivateRoute';
-//import AdminProducts from './Main/Dashboards/Admin/AdminProducts';
+import Dashboards from './Main/Dashboards/Dashboards';
+import AdminProducts from './Main/Dashboards/Admin/AdminProducts';
 
 function Routings({ handleMode }) {
   return (
@@ -16,7 +16,6 @@ function Routings({ handleMode }) {
       <AuthProvider>
         <Layout handleMode={handleMode}>
           <Routes>
-            {/*<Route path="/admin/products/*" element={<AdminProducts />} />*/}
             <Route exact path='/' element={<Home />} />
             <Route exact path='/home' element={<Home />} />
             <Route path='/guide' element={<Guide />} />
@@ -25,9 +24,10 @@ function Routings({ handleMode }) {
           </Routes>
         </Layout>
         <PrivateRoute>
-        <Routes>
-          <Route path='/dashboard' element={<Structure handleMode={handleMode} />}/>
-        </Routes>
+          <Routes>
+            <Route path='/dashboard' element={<Dashboards handleMode={handleMode} />} />
+            <Route path="/admin/products/*" element={<AdminProducts />} />
+          </Routes>
         </PrivateRoute>
       </AuthProvider>
     </>

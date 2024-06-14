@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import {Backdrop,Box,Modal,Fade,Container }from '@mui/material';
 import { ToastContainer } from 'react-toastify';
-import { Login, Register, Welcome } from '../common/Welcome/Welcome';
-import NavigationBar from '../common/NavigationBar/NavigationBar';
-import Footer from '../common/Footer/Footer';
+import { Login, Register, Welcome } from '../../common/Welcome/Welcome';
+import NavigationBar from '../../common/NavigationBar/NavigationBar';
+import Footer from '../../common/Footer/Footer';
 import { useNavigate } from 'react-router-dom';
 
 const style = {
@@ -26,6 +26,7 @@ function Layout({ children ,handleMode}) {
     const [open, setOpen] = useState(false);
     const [welcome,setWelcome]=useState(false)
     const [login,setLogin]=useState(false)
+    const [openDashborad,setOpenDashboard]=useState(false)
     const navigate = useNavigate();
 
     const showWelcome = () => {
@@ -55,7 +56,7 @@ function Layout({ children ,handleMode}) {
 
     return (
         <>
-            <NavigationBar handleLoginButton={showWelcome} handleMode={handleMode}/>
+            {!openDashborad && <NavigationBar handleLoginButton={showWelcome} handleMode={handleMode} showDashboard={()=>setOpenDashboard(!openDashborad)}/>}
             <ToastContainer/>
             <div className='d-flex justify-content-center align-items-center mt-30 text-center'>
                 <Modal
@@ -80,7 +81,7 @@ function Layout({ children ,handleMode}) {
             <Container sx={{marginTop:'15vh'}}>
                 {children}
             </Container>
-            <Footer />
+            {!openDashborad && <Footer />}
         </>
     )
 }

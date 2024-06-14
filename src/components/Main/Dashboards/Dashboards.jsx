@@ -1,4 +1,4 @@
-import { Box, CssBaseline, Divider, FormControlLabel, Grid, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, MenuItem, MenuList, Paper, Toolbar, Tooltip, Typography, styled, useTheme } from '@mui/material'
+import { Box, CssBaseline, Divider, FormControlLabel, Grid, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, MenuItem, MenuList, Paper, Toolbar, Tooltip, Typography, capitalize, styled, useTheme } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
@@ -109,7 +109,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
-function Structure({ handleMode }) {
+export default function Dashboards({ handleMode }) {
     const [board, setBoard] = React.useState(0)
     const [status, setStatus] = React.useState('')
     const { user } = useAuth()
@@ -146,7 +146,7 @@ function Structure({ handleMode }) {
                             <MenuIcon />
                         </IconButton>
                         <Typography variant="h6" noWrap component="div">
-                            {user.role} DASHBOARD
+                            {capitalize(user.role)} DASHBOARD
                         </Typography>
 
                         <Box>
@@ -216,25 +216,8 @@ function Structure({ handleMode }) {
                         ))}
                     </List>
                 </Drawer >
-                <Grid container spacing={2} columns={{ xs: 2, sm: 6, md: 12, lg: 12 }}>
-                    <Grid justifyContent="center" alignItems="center" item xs={2} sm={4} md={3} lg={3}>
-                        <Paper>
-                            <MenuList variant='selectedMenu'>
-                                {status === 'admin' && adminMenu.map((item, index) => (
-                                    <MenuItem key={index} sx={{ height: '4rem' }} onClick={() => setBoard(index)}>{item}</MenuItem>
-                                ))}
-                                {status === 'seller' && sellerMenu.map((item, index) => (
-                                    <MenuItem key={index} sx={{ height: '5rem' }} onClick={() => setBoard(index)}>{item}</MenuItem>
-                                ))}
-                                {status === 'renter' && renterMenu.map((item, index) => (
-                                    <MenuItem key={index} sx={{ height: '5rem' }} onClick={() => setBoard(index)}>{item}</MenuItem>
-                                ))}
-                                {status === "buyer" && userMenu.map((item, index) => (
-                                    <MenuItem key={index} sx={{ height: '5rem' }} onClick={() => setBoard(index)}>{item}</MenuItem>
-                                ))}
-                            </MenuList>
-                        </Paper>
-                    </Grid>
+                
+                <Grid ml={7} container spacing={2} columns={{ xs: 2, sm: 6, md: 12, lg: 12 }}>                    
                     <Grid item md={9}>
                         <Paper sx={{ height: '100%' }}>
                             {status === 'admin' && adminBoard.map((boardComponent, index) => (
@@ -249,7 +232,6 @@ function Structure({ handleMode }) {
                             {status === "buyer" && userBoard.map((boardComponent, index) => (
                                 board === index && boardComponent
                             ))}
-
                         </Paper>
                     </Grid>
                 </Grid>
@@ -257,5 +239,3 @@ function Structure({ handleMode }) {
         </>
     )
 }
-
-export default Structure
