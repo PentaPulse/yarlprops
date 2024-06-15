@@ -1,11 +1,9 @@
-import { Box, CssBaseline, Divider, FormControlLabel, Grid, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, MenuItem, MenuList, Paper, Toolbar, Tooltip, Typography, capitalize, styled, useTheme } from '@mui/material'
+import { Avatar, Box, CssBaseline, Divider, FormControlLabel, Grid, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Tooltip, Typography, capitalize, styled, useTheme } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import * as React from 'react'
 import Profile from './UserProfile'
 import { useAuth } from '../../../backend/AuthContext'
@@ -31,11 +29,10 @@ import Admins from './Admin/Admins'
 import { MaterialUISwitch, ProfileBox } from '../../common/NavigationBar/NavigationBar';
 
 //menus
-const adminMenu = ['Overview', 'Admins', 'Sellers', 'Renters', 'Users', 'Products', 'Contact us requests', 'My Profile', 'Back to Home']
-const sellerMenu = ['Overview', 'Products', 'Orders', 'My Profile', 'Back to Home']
-const renterMenu = ['Overview', 'Products', 'Orders', 'My Profile', 'Back to Home']
-const userMenu = ['Overview', 'My Profile', 'Back to Home']
-
+const adminMenu = [['Overview', 'drawer/overview.svg'], ['Admins', 'drawer/admins.svg'], ['Sellers', 'drawer/seller.svg'], ['Renters', 'drawer/renter.svg'], ['Users', ''], ['Products', ''], ['Contact us requests', ''], ['My Profile', ''], ['Back to Home', '']]
+const sellerMenu = [['Overview', 'drawer/overview.svg'], 'Products', 'Orders', 'My Profile', 'Back to Home']
+const renterMenu = [['Overview', 'drawer/overview.svg'], 'Products', 'Orders', 'My Profile', 'Back to Home']
+const userMenu = [['Overview', 'drawer/overview.svg'], 'My Profile', 'Back to Home']
 //boards
 const adminBoard = [<AdminOverview />, <Admins />, <AdminSellers />, <AdminRenters />, <AdminUsers />, <AdminProducts />, <ContactusReqs />, <Profile />]
 const sellerBoard = [<SellerOverview />, <SellerOrders />, <SellerProducts />, <Profile />]
@@ -110,7 +107,6 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 export default function Dashboards({ handleMode }) {
     const [board, setBoard] = React.useState(0)
-    const [status, setStatus] = React.useState('')
     const { user, home } = useAuth()
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
@@ -122,35 +118,36 @@ export default function Dashboards({ handleMode }) {
     const handleDrawerClose = () => {
         setOpen(false);
     };
-
-    React.useEffect(() => {
-        setStatus(user.role)
-    }, [user]);
     const showDashboard = () => {
-        const had = sessionStorage.getItem('dash')
-        sessionStorage.setItem('dash', !had)
+        sessionStorage.setItem('dash', true)
+    }
+    const handleMenu = (index) => {
+        setBoard(index)
+        setOpen(false)
     }
     return (
         <>
             <Box >
                 <CssBaseline />
                 <AppBar position="fixed" open={open} color='inherit'>
-                    <Toolbar>
-                        <IconButton
-                            color={"inherit"}
-                            aria-label="open drawer"
-                            onClick={handleDrawerOpen}
-                            edge="start"
-                            sx={{
-                                marginRight: 5,
-                                ...(open && { display: 'none' }),
-                            }}
-                        >
-                            <MenuIcon />
-                        </IconButton>
-                        <Typography variant="h6" noWrap component="div">
-                            {capitalize(user.role)} DASHBOARD
-                        </Typography>
+                    <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Box display='flex'>
+                            <IconButton
+                                color={"inherit"}
+                                aria-label="open drawer"
+                                onClick={handleDrawerOpen}
+                                edge="start"
+                                sx={{
+                                    marginRight: 5,
+                                    ...(open && { display: 'none' }),
+                                }}
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                            <Typography variant="h6" noWrap component="div">
+                                {capitalize(user.role)} DASHBOARD
+                            </Typography>
+                        </Box>
                         <Box display={'flex'} >
                             <Box>
                                 <Tooltip title={`${theme.palette.mode} mode`}>
@@ -181,7 +178,7 @@ export default function Dashboards({ handleMode }) {
                                         justifyContent: open ? 'initial' : 'center',
                                         px: 2.5,
                                     }}
-                                    onClick={() => setBoard(index)}
+                                    onClick={() => handleMenu(index)}
                                 >
                                     <ListItemIcon
                                         sx={{
@@ -190,9 +187,9 @@ export default function Dashboards({ handleMode }) {
                                             justifyContent: 'center',
                                         }}
                                     >
-                                        {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                                        <Avatar alt={text[0]} src={text[1]} variant='square' />
                                     </ListItemIcon>
-                                    <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} onClick={() => setBoard(index)} />
+                                    <ListItemText primary={text[0]} sx={{ opacity: open ? 1 : 0 }} onClick={() => setBoard(index)} />
                                 </ListItemButton>
                             </ListItem>
                         ))}
