@@ -29,7 +29,7 @@ import Admins from './Admin/Admins'
 import { MaterialUISwitch, ProfileBox } from '../../common/NavigationBar/NavigationBar';
 
 //menus
-const adminMenu = [['Overview', 'drawer/overview.svg'], ['Admins', 'drawer/admins.svg'], ['Sellers', 'drawer/seller.svg'], ['Renters', 'drawer/renter.svg'], ['Users', ''], ['Products', ''], ['Contact us requests', ''], ['My Profile', ''], ['Back to Home', '']]
+const adminMenu = [['Overview', 'drawer/overview.svg'], ['Admins', 'drawer/admins.svg'], ['Sellers', 'drawer/seller.svg'], ['Renters', 'drawer/renter.svg'], ['Users', 'drawer/users.svg'], ['Products', 'drawer/products.svg'], ['Contact us requests', 'drawer/contactus.svg'], ['My Profile', 'drawer/profile.svg'], ['Back to Home', 'drawer/backhome.svg']]
 const sellerMenu = [['Overview', 'drawer/overview.svg'], 'Products', 'Orders', 'My Profile', 'Back to Home']
 const renterMenu = [['Overview', 'drawer/overview.svg'], 'Products', 'Orders', 'My Profile', 'Back to Home']
 const userMenu = [['Overview', 'drawer/overview.svg'], 'My Profile', 'Back to Home']
