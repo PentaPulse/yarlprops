@@ -30,8 +30,8 @@ import { MaterialUISwitch, ProfileBox } from '../../common/NavigationBar/Navigat
 
 //menus
 const adminMenu = [['Overview', 'drawer/overview.svg'], ['Admins', 'drawer/admins.svg'], ['Sellers', 'drawer/seller.svg'], ['Renters', 'drawer/renter.svg'], ['Users', 'drawer/users.svg'], ['Products', 'drawer/products.svg'], ['Contact us requests', 'drawer/contactus.svg'], ['My Profile', 'drawer/profile.svg'], ['Back to Home', 'drawer/backhome.svg']]
-const sellerMenu = [['Overview', 'drawer/overview.svg'], ['Products', 'drawer/products.svg'], ['Orders','drawer/orders.svg'], ['My Profile','drawer/profile.svg'], ['Back to Home', 'drawer/backhome.svg']]
-const renterMenu = [['Overview', 'drawer/overview.svg'], ['Products', 'drawer/products.svg'], ['Orders','drawer/orders.svg'], ['My Profile','drawer/profile.svg'], ['Back to Home', 'drawer/backhome.svg']]
+const sellerMenu = [['Overview', 'drawer/overview.svg'], ['Products', 'drawer/products.svg'], ['Orders', 'drawer/orders.svg'], ['My Profile', 'drawer/profile.svg'], ['Back to Home', 'drawer/backhome.svg']]
+const renterMenu = [['Overview', 'drawer/overview.svg'], ['Products', 'drawer/products.svg'], ['Orders', 'drawer/orders.svg'], ['My Profile', 'drawer/profile.svg'], ['Back to Home', 'drawer/backhome.svg']]
 const userMenu = [['Overview', 'drawer/overview.svg'], 'My Profile', ['Back to Home', 'drawer/backhome.svg']]
 //boards
 const adminBoard = [<AdminOverview />, <Admins />, <AdminSellers />, <AdminRenters />, <AdminUsers />, <AdminProducts />, <ContactusReqs />, <Profile />]
@@ -187,7 +187,17 @@ export default function Dashboards({ handleMode }) {
                                             justifyContent: 'center',
                                         }}
                                     >
-                                        <Avatar sx={{width:24,height:24}} alt={text[0]} src={text[1]} variant='square' />
+                                        <Avatar
+                                            sx={{
+                                                width: 24,
+                                                height: 24,
+                                                '& svg': {
+                                                    fill: theme.palette.mode === 'light' ? '#000000' : '#ffffff',
+                                                },
+                                            }}
+                                            alt={text[0]}
+                                            src={text[1]}
+                                            variant="square" />
                                     </ListItemIcon>
                                     <ListItemText primary={text[0]} sx={{ opacity: open ? 1 : 0 }} onClick={() => setBoard(index)} />
                                 </ListItemButton>
