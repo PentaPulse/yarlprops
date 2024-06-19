@@ -9,7 +9,8 @@ import { useAuth } from '../../../backend/AuthContext'
 
 
 import { MaterialUISwitch, ProfileBox } from '../../common/NavigationBar/NavigationBar';
-import { adminBoard, adminMenu, renterBoard, renterMenu, sellerBoard, sellerMenu, userBoard, userMenu } from './menuLists';
+import { adminBoard, adminMenu, backToHome, renterBoard, renterMenu, sellerBoard, sellerMenu, userBoard, userMenu } from './menuLists';
+import { useNavigate } from 'react-router-dom';
 
 //menus
 
@@ -84,6 +85,7 @@ export default function Dashboards({ handleMode }) {
     const [board, setBoard] = React.useState(0)
     const { user } = useAuth()
     const theme = useTheme();
+    const navigate = useNavigate();
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -92,12 +94,12 @@ export default function Dashboards({ handleMode }) {
     const handleDrawerClose = () => {
         setOpen(false);
     };
-    const showDashboard = () => {
-        sessionStorage.setItem('dash', true)
-    }
     const handleMenu = (index) => {
         setBoard(index)
         setOpen(false)
+    }
+    const showDashboard = () => {
+        navigate('/')
     }
     return (
         <>
@@ -136,7 +138,7 @@ export default function Dashboards({ handleMode }) {
                         </Box>
                     </Toolbar >
                 </AppBar >
-                < Drawer variant="permanent" open={open} onMouseEnter={()=>setOpen(true)} onMouseLeave={()=>setOpen(false)}>
+                < Drawer variant="permanent" open={open} onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
                     <DrawerHeader>
                         <IconButton onClick={handleDrawerClose} >
                             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
@@ -165,7 +167,7 @@ export default function Dashboards({ handleMode }) {
                                             sx={{
                                                 width: 24,
                                                 height: 24,
-                                                bgcolor:'inherit'
+                                                bgcolor: 'inherit'
                                             }}
                                             alt={text[0]}
                                             variant="square" >
@@ -176,7 +178,7 @@ export default function Dashboards({ handleMode }) {
                                                 width="24"
                                                 height="24"
                                             >
-                                                <path d={text[1]} fill={theme.palette.mode === 'light' ? '#000000' : '#ffffff'}/>
+                                                <path d={text[1]} fill={theme.palette.mode === 'light' ? '#000000' : '#ffffff'} />
                                             </svg>
                                         </Avatar>
                                     </ListItemIcon>
@@ -184,15 +186,51 @@ export default function Dashboards({ handleMode }) {
                                 </ListItemButton>
                             </ListItem>
                         ))}
+                        <ListItem disablePadding sx={{ display: 'block' }}>
+                            <ListItemButton
+                                sx={{
+                                    minHeight: 48,
+                                    justifyContent: open ? 'initial' : 'center',
+                                    px: 2.5,
+                                }}
+                                onClick={() => navigate('/')}
+                            >
+                                <ListItemIcon
+                                    sx={{
+                                        minWidth: 0,
+                                        mr: open ? 3 : 'auto',
+                                        justifyContent: 'center',
+                                    }}
+                                >
+                                    <Avatar
+                                        sx={{
+                                            width: 24,
+                                            height: 24,
+                                            bgcolor: 'inherit'
+                                        }}
+                                        alt={backToHome[0]}
+                                        variant="square" >
+                                        <svg
+
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 24 24"
+                                            width="24"
+                                            height="24"
+                                        >
+                                            <path d={backToHome[1]} />
+                                        </svg>
+
+                                    </Avatar>
+                                </ListItemIcon>
+                                <ListItemText primary={backToHome[0]} sx={{ opacity: open ? 1 : 0 }} />
+                            </ListItemButton>
+                        </ListItem>
                     </List>
                 </Drawer >
-
-                <Grid ml={7} container spacing={2} columns={{ xs: 2, sm: 6, md: 12, lg: 12 }}>
-                    <Grid item md={9}>
-                        {(user.role === 'admin' ? adminBoard : (user.role === 'seller' ? sellerBoard : (user.role === 'renter' ? renterBoard : userBoard))).map((boardComponent, index) => (
-                            board === index && boardComponent
-                        ))}
-                    </Grid>
+                <Grid item m='12vh 2vw 0 6vw'>
+                    {(user.role === 'admin' ? adminBoard : (user.role === 'seller' ? sellerBoard : (user.role === 'renter' ? renterBoard : userBoard))).map((boardComponent, index) => (
+                        board === index && boardComponent
+                    ))}
                 </Grid>
             </Box >
         </>
