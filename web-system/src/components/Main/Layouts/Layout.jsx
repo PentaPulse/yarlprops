@@ -89,8 +89,8 @@ function Layout({ children, handleMode }) {
                     <Route path="/admin/products/*" element={<AdminProducts />} />
                     <Route exact path='/' element={<Home />} />
                     <Route exact path='/home' element={<Home />} />
-                    <Route path='/guide' element={<Guide />} />
-                    <Route path='/contact' element={<Contact />} />
+                    <Route exact path='/guide' element={<Guide />} />
+                    <Route exact path='/contact' element={<Contact />} />
                     <Route path="/product/:id" element={<ProductPage />} />
                 </Routes>
             </Container>

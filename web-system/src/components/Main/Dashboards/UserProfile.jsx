@@ -1,31 +1,6 @@
 import { Grid, Paper } from '@mui/material';
 import * as React from 'react';
 
-// Dummy ProfileCard and SettingsCard components for demonstration purposes
-const ProfileCard = ({ name, sub, dt1, dt2, dt3 }) => (
-  <Paper>
-    <h2>{name}</h2>
-    <h3>{sub}</h3>
-    <p>dt1: {dt1}</p>
-    <p>dt2: {dt2}</p>
-    <p>dt3: {dt3}</p>
-  </Paper>
-);
-
-const SettingsCard = ({ expose, firstName, lastName, midName, phone, email, pass, gender }) => (
-  <Paper>
-    <h2>Settings</h2>
-    <p>First Name: {firstName}</p>
-    <p>Last Name: {lastName}</p>
-    <p>Middle Name: {midName}</p>
-    <p>Phone: {phone}</p>
-    <p>Email: {email}</p>
-    <p>Password: {pass}</p>
-    <p>Gender: {gender}</p>
-    <input type="text" onChange={(e) => expose(e.target.value)} />
-  </Paper>
-);
-
 export default function Profile() {
   const [text, setText] = React.useState("");
 
@@ -104,3 +79,28 @@ export default function Profile() {
     </>
   );
 }
+
+// Dummy ProfileCard and SettingsCard components for demonstration purposes
+const ProfileCard = ({ name, sub, dt1, dt2, dt3 }) => (
+  <Paper>
+    <h2>{name}</h2>
+    <h3>{sub}</h3>
+    <p>dt1: {dt1}</p>
+    <p>dt2: {dt2}</p>
+    <p>dt3: {dt3}</p>
+  </Paper>
+);
+
+const SettingsCard = ({ expose, firstName, lastName, midName, phone, email, pass, gender }) => (
+  <Paper>
+    <h2>Settings</h2>
+    <p>First Name: {firstName}</p>
+    <p>Last Name: {lastName}</p>
+    <p>Middle Name: {midName}</p>
+    <p>Phone: {phone}</p>
+    <p>Email: {email}</p>
+    <p>Password: {pass}</p>
+    <p>Gender: {gender}</p>
+    <input type="text" onChange={(e) => expose(e.target.value)} />
+  </Paper>
+);
