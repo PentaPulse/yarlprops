@@ -80,10 +80,10 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 export default function Dashboards({ handleMode }) {
+    const [open, setOpen] = React.useState(false);
     const [board, setBoard] = React.useState(0)
     const { user } = useAuth()
     const theme = useTheme();
-    const [open, setOpen] = React.useState(false);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -136,9 +136,9 @@ export default function Dashboards({ handleMode }) {
                         </Box>
                     </Toolbar >
                 </AppBar >
-                < Drawer variant="permanent" open={open} >
+                < Drawer variant="permanent" open={open} onMouseEnter={()=>setOpen(true)} onMouseLeave={()=>setOpen(false)}>
                     <DrawerHeader>
-                        <IconButton onClick={handleDrawerClose}>
+                        <IconButton onClick={handleDrawerClose} >
                             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
                         </IconButton>
                     </DrawerHeader>
