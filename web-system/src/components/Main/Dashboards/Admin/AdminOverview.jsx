@@ -1,4 +1,4 @@
-import { Container, Grid, Paper, Typography } from '@mui/material'
+import { Grid, Paper, Typography } from '@mui/material'
 import * as React from 'react'
 import { db } from '../../../../backend/secrets';
 import { collection, getDocs, query, where } from 'firebase/firestore';
@@ -8,9 +8,6 @@ function AdminOverview() {
         totalSellers: 0,
         totalRenters: 0,
         totalBuyers: 0,
-        newRequests: 0,
-        totalListings: 0,
-        contactResponses: 0,
     });
 
     React.useEffect(() => {
