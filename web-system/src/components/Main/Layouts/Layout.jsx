@@ -4,12 +4,7 @@ import { ToastContainer } from 'react-toastify';
 import { Login, Register, Welcome } from '../../common/Welcome/Welcome';
 import NavigationBar from '../../common/NavigationBar/NavigationBar';
 import Footer from '../../common/Footer/Footer';
-import { Route, Routes, useNavigate } from 'react-router-dom';
-import AdminProducts from '../Dashboards/Admin/AdminProducts';
-import Home from './Home/Home';
-import Guide from './Guide/Guide';
-import Contact from './Contact/Contact';
-import ProductPage from './Home/ProView/ProductPage';
+import { useNavigate } from 'react-router-dom';
 
 const style = {
     position: 'absolute',
@@ -27,7 +22,7 @@ const style = {
     textAlign: "center"
 };
 
-function Layout({ children, handleMode }) {
+function Layout({ children, handleMode, handleDashboardState, dash }) {
     const [open, setOpen] = useState(false);
     const [welcome, setWelcome] = useState(false)
     const [login, setLogin] = useState(false)
@@ -57,12 +52,9 @@ function Layout({ children, handleMode }) {
     const handleBackButton = () => {
         setWelcome(true)
     }
-    const showDashboard = () => {
-        navigate('/dashboard')
-    }
     return (
         <>
-            <NavigationBar handleLoginButton={showWelcome} handleMode={handleMode} showDashboard={showDashboard} />
+            <NavigationBar handleLoginButton={showWelcome} handleMode={handleMode} />
             <ToastContainer />
             <div className='d-flex justify-content-center align-items-center mt-30 text-center'>
                 <Modal
@@ -85,14 +77,7 @@ function Layout({ children, handleMode }) {
                 </Modal>
             </div>
             <Container sx={{ marginTop: '12vh' }}>
-                <Routes>
-                    <Route path="/admin/products/*" element={<AdminProducts />} />
-                    <Route exact path='/' element={<Home />} />
-                    <Route exact path='/home' element={<Home />} />
-                    <Route exact path='/guide' element={<Guide />} />
-                    <Route exact path='/contact' element={<Contact />} />
-                    <Route path="/product/:id" element={<ProductPage />} />
-                </Routes>
+                {children}
             </Container>
             <Footer />
         </>

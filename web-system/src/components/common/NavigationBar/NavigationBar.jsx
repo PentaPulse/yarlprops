@@ -19,6 +19,7 @@ export default function NavigationBar({ handleLoginButton, handleMode ,showDashb
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
     };
+    
     React.useEffect(() => {
         const unsubscribe = authUser.onAuthStateChanged((user) => {
             if (user) {
@@ -151,7 +152,7 @@ export default function NavigationBar({ handleLoginButton, handleMode ,showDashb
     );
 }
 
-export function ProfileBox({ isLogged ,showDashboard}) {
+export function ProfileBox({ isLogged }) {
     const theme = useTheme();
     const navigate = useNavigate()
 
@@ -165,7 +166,7 @@ export function ProfileBox({ isLogged ,showDashboard}) {
     };
 
     const handleDashboards = (e) => {
-        showDashboard();
+        sessionStorage.setItem('dash',false)
         navigate(`/dashboard`)
     }
 

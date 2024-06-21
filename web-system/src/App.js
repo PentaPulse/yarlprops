@@ -48,6 +48,9 @@ function Themed() {
     return storedTheme === null ? true : storedTheme === 'true';
   });
 
+  const [dash, setDash] = React.useState(true)
+  
+
   const handleTheme = () => {
     setMode((prevMode) => {
       const newMode = !prevMode;
@@ -67,7 +70,7 @@ function Themed() {
     <ThemeProvider theme={mode ? lightTheme : darkTheme}>
       <CssBaseline />
       <Router>
-        <Routings handleMode={handleTheme} />
+        <Routings handleMode={handleTheme} handleDashboardState={()=>setDash(sessionStorage.getItem('dash'))} dash={dash}/>
       </Router>
     </ThemeProvider>
   );

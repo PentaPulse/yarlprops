@@ -80,7 +80,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
-export default function Dashboards({ handleMode }) {
+export default function Dashboards({ handleMode ,handleDashbordState}) {
     const [open, setOpen] = React.useState(false);
     const [board, setBoard] = React.useState(0)
     const { user } = useAuth()
@@ -98,7 +98,9 @@ export default function Dashboards({ handleMode }) {
         setBoard(index)
         setOpen(false)
     }
-    const showDashboard = () => {
+    const back = () => {
+        sessionStorage.setItem('dash',true)
+        handleDashbordState()
         navigate('/')
     }
     return (
@@ -133,7 +135,7 @@ export default function Dashboards({ handleMode }) {
                                 </Tooltip>
                             </Box >
                             <Box>
-                                <ProfileBox showDashboard={showDashboard} />
+                                <ProfileBox />
                             </Box>
                         </Box>
                     </Toolbar >
@@ -193,7 +195,7 @@ export default function Dashboards({ handleMode }) {
                                     justifyContent: open ? 'initial' : 'center',
                                     px: 2.5,
                                 }}
-                                onClick={() => navigate('/')}
+                                onClick={back}
                             >
                                 <ListItemIcon
                                     sx={{

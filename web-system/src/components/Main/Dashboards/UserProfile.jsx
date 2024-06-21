@@ -1,22 +1,23 @@
 import { Grid, Paper } from '@mui/material';
 import * as React from 'react';
+import { useAuth } from '../../../backend/AuthContext';
 
 export default function Profile() {
-  const [text, setText] = React.useState("");
+  const {user}=useAuth()
 
   const mainUser = {
     // DEFAULT VALUES
-    title: "CEO of Apple",
+    title: user.role,
     dt1: 32,
     dt2: 40,
     dt3: 50,
-    firstName: text,
-    lastName: "Doe",
-    midName: "Baker",
-    gender: "female",
-    phone: "932-555-4247",
-    email: "janedoe@gmail.com",
-    pass: "password123"
+    firstName: user.fname,
+    lastName: user.lname,
+    midName: "",
+    gender: user.gender,
+    phone: user.phone,
+    email: user.email,
+    pass: user.password
   };
 
   const fullName = `${mainUser.firstName} ${mainUser.lastName}`;
@@ -64,7 +65,6 @@ export default function Profile() {
           {/* SETTINGS CARD */}
           <Grid item md={9}>
             <SettingsCard
-              expose={(v) => setText(v)}
               firstName={mainUser.firstName}
               lastName={mainUser.lastName}
               midName={mainUser.midName}
