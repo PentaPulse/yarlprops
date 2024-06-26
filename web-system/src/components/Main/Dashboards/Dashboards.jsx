@@ -10,7 +10,7 @@ import { useAuth } from '../../../backend/AuthContext'
 
 import { MaterialUISwitch, ProfileBox } from '../../common/NavigationBar/NavigationBar';
 import { adminBoard, adminMenu, backToHome, renterBoard, renterMenu, sellerBoard, sellerMenu, userBoard, userMenu } from './menuLists';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 //menus
 
@@ -80,7 +80,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
-export default function Dashboards({ handleMode ,handleDashbordState}) {
+export default function Dashboards({ handleMode }) {
     const [open, setOpen] = React.useState(false);
     const [board, setBoard] = React.useState(0)
     const { user } = useAuth()
@@ -99,8 +99,7 @@ export default function Dashboards({ handleMode ,handleDashbordState}) {
         setOpen(false)
     }
     const back = () => {
-        sessionStorage.setItem('dash',true)
-        handleDashbordState()
+        sessionStorage.setItem('dash', true)
         navigate('/')
     }
     return (
@@ -177,10 +176,11 @@ export default function Dashboards({ handleMode ,handleDashbordState}) {
 
                                                 xmlns="http://www.w3.org/2000/svg"
                                                 viewBox="0 0 24 24"
-                                                width="24"
-                                                height="24"
+                                                width="100%"
+                                                height="100%"
+                                                fill={theme.palette.mode === 'light' ? '#000000' : '#ffffff'}
                                             >
-                                                <path d={text[1]} fill={theme.palette.mode === 'light' ? '#000000' : '#ffffff'} />
+                                                <path d={text[1]} />
                                             </svg>
                                         </Avatar>
                                     </ListItemIcon>
@@ -211,13 +211,14 @@ export default function Dashboards({ handleMode ,handleDashbordState}) {
                                             bgcolor: 'inherit'
                                         }}
                                         alt={backToHome[0]}
-                                        variant="square" >
+                                        variant="square"
+                                    >
                                         <svg
-
                                             xmlns="http://www.w3.org/2000/svg"
                                             viewBox="0 0 24 24"
                                             width="24"
                                             height="24"
+                                            fill={theme.palette.mode === 'light' ? '#000000' : '#ffffff'}
                                         >
                                             <path d={backToHome[1]} />
                                         </svg>
@@ -229,7 +230,7 @@ export default function Dashboards({ handleMode ,handleDashbordState}) {
                         </ListItem>
                     </List>
                 </Drawer >
-                <Grid item m='12vh 2vw 0 6vw'>
+                <Grid item m='0 2vw 0 6vw'>
                     {(user.role === 'admin' ? adminBoard : (user.role === 'seller' ? sellerBoard : (user.role === 'renter' ? renterBoard : userBoard))).map((boardComponent, index) => (
                         board === index && boardComponent
                     ))}

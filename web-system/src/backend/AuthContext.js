@@ -1,18 +1,20 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import * as React from 'react';
 import { GoogleAuthProvider, createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth';
 import { db, auth } from './secrets';
 import { doc, getDoc } from 'firebase/firestore';
 import { addUser } from './db/users';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-const AuthContext = createContext();
+const AuthContext = React.createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [user, setUser] = React.useState(null);
+    const [loading, setLoading] = React.useState(true);
+    const [dash, setDash] = React.useState(false)
     const navigate = useNavigate()
+    const location = useLocation()
 
-    useEffect(() => {
+    React.useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
             if (currentUser) {
                 try {
@@ -36,11 +38,11 @@ export const AuthProvider = ({ children }) => {
         return () => unsubscribe();
     }, []);
     //registering
-    const register = (fname, lname, email, password,role) => createUserWithEmailAndPassword(auth, email, password)
+    const register = (fname, lname, email, password, role) => createUserWithEmailAndPassword(auth, email, password)
         .then((result) => {
             const user = result.user;
             const userid = user.uid
-            addUser(userid, fname, lname, email, "", "", "", "",role)
+            addUser(userid, fname, lname, email, "", "", "", "", role)
         })
 
     //login
@@ -60,16 +62,27 @@ export const AuthProvider = ({ children }) => {
     const logout = () => signOut(auth);
 
     //back to home
-    const home =()=>{
-        sessionStorage.setItem('dash',!sessionStorage.getItem('dash'))
+    const home = () => {
+        sessionStorage.setItem('dash', !sessionStorage.getItem('dash'))
         navigate('/')
     }
 
+    // dash on off
+    React.useEffect(() => {
+        // Update the state when the URL changes
+        if (location.pathname === "/dashboard") {
+            setDash(false)
+        }
+        else {
+            setDash(true)
+        }
+    }, [location]);
+    
     return (
-        <AuthContext.Provider value={{ user, register, login, logout, reset, google ,home}}>
+        <AuthContext.Provider value={{ user, register, login, logout, reset, google, home, dash }}>
             {loading ? "" : children}
         </AuthContext.Provider>
     );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => React.useContext(AuthContext);

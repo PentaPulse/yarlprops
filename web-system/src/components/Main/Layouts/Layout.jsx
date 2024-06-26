@@ -4,7 +4,8 @@ import { ToastContainer } from 'react-toastify';
 import { Login, Register, Welcome } from '../../common/Welcome/Welcome';
 import NavigationBar from '../../common/NavigationBar/NavigationBar';
 import Footer from '../../common/Footer/Footer';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../../backend/AuthContext';
 
 const style = {
     position: 'absolute',
@@ -22,11 +23,12 @@ const style = {
     textAlign: "center"
 };
 
-function Layout({ children, handleMode, handleDashboardState, dash }) {
+function Layout({ children, handleMode, handleDashboardState }) {
     const [open, setOpen] = useState(false);
     const [welcome, setWelcome] = useState(false)
     const [login, setLogin] = useState(false)
     const navigate = useNavigate();
+    const {dash}=useAuth();
 
     const showWelcome = () => {
         setOpen(!open);
@@ -52,9 +54,10 @@ function Layout({ children, handleMode, handleDashboardState, dash }) {
     const handleBackButton = () => {
         setWelcome(true)
     }
+    
     return (
         <>
-            <NavigationBar handleLoginButton={showWelcome} handleMode={handleMode} />
+            {dash && <NavigationBar handleLoginButton={showWelcome} handleMode={handleMode} />}
             <ToastContainer />
             <div className='d-flex justify-content-center align-items-center mt-30 text-center'>
                 <Modal
@@ -79,7 +82,7 @@ function Layout({ children, handleMode, handleDashboardState, dash }) {
             <Container sx={{ marginTop: '12vh' }}>
                 {children}
             </Container>
-            <Footer />
+            {dash && <Footer />}
         </>
     )
 }
