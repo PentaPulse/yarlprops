@@ -10,7 +10,7 @@ import { useAuth } from '../../../backend/AuthContext'
 
 import { MaterialUISwitch, ProfileBox } from '../../common/NavigationBar/NavigationBar';
 import { adminBoard, adminMenu, backToHome, renterBoard, renterMenu, sellerBoard, sellerMenu, userBoard, userMenu } from './menuLists';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 //menus
 
@@ -164,25 +164,7 @@ export default function Dashboards({ handleMode }) {
                                             justifyContent: 'center',
                                         }}
                                     >
-                                        <Avatar
-                                            sx={{
-                                                width: 24,
-                                                height: 24,
-                                                bgcolor: 'inherit'
-                                            }}
-                                            alt={text[0]}
-                                            variant="square" >
-                                            <svg
-
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                viewBox="0 0 24 24"
-                                                width="100%"
-                                                height="100%"
-                                                fill={theme.palette.mode === 'light' ? '#000000' : '#ffffff'}
-                                            >
-                                                <path d={text[1]} />
-                                            </svg>
-                                        </Avatar>
+                                        {text[1]}
                                     </ListItemIcon>
                                     <ListItemText primary={text[0]} sx={{ opacity: open ? 1 : 0 }} onClick={() => setBoard(index)} />
                                 </ListItemButton>

@@ -5,12 +5,14 @@ import MenuIcon from '@mui/icons-material/Menu';
 import AdbIcon from '@mui/icons-material/Adb';
 import { authUser } from '../../../backend/autharization';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../../backend/AuthContext';
 
 const pages = ['Home', 'Guide', 'About', 'Contact'];
 
 export default function NavigationBar({ handleLoginButton, handleMode ,showDashboard}) {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [isLogged, setIsLogged] = React.useState(false);
+    const {user} = useAuth()
     const theme = useTheme();
 
     const handleOpenNavMenu = (event) => {
@@ -21,7 +23,6 @@ export default function NavigationBar({ handleLoginButton, handleMode ,showDashb
     };
     
     React.useEffect(() => {
-        const unsubscribe = authUser.onAuthStateChanged((user) => {
             if (user) {
                 setIsLogged(true);
                 sessionStorage.setItem('pp', user.photoURL);
@@ -29,11 +30,7 @@ export default function NavigationBar({ handleLoginButton, handleMode ,showDashb
             } else {
                 setIsLogged(false);
             }
-        });
-
-        // Cleanup subscription on unmount
-        return () => unsubscribe();
-    }, [])
+    }, [user])
 
     return (
         <AppBar position="fixed" sx={{

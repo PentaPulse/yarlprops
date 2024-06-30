@@ -4,7 +4,7 @@ import { ToastContainer } from 'react-toastify';
 import { Login, Register, Welcome } from '../../common/Welcome/Welcome';
 import NavigationBar from '../../common/NavigationBar/NavigationBar';
 import Footer from '../../common/Footer/Footer';
-import { useLocation, useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../backend/AuthContext';
 
 const style = {
