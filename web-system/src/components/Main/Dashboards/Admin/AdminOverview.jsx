@@ -108,7 +108,7 @@ function UsersTable() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {users.map((usr, index) => (
+                            {users.slice(0,5).map((usr, index) => (
                                 <TableRow>
                                     <TableCell>{index + 1}</TableCell>
                                     <TableCell>{usr.fname + ' ' + usr.lname}</TableCell>
@@ -153,7 +153,7 @@ function ContactResponsesTable() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {responses.map((response, index) => (
+                            {responses.slice(0,5).map((response, index) => (
                                 <TableRow>
                                     <TableCell>{index + 1}</TableCell>
                                     <TableCell>{response.custName}</TableCell>
@@ -198,7 +198,7 @@ function ProductsTable() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {products.map((pro, index) => (
+                            {products.slice(0,5).map((pro, index) => (
                                 <TableRow>
                                     <TableCell>{index + 1}</TableCell>
                                     <TableCell>{pro.name}</TableCell>
