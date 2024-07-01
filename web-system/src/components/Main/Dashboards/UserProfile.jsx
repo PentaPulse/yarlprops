@@ -1,31 +1,32 @@
-import { Accordion, AccordionDetails, AccordionSummary, Avatar, Badge, Box, Grid, TextField, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Avatar, Box, Grid, TextField, Typography } from '@mui/material';
 import * as React from 'react';
 import { useAuth } from '../../../backend/AuthContext';
-import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import PropTypes from 'prop-types';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Fade from '@mui/material/Fade';
 
 export default function Profile() {
   const { user } = useAuth();
+  const [expanded, setExpanded] = React.useState('panel1');
+
+  const handleExpansion = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
+  };
 
   return (
     <>
       <Grid container spacing={2} columns={12} mt={2}>
         <Grid container justifyContent="center" alignItems="center" >
-          <Badge
-            overlap="circular"
-            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-            badgeContent={<CameraAltIcon />}
-          >
-            <Avatar alt="Profile Picture" src={user.photoUrl || sessionStorage.getItem('pp')} sx={{ width: 150, height: 150 }} />
-          </Badge>
+          <Avatar alt="Profile Picture" src={user.photoUrl || sessionStorage.getItem('pp')} sx={{ width: 150, height: 150 }} />
           <Grid item>
             <TextField
-              required
               label="Name"
               defaultValue={user.displayName}
               fullWidth
               margin="normal"
+              InputProps={{
+                readOnly: true,
+              }}
             />
             <TextField
               required
@@ -33,6 +34,9 @@ export default function Profile() {
               defaultValue={user.email || 'example@p5p.lk'}
               fullWidth
               margin="normal"
+              InputProps={{
+                readOnly: true,
+              }}
             />
             <TextField
               required
@@ -40,11 +44,23 @@ export default function Profile() {
               defaultValue={user.phone || '+94 12 345 6789'}
               fullWidth
               margin="normal"
+              InputProps={{
+                readOnly: true,
+              }}
             />
           </Grid>
         </Grid>
         <Grid item xs={12}>
-          <Accordion defaultExpanded>
+          <Accordion
+            expanded={expanded === 'panel1'}
+            onChange={handleExpansion('panel1')}
+            TransitionComponent={Fade}
+            transitionDuration={400}
+            sx={{
+              '& .MuiAccordionSummary-content': { height: expanded === 'panel1' ? 'auto' : 0 },
+              '& .MuiAccordionDetails-root': { display: expanded === 'panel1' ? 'block' : 'none' },
+            }}
+          >
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1-content"
@@ -53,10 +69,19 @@ export default function Profile() {
               Profile Settings
             </AccordionSummary>
             <AccordionDetails>
-              <ProfileSettings/>
+              <ProfileSettings />
             </AccordionDetails>
           </Accordion>
-          <Accordion>
+          <Accordion
+            expanded={expanded === 'panel2'}
+            onChange={handleExpansion('panel2')}
+            TransitionComponent={Fade}
+            transitionDuration={400}
+            sx={{
+              '& .MuiAccordionSummary-content': { height: expanded === 'panel2' ? 'auto' : 0 },
+              '& .MuiAccordionDetails-root': { display: expanded === 'panel2' ? 'block' : 'none' },
+            }}
+          >
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel2-content"
@@ -65,7 +90,7 @@ export default function Profile() {
               Account Settings
             </AccordionSummary>
             <AccordionDetails>
-              <AccountSettings/>
+              <AccountSettings />
             </AccordionDetails>
           </Accordion>
         </Grid>

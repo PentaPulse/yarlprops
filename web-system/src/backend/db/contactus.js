@@ -1,7 +1,7 @@
 import firebase from "firebase/compat/app";
 import "firebase/firestore";
-import { firebaseConfig } from "./secrets";
-import { doc, setDoc, getFirestore, collection, getDoc } from "firebase/firestore";
+import { firebaseConfig } from "../secrets";
+import { doc, setDoc, getFirestore, collection, getDocs } from "firebase/firestore";
 
 const app = firebase.initializeApp(firebaseConfig)
 
@@ -20,3 +20,16 @@ export const sendMessage = async (name, email, message) => {
         status:'new'
     })
 }
+
+async function fetchContactUsResponsesList() {
+    try {
+        const querySnapshot = await getDocs(contactRef);
+        const ContactUsResponsesList = querySnapshot.docs.map(doc => doc.data().email);
+        return ContactUsResponsesList;
+    } catch (error) {
+        console.error("Error fetching user emails:", error);
+        return [];
+    }
+}
+
+export {fetchContactUsResponsesList}

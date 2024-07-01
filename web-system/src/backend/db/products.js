@@ -58,4 +58,11 @@ const fetchSelectedProduct = async (pid) => {
         return [];
     }
 }
+
+//count products
+export const countProducts = async () => {
+    const productsSnapshot = await getDocs(collection(db, 'products'));
+    return productsSnapshot.size;
+};
+
 export { db, addProduct, fetchProducts, fetchSelectedProduct }

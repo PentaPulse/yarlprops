@@ -1,19 +1,14 @@
 import firebase from "firebase/compat/app";
 import "firebase/firestore";
 import { firebaseConfig } from "../secrets";
-import { doc, setDoc, getFirestore, collection, getDoc, getDocs } from "firebase/firestore";
-import { onAuthStateChanged } from "firebase/auth";
-import { authUser } from "../autharization";
+import { doc, setDoc, collection, getDoc, getDocs, where, query, getFirestore } from "firebase/firestore";
 
 const app = firebase.initializeApp(firebaseConfig)
 
 const db = getFirestore(app);
 
 //reference
-const adminRef = collection(db, "admins")
-const sellerRef = collection(db, "sellers")
-const renterRef = collection(db, "renters")
-const userRef = collection(db, "users")
+const userRef = collection(db, "systemusers")
 
 //functions
 //initialize the user initially in the registering process
@@ -54,60 +49,41 @@ const getUserInfo = async (uid) => {
 }
 
 // fetching lists
-async function fetchAdminList() {
-    try {
-        const querySnapshot = await getDocs(adminRef);
-        const adminList = querySnapshot.docs.map(doc => doc.data().email);
-        return adminList;
-    } catch (error) {
-        console.error("Error fetching admin emails:", error);
-        return [];
-    }
-}
-
-async function fetchSellerList() {
-    try {
-        const querySnapshot = await getDocs(sellerRef);
-        const sellerList = querySnapshot.docs.map(doc => doc.data().email);
-        return sellerList;
-    } catch (error) {
-        console.error("Error fetching seller emails:", error);
-        return [];
-    }
-}
-
-async function fetchRenterList() {
-    try {
-        const querySnapshot = await getDocs(renterRef);
-        const renterList = querySnapshot.docs.map(doc => doc.data().email);
-        return renterList;
-    } catch (error) {
-        console.error("Error fetching seller emails:", error);
-        return [];
-    }
-}
-
 async function fetchUserList() {
     try {
-        const querySnapshot = await getDocs(userRef)
-        const userList = querySnapshot.docs.map(doc => doc.data().email)
-        return userList
-    } catch (e) {
-        console.error("Error fetching user emails:", e)
-        return []
+        const querySnapshot = await getDocs(userRef);
+        const usersList = querySnapshot.docs.map(doc => doc.data());
+        return usersList;
+    } catch (error) {
+        console.error("Error fetching user emails:", error);
+        return [];
     }
 }
 
-//check for normal user
-async function isNUser() {
-    const nUserList = await fetchUserList();
-    onAuthStateChanged(authUser, user => {
-        if (user) {
-            const userEmail = user.email
-            if (nUserList.includes(userEmail)) {
-                return true;
-            }
-        }
-    })
+//counts
+async function countUsersFromRef(userRef) {
+    try {
+        const querySnapshot = await getDocs(userRef);
+        return querySnapshot.size;
+    } catch (error) {
+        console.error("Error fetching user count:", error);
+        return 0;
+    }
 }
-export { addUser, getUserInfo, fetchAdminList, fetchSellerList, fetchRenterList, fetchUserList, isNUser };
+
+export const countUsers = async () => {
+    const userRef = collection(db ,'users');
+    return await countUsersFromRef(userRef);
+};
+
+export const countSellers = async () => {
+    const userRef = query(collection(db, 'users'), where('role', '==', 'seller'));
+    return await countUsersFromRef(userRef);
+};
+
+export const countRenters = async () => {
+    const userRef = query(collection(db, 'users'), where('role', '==', 'renter'));
+    return await countUsersFromRef(userRef);
+};
+
+export { addUser, getUserInfo, fetchUserList};
