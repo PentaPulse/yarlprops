@@ -88,7 +88,6 @@ function Admins() {
                         </Table>
                     </TableContainer>
                 </Paper>
-
                 <Modal
                     open={open}
                     onClose={handleOpen}

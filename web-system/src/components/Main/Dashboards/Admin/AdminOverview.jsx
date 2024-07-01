@@ -1,10 +1,10 @@
 import React from 'react';
-import { Box, Grid, Paper, Typography,  Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
+import { Box, Grid, Paper, Typography, Table, TableHead, TableRow, TableCell, TableBody, TableContainer } from '@mui/material';
 import { countRenters, countSellers, countUsers, fetchUserList } from '../../../../backend/db/users';
 import { fetchContactUsResponsesList } from '../../../../backend/db/contactus';
 import { countProducts, fetchProducts } from '../../../../backend/db/products';
 
- export default function AdminOverview() {
+export default function AdminOverview() {
     const [userCount, setUserCount] = React.useState(0);
     const [sellerCount, setSellerCount] = React.useState(0);
     const [renterCount, setRenterCount] = React.useState(0);
@@ -68,19 +68,13 @@ import { countProducts, fetchProducts } from '../../../../backend/db/products';
                     </Paper>
                 </Grid>
                 <Grid item xs={12}>
-                    <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                        <UsersTable />
-                    </Paper>
+                    <UsersTable />
                 </Grid>
                 <Grid item xs={12}>
-                    <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                        <ContactResponsesTable />
-                    </Paper>
+                    <ContactResponsesTable />
                 </Grid>
                 <Grid item xs={12}>
-                    <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                        <ProductsTable />
-                    </Paper>
+                    <ProductsTable />
                 </Grid>
             </Grid>
         </Box>
@@ -97,30 +91,37 @@ function UsersTable() {
         }
         fetchData();
     }, []);
+    const cols = ["No", "Name", "Email", "Role"]
     return (
-        <div>
+        <>
             <Typography variant="h6" gutterBottom>
                 Users
             </Typography>
-            <Table size="small">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Name</TableCell>
-                        <TableCell>Email</TableCell>
-                        <TableCell>Role</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {users.map((user) => (
-                        <TableRow key={user.id}>
-                            <TableCell>{user.fname}</TableCell>
-                            <TableCell>{user.email}</TableCell>
-                            <TableCell>{user.role}</TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </div>
+            <Paper sx={{ width: '100%', mb: 4 }}>
+                <TableContainer sx={{ maxHeight: 450 }}>
+                    <Table stickyHeader>
+                        <TableHead>
+                            <TableRow>
+                                {cols.map((column) => (
+                                    <TableCell style={{ backgroundColor: 'black', color: 'white' }} >{column}</TableCell>
+                                ))}
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {users.map((usr, index) => (
+                                <TableRow>
+                                    <TableCell>{index + 1}</TableCell>
+                                    <TableCell>{usr.fname + ' ' + usr.lname}</TableCell>
+                                    <TableCell>{usr.email}</TableCell>
+                                    <TableCell>{usr.role}</TableCell>
+
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Paper>
+        </>
     );
 }
 
@@ -135,32 +136,37 @@ function ContactResponsesTable() {
         }
         fetchData();
     }, []);
+    const cols = ['No', 'Name', 'Email', 'Status', 'Message']
     return (
-        <div>
+        <>
             <Typography variant="h6" gutterBottom>
-                Contact Us Responses
+                Contact us responses
             </Typography>
-            <Table size="small">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Name</TableCell>
-                        <TableCell>Email</TableCell>
-                        <TableCell>Status</TableCell>
-                        <TableCell>Message</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {responses.map((response) => (
-                        <TableRow key={response.id}>
-                            <TableCell>{response.custName}</TableCell>
-                            <TableCell>{response.custEmail}</TableCell>
-                            <TableCell>{response.status}</TableCell>
-                            <TableCell>{response.custMessage}</TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </div>
+            <Paper sx={{ width: '100%', mb: 4 }}>
+                <TableContainer sx={{ maxHeight: 450 }}>
+                    <Table stickyHeader>
+                        <TableHead>
+                            <TableRow>
+                                {cols.map((column) => (
+                                    <TableCell style={{ backgroundColor: 'black', color: 'white' }} >{column}</TableCell>
+                                ))}
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {responses.map((response, index) => (
+                                <TableRow>
+                                    <TableCell>{index + 1}</TableCell>
+                                    <TableCell>{response.custName}</TableCell>
+                                    <TableCell>{response.custEmail}</TableCell>
+                                    <TableCell>{response.status}</TableCell>
+                                    <TableCell>{response.custMessage}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Paper>
+        </>
     );
 }
 
@@ -175,31 +181,36 @@ function ProductsTable() {
         }
         fetchData();
     }, []);
+    const cols = ["No", "Name", "Category", "Price"]
     return (
-        <div>
+        <>
             <Typography variant="h6" gutterBottom>
                 Products
             </Typography>
-            <Table size="small">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>ID</TableCell>
-                        <TableCell>Name</TableCell>
-                        <TableCell>Category</TableCell>
-                        <TableCell>Price</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {products.map((product) => (
-                        <TableRow key={product.id}>
-                            <TableCell>{product.id}</TableCell>
-                            <TableCell>{product.name}</TableCell>
-                            <TableCell>{product.category}</TableCell>
-                            <TableCell>${product.price}</TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </div>
+            <Paper sx={{ width: '100%', mb: 4 }}>
+                <TableContainer sx={{ maxHeight: 450 }}>
+                    <Table stickyHeader>
+                        <TableHead>
+                            <TableRow>
+                                {cols.map((column) => (
+                                    <TableCell style={{ backgroundColor: 'black', color: 'white' }} >{column}</TableCell>
+                                ))}
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {products.map((pro, index) => (
+                                <TableRow>
+                                    <TableCell>{index + 1}</TableCell>
+                                    <TableCell>{pro.name}</TableCell>
+                                    <TableCell>{pro.type}</TableCell>
+                                    <TableCell>{pro.price}</TableCell>
+
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Paper>
+        </>
     );
 }
