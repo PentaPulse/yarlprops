@@ -9,9 +9,10 @@ import PrivateRoute from '../backend/PrivateRoute';
 import AdminProducts from './Main/Dashboards/Admin/AdminProducts';
 import Dashboards from './Main/Dashboards/Dashboards';
 import Layout from './Main/Layouts/Layout';
+import Products from './Main/Layouts/Products/Products';
 //import { ProductProvider } from '../backend/ProductContext';
 
-function Routings({ handleMode, handleDashboardState, dash }) {
+function Routings({ handleMode }) {
   return (
     <>
         <AuthProvider>
@@ -22,7 +23,8 @@ function Routings({ handleMode, handleDashboardState, dash }) {
               <Route path='/home' element={<Home />} />
               <Route path='/guide' element={<Guide />} />
               <Route path='/contact' element={<Contact />} />
-              <Route path="/product/:id" element={<ProductPage />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/products/:id" element={<ProductPage />} />
             </Routes>
           </Layout>
           <Routes>

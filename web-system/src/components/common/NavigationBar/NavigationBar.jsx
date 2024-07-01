@@ -7,7 +7,7 @@ import { authUser } from '../../../backend/autharization';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../backend/AuthContext';
 
-const pages = ['Home', 'Guide', 'About', 'Contact'];
+const pages = ['Home','Products',/* 'Guide',*/ 'About', 'Contact'];
 
 export default function NavigationBar({ handleLoginButton, handleMode ,showDashboard}) {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -163,7 +163,6 @@ export function ProfileBox({ isLogged }) {
     };
 
     const handleDashboards = (e) => {
-        sessionStorage.setItem('dash',false)
         navigate(`/dashboard`)
     }
 
