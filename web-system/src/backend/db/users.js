@@ -12,13 +12,13 @@ const userRef = collection(db, "systemusers")
 
 //functions
 //initialize the user initially in the registering process
-const addUser = async (uid, fname, lname, email, phone, gender, picture, address) => {
+export const addUser = async (uid, fname, lname, email, phone, gender, picture, address) => {
     try {
         const userRef = doc(db, 'systemusers', uid);
         const userSnap = await getDoc(userRef)
         if (!userSnap.exists()) {
             await setDoc(userRef, {
-                uid:uid,
+                uid: uid,
                 fname: fname,
                 lname: lname,
                 email: email,
@@ -28,7 +28,7 @@ const addUser = async (uid, fname, lname, email, phone, gender, picture, address
                 address: address,
                 role: "buyer"
             });
-        } else{
+        } else {
             console.log("user exists")
         }
 
@@ -38,7 +38,7 @@ const addUser = async (uid, fname, lname, email, phone, gender, picture, address
 };
 
 // getting user info
-const getUserInfo = async (uid) => {
+export const getUserInfo = async (uid) => {
     const userSnap = await getDoc(userRef, uid)
     if (userSnap.exists()) {
         console.log(" doc data: ", userSnap.data());
@@ -49,7 +49,7 @@ const getUserInfo = async (uid) => {
 }
 
 // fetching lists
-async function fetchUserList() {
+export const fetchUserList = async () => {
     try {
         const querySnapshot = await getDocs(userRef);
         const usersList = querySnapshot.docs.map(doc => doc.data());
@@ -61,9 +61,9 @@ async function fetchUserList() {
 }
 
 //counts
-async function countUsersFromRef(userRef) {
+async function countUsersFromRef(Ref) {
     try {
-        const querySnapshot = await getDocs(userRef);
+        const querySnapshot = await getDocs(Ref);
         return querySnapshot.size;
     } catch (error) {
         console.error("Error fetching user count:", error);
@@ -72,18 +72,16 @@ async function countUsersFromRef(userRef) {
 }
 
 export const countUsers = async () => {
-    const userRef = collection(db ,'users');
-    return await countUsersFromRef(userRef);
+    const usersRef = collection(db, 'systemusers');
+    return await countUsersFromRef(usersRef);
 };
 
 export const countSellers = async () => {
-    const userRef = query(collection(db, 'users'), where('role', '==', 'seller'));
+    const userRef = query(collection(db, 'systemusers'), where('role', '==', 'seller'));
     return await countUsersFromRef(userRef);
 };
 
 export const countRenters = async () => {
-    const userRef = query(collection(db, 'users'), where('role', '==', 'renter'));
+    const userRef = query(collection(db, 'systemusers'), where('role', '==', 'renter'));
     return await countUsersFromRef(userRef);
 };
-
-export { addUser, getUserInfo, fetchUserList};

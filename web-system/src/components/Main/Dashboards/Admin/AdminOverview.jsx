@@ -6,30 +6,26 @@ import { countProducts, fetchProducts } from '../../../../backend/db/products';
 
 function AdminOverview() {
     const [userCount, setUserCount] = React.useState(0);
-  const [sellerCount, setSellerCount] = React.useState(0);
-  const [renterCount, setRenterCount] = React.useState(0);
-  const [productCount, setProductCount] = React.useState(0);
+    const [sellerCount, setSellerCount] = React.useState(0);
+    const [renterCount, setRenterCount] = React.useState(0);
+    const [productCount, setProductCount] = React.useState(0);
 
-  React.useEffect(() => {
-    const fetchCounts = async () => {
-      const users = await countUsers();
-      const sellers = await countSellers();
-      const renters = await countRenters();
-      const products = await countProducts();
-      setUserCount(users);
-      setSellerCount(sellers);
-      setRenterCount(renters);
-      setProductCount(products);
-    };
+    React.useEffect(() => {
+        const fetchCounts = async () => {
+            const users = await countUsers();
+            const sellers = await countSellers();
+            const renters = await countRenters();
+            const products = await countProducts();
+            setUserCount(users);
+            setSellerCount(sellers);
+            setRenterCount(renters);
+            setProductCount(products);
+        };
 
-    fetchCounts();
-  }, []);
+        fetchCounts();
+    }, []);
     return (
         <Box sx={{ p: 3 }}>
-            <Typography variant="h4" gutterBottom>
-                Dashboard
-            </Typography>
-            <Divider sx={{ mb: 2 }} />
             <Grid container spacing={3}>
                 <Grid item xs={12} md={3}>
                     <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: 150 }}>
@@ -104,31 +100,31 @@ function UsersTable() {
         fetchData();
     }, []);
     return (
-      <div>
-        <Typography variant="h6" gutterBottom>
-          Users
-        </Typography>
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Role</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {users.map((user) => (
-              <TableRow key={user.id}>
-                <TableCell>{user.fname}</TableCell>
-                <TableCell>{user.email}</TableCell>
-                <TableCell>{user.role}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+        <div>
+            <Typography variant="h6" gutterBottom>
+                Users
+            </Typography>
+            <Table size="small">
+                <TableHead>
+                    <TableRow>
+                        <TableCell>Name</TableCell>
+                        <TableCell>Email</TableCell>
+                        <TableCell>Role</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {users.map((user) => (
+                        <TableRow key={user.id}>
+                            <TableCell>{user.fname}</TableCell>
+                            <TableCell>{user.email}</TableCell>
+                            <TableCell>{user.role}</TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </div>
     );
-  }
+}
 
 
 function ContactResponsesTable() {
@@ -142,33 +138,33 @@ function ContactResponsesTable() {
         fetchData();
     }, []);
     return (
-      <div>
-        <Typography variant="h6" gutterBottom>
-          Contact Us Responses
-        </Typography>
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Message</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {responses.map((response) => (
-              <TableRow key={response.id}>
-                <TableCell>{response.id}</TableCell>
-                <TableCell>{response.name}</TableCell>
-                <TableCell>{response.email}</TableCell>
-                <TableCell>{response.message}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+        <div>
+            <Typography variant="h6" gutterBottom>
+                Contact Us Responses
+            </Typography>
+            <Table size="small">
+                <TableHead>
+                    <TableRow>
+                        <TableCell>ID</TableCell>
+                        <TableCell>Name</TableCell>
+                        <TableCell>Email</TableCell>
+                        <TableCell>Message</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {responses.map((response) => (
+                        <TableRow key={response.id}>
+                            <TableCell>{response.id}</TableCell>
+                            <TableCell>{response.name}</TableCell>
+                            <TableCell>{response.email}</TableCell>
+                            <TableCell>{response.message}</TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </div>
     );
-  }
+}
 
 
 function ProductsTable() {
@@ -182,30 +178,30 @@ function ProductsTable() {
         fetchData();
     }, []);
     return (
-      <div>
-        <Typography variant="h6" gutterBottom>
-          Products
-        </Typography>
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Category</TableCell>
-              <TableCell>Price</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {products.map((product) => (
-              <TableRow key={product.id}>
-                <TableCell>{product.id}</TableCell>
-                <TableCell>{product.name}</TableCell>
-                <TableCell>{product.category}</TableCell>
-                <TableCell>${product.price}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+        <div>
+            <Typography variant="h6" gutterBottom>
+                Products
+            </Typography>
+            <Table size="small">
+                <TableHead>
+                    <TableRow>
+                        <TableCell>ID</TableCell>
+                        <TableCell>Name</TableCell>
+                        <TableCell>Category</TableCell>
+                        <TableCell>Price</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {products.map((product) => (
+                        <TableRow key={product.id}>
+                            <TableCell>{product.id}</TableCell>
+                            <TableCell>{product.name}</TableCell>
+                            <TableCell>{product.category}</TableCell>
+                            <TableCell>${product.price}</TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </div>
     );
-  }
+}
