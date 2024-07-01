@@ -15,7 +15,6 @@ function Admins() {
                 const querySnapshot = await getDocs(q);
                 if (!querySnapshot.empty) {
                     const adminsData = querySnapshot.docs.map(doc => doc.data());
-                    console.log(adminsData)
                     setAdmins(adminsData);
                 } else {
                     console.log('No admin documents found');

@@ -17,19 +17,17 @@ export const sendMessage = async (name, email, message) => {
         custName: name,
         custEmail: email,
         custMessage: message,
-        status:'new'
+        status: 'new'
     })
 }
 
-async function fetchContactUsResponsesList() {
+export const fetchContactUsResponsesList = async () => {
     try {
         const querySnapshot = await getDocs(contactRef);
-        const ContactUsResponsesList = querySnapshot.docs.map(doc => doc.data().email);
-        return ContactUsResponsesList;
+        const contactUsResponsesList = querySnapshot.docs.map(doc => doc.data());
+        return contactUsResponsesList;
     } catch (error) {
-        console.error("Error fetching user emails:", error);
+        console.error("Error fetching contact us:", error);
         return [];
     }
 }
-
-export {fetchContactUsResponsesList}

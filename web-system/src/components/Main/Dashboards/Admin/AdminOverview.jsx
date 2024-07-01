@@ -1,10 +1,10 @@
 import React from 'react';
-import { Box, Grid, Paper, Typography, Divider, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
+import { Box, Grid, Paper, Typography,  Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
 import { countRenters, countSellers, countUsers, fetchUserList } from '../../../../backend/db/users';
 import { fetchContactUsResponsesList } from '../../../../backend/db/contactus';
 import { countProducts, fetchProducts } from '../../../../backend/db/products';
 
-function AdminOverview() {
+ export default function AdminOverview() {
     const [userCount, setUserCount] = React.useState(0);
     const [sellerCount, setSellerCount] = React.useState(0);
     const [renterCount, setRenterCount] = React.useState(0);
@@ -87,8 +87,6 @@ function AdminOverview() {
     );
 }
 
-export default AdminOverview;
-
 function UsersTable() {
     const [users, setUsers] = React.useState([]);
 
@@ -145,19 +143,19 @@ function ContactResponsesTable() {
             <Table size="small">
                 <TableHead>
                     <TableRow>
-                        <TableCell>ID</TableCell>
                         <TableCell>Name</TableCell>
                         <TableCell>Email</TableCell>
+                        <TableCell>Status</TableCell>
                         <TableCell>Message</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {responses.map((response) => (
                         <TableRow key={response.id}>
-                            <TableCell>{response.id}</TableCell>
-                            <TableCell>{response.name}</TableCell>
-                            <TableCell>{response.email}</TableCell>
-                            <TableCell>{response.message}</TableCell>
+                            <TableCell>{response.custName}</TableCell>
+                            <TableCell>{response.custEmail}</TableCell>
+                            <TableCell>{response.status}</TableCell>
+                            <TableCell>{response.custMessage}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
