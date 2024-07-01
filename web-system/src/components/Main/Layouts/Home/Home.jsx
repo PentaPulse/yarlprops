@@ -2,7 +2,7 @@ import * as React from 'react';
 import Slidshow from './Slideshow/Slidshow';
 import Categories from './Filters/Categories';
 import ProductsContents from './ProContent/ProductsContents';
-import { Divider, Grid, Pagination, TextField } from '@mui/material';
+import { Divider, Grid, TextField } from '@mui/material';
 
 function Home() {
   const [searchTerm, setSearchTerm] = React.useState('');
@@ -27,7 +27,6 @@ function Home() {
         </Grid>
         <Grid item md={9}>
           <ProductsContents searchTerm={searchTerm}/>
-          <Pagination sx={{ width: '100%' }} count={10} />
         </Grid>
       </Grid>
     </>

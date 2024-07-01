@@ -1,11 +1,39 @@
-import React from 'react'
+import { Grid, TextField } from '@mui/material';
+import * as React from 'react'
+import ProductsContents from '../Home/ProContent/ProductsContents';
 
 function Products() {
-  return (
-    <div>
-      
-    </div>
-  )
+    const [searchTerm, setSearchTerm] = React.useState('');
+
+    return (
+        <>
+            <Grid container justifyContent='center' spacing={3} columns={12}>
+                <Grid item xs={11} sm={11} md={11} lg={11}>
+                    <TextField
+                        label="Search"
+                        variant="outlined"
+                        fullWidth
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                </Grid>
+                <Grid item md={3}>
+                    <Categories />
+                </Grid>
+                <Grid item md={9}>
+                    <ProductsContents searchTerm={searchTerm} />
+                </Grid>
+            </Grid>
+        </>
+    )
 }
 
 export default Products;
+
+function Categories(){
+    return(
+        <>
+        Filters
+        </>
+    );
+}

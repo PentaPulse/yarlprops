@@ -29,7 +29,7 @@ const ProductsContents = ({ searchTerm }) => {
     }, [searchTerm]);
 
     const handleCardClick = (e) => {
-        navigate(`/product/${e}`)
+        navigate(`/products/${e}`)
     }
     return (
         <>
