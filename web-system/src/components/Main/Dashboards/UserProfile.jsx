@@ -1,16 +1,12 @@
-import { AppBar, Avatar, Badge, Box, Grid, Tab, Tabs, TextField, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Avatar, Badge, Box, Grid, TextField, Typography } from '@mui/material';
 import * as React from 'react';
 import { useAuth } from '../../../backend/AuthContext';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import PropTypes from 'prop-types';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 export default function Profile() {
   const { user } = useAuth();
-  const [value, setValue] = React.useState(0);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
 
   return (
     <>
@@ -48,24 +44,30 @@ export default function Profile() {
           </Grid>
         </Grid>
         <Grid item xs={12}>
-          <AppBar position="static">
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              indicatorColor="secondary"
-              textColor="inherit"
-              variant="fullWidth"
+          <Accordion defaultExpanded>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1-content"
+              id="panel1-header"
             >
-              <Tab label="Item One" />
-              <Tab label="Item Two" />
-            </Tabs>
-          </AppBar>
-          <TabPanel value={value} index={0}>
-            Item One
-          </TabPanel>
-          <TabPanel value={value} index={1}>
-            Item Two
-          </TabPanel>
+              Profile Settings
+            </AccordionSummary>
+            <AccordionDetails>
+              <ProfileSettings/>
+            </AccordionDetails>
+          </Accordion>
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel2-content"
+              id="panel2-header"
+            >
+              Account Settings
+            </AccordionSummary>
+            <AccordionDetails>
+              <AccountSettings/>
+            </AccordionDetails>
+          </Accordion>
         </Grid>
       </Grid>
     </>
@@ -97,3 +99,19 @@ TabPanel.propTypes = {
   index: PropTypes.number.isRequired,
   value: PropTypes.number.isRequired,
 };
+
+const ProfileSettings = () => {
+  return (
+    <>
+      dds
+    </>
+  )
+}
+
+const AccountSettings = () => {
+  return (
+    <>
+      dd
+    </>
+  )
+}
