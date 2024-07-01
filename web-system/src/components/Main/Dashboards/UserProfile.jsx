@@ -3,12 +3,9 @@ import * as React from 'react';
 import { useAuth } from '../../../backend/AuthContext';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import PropTypes from 'prop-types';
-//import SwipeableViews from 'react-swipeable-views';
-import { useTheme } from '@emotion/react';
 
 export default function Profile() {
-  const { user } = useAuth()
-  const theme = useTheme()
+  const { user } = useAuth();
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -18,35 +15,39 @@ export default function Profile() {
   return (
     <>
       <Grid container spacing={2} columns={12} mt={2}>
-        <Grid container justifyContent='center' >
+        <Grid container justifyContent="center" alignItems="center" >
           <Badge
             overlap="circular"
             anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-            badgeContent={
-              <CameraAltIcon />
-            }
+            badgeContent={<CameraAltIcon />}
           >
-            <Avatar alt='profile picyure' src={user.photoUrl || sessionStorage.getItem('pp')} sx={{ width: 150, height: 150 }} />
+            <Avatar alt="Profile Picture" src={user.photoUrl || sessionStorage.getItem('pp')} sx={{ width: 150, height: 150 }} />
           </Badge>
-          <Grid item >
+          <Grid item>
             <TextField
               required
               label="Name"
               defaultValue={user.displayName}
+              fullWidth
+              margin="normal"
             />
             <TextField
               required
               label="Email"
               defaultValue={user.email || 'example@p5p.lk'}
+              fullWidth
+              margin="normal"
             />
             <TextField
               required
-              label="Phone number"
+              label="Phone Number"
               defaultValue={user.phone || '+94 12 345 6789'}
+              fullWidth
+              margin="normal"
             />
           </Grid>
         </Grid>
-        <Grid item width='100%'>
+        <Grid item xs={12}>
           <AppBar position="static">
             <Tabs
               value={value}
@@ -59,10 +60,10 @@ export default function Profile() {
               <Tab label="Item Two" />
             </Tabs>
           </AppBar>
-          <TabPanel value={value} index={0} >
+          <TabPanel value={value} index={0}>
             Item One
           </TabPanel>
-          <TabPanel value={value} index={1} dir={theme.direction}>
+          <TabPanel value={value} index={1}>
             Item Two
           </TabPanel>
         </Grid>
@@ -71,7 +72,6 @@ export default function Profile() {
   );
 }
 
-
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -79,6 +79,7 @@ function TabPanel(props) {
     <div
       role="tabpanel"
       hidden={value !== index}
+      id={`full-width-tabpanel-${index}`}
       aria-labelledby={`full-width-tab-${index}`}
       {...other}
     >
