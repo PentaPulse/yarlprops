@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, ButtonGroup, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField } from '@mui/material';
+import { Button, ButtonGroup, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useAuth } from '../../../backend/AuthContext';
 
@@ -34,7 +34,7 @@ export function Welcome({ toLogin, toRegister, closeBox }) {
     )
 }
 
-export function Login({ handleBack ,closeBox}) {
+export function Login({ handleBack, closeBox }) {
     const theme = useTheme()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -78,58 +78,69 @@ export function Login({ handleBack ,closeBox}) {
     )
 }
 
-export function Register({ handleBack }) {
-    const [fname, setFname] = useState('')
-    const [lname, setLname] = useState('')
-    const [dname, setDname] = useState('')
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [role, setRole] = useState('buyer')
-    const {register}=useAuth()
+export function Register({ handleBack ,closeBox}) {
+    const [fname, setFname] = useState('');
+    const [lname, setLname] = useState('');
+    const [dname, setDname] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [role, setRole] = useState('');
+    const { register } = useAuth();
+
+    const roles = ['','Seller', 'Renter', 'Buyer'];
 
     const handleFname = (e) => {
-        setFname(e.target.value)
-        setDname(e.target.value + " " + lname)
-    }
-    const handleLname = (e) => {
-        setLname(e.target.value)
-        setDname(fname + " " + e.target.value)
-    }
-    const handleRegister = (e) => {
-        e.preventDefault()
-        register(fname,lname,email,password,role)
-    }
-    return (
-        <>
-            <div className="d-flex flex-column justify-content-center text-center">
-                <h2>Create account</h2>
-                <hr />
-                <div className="d-flex flex-column gap-3">
-                    <div className="d-flex gap-4 w-100">
-                        <TextField className='w-50' label="First name" value={fname} onChange={handleFname} required />
-                        <TextField className='w-50' label="Last name" value={lname} onChange={handleLname} required />
-                    </div>
+        const value = e.target.value;
+        setFname(value);
+        setDname(value + " " + lname);
+    };
 
-                    <TextField label="Display name" value={dname} />
-                    <FormControl>
-                        <FormLabel id="demo-row-radio-buttons-group-label">Role</FormLabel>
-                        <RadioGroup row name="row-radio-buttons-group" aria-labelledby="demo-row-radio-buttons-group-label">
-                            <FormControlLabel value={()=>setRole("seller")} control={<Radio/>} label="Seller"/>
-                            <FormControlLabel value="renter" control={<Radio/>} label="Renter"/>
-                            <FormControlLabel value="buyer" control={<Radio/>} label="Buyer"/>
-                        </RadioGroup>
-                    </FormControl>
-                    <TextField label="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-                    <TextField label="Password" type='password' value={password} onChange={(e) => setPassword(e.target.value)} required />
-                    {/*<TextField label="Confirm Password" type='password' />*/}
-                    <div className="text-center">
-                        <ButtonGroup aria-label='Vertical button group' className='gap-3 text-center'>
-                            <Button variant='contained' onClick={handleBack}>Back</Button>
-                            <Button variant='contained' onClick={handleRegister}>Register</Button>
-                        </ButtonGroup>
-                    </div>
+    const handleLname = (e) => {
+        const value = e.target.value;
+        setLname(value);
+        setDname(fname + " " + value);
+    };
+    const handleRegister = async (e) => {
+        e.preventDefault();
+        try {
+            await register(fname, lname,dname, email, password, role);
+            closeBox()
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    const handleSelectChange = (e) => {
+        setRole(e.target.value);
+    };
+
+    return (
+        <div className="d-flex flex-column justify-content-center text-center">
+            <h2>Create account</h2>
+            <hr />
+            <div className="d-flex flex-column gap-3">
+                <div className="d-flex gap-4 w-100">
+                    <TextField className="w-50" label="First name" value={fname} onChange={handleFname} required />
+                    <TextField className="w-50" label="Last name" value={lname} onChange={handleLname} required />
+                </div>
+                <TextField label="Display name" value={dname} disabled />
+                <FormControl style={{ marginRight: '10px', minWidth: 120 }}>
+                    <InputLabel>Role</InputLabel>
+                    <Select value={role} onChange={handleSelectChange}>
+                        {roles.map((role, index) => (
+                            <MenuItem key={index} value={role}>{role}</MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+                <TextField label="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                <TextField label="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                <div className="text-center">
+                    <ButtonGroup aria-label="Vertical button group" className="gap-3 text-center">
+                        <Button variant="contained" onClick={handleBack}>Back</Button>
+                        <Button variant="contained" onClick={handleRegister}>Register</Button>
+                    </ButtonGroup>
                 </div>
             </div>
-        </>
-    )
+        </div>
+    );
 }
