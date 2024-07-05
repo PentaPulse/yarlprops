@@ -45,8 +45,8 @@ const Profile = () => {
         </Paper>
       </Grid>
       <Grid item xs={12}>
-      <Paper sx={{ mt: 1, padding: '20px' }}>
-        <AccountSettings />
+        <Paper sx={{ mt: 1, padding: '20px' }}>
+          <AccountSettings />
         </Paper>
       </Grid>
     </Grid>
@@ -77,136 +77,154 @@ const ProfileSettings = () => {
 
   return (
     <>
-    <Typography>Profile Settings</Typography>
-    <Box
-      component="form"
-      sx={{
-        '& .MuiTextField-root': { m: 1, width: width },
-      }}
-      noValidate
-      autoComplete="off"
-    >
-      <div>
-        <TextField
-          label="First name"
-          defaultValue={user.fname}
-          InputProps={{
-            readOnly: !edit,
-          }}
-        />
-        <TextField
-          label="Last name"
-          defaultValue={user.lname}
-          InputProps={{
-            readOnly: !edit,
-          }}
-        />
-      </div>
-      <div>
-        <TextField
-          label="Email"
-          defaultValue={user.email}
-          InputProps={{
-            readOnly: true,
-          }}
-        />
-        <TextField
-          label="Phone number"
-          defaultValue={user.phoneNumber}
-          InputProps={{
-            readOnly: true,
-          }}
-        />
-      </div>
-      <div>
-        <TextField
-          label="Date of Birth"
-          type="date"
-          defaultValue={user.dob} // Assuming user.dob is in YYYY-MM-DD format
-          InputLabelProps={{
-            shrink: true,
-          }}
-          InputProps={{
-            readOnly: !edit,
-          }}
-        />
-        <TextField
-          label="My role"
-          defaultValue={user.role}
-          InputProps={{
-            readOnly: true,
-          }}
-        />
-      </div>
-      <div>
-        <TextField
-          label="Address"
-          defaultValue={user.address}
-          InputProps={{
-            readOnly: !edit,
-          }}
-        />
-        <FormControl sx={{ m: 1, width: width }} disabled={!edit}>
-          <InputLabel>Gender</InputLabel>
-          <Select value={gender} onChange={handleSelectChange}>
-            {['', 'Male', 'Female'].map((genderOption, index) => (
-              <MenuItem key={index} value={genderOption}>{genderOption}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </div>
-      <Container sx={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-        {!edit ? (
-          <Button variant="contained" color="primary" onClick={handleEditProfile}>
-            Edit Profile
-          </Button>
-        ) : (
-          <>
-            <Button variant="contained" color="primary" onClick={handleSubmit}>
-              Submit
+      <Typography>Profile Settings</Typography>
+      <Box
+        component="form"
+        sx={{
+          '& .MuiTextField-root': { m: 1, width: width },
+        }}
+        noValidate
+        autoComplete="off"
+      >
+        <div>
+          <TextField
+            label="First name"
+            defaultValue={user.fname}
+            InputProps={{
+              readOnly: !edit,
+            }}
+          />
+          <TextField
+            label="Last name"
+            defaultValue={user.lname}
+            InputProps={{
+              readOnly: !edit,
+            }}
+          />
+        </div>
+        <div>
+          <TextField
+            label="Email"
+            defaultValue={user.email}
+            InputProps={{
+              readOnly: true,
+            }}
+          />
+          <TextField
+            label="Phone number"
+            defaultValue={user.phoneNumber}
+            InputProps={{
+              readOnly: true,
+            }}
+          />
+        </div>
+        <div>
+          <TextField
+            label="Date of Birth"
+            type="date"
+            defaultValue={user.dob} // Assuming user.dob is in YYYY-MM-DD format
+            InputLabelProps={{
+              shrink: true,
+            }}
+            InputProps={{
+              readOnly: !edit,
+            }}
+          />
+          <TextField
+            label="My role"
+            defaultValue={user.role}
+            InputProps={{
+              readOnly: true,
+            }}
+          />
+        </div>
+        <div>
+          <TextField
+            label="Address"
+            defaultValue={user.address}
+            InputProps={{
+              readOnly: !edit,
+            }}
+          />
+          <FormControl sx={{ m: 1, width: width }} disabled={!edit}>
+            <InputLabel>Gender</InputLabel>
+            <Select value={gender} onChange={handleSelectChange}>
+              {['', 'Male', 'Female'].map((genderOption, index) => (
+                <MenuItem key={index} value={genderOption}>{genderOption}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </div>
+        <Container sx={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+          {!edit ? (
+            <Button variant="contained" color="primary" onClick={handleEditProfile}>
+              Edit Profile
             </Button>
-            <Button variant="contained" color="primary" onClick={handleCancel}>
-              Cancel
-            </Button>
-          </>
-        )}
-      </Container>
-    </Box>
+          ) : (
+            <>
+              <Button variant="contained" color="primary" onClick={handleSubmit}>
+                Submit
+              </Button>
+              <Button variant="contained" color="primary" onClick={handleCancel}>
+                Cancel
+              </Button>
+            </>
+          )}
+        </Container>
+      </Box>
     </>
   );
 };
 
 const AccountSettings = () => {
   const { user } = useAuth();
+  const width = '25vw'
 
   return (
     <>
-    <Typography>Account Settings</Typography>
-    <Box
-      component="form"
-      sx={{
-        '& .MuiTextField-root': { m: 1, width: '40vw' },
-      }}
-      noValidate
-      autoComplete="off"
-    >
-      <div>
-        <TextField
-          label="First name"
-          defaultValue={user.fname}
-          InputProps={{
-            readOnly: true,
-          }}
-        />
-        <TextField
-          label="Last name"
-          defaultValue={user.lname}
-          InputProps={{
-            readOnly: true,
-          }}
-        />
-      </div>
-    </Box>
+      <Typography>Account Settings</Typography>
+      <Box
+        component="form"
+        sx={{
+          '& .MuiTextField-root': { m: 1, width: width },
+        }}
+        noValidate
+        autoComplete="off"
+      >
+        <div>
+          <Typography>Change Email</Typography>
+          <TextField
+            label="Old Email"
+          />
+          <TextField
+            label="New Email"
+          />
+          <TextField
+            label="Confirm Email"
+          />
+          <Container sx={{ display: 'flex', justifyContent: 'end', marginTop: '20px' }}>
+            <Button variant="contained" color="primary">Change email</Button>
+          </Container>
+        </div>
+        <div>
+          <Typography>Change Password</Typography>
+          <TextField
+            label="Old Password"
+            type='password'
+          />
+          <TextField
+            label="New Password"
+            type='password'
+          />
+          <TextField
+            label="Confirm Password"
+            type='password'
+          />
+          <Container sx={{ display: 'flex', justifyContent: 'end', marginTop: '20px' }}>
+            <Button variant="contained" color="primary">Change Password</Button>
+          </Container>
+        </div>
+      </Box>
     </>
   );
 };
