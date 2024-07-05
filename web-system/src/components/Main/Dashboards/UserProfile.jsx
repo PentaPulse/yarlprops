@@ -1,14 +1,9 @@
 import React from 'react';
-import { useAuth } from '../../../backend/AuthContext'; // Update with the correct path
+import { useAuth } from '../../../backend/AuthContext';
 import { Box, Button, Container, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Avatar, Paper, Typography } from '@mui/material';
 
 const Profile = () => {
   const { user } = useAuth();
-  const [expanded, setExpanded] = React.useState('panel1');
-
-  const handleExpansion = (panel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
-  };
 
   return (
     <Grid container spacing={2} mt={2}>
