@@ -281,7 +281,9 @@ const AccountSettings = () => {
 
   return (
     <>
-      <Typography variant="h5">Account Settings</Typography>
+    <Box display='flex' justifyContent='center'>
+    <Typography variant="h5">Account Settings</Typography>
+    </Box>      
       <Box
         component="form"
         sx={{
