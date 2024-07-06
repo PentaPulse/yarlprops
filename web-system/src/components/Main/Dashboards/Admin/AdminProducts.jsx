@@ -19,11 +19,12 @@ const AdminProducts = () => {
 
   return (
     <>
+      <h2>PRODUCTS</h2>
       <Button
         variant="contained"
-        color="primary"
+        color="success"
         onClick={toggleAddProduct}
-        style={{ margin: '20px 0' }}
+        style={{ margin: '20px' }}
       >
         {showAddProduct ? "Back to Product List" : "Add Product"}
       </Button>
@@ -33,9 +34,9 @@ const AdminProducts = () => {
         ) : (
         <Routes>
           <Route path="/" element={<ProductList />} />
-          <Route path="/products/:pid" element={<ProductDetail />} />
+          <Route path="/product/:pid" element={<ProductDetail />} />
           <Route path="/add-product" element={<ProductForm onSuccess={handleSuccess} />} />
-          <Route path="/products/:pid/edit" element={<ProductForm onSuccess={handleSuccess} />} />
+          <Route path="/product/:pid/edit" element={<ProductForm onSuccess={handleSuccess} />} />
         </Routes>
         )}
       </Container>
