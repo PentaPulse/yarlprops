@@ -18,19 +18,20 @@ function Routings({ handleMode }) {
         <AuthProvider>
           <Layout handleMode={handleMode} >
             <Routes>
+              <Route path="/admin/products/*" element={<AdminProducts />} />
               <Route exact path='/' element={<Home />} />
               <Route path='/home' element={<Home />} />
               <Route path='/guide' element={<Guide />} />
               <Route path='/contact' element={<Contact />} />
               <Route path="/products" element={<Products />} />
               <Route path="/products/:id" element={<ProductPage />} />
-              <Route path="/admin/products/*" element={<AdminProducts />} />
             </Routes>
           </Layout>
           <Routes>
             <Route path='/dashboard' element={<PrivateRoute><Dashboards handleMode={handleMode} /></PrivateRoute>} />
           </Routes>
-        </AuthProvider>
+        </Layout>
+      </AuthProvider>
     </>
   )
 }

@@ -12,7 +12,7 @@ const userRef = collection(db, "systemusers")
 
 //functions
 //initialize the user initially in the registering process
-export const addUser = async (uid, fname, lname, email, phone, gender, picture, address) => {
+export const addUser = async (uid, fname, lname, email, phone, gender, picture, address,role) => {
     try {
         const userRef = doc(db, 'systemusers', uid);
         const userSnap = await getDoc(userRef)
@@ -26,7 +26,7 @@ export const addUser = async (uid, fname, lname, email, phone, gender, picture, 
                 gender: gender,
                 picture: picture,
                 address: address,
-                role: "buyer"
+                role: role
             });
         } else {
             console.log("user exists")
@@ -37,16 +37,6 @@ export const addUser = async (uid, fname, lname, email, phone, gender, picture, 
     }
 };
 
-// getting user info
-export const getUserInfo = async (uid) => {
-    const userSnap = await getDoc(userRef, uid)
-    if (userSnap.exists()) {
-        console.log(" doc data: ", userSnap.data());
-        return userSnap.data();
-    } else {
-        console.log("No such docs")
-    }
-}
 
 // fetching lists
 export const fetchUserList = async () => {

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { GoogleAuthProvider, createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth';
+import { GoogleAuthProvider, createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth';
 import { db, auth } from './secrets';
 import { doc, getDoc } from 'firebase/firestore';
 import { addUser } from './db/users';
@@ -38,12 +38,23 @@ export const AuthProvider = ({ children }) => {
         return () => unsubscribe();
     }, []);
     //registering
-    const register = (fname, lname, email, password, role) => createUserWithEmailAndPassword(auth, email, password)
-        .then((result) => {
-            const user = result.user;
-            const userid = user.uid
-            addUser(userid, fname, lname, email, "", "", "", "", role)
-        })
+    const register = (fname, lname, dname, email, password, role) => {
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((result) => {
+                const user = result.user;
+                const userid = user.uid;
+                updateProfile(user, { displayName: dname })
+                    .then(() => {
+                        addUser(userid, fname, lname, email, "", "", "", "", role);
+                    })
+                    .catch((error) => {
+                        console.error("Error updating profile:", error);
+                    });
+            })
+            .catch((error) => {
+                console.error("Error creating user:", error);
+            });
+        }
 
     //login
     const provider = new GoogleAuthProvider();
