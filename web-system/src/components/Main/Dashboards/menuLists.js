@@ -22,7 +22,7 @@ import RenterProducts from './Renter/RenterProducts'
 //user imports
 import UserOverview from './User/UserOverview'
 import ContactusReqs from './Admin/ContactusReqs'
-import Admins from './Admin/Admins'
+import Admins from './Admin/Admins' 
 
 //common
 import Profile from './UserProfile'
