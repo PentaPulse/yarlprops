@@ -3,7 +3,6 @@ import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, 
 import { styled, useTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import AdbIcon from '@mui/icons-material/Adb';
-import { authUser } from '../../../backend/autharization';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../backend/AuthContext';
 
@@ -152,10 +151,11 @@ export default function NavigationBar({ handleLoginButton, handleMode ,showDashb
 export function ProfileBox({ isLogged }) {
     const theme = useTheme();
     const navigate = useNavigate()
+    const {logout}=useAuth()
 
     const handleSignout = () => {
         isLogged = false
-        authUser.signOut()
+        logout()
         const them = sessionStorage.getItem('isLight')
         sessionStorage.clear();
         sessionStorage.setItem('isLight', them)

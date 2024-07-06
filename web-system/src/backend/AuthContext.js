@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { GoogleAuthProvider, createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth';
-import { db, auth } from './secrets';
+import { db, auth } from './firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { addUser } from './db/users';
 import { useLocation, useNavigate } from 'react-router-dom';

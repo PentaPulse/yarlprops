@@ -1,11 +1,7 @@
-import firebase from "firebase/compat/app";
 import "firebase/firestore";
-import { firebaseConfig } from "../secrets";
-import { doc, setDoc, getFirestore, collection, getDocs } from "firebase/firestore";
+import { db } from "../firebase";
+import { doc, setDoc, collection, getDocs } from "firebase/firestore";
 
-const app = firebase.initializeApp(firebaseConfig)
-
-const db = getFirestore(app);
 //reference
 const contactRef = collection(db, "contactUs")
 

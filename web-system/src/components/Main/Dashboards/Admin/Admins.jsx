@@ -1,6 +1,6 @@
 import { collection, getDocs, query, where } from 'firebase/firestore'
 import * as React from 'react'
-import { db } from '../../../../backend/secrets'
+import { db } from '../../../../backend/firebase'
 import { Box, Button, Grid, Modal, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material';
 
 function Admins() {
@@ -78,8 +78,8 @@ function Admins() {
                                     <TableRow>
                                         <TableCell>{index + 1}</TableCell>
                                         <TableCell>{admin.displayName}</TableCell>
-                                        <TableCell>{admin.fname}</TableCell>
-                                        <TableCell>{admin.lname}</TableCell>
+                                        <TableCell>{admin.firstName}</TableCell>
+                                        <TableCell>{admin.lastName}</TableCell>
                                         <TableCell>{admin.email}</TableCell>
                                         <TableCell>{admin.gender}</TableCell>
                                     </TableRow>
