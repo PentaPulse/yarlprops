@@ -18,7 +18,7 @@ function Routings({ handleMode }) {
         <AuthProvider>
           <Layout handleMode={handleMode} >
             <Routes>
-              <Route path="/admin/products/*" element={<AdminProducts />} />
+              <Route path="/dashboard/*" element={<AdminProducts />} />
               <Route exact path='/' element={<Home />} />
               <Route path='/home' element={<Home />} />
               <Route path='/guide' element={<Guide />} />

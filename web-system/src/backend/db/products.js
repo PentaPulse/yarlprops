@@ -8,8 +8,6 @@ const db = getFirestore(app);
 // Reference
 const productRef = collection(db, "products");
 
-// Functions
-
 // Adding products
 const addProduct = async (title, category, type, description, quantity, location, imageArray) => {
     try {

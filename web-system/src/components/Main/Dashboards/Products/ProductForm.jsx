@@ -95,7 +95,7 @@ const ProductForm = () => {
       setNewImages([]);
 
       // Navigate to product list
-      navigate('/admin/products');
+      navigate('/');
     } catch (e) {
       console.error("Error adding product:", e);
       setValidationMessage('An error occurred while adding the product. Please try again.');
