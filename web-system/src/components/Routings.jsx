@@ -6,7 +6,6 @@ import Contact from './Main/Layouts/Contact/Contact';
 import ProductPage from './Main/Layouts/Home/ProView/ProductPage';
 import { AuthProvider } from '../backend/AuthContext';
 import PrivateRoute from '../backend/PrivateRoute';
-import AdminProducts from './Main/Dashboards/Admin/AdminProducts';
 import Dashboards from './Main/Dashboards/Dashboards';
 import Layout from './Main/Layouts/Layout';
 import Products from './Main/Layouts/Products/Products';
@@ -18,9 +17,7 @@ function Routings({ handleMode }) {
         <AuthProvider>
           <Layout handleMode={handleMode} >
             <Routes>
-              <Route path="/dashboard/*" element={<AdminProducts />} />
               <Route exact path='/' element={<Home />} />
-              <Route path='/home' element={<Home />} />
               <Route path='/guide' element={<Guide />} />
               <Route path='/contact' element={<Contact />} />
               <Route path="/products" element={<Products />} />

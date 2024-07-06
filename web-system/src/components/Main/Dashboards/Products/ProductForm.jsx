@@ -6,7 +6,7 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../../../backend/firebase';
 
 const ProductForm = () => {
-  const { id } = useParams();
+  const { pid } = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState({ title: '', category: '', type: '', description: '', quantity: '', location: '', images: [] });
   const [existingImages, setExistingImages] = useState([]);
@@ -14,9 +14,9 @@ const ProductForm = () => {
   const [validationMessage, setValidationMessage] = useState('');
 
   useEffect(() => {
-    if (id) {
+    if (pid) {
       const fetchProduct = async () => {
-        const fetchedProduct = await fetchSelectedProduct(id);
+        const fetchedProduct = await fetchSelectedProduct(pid);
         if (fetchedProduct) {
           setProduct({
             title: fetchedProduct.title,
@@ -34,7 +34,7 @@ const ProductForm = () => {
       };
       fetchProduct();
     }
-  }, [id]);
+  }, [pid]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -82,8 +82,8 @@ const ProductForm = () => {
       const allImageUrls = [...existingImages, ...newImageUrls];
 
       // Add or update product with the combined image URLs
-      if (id) {
-        await updateProduct(id, { ...product, images: allImageUrls });
+      if (pid) {
+        await updateProduct(pid, { ...product, images: allImageUrls });
       } else {
         const productId = await addProduct(product.title, product.category, product.type, product.description, product.quantity, product.location, allImageUrls);
         console.log('Product added with ID:', productId);
@@ -104,7 +104,7 @@ const ProductForm = () => {
 
   return (
     <Paper style={{ padding: 16 }}>
-      <Typography variant="h6">{id ? 'Edit Product' : 'Add Product'}</Typography>
+      <Typography variant="h6">{pid ? 'Edit Product' : 'Add Product'}</Typography>
       <form onSubmit={handleSubmit}>
         <TextField
           label="Title"

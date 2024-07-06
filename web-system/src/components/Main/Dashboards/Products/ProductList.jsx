@@ -62,9 +62,9 @@ const ProductList = () => {
                                 <TableCell>{product.quantity}</TableCell>
                                 <TableCell>{product.location}</TableCell>
                                 <TableCell>
-                                    <Button component={Link} to={`/${product.id}`} variant="outlined" style={{ marginRight: '8px' }}>View</Button>
-                                    <Button component={Link} to={`/${product.id}/edit`} variant="outlined" style={{ marginRight: '8px' }}>Edit</Button>
-                                    <Button onClick={() => handleDelete(product.id)} variant="outlined" color="secondary">Delete</Button>
+                                    <Button component={Link} to={`/dashboard/product/${product.id}`} variant="outlined" style={{ margin: '5px', width: '100%' }}>View</Button>
+                                    <Button component={Link} to={`/dashboard/product/${product.id}/edit`} variant="outlined" color="success" style={{ margin: '5px', width: '100%' }}>Edit</Button>
+                                    <Button onClick={() => handleDelete(product.id)} variant="outlined" color="error" style={{ margin: '5px', width: '100%' }}>Delete</Button>
                                 </TableCell>
                             </TableRow>
                         ))}
