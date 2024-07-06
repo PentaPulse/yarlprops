@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Backdrop, Box, Modal, Fade, Container } from '@mui/material';
-import { ToastContainer } from 'react-toastify';
 import { Login, Register, Welcome } from '../../common/Welcome/Welcome';
 import NavigationBar from '../../common/NavigationBar/NavigationBar';
 import Footer from '../../common/Footer/Footer';
@@ -58,7 +57,6 @@ function Layout({ children, handleMode, handleDashboardState }) {
     return (
         <>
             {dash && <NavigationBar handleLoginButton={showWelcome} handleMode={handleMode} />}
-            <ToastContainer />
             <div className='d-flex justify-content-center align-items-center mt-30 text-center'>
                 <Modal
                     aria-labelledby="transition-modal-title"

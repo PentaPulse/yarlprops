@@ -2,7 +2,7 @@ import * as React from 'react';
 import { GoogleAuthProvider, createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth';
 import { db, auth } from './firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import { addUser } from './db/users';
+import { addUser, registerUser } from './db/users';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const AuthContext = React.createContext();
@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }) => {
 
         return () => unsubscribe();
     }, []);
-    
+
     //registering
     const register = (fname, lname, dname, email, password, role) => {
         createUserWithEmailAndPassword(auth, email, password)
@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }) => {
                 const userid = user.uid;
                 updateProfile(user, { displayName: dname })
                     .then(() => {
-                        addUser(userid, fname, lname, email, "", "", "", "", role);
+                        registerUser(userid, fname, lname,dname, email,role);
                     })
                     .catch((error) => {
                         console.error("Error updating profile:", error);
