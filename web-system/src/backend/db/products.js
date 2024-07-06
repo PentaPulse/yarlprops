@@ -5,8 +5,6 @@ import { doc, setDoc, collection, getDocs, query, where, addDoc, updateDoc } fro
 // Reference
 const productRef = collection(db, "products");
 
-// Functions
-
 // Adding products
 const addProduct = async (title, category, type, description, quantity, location, imageArray) => {
     try {

@@ -62,8 +62,8 @@ const ProductList = () => {
                                 <TableCell>{product.quantity}</TableCell>
                                 <TableCell>{product.location}</TableCell>
                                 <TableCell>
-                                    <Button component={Link} to={`/admin/products/${product.id}`} variant="outlined" style={{ marginRight: '8px' }}>View</Button>
-                                    <Button component={Link} to={`/admin/products/${product.id}/edit`} variant="outlined" style={{ marginRight: '8px' }}>Edit</Button>
+                                    <Button component={Link} to={`/${product.id}`} variant="outlined" style={{ marginRight: '8px' }}>View</Button>
+                                    <Button component={Link} to={`/${product.id}/edit`} variant="outlined" style={{ marginRight: '8px' }}>Edit</Button>
                                     <Button onClick={() => handleDelete(product.id)} variant="outlined" color="secondary">Delete</Button>
                                 </TableCell>
                             </TableRow>
