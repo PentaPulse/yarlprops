@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useAuth } from '../../../backend/AuthContext';
 import { Box, Button, Container, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Avatar, Paper, Typography } from '@mui/material';
 import { doc, setDoc, updateDoc } from 'firebase/firestore';
-import { auth, db } from '../../../backend/secrets';
-import { updateEmail, updatePassword, updatePhoneNumber } from 'firebase/auth';
+import { db } from '../../../backend/secrets';
+import { updateEmail, updatePassword} from 'firebase/auth';
 
 const Profile = () => {
   const { user } = useAuth();

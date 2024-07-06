@@ -25,9 +25,6 @@ function Routings({ handleMode }) {
               <Route path='/contact' element={<Contact />} />
               <Route path="/products" element={<Products />} />
               <Route path="/products/:id" element={<ProductPage />} />
-            </Routes>
-          </Layout>
-          <Routes>
             <Route path='/dashboard' element={<PrivateRoute><Dashboards handleMode={handleMode} /></PrivateRoute>} />
           </Routes>
         </Layout>
