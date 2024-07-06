@@ -37,16 +37,6 @@ export const addUser = async (uid, fname, lname, email, phone, gender, picture, 
     }
 };
 
-// getting user info
-export const getUserInfo = async (uid) => {
-    const userSnap = await getDoc(userRef, uid)
-    if (userSnap.exists()) {
-        console.log(" doc data: ", userSnap.data());
-        return userSnap.data();
-    } else {
-        console.log("No such docs")
-    }
-}
 
 // fetching lists
 export const fetchUserList = async () => {
