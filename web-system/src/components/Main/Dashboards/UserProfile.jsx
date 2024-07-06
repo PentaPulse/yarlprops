@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../../../backend/AuthContext';
 import { Box, Button, Container, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Avatar, Paper, Typography } from '@mui/material';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, updateDoc } from 'firebase/firestore';
 import { auth, db } from '../../../backend/secrets';
-import { updateEmail, updatePassword, updatePhoneNumber } from 'firebase/auth'; 
+import { updateEmail, updatePassword, updatePhoneNumber } from 'firebase/auth';
 
 const Profile = () => {
   const { user } = useAuth();
@@ -58,7 +58,7 @@ const Profile = () => {
 
 const ProfileSettings = () => {
   const { user } = useAuth();
-  const [profile, setProfile] = React.useState({
+  const [profile, setProfile] = useState({
     firstName: user?.firstName || '',
     lastName: user?.lastName || '',
     email: user?.email || '',
@@ -68,7 +68,7 @@ const ProfileSettings = () => {
     address: user?.address || '',
     gender: user?.gender || '',
   });
-  const [edit, setEdit] = React.useState(false);
+  const [edit, setEdit] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -87,7 +87,6 @@ const ProfileSettings = () => {
   };
 
   const handleEditProfile = () => {
-    console.log(user)
     setEdit(true);
   };
 
@@ -222,14 +221,13 @@ const ProfileSettings = () => {
   );
 };
 
-
 const AccountSettings = () => {
   const { user } = useAuth();
   const width = '25vw';
 
-  const [email, setEmail] = React.useState({ old: '', new: '', confirm: '' });
-  const [phoneNumber, setPhoneNumber] = React.useState({ old: '', new: '', confirm: '' });
-  const [password, setPassword] = React.useState({ old: '', new: '', confirm: '' });
+  const [email, setEmail] = useState({ old: '', new: '', confirm: '' });
+  const [phoneNumber, setPhoneNumber] = useState({ old: '', new: '', confirm: '' });
+  const [password, setPassword] = useState({ old: '', new: '', confirm: '' });
 
   const handleInputChange = (setter) => (e) => {
     const { name, value } = e.target;
@@ -245,7 +243,8 @@ const AccountSettings = () => {
       return;
     }
     try {
-      await updateEmail(auth.currentUser, email.new);
+      await updateEmail(user, email.confirm);
+      await updateDoc(doc(db, 'systemusers', user.uid), { email: email.confirm });
       alert("Email updated successfully");
     } catch (error) {
       console.error("Error updating email: ", error);
@@ -258,8 +257,9 @@ const AccountSettings = () => {
       return;
     }
     try {
-      // Assume you have a method to update phone number
-      await updatePhoneNumber(auth.currentUser, phoneNumber.new);
+      // Use your method to update the phone number
+      //await updatePhoneNumber(user, phoneNumber.new);
+      await updateDoc(doc(db, 'systemusers', user.uid), { phoneNumber: phoneNumber.confirm });
       alert("Phone number updated successfully");
     } catch (error) {
       console.error("Error updating phone number: ", error);
@@ -272,7 +272,7 @@ const AccountSettings = () => {
       return;
     }
     try {
-      await updatePassword(auth.currentUser, password.new);
+      await updatePassword(user, password.confirm);
       alert("Password updated successfully");
     } catch (error) {
       console.error("Error updating password: ", error);
