@@ -3,11 +3,10 @@ import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, 
 import { styled, useTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import AdbIcon from '@mui/icons-material/Adb';
-import { authUser } from '../../../backend/autharization';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../backend/AuthContext';
 
-const pages = ['Home','Products',/* 'Guide',*/ 'About', 'Contact'];
+const pages = [['Home','/'],['Products','/products'],/* 'Guide',*/ ['About','/about'],[ 'Contact','/contact']];
 
 export default function NavigationBar({ handleLoginButton, handleMode ,showDashboard}) {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -92,8 +91,8 @@ export default function NavigationBar({ handleLoginButton, handleMode ,showDashb
                         >
                             {pages.map((page) => (
                                 <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                    <Typography component="a" textAlign="center" href={`/${page.toLowerCase()}`} sx={{ textDecoration: 'none', color: theme.palette.primary }}>
-                                        {page}
+                                    <Typography component="a" textAlign="center" href={page[1]} sx={{ textDecoration: 'none', color: theme.palette.primary }}>
+                                        {page[0]}
                                     </Typography>
                                 </MenuItem>
                             ))}
@@ -124,9 +123,9 @@ export default function NavigationBar({ handleLoginButton, handleMode ,showDashb
                                 key={page}
                                 onClick={handleCloseNavMenu}
                                 sx={{ my: 2, display: 'block', color: theme.palette.primary }}
-                                href={`/${page.toLowerCase()}`}
+                                href={page[1]}
                             >
-                                {page}
+                                {page[0]}
                             </Button>
                         ))}
                     </Box>
@@ -152,10 +151,11 @@ export default function NavigationBar({ handleLoginButton, handleMode ,showDashb
 export function ProfileBox({ isLogged }) {
     const theme = useTheme();
     const navigate = useNavigate()
+    const {logout}=useAuth()
 
     const handleSignout = () => {
         isLogged = false
-        authUser.signOut()
+        logout()
         const them = sessionStorage.getItem('isLight')
         sessionStorage.clear();
         sessionStorage.setItem('isLight', them)

@@ -1,17 +1,22 @@
-import firebase from "firebase/compat/app";
 import "firebase/firestore";
-import { firebaseConfig } from "../secrets";
-import { doc, setDoc, collection, getDoc, getDocs, where, query, getFirestore } from "firebase/firestore";
-
-const app = firebase.initializeApp(firebaseConfig)
-
-const db = getFirestore(app);
+import { db } from "../firebase";
+import { doc, setDoc, collection, getDoc, getDocs, where, query } from "firebase/firestore";
 
 //reference
 const userRef = collection(db, "systemusers")
 
 //functions
-//initialize the user initially in the registering process
+//register user
+/*
+export const registerUser=async(uid,fname,lname,dname,email,role)=>{
+    try{
+        const userRef = doc(db,"systemusers",uid);
+        const userSnap=await getDoc(userRef)
+
+    }
+}
+
+*/
 export const addUser = async (uid, fname, lname, email, phone, gender, picture, address,role) => {
     try {
         const userRef = doc(db, 'systemusers', uid);

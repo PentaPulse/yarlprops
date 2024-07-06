@@ -1,9 +1,6 @@
-import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, setDoc, updateDoc, getDocs, query, where, doc } from "firebase/firestore";
-import { firebaseConfig } from "../secrets";
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+import "firebase/firestore";
+import { db } from "../firebase";
+import { doc, setDoc, collection, getDocs, query, where, addDoc, updateDoc } from "firebase/firestore";
 
 // Reference
 const productRef = collection(db, "products");

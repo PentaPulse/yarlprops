@@ -1,10 +1,7 @@
-import firebase from "firebase/compat/app";
-import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { getDownloadURL,  ref, uploadBytes } from "firebase/storage";
 //import { updateProfile } from "firebase/auth";
-import { firebaseConfig } from "./secrets";
+import {  storage } from "./firebase";
 
-const app=firebase.initializeApp(firebaseConfig)
-const storage = getStorage(app);
 /*
 function uploadProfilePicture(user, pp) {
     const storageRef = ref(storage, `users/profilePictures/${user.uid}`);
@@ -47,4 +44,4 @@ const uploadImagesAndGetUrls = async (files, folderPath) => {
     return Promise.all(uploadPromises);
 };
 
-export { storage, uploadImagesAndGetUrls }
+export {  uploadImagesAndGetUrls }

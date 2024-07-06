@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { addProduct, fetchSelectedProduct, updateProduct } from '../../../../backend/db/products';
 import { TextField, Button, Paper, Typography, Grid } from '@mui/material';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { storage } from '../../../../backend/storage';
+import { storage } from '../../../../backend/firebase';
 
 const ProductForm = () => {
   const { id } = useParams();

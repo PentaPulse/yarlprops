@@ -2,6 +2,7 @@ import { getAuth } from 'firebase/auth';
 //import { initializeApp } from "firebase/app";
 import firebase from 'firebase/compat/app';
 import { getFirestore } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
 //import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 
 const firebaseConfig = {
@@ -18,6 +19,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = getFirestore()
 const auth = getAuth()
+const storage = getStorage();
 
 /*
 const appCheck = initializeAppCheck(app, {
@@ -25,6 +27,6 @@ const appCheck = initializeAppCheck(app, {
   isTokenAutoRefreshEnabled: true
 });
 */
-export { firebaseConfig ,db,auth}
+export { db,auth,storage}
 
 //setDoc(doc(db,'systemusers',user.uid),profile)

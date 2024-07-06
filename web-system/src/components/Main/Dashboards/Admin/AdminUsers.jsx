@@ -2,7 +2,7 @@ import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableH
 import React, { useEffect, useState } from "react";
 import AddIcon from '@mui/icons-material/Add';
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "../../../../backend/secrets";
+import { db } from "../../../../backend/firebase";
 
 const AdminUsers = () => {
     const columns = [
