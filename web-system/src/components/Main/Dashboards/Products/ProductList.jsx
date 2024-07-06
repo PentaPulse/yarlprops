@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { fetchProducts } from '../../../../backend/db/products';
-import { db } from '../../../../backend/db/products';
+import { fetchProducts, db } from '../../../../backend/db/products';
 import { deleteDoc, doc } from 'firebase/firestore';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, TablePagination } from '@mui/material';
 
@@ -19,7 +18,7 @@ const ProductList = () => {
     }, []);
 
     const handleDelete = async (id) => {
-        try{
+        try {
             await deleteDoc(doc(db, 'products', id));
             setProducts(products.filter(product => product.id !== id));
         } catch (error) {
@@ -39,47 +38,48 @@ const ProductList = () => {
     return (
         <Paper>
             <TableContainer>
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell>ID</TableCell>
-                        <TableCell>Title</TableCell>
-                        <TableCell>Category</TableCell>
-                        <TableCell>Type</TableCell>
-                        <TableCell>Description</TableCell>
-                        <TableCell>Quantity</TableCell>
-                        <TableCell>Location</TableCell>
-                        <TableCell>Actions</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {products.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(product => (
-                        <TableRow key={product.id}>
-                            <TableCell>{product.id}</TableCell>
-                            <TableCell>{product.title}</TableCell>
-                            <TableCell>{product.type}</TableCell>
-                            <TableCell>{product.description}</TableCell>
-                            <TableCell>{product.quantity}</TableCell>
-                            <TableCell>{product.location}</TableCell>
-                            <TableCell>
-                                <Button component={Link} to={`/admin/products/${product.id}`} variant="outlined">View</Button>
-                                <Button component={Link} to={`/admin/products/${product.id}/edit`} variant="outlined">Edit</Button>
-                                <Button onClick={() => handleDelete(product.id)} variant="outlined" color="secondary">Delete</Button>
-                            </TableCell>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>ID</TableCell>
+                            <TableCell>Title</TableCell>
+                            <TableCell>Category</TableCell>
+                            <TableCell>Type</TableCell>
+                            <TableCell>Description</TableCell>
+                            <TableCell>Quantity</TableCell>
+                            <TableCell>Location</TableCell>
+                            <TableCell>Actions</TableCell>
                         </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
-        <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={products.length} 
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+                    </TableHead>
+                    <TableBody>
+                        {products.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(product => (
+                            <TableRow key={product.id}>
+                                <TableCell>{product.id}</TableCell>
+                                <TableCell>{product.title}</TableCell>
+                                <TableCell>{product.category}</TableCell>
+                                <TableCell>{product.type}</TableCell>
+                                <TableCell>{product.description}</TableCell>
+                                <TableCell>{product.quantity}</TableCell>
+                                <TableCell>{product.location}</TableCell>
+                                <TableCell>
+                                    <Button component={Link} to={`/admin/products/${product.id}`} variant="outlined" style={{ marginRight: '8px' }}>View</Button>
+                                    <Button component={Link} to={`/admin/products/${product.id}/edit`} variant="outlined" style={{ marginRight: '8px' }}>Edit</Button>
+                                    <Button onClick={() => handleDelete(product.id)} variant="outlined" color="secondary">Delete</Button>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+            <TablePagination
+                rowsPerPageOptions={[5, 10, 25]}
+                component="div"
+                count={products.length} 
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+            />
         </Paper>
     );
 };
