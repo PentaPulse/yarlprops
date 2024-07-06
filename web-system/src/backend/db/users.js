@@ -7,16 +7,29 @@ const userRef = collection(db, "systemusers")
 
 //functions
 //register user
-/*
 export const registerUser=async(uid,fname,lname,dname,email,role)=>{
     try{
-        const userRef = doc(db,"systemusers",uid);
-        const userSnap=await getDoc(userRef)
-
+        const newUserRef = doc(db,"systemusers",uid);
+        const userSnap=await getDoc(newUserRef);
+        if(!userSnap.exists){
+            await setDoc(newUserRef,{
+                uid: uid,
+                fname: fname,
+                lname: lname,
+                email: email,
+                phone: '',
+                gender: '',
+                picture: '',
+                address: '',
+                role: role
+            })
+        }
+    }
+    catch(e){
+        alert(e)
     }
 }
 
-*/
 export const addUser = async (uid, fname, lname, email, phone, gender, picture, address,role) => {
     try {
         const userRef = doc(db, 'systemusers', uid);

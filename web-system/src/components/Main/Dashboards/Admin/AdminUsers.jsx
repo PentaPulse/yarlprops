@@ -1,7 +1,7 @@
 import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Grid, Modal, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import AddIcon from '@mui/icons-material/Add';
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, query} from "firebase/firestore";
 import { db } from "../../../../backend/firebase";
 
 const AdminUsers = () => {
@@ -70,7 +70,7 @@ const AdminUsers = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const q = query(collection(db, "systemusers"),where("role","==","buyer"))
+                const q = query(collection(db, "systemusers"))
                 const qSnapshot = await getDocs(q)
                 if (!qSnapshot.empty) {
                     const userList = qSnapshot.docs.map(doc => doc.data());

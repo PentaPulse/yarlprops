@@ -1,8 +1,6 @@
 //icons
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import SellIcon from '@mui/icons-material/Sell';
-import CarRentalIcon from '@mui/icons-material/CarRental';
 import GroupIcon from '@mui/icons-material/Group';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import CommentIcon from '@mui/icons-material/Comment';
@@ -11,8 +9,6 @@ import StoreIcon from '@mui/icons-material/Store';
 
 //Admin imports
 import AdminOverview from './Admin/AdminOverview'
-import AdminSellers from './Admin/AdminSellers'
-import AdminRenters from './Admin/AdminRenters'
 import AdminUsers from './Admin/AdminUsers'
 import AdminProducts from './Admin/AdminProducts'
 //seller imports
@@ -34,8 +30,6 @@ import Profile from './UserProfile'
 export const adminMenu = [
     ['Overview', <DashboardIcon />],
     ['Admins', <SupervisorAccountIcon />],
-    ['Sellers', <SellIcon />],
-    ['Renters', <CarRentalIcon />],
     ['Users', <GroupIcon />],
     ['Products', <InventoryIcon />],
     ['Contact us requests', <CommentIcon />],
@@ -58,7 +52,7 @@ export const userMenu = [
     ['My Profile', <BadgeIcon />],
 ]
 //boards
-export const adminBoard = [<AdminOverview />, <Admins />, <AdminSellers />, <AdminRenters />, <AdminUsers />, <AdminProducts />, <ContactusReqs />, <Profile />]
+export const adminBoard = [<AdminOverview />, <Admins />, <AdminUsers />, <AdminProducts />, <ContactusReqs />, <Profile />]
 export const sellerBoard = [<SellerOverview />, <SellerOrders />, <SellerProducts />, <Profile />]
 export const renterBoard = [<RenterOverview />, <RenterOrders />, <RenterProducts />, <Profile />]
 export const userBoard = [<UserOverview />, <Profile />]
