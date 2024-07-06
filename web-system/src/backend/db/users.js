@@ -1,36 +1,52 @@
 import "firebase/firestore";
 import { db } from "../firebase";
 import { doc, setDoc, collection, getDoc, getDocs, where, query } from "firebase/firestore";
+import { useAlerts } from "../SnackbarContext";
 
 //reference
 const userRef = collection(db, "systemusers")
 
 //functions
 //register user
-export const registerUser=async(uid,fname,lname,dname,email,role)=>{
-    try{
-        const newUserRef = doc(db,"systemusers",uid);
-        const userSnap=await getDoc(newUserRef);
-        if(!userSnap.exists){
-            await setDoc(newUserRef,{
-                uid: uid,
-                fname: fname,
-                lname: lname,
-                email: email,
+export const registerUser = async (uid, fname, lname, dname, email, role) => {
+    try {
+        // Ensure all required fields are provided
+        if (!uid || !email || !role) {
+            throw new Error('Missing required user information');
+        }
+
+        const newUserRef = doc(db, "systemusers", uid);
+        const userSnap = await getDoc(newUserRef);
+
+        if (!userSnap.exists()) {
+            await setDoc(newUserRef, {
+                uid,
+                fname: fname || '',
+                lname: lname || '',
+                dname: dname || '',
+                email:email,
                 phone: '',
                 gender: '',
                 picture: '',
                 address: '',
-                role: role
-            })
+                role:role
+            });
+            console.log("User registered successfully");
+            return { success: true, message: 'User registered successfully' };
+        } else {
+            console.log("User already exists");
+            return { success: false, message: 'User already exists' };
         }
-    }
-    catch(e){
-        alert(e)
-    }
-}
+    } catch (e) {
+        const eMsg = e.message;
+        const eCode = e.code || 'unknown_error';
 
-export const addUser = async (uid, fname, lname, email, phone, gender, picture, address,role) => {
+        console.log(`${eCode}: ${eMsg}`);
+        return { success: false, message: `${eCode}: ${eMsg}` };
+    }
+};
+
+export const addUser = async (uid, fname, lname, email, phone, gender, picture, address, role) => {
     try {
         const userRef = doc(db, 'systemusers', uid);
         const userSnap = await getDoc(userRef)

@@ -4,6 +4,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Routings from './components/Routings';
 import Maintain from './components/Maintain';
 import CssBaseline from '@mui/material/CssBaseline';
+import AlertProvider from './backend/SnackbarContext';
 
 const lightTheme = createTheme({
   palette: {
@@ -68,10 +69,13 @@ function Themed() {
 
   return (
     <ThemeProvider theme={mode ? lightTheme : darkTheme}>
+      <AlertProvider>
       <CssBaseline />
       <Router>
         <Routings handleMode={handleTheme} handleDashboardState={()=>setDash(sessionStorage.getItem('dash'))} dash={dash}/>
       </Router>
+
+      </AlertProvider>
     </ThemeProvider>
   );
 }

@@ -116,7 +116,8 @@ const ProfileSettings = () => {
           '& .MuiTextField-root': { m: 1, width: width },
         }}
       >
-        <div>
+        <Box>
+          <Typography>Personal details</Typography>
           <TextField
             label="First name"
             name="firstName"
@@ -135,26 +136,6 @@ const ProfileSettings = () => {
               readOnly: !edit,
             }}
           />
-        </div>
-        <div>
-          <TextField
-            label="Email"
-            name="email"
-            value={profile.email}
-            InputProps={{
-              readOnly: true,
-            }}
-          />
-          <TextField
-            label="Phone number"
-            name="phoneNumber"
-            value={profile.phoneNumber}
-            InputProps={{
-              readOnly: true,
-            }}
-          />
-        </div>
-        <div>
           <TextField
             label="Date of Birth"
             name="dateOfBirth"
@@ -164,25 +145,6 @@ const ProfileSettings = () => {
             InputLabelProps={{
               shrink: true,
             }}
-            InputProps={{
-              readOnly: !edit,
-            }}
-          />
-          <TextField
-            label="My role"
-            name="role"
-            value={profile.role}
-            InputProps={{
-              readOnly: true,
-            }}
-          />
-        </div>
-        <div>
-          <TextField
-            label="Address"
-            name="address"
-            value={profile.address}
-            onChange={handleInputChange}
             InputProps={{
               readOnly: !edit,
             }}
@@ -199,7 +161,35 @@ const ProfileSettings = () => {
               ))}
             </Select>
           </FormControl>
-        </div>
+        </Box>
+        <Box>
+          <Typography>Contact details</Typography>
+          <TextField
+            label="Email"
+            name="email"
+            value={profile.email}
+            InputProps={{
+              readOnly: true,
+            }}
+          />
+          <TextField
+            label="Phone number"
+            name="phoneNumber"
+            value={profile.phoneNumber}
+            InputProps={{
+              readOnly: true,
+            }}
+          />
+          <TextField
+            label="Address"
+            name="address"
+            value={profile.address}
+            onChange={handleInputChange}
+            InputProps={{
+              readOnly: !edit,
+            }}
+          />
+        </Box>
         <Container sx={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
           {!edit ? (
             <Button variant="contained" color="primary" onClick={handleEditProfile}>
@@ -292,7 +282,7 @@ const AccountSettings = () => {
         noValidate
         autoComplete="off"
       >
-        <div>
+        <Box>
           <Typography variant="h6">Change Email</Typography>
           <TextField
             label="Old Email"
@@ -315,8 +305,8 @@ const AccountSettings = () => {
           <Container sx={{ display: 'flex', justifyContent: 'end', marginTop: '20px' }}>
             <Button variant="contained" color="primary" onClick={changeEmail}>Change Email</Button>
           </Container>
-        </div>
-        <div>
+        </Box>
+        <Box>
           <Typography variant="h6">Change Phone Number</Typography>
           <TextField
             label="Old Phone Number"
@@ -339,8 +329,8 @@ const AccountSettings = () => {
           <Container sx={{ display: 'flex', justifyContent: 'end', marginTop: '20px' }}>
             <Button variant="contained" color="primary" onClick={changePhonenumber}>Change Phone Number</Button>
           </Container>
-        </div>
-        <div>
+        </Box>
+        <Box>
           <Typography variant="h6">Change Password</Typography>
           <TextField
             label="Old Password"
@@ -366,7 +356,7 @@ const AccountSettings = () => {
           <Container sx={{ display: 'flex', justifyContent: 'end', marginTop: '20px' }}>
             <Button variant="contained" color="primary" onClick={changePassword}>Change Password</Button>
           </Container>
-        </div>
+        </Box>
       </Box>
     </>
   );

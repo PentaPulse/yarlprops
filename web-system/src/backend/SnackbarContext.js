@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Snackbar, MuiAlert } from '@mui/material'
+import { Snackbar, Alert } from '@mui/material'
 
 const AlertService = React.createContext();
 
@@ -11,11 +11,15 @@ const AlertProvider = ({ children }) => {
     const [alerts, setAlerts] = React.useState({
         open: false,
         message: '',
-        variety: ''
+        variety: '',
+        timeout: 3000,
+        vertical: 'top',
+        horizontal: 'left'
+
     })
 
-    const showAlerts = (message, variety = 'info') => {
-        setAlerts({ open: true, message, variety })
+    const showAlerts = (message, variety = 'info', vertical = 'top', horizontal = 'left', timeout = 3000) => {
+        setAlerts({ open: true, message, variety, vertical, horizontal, timeout })
     }
 
     const handleClose = (event, reason) => {
@@ -29,16 +33,17 @@ const AlertProvider = ({ children }) => {
         <AlertService.Provider value={showAlerts}>
             {children}
             <Snackbar
-                open:{alerts.open}
-                autoHideDuration={5000}
+                open={alerts.open}
+                autoHideDuration={alerts.timeout}
+                anchorOrigin={{ vertical:alerts.vertical, horizontal:alerts.horizontal }}
                 onClose={handleClose}
             >
-                <MuiAlert
+                <Alert
                     onClose={handleClose}
                     severity={alerts.variety}
                     sx={{ width: '100%' }}>
                     {alerts.message}
-                </MuiAlert>
+                </Alert>
             </Snackbar>
         </AlertService.Provider>
     )
