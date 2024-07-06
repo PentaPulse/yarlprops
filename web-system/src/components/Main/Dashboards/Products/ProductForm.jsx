@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { addProduct, fetchSelectedProduct } from '../../../../backend/db/products';
+import { addProduct, fetchSelectedProduct, updateProduct } from '../../../../backend/db/products';
 import { TextField, Button, Paper, Typography, Grid } from '@mui/material';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../../../backend/storage';
@@ -8,18 +8,18 @@ import { storage } from '../../../../backend/storage';
 const ProductForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [product, setProduct] = useState({title:'', category:'', type:'', description: '', quantity: '', location: '', images: [] });
-  const [imagePreviews, setImagePreviews] = useState([]);
+  const [product, setProduct] = useState({ title: '', category: '', type: '', description: '', quantity: '', location: '', images: [] });
+  const [existingImages, setExistingImages] = useState([]);
+  const [newImages, setNewImages] = useState([]);
   const [validationMessage, setValidationMessage] = useState('');
-
 
   useEffect(() => {
     if (id) {
       const fetchProduct = async () => {
         const fetchedProduct = await fetchSelectedProduct(id);
-        if(fetchedProduct){
+        if (fetchedProduct) {
           setProduct(fetchedProduct);
-          setImagePreviews(fetchedProduct.image || []);
+          setExistingImages(fetchedProduct.images || []);
         } else {
           console.log('No such document!');
         }
@@ -34,34 +34,69 @@ const ProductForm = () => {
   };
 
   const handleImageChange = (event) => {
-    const files = Array.from(event.target.files);
-    setProduct({ ...product, image: files });
+    const file = event.target.files[0];
+    if (file) {
+      if (!file.name) {
+        console.error('File is missing a name property:', file);
+        setValidationMessage('One of the selected files is invalid.');
+        return;
+      }
+      setNewImages([...newImages, file]);
 
-    const previews = files.map(file => URL.createObjectURL(file));
-    setImagePreviews(previews);
+      // const preview = URL.createObjectURL(file);
+      // setProduct((prevProduct) => ({
+      //   ...prevProduct,
+      //   images: [...prevProduct.images, preview],
+      // }));
+    }
+  };
+
+  const handleRemoveImage = (index, type) => {
+    if (type === 'existing') {
+      setExistingImages(existingImages.filter((_, i) => i !== index));
+      // setProduct((prevProduct) => ({
+      //   ...prevProduct,
+      //   images: prevProduct.images.filter((_, i) => i !== index),
+      // }));
+    } else {
+      setNewImages(newImages.filter((_, i) => i !== index));
+      // setProduct((prevProduct) => ({
+      //   ...prevProduct,
+      //   images: prevProduct.images.filter((_, i) => i !== index + existingImages.length),
+      // }));
+    }
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (product.images.length < 3 || product.images.length > 6) {
-      setValidationMessage('You must upload at least 3 images and no more than 6 images.');
+    const totalImages = existingImages.length + newImages.length;
+    if (totalImages < 3 || totalImages > 6) {
+      setValidationMessage('You must have at least 3 images and no more than 6 images.');
       return;
     }
 
-    setValidationMessage(''); // Clear validation message if validation passes
+    setValidationMessage('');
 
-    const imageUrls = await Promise.all(product.images.map(async (image) => {
+    try {
+      const newImageUrls = await Promise.all(newImages.map(async (image) => {  
       const imageRef = ref(storage, `images/${image.name}`);
       await uploadBytes(imageRef, image);
       return await getDownloadURL(imageRef);
     }));
 
-    try {
-      await addProduct(product.title, product.category, product.type, product.description, product.quantity, product.location, imageUrls);
-      setProduct({ title: '', category: '', type: '', description: '', quantity: '', location: '', images: [] });//Clear the form data
-      setImagePreviews([]); //Clear the image previews
-      navigate('/products');
+    const allImageUrls = [...existingImages, ...newImageUrls];
+
+    
+      if (id) {
+        await updateProduct(id, { ...product, images: allImageUrls });
+      } else {
+        await addProduct({ ...product, images: allImageUrls });
+      }
+      setProduct({ title: '', category: '', type: '', description: '', quantity: '', location: '', images: [] });
+      setExistingImages([]);
+      setNewImages([]);
+      navigate('/admin/products');
     } catch (e) {
       console.error("Error adding product: ", e);
     }
@@ -126,22 +161,48 @@ const ProductForm = () => {
           margin="normal"
           required
         />
-        <input 
+        <input
           type='file'
           accept='image/*'
-          multiple
           onChange={handleImageChange}
-          required
+          style={{ display: 'block', margin: '20px 0' }}
         />
         <Grid container spacing={2}>
-          {imagePreviews.map((src, index) => (
+          {existingImages.map((src, index) => (
             <Grid item key={index}>
-              <img src={src} alt={`Preview ${index}`} style={{ width: 100, height: 100, objectFit: 'cover' }} />
+              <div style={{ position: 'relative' }}>
+                <img src={src} alt={`Existing Preview ${index}`} style={{ width: 150, height: 100, objectFit: 'cover' }} />
+                <Button
+                  onClick={() => handleRemoveImage(index, 'existing')}
+                  variant="contained"
+                  color="error"
+                  size="small"
+                  style={{ position: 'absolute', top: 0, right: 0 }}
+                >
+                  X
+                </Button>
+              </div>
+            </Grid>
+          ))}
+          {newImages.map((file, index) => (
+            <Grid item key={index + existingImages.length}>
+              <div style={{ position: 'relative' }}>
+                <img src={URL.createObjectURL(file)} alt={`New Preview ${index}`} style={{ width: 150, height: 120, objectFit: 'cover' }} />
+                <Button
+                  onClick={() => handleRemoveImage(index, 'new')}
+                  variant="contained"
+                  color="error"
+                  size="small"
+                  style={{ position: 'absolute', top: 0, right: 0 }}
+                >
+                  X
+                </Button>
+              </div>
             </Grid>
           ))}
         </Grid>
         {validationMessage && <Typography color="error">{validationMessage}</Typography>}
-        <Button type="submit" variant="contained" color="primary" style={{ marginTop : '25px'}}>
+        <Button type="submit" variant="contained" color="primary" style={{ marginTop: '25px' }}>
           Save
         </Button>
       </form>

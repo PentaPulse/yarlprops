@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import ProductList from '../Products/ProductList';
 import ProductDetail from '../Products/ProductDetail';
 import ProductForm from '../Products/ProductForm';
@@ -8,31 +8,36 @@ import { Container, Button } from '@mui/material';
 
 const AdminProducts = () => {
   const [showAddProduct, setShowAddProduct] = useState(false);
+  const navigate = useNavigate();
 
   const toggleAddProduct = () => {
     setShowAddProduct(!showAddProduct);
   };
 
+  const handleSuccess = () => {
+    navigate('admin/products');
+  }
+
   return (
     <>
       <Navbar />
-      <Container>
-        <Button
+      <Button
           variant="contained"
           color="primary"
           onClick={toggleAddProduct}
           style={{ margin: '20px 0' }}
         >
           {showAddProduct ? "Back to Product List" : "Add Product"}
-        </Button>
+      </Button>
+      <Container>
         {showAddProduct ? (
           <ProductForm onSuccess={() => setShowAddProduct(false)} />
         ) : (
           <Routes>
             <Route path="/" element={<ProductList />} />
             <Route path="/products/:pid" element={<ProductDetail />} />
-            <Route path="/add-product" element={<ProductForm />} />
-            <Route path="/products/:pid/edit" element={<ProductForm />} />
+            <Route path="/add-product" element={<ProductForm onSuccess={handleSuccess}/>} />
+            <Route path="/products/:pid/edit" element={<ProductForm onSuccess={handleSuccess}/>} />
           </Routes>
         )}
       </Container>

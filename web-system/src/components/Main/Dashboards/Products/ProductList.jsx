@@ -20,7 +20,7 @@ const ProductList = () => {
 
     const handleDelete = async (id) => {
         try{
-            await deleteDoc(doc(db, 'products, id'));
+            await deleteDoc(doc(db, 'products', id));
             setProducts(products.filter(product => product.id !== id));
         } catch (error) {
             console.error("Error deleting product: ", error);
@@ -58,13 +58,12 @@ const ProductList = () => {
                             <TableCell>{product.id}</TableCell>
                             <TableCell>{product.title}</TableCell>
                             <TableCell>{product.type}</TableCell>
-                            <TableCell>{product.subtype}</TableCell>
                             <TableCell>{product.description}</TableCell>
                             <TableCell>{product.quantity}</TableCell>
                             <TableCell>{product.location}</TableCell>
                             <TableCell>
-                                <Button component={Link} to={`/products/${product.id}`} variant="outlined">View</Button>
-                                <Button component={Link} to={`/products/${product.id}/edit`} variant="outlined">Edit</Button>
+                                <Button component={Link} to={`/admin/products/${product.id}`} variant="outlined">View</Button>
+                                <Button component={Link} to={`/admin/products/${product.id}/edit`} variant="outlined">Edit</Button>
                                 <Button onClick={() => handleDelete(product.id)} variant="outlined" color="secondary">Delete</Button>
                             </TableCell>
                         </TableRow>
