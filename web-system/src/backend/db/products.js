@@ -2,40 +2,39 @@ import "firebase/firestore";
 import { db } from "../firebase";
 import { doc, setDoc, collection, getDocs, query, where, addDoc, updateDoc } from "firebase/firestore";
 
-//reference
-const productRef = collection(db, "products")
+// Reference
+const productRef = collection(db, "products");
 
+// Functions
 
-//functions
-// adding products
+// Adding products
 const addProduct = async (title, category, type, description, quantity, location, imageArray) => {
     try {
         const docRef = await addDoc(productRef, {
-            title: title,
-            category: category,
-            type: type,
-            description: description,
-            quantity: quantity,
-            location: location,
+            title,
+            category,
+            type,
+            description,
+            quantity,
+            location,
             images: imageArray,
-        })
+        });
         await setDoc(docRef, { pid: docRef.id }, { merge: true });
         return docRef.id;
-
     } catch (e) {
         console.error("Error adding product:", e);
-        throw new Error(e);
+        throw new Error("Error adding product: " + e.message);
     }
 };
 
-//Updating a Product
+// Updating a product
 const updateProduct = async (id, updatedProduct) => {
     try {
         const productDocRef = doc(db, 'products', id);
         await updateDoc(productDocRef, updatedProduct);
     } catch (e) {
         console.error("Error updating product:", e);
-        throw new Error(e);
+        throw new Error("Error updating product: " + e.message);
     }
 };
 
@@ -45,9 +44,9 @@ const fetchProducts = async () => {
         const qSnapshot = await getDocs(productRef);
         const productList = qSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         return productList;
-    } catch (error) {
-        console.error("Error fetching products:", error);
-        return [];
+    } catch (e) {
+        console.error("Error fetching products:", e);
+        throw new Error("Error fetching products: " + e.message);
     }
 };
 
@@ -65,37 +64,9 @@ const fetchSelectedProduct = async (pid) => {
         }
     } catch (e) {
         console.error("Error fetching product:", e);
-        return null;
+        throw new Error("Error fetching product: " + e.message);
     }
 };
-
-//fetching all the documents without conditions
-// const fetchProducts = async () => {
-//     try {
-//         const qSnapshot = await getDocs(productRef);
-//         const productList = qSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-//         return productList;
-//     } catch (error) {
-//         console.error("Error fetching products:", error);
-//         return [];
-//     }
-// }
-
-// fetch documents with conditions / applying filters
-
-
-//fetching readmore clicked document
-// const fetchSelectedProduct = async (pid) => {
-//     const q = query(productRef, where('pid', '==', pid))
-//     try {
-//         const qSnapshot = await getDocs(q)
-//         const product = qSnapshot.docs[0]
-//         return product.data();
-//     } catch (e) {
-//         console.error("Error fetching product: ", e);
-//         return [];
-//     }
-// }
 
 //count products
 export const countProducts = async () => {
@@ -103,4 +74,7 @@ export const countProducts = async () => {
     return productsSnapshot.size;
 };
 
-export { db, addProduct, updateProduct, fetchProducts, fetchSelectedProduct }
+export { db, addProduct, updateProduct, fetchProducts, fetchSelectedProduct };
+
+
+

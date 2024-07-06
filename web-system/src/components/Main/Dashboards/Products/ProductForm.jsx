@@ -18,7 +18,15 @@ const ProductForm = () => {
       const fetchProduct = async () => {
         const fetchedProduct = await fetchSelectedProduct(id);
         if (fetchedProduct) {
-          setProduct(fetchedProduct);
+          setProduct({
+            title: fetchedProduct.title,
+            category: fetchedProduct.category,
+            type: fetchedProduct.type,
+            description: fetchedProduct.description,
+            quantity: fetchedProduct.quantity,
+            location: fetchedProduct.location,
+            images: fetchedProduct.images || []
+          });
           setExistingImages(fetchedProduct.images || []);
         } else {
           console.log('No such document!');
@@ -34,36 +42,20 @@ const ProductForm = () => {
   };
 
   const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      if (!file.name) {
-        console.error('File is missing a name property:', file);
-        setValidationMessage('One of the selected files is invalid.');
-        return;
-      }
-      setNewImages([...newImages, file]);
-
-      // const preview = URL.createObjectURL(file);
-      // setProduct((prevProduct) => ({
-      //   ...prevProduct,
-      //   images: [...prevProduct.images, preview],
-      // }));
+    const files = Array.from(event.target.files);
+    const validFiles = files.filter(file => file.name);
+    if (validFiles.length !== files.length) {
+      setValidationMessage('One or more of the selected files are invalid.');
+      return;
     }
+    setNewImages([...newImages, ...validFiles]);
   };
 
   const handleRemoveImage = (index, type) => {
     if (type === 'existing') {
       setExistingImages(existingImages.filter((_, i) => i !== index));
-      // setProduct((prevProduct) => ({
-      //   ...prevProduct,
-      //   images: prevProduct.images.filter((_, i) => i !== index),
-      // }));
     } else {
       setNewImages(newImages.filter((_, i) => i !== index));
-      // setProduct((prevProduct) => ({
-      //   ...prevProduct,
-      //   images: prevProduct.images.filter((_, i) => i !== index + existingImages.length),
-      // }));
     }
   };
 
@@ -79,26 +71,34 @@ const ProductForm = () => {
     setValidationMessage('');
 
     try {
-      const newImageUrls = await Promise.all(newImages.map(async (image) => {  
-      const imageRef = ref(storage, `images/${image.name}`);
-      await uploadBytes(imageRef, image);
-      return await getDownloadURL(imageRef);
-    }));
+      // Upload new images and get their URLs
+      const newImageUrls = await Promise.all(newImages.map(async (image) => {
+        const imageRef = ref(storage, `images/${image.name}`);
+        await uploadBytes(imageRef, image);
+        return await getDownloadURL(imageRef);
+      }));
 
-    const allImageUrls = [...existingImages, ...newImageUrls];
+      // Combine existing and new image URLs
+      const allImageUrls = [...existingImages, ...newImageUrls];
 
-    
+      // Add or update product with the combined image URLs
       if (id) {
         await updateProduct(id, { ...product, images: allImageUrls });
       } else {
-        await addProduct({ ...product, images: allImageUrls });
+        const productId = await addProduct(product.title, product.category, product.type, product.description, product.quantity, product.location, allImageUrls);
+        console.log('Product added with ID:', productId);
       }
+
+      // Reset form state
       setProduct({ title: '', category: '', type: '', description: '', quantity: '', location: '', images: [] });
       setExistingImages([]);
       setNewImages([]);
+
+      // Navigate to product list
       navigate('/admin/products');
     } catch (e) {
-      console.error("Error adding product: ", e);
+      console.error("Error adding product:", e);
+      setValidationMessage('An error occurred while adding the product. Please try again.');
     }
   };
 
@@ -164,6 +164,7 @@ const ProductForm = () => {
         <input
           type='file'
           accept='image/*'
+          multiple
           onChange={handleImageChange}
           style={{ display: 'block', margin: '20px 0' }}
         />
