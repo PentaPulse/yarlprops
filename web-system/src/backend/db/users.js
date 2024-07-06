@@ -6,8 +6,17 @@ import { doc, setDoc, collection, getDoc, getDocs, where, query } from "firebase
 const userRef = collection(db, "systemusers")
 
 //functions
-//initialize the user initially in the registering process
+//register user
+/*
+export const registerUser=async(uid,fname,lname,dname,email,role)=>{
+    try{
+        const userRef = doc(db,"systemusers",uid);
+        const userSnap=await getDoc(userRef)
 
+    }
+}
+
+*/
 export const addUser = async (uid, fname, lname, email, phone, gender, picture, address,role) => {
     try {
         const userRef = doc(db, 'systemusers', uid);

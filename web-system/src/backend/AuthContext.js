@@ -37,6 +37,7 @@ export const AuthProvider = ({ children }) => {
 
         return () => unsubscribe();
     }, []);
+    
     //registering
     const register = (fname, lname, dname, email, password, role) => {
         createUserWithEmailAndPassword(auth, email, password)
@@ -66,9 +67,11 @@ export const AuthProvider = ({ children }) => {
         })
 
     const login = (email, password) => signInWithEmailAndPassword(auth, email, password);
+
     //reset password
     const reset = (email) => sendPasswordResetEmail(auth, email)
         .then(alert("check " + email + " inbox"));
+
     //logout
     const logout = () => signOut(auth);
 
