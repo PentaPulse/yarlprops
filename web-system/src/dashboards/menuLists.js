@@ -1,5 +1,5 @@
 //icons
-import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import GroupIcon from '@mui/icons-material/Group';
 import InventoryIcon from '@mui/icons-material/Inventory';
@@ -29,7 +29,7 @@ import Profile from './UserProfile'
 
 export const adminMenu = [
     ['Overview', <DashboardIcon />],
-    ['Admins', <SupervisorAccountIcon />],
+    ['Admins', <AdminPanelSettingsIcon />],
     ['Users', <GroupIcon />],
     ['Products', <InventoryIcon />],
     ['Contact us requests', <CommentIcon />],

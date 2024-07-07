@@ -4,6 +4,7 @@ import { db, auth } from './firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { addUser, registerUser } from './db/users';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useAlerts } from './AlertService';
 
 const AuthContext = React.createContext();
 
@@ -13,6 +14,7 @@ export const AuthProvider = ({ children }) => {
     const [dash, setDash] = React.useState(false)
     const navigate = useNavigate()
     const location = useLocation()
+    const showAlerts=useAlerts();
 
     React.useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -33,6 +35,7 @@ export const AuthProvider = ({ children }) => {
                 setUser(null);
             }
             setLoading(false);
+
         });
 
         return () => unsubscribe();
@@ -64,6 +67,7 @@ export const AuthProvider = ({ children }) => {
             const user = result.user;
             const userid = user.uid
             addUser(userid, "", "", user.email, user.phoneNumber, "", user.photoURL, "")
+            showAlerts('Successfully logged','success')
         })
 
     const login = (email, password) => signInWithEmailAndPassword(auth, email, password);
@@ -77,7 +81,6 @@ export const AuthProvider = ({ children }) => {
 
     //back to home
     const home = () => {
-        sessionStorage.setItem('dash', !sessionStorage.getItem('dash'))
         navigate('/')
     }
 
@@ -92,6 +95,17 @@ export const AuthProvider = ({ children }) => {
         }
     }, [location]);
     
+    React.useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user && !user.emailVerified) {
+                showAlerts('Verify your email', 'error','top-center');
+            }
+        });
+
+        // Cleanup subscription on unmount
+        return () => unsubscribe();
+    });
+
     return (
         <AuthContext.Provider value={{ user, register, login, logout, reset, google, home, dash }}>
             {loading ? "" : children}

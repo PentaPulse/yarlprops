@@ -6,9 +6,9 @@ import AdbIcon from '@mui/icons-material/Adb';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../backend/AuthContext';
 
-const pages = [['Home','/'],['Products','/products'],/* 'Guide',*/ ['About','/about'],[ 'Contact','/contact']];
+const pages = [['Home','/'],['Products','/products'], ['Guide','/guide'] ,[ 'Contact','/contact']];
 
-export default function NavigationBar({ handleLoginButton, handleMode ,showDashboard}) {
+export default function NavigationBar({ handleLoginButton, handleMode }) {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [isLogged, setIsLogged] = React.useState(false);
     const {user} = useAuth()
@@ -138,7 +138,7 @@ export default function NavigationBar({ handleLoginButton, handleMode ,showDashb
                     </Box>
 
                     {isLogged ? (
-                        <ProfileBox isLogged={isLogged} showDashboard={showDashboard}/>
+                        <ProfileBox isLogged={isLogged} />
                     ) : (
                         <Button sx={{ color: theme.palette.primary }} onClick={handleLoginButton}>Sign In</Button>
                     )}

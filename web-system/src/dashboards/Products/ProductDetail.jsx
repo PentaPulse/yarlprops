@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchSelectedProduct } from '../../../../backend/db/products';
 import { Paper, Typography, CircularProgress, Grid } from '@mui/material';
+import { fetchSelectedProduct } from '../../backend/db/products';
 
 const ProductDetail = () => {
   const { pid } = useParams();

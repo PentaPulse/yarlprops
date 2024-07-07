@@ -5,10 +5,10 @@ import MuiAppBar from '@mui/material/AppBar';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import * as React from 'react'
-import { useAuth } from '../../../backend/AuthContext'
+import { useAuth } from '../backend/AuthContext'
 
 
-import { MaterialUISwitch, ProfileBox } from '../../common/NavigationBar/NavigationBar';
+import { MaterialUISwitch, ProfileBox } from '../components/common/NavigationBar/NavigationBar';
 import { adminBoard, adminMenu, backToHome, renterBoard, renterMenu, sellerBoard, sellerMenu, userBoard, userMenu } from './menuLists';
 import { useNavigate } from 'react-router-dom';
 
@@ -80,7 +80,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
-export default function Dashboards({ handleMode }) {
+export default function DashboardLayout({ handleMode }) {
     const [open, setOpen] = React.useState(false);
     const [board, setBoard] = React.useState(0)
     const { user } = useAuth()

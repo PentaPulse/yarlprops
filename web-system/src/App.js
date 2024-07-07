@@ -1,9 +1,18 @@
 import * as React from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Routings from './components/Routings';
-import Maintain from './components/Maintain';
+import Maintain from './Maintain';
 import CssBaseline from '@mui/material/CssBaseline';
+import AlertProvider from './backend/AlertService';
+import { AuthProvider } from './backend/AuthContext';
+import PrivateRoute from './backend/PrivateRoute';
+import DashboardLayout from './dashboards/DashboardLayout';
+import PageLayout from './pages/PageLayout';
+import Home from './pages/Home/Home';
+import Guide from './pages/Guide/Guide';
+import Contact from './pages/Contact/Contact';
+import Products from './pages/Products/Products';
+import ProductPage from './pages/Home/ProView/ProductPage';
 
 const lightTheme = createTheme({
   palette: {
@@ -49,7 +58,7 @@ function Themed() {
   });
 
   const [dash, setDash] = React.useState(true)
-  
+
 
   const handleTheme = () => {
     setMode((prevMode) => {
@@ -68,12 +77,33 @@ function Themed() {
 
   return (
     <ThemeProvider theme={mode ? lightTheme : darkTheme}>
-      <CssBaseline />
-      <Router>
-        <Routings handleMode={handleTheme} handleDashboardState={()=>setDash(sessionStorage.getItem('dash'))} dash={dash}/>
-      </Router>
+      <AlertProvider>
+        <CssBaseline />
+        <Router>
+          <Routings handleMode={handleTheme} handleDashboardLayouttate={() => setDash(sessionStorage.getItem('dash'))} dash={dash} />
+        </Router>
+      </AlertProvider>
     </ThemeProvider>
   );
+}
+
+function Routings({ handleMode }) {
+  return (
+    <>
+      <AuthProvider>
+        <PageLayout handleMode={handleMode} >
+          <Routes>
+            <Route exact path='/' element={<Home />} />
+            <Route path='/guide' element={<Guide />} />
+            <Route path='/contact' element={<Contact />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/products/:id" element={<ProductPage />} />
+            <Route path='/dashboard' element={<PrivateRoute><DashboardLayout handleMode={handleMode} /></PrivateRoute>} />
+          </Routes>
+        </PageLayout>
+      </AuthProvider>
+    </>
+  )
 }
 
 export default App;

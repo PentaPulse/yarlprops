@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
-import { Backdrop, Box, Modal, Fade, Container } from '@mui/material';
-import { Login, Register, Welcome } from '../../common/Welcome/Welcome';
-import NavigationBar from '../../common/NavigationBar/NavigationBar';
-import Footer from '../../common/Footer/Footer';
-import {  useNavigate } from 'react-router-dom';
-import { useAuth } from '../../../backend/AuthContext';
+import * as React from 'react'
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../backend/AuthContext';
+import NavigationBar from '../components/common/NavigationBar/NavigationBar';
+import { Backdrop, Box, Container, Fade, Modal } from '@mui/material';
+import { Login, Register, Welcome } from '../components/common/Welcome/Welcome';
+import Footer from '../components/common/Footer/Footer';
 
 const style = {
     position: 'absolute',
@@ -22,12 +22,12 @@ const style = {
     textAlign: "center"
 };
 
-function Layout({ children, handleMode, handleDashboardState }) {
-    const [open, setOpen] = useState(false);
-    const [welcome, setWelcome] = useState(false)
-    const [login, setLogin] = useState(false)
+export default function PageLayout({ children, handleMode, handleDashboardState }) {
+    const [open, setOpen] = React.useState(false);
+    const [welcome, setWelcome] = React.useState(false)
+    const [login, setLogin] = React.useState(false)
     const navigate = useNavigate();
-    const {dash}=useAuth();
+    const { dash } = useAuth();
 
     const showWelcome = () => {
         setOpen(!open);
@@ -53,7 +53,7 @@ function Layout({ children, handleMode, handleDashboardState }) {
     const handleBackButton = () => {
         setWelcome(true)
     }
-    
+
     return (
         <>
             {dash && <NavigationBar handleLoginButton={showWelcome} handleMode={handleMode} />}
@@ -84,5 +84,3 @@ function Layout({ children, handleMode, handleDashboardState }) {
         </>
     )
 }
-
-export default Layout;

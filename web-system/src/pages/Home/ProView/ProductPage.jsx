@@ -4,7 +4,7 @@ import { Row, Col, Image, Carousel } from 'react-bootstrap';
 import { Container } from '@mui/material'
 import styles from './ProductPage.module.css';
 import { useTheme } from '@mui/material/styles';
-import { fetchSelectedProduct } from '../../../../../backend/db/products';
+import { fetchSelectedProduct } from '../../../backend/db/products';
 
 
 function ProductPage() {

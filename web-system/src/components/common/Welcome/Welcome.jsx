@@ -104,7 +104,6 @@ export function Register({ handleBack ,closeBox}) {
         e.preventDefault();
         try {
             await register(fname, lname,dname, email, password, role);
-            //closeBox()
         } catch (error) {
             console.error('ff.'+error)
         }
