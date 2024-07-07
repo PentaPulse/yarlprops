@@ -1,53 +1,66 @@
 import React from 'react';
 import '@fortawesome/fontawesome-free/css/all.css';
-import './Footer.css';
+import { Container, Grid, Paper, Typography, Link, List, ListItem, ListItemText, IconButton } from '@mui/material';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import TwitterIcon from '@mui/icons-material/Twitter';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import PhoneIcon from '@mui/icons-material/Phone';
+import EmailIcon from '@mui/icons-material/Email';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 
-const Footer = () => {
+export default function Footer() {
     return (
         <>
-            <div className="Footer">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-md-6 col-lg-5 col-12 ft-1">
-                            <h3><span>YARL</span>PROPS</h3>
-                            <h4>Do You Have Questions ?</h4>
-                            <p>Feel Free to Contact Us.</p>
-                            {/* <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Laborum ea quo ex ullam laboriosam magni totam, facere eos iure voluptate.</p> */}
-                            <div className="footer-icons">
-                                <i className="fa-brands fa-facebook"></i>
-                                <i className="fa-brands fa-x-twitter"></i>
-                                <i className="fa-brands fa-instagram"></i>
-                                <i className="fa-brands fa-linkedin-in"></i>
-                            </div>
+            <Container sx={{  mt: 4 }}>
+                <Grid container spacing={3} >
+                    <Grid item xs={12} md={4}>
+                        <Typography variant="h4"><span>YARL</span>PROPS</Typography>
+                        <Typography variant="h5">Do You Have Questions?</Typography>
+                        <Typography variant="body1">Feel Free to Contact Us.</Typography>
+                        {/* <Typography variant="body2">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Laborum ea quo ex ullam laboriosam magni totam, facere eos iure voluptate.</Typography> */}
+                        <div>
+                            <IconButton>
+                                <FacebookIcon />
+                            </IconButton>
+                            <IconButton>
+                                <TwitterIcon />
+                            </IconButton>
+                            <IconButton>
+                                <InstagramIcon />
+                            </IconButton>
+                            <IconButton>
+                                <LinkedInIcon />
+                            </IconButton>
                         </div>
-                        <div className="col-md-6 col-lg-3 col-12 ft-2">
-                            <h5>Quick Links</h5>
-                            <ul>
-                                <li className="nav-item">
-                                    <a className="" href="/">Services</a>
-                                </li>
-                                <li className="nav-item">
-                                    <a className="" href="/">Contact Us</a>
-                                </li>
-                                <li className="nav-item">
-                                    <a className="" href="/">Guide</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div className="col-md-6 col-lg-4 col-12 ft-3">
-                            <h5>More Details</h5>
-                            <p><i className="fa-solid fa-phone-volume"></i> +94 77 1234567</p>
-                            <p><i className="fa-solid fa-envelope"></i> PentaPulse@gmail.com</p>
-                            <p><i className="fa-solid fa-location-dot"></i> Ramanathan Road, Thirunelvely, Jaffna</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className='Last-footer'>
-                <p>© 2024 Designed By PentaPulse</p>
-            </div>
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                        <Typography variant="h5">Quick Links</Typography>
+                        <List>
+                            <ListItem>
+                                <ListItemText>
+                                    <Link href="/" underline="none">Services</Link>
+                                    <Link href="/" underline="none">Contact Us</Link>
+                                </ListItemText>
+                            </ListItem>
+                            <ListItem>
+                                <ListItemText>
+                                    <Link href="/" underline="none">Guide</Link>
+                                </ListItemText>
+                            </ListItem>
+                        </List>
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                        <Typography variant="h5">More Details</Typography>
+                        <Typography variant="body1"><PhoneIcon /> +94 77 1234567</Typography>
+                        <Typography variant="body1"><EmailIcon /> PentaPulse@gmail.com</Typography>
+                        <Typography variant="body1"><LocationOnIcon /> Ramanathan Road, Thirunelvely, Jaffna</Typography>
+                    </Grid>
+                </Grid>
+            </Container>
+            <Paper sx={{ width: '100%', display: 'flex', justifyContent: 'center', padding: '16px', marginTop: '16px' }}>
+                <Typography>© 2024 Designed By PentaPulse</Typography>
+            </Paper>
         </>
-    )
+    );
 }
-
-export default Footer;

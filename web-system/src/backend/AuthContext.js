@@ -81,7 +81,6 @@ export const AuthProvider = ({ children }) => {
 
     //back to home
     const home = () => {
-        sessionStorage.setItem('dash', !sessionStorage.getItem('dash'))
         navigate('/')
     }
 
@@ -95,11 +94,11 @@ export const AuthProvider = ({ children }) => {
             setDash(true)
         }
     }, [location]);
-
+    
     React.useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user && !user.emailVerified) {
-                showAlerts('Verify your email', 'error','top','center');
+                showAlerts('Verify your email', 'error','top-center');
             }
         });
 

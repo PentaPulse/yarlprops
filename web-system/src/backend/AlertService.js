@@ -1,5 +1,6 @@
 import * as React from 'react'
-import { Snackbar, Alert } from '@mui/material'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AlertService = React.createContext();
 
@@ -8,6 +9,7 @@ export const useAlerts = () => {
 }
 
 const AlertProvider = ({ children }) => {
+    /*
     const [alerts, setAlerts] = React.useState({
         open: false,
         message: '',
@@ -17,34 +19,25 @@ const AlertProvider = ({ children }) => {
         horizontal: 'left'
 
     })
+        */
 
-    const showAlerts = (message, variety = 'info', vertical = 'top', horizontal = 'left', timeout = 3000) => {
-        setAlerts({ open: true, message, variety, vertical, horizontal, timeout })
-    }
-
-    const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        setAlerts({ ...alerts, open: false })
-    }
+    const showAlerts = (message, type = 'info', position = 'top-right', autoClose = 5000) => {
+        toast(message, {
+            type,
+            position,
+            autoClose,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    };
 
     return (
         <AlertService.Provider value={showAlerts}>
             {children}
-            <Snackbar
-                open={alerts.open}
-                autoHideDuration={alerts.timeout}
-                anchorOrigin={{ vertical:alerts.vertical, horizontal:alerts.horizontal }}
-                onClose={handleClose}
-            >
-                <Alert
-                    onClose={handleClose}
-                    severity={alerts.variety}
-                    sx={{ width: '100%' }}>
-                    {alerts.message}
-                </Alert>
-            </Snackbar>
+            <ToastContainer />
         </AlertService.Provider>
     )
 }
