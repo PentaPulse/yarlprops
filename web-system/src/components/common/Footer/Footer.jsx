@@ -12,13 +12,12 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 export default function Footer() {
     return (
         <>
-            <Container sx={{  mt: 4 }}>
-                <Grid container spacing={3} >
-                    <Grid item xs={12} md={4}>
+            <Container sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+                <Grid container spacing={3} sx={{ justifyContent: 'center', textAlign: { xs: 'center', md: 'left' } }}>
+                    <Grid item xs={12} md={4} sx={{ display: 'flex', flexDirection: 'column', alignItems: { xs: 'center', md: 'flex-start' } }}>
                         <Typography variant="h4"><span>YARL</span>PROPS</Typography>
                         <Typography variant="h5">Do You Have Questions?</Typography>
                         <Typography variant="body1">Feel Free to Contact Us.</Typography>
-                        {/* <Typography variant="body2">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Laborum ea quo ex ullam laboriosam magni totam, facere eos iure voluptate.</Typography> */}
                         <div>
                             <IconButton>
                                 <FacebookIcon />
@@ -34,12 +33,16 @@ export default function Footer() {
                             </IconButton>
                         </div>
                     </Grid>
-                    <Grid item xs={12} md={4}>
+                    <Grid item xs={12} md={4} sx={{ display: 'flex', flexDirection: 'column', alignItems: { xs: 'center', md: 'flex-start' } }}>
                         <Typography variant="h5">Quick Links</Typography>
                         <List>
                             <ListItem>
                                 <ListItemText>
                                     <Link href="/" underline="none">Services</Link>
+                                </ListItemText>
+                            </ListItem>
+                            <ListItem>
+                                <ListItemText>
                                     <Link href="/" underline="none">Contact Us</Link>
                                 </ListItemText>
                             </ListItem>
@@ -50,7 +53,7 @@ export default function Footer() {
                             </ListItem>
                         </List>
                     </Grid>
-                    <Grid item xs={12} md={4}>
+                    <Grid item xs={12} md={4} sx={{ display: 'flex', flexDirection: 'column', alignItems: { xs: 'center', md: 'flex-start' } }}>
                         <Typography variant="h5">More Details</Typography>
                         <Typography variant="body1"><PhoneIcon /> +94 77 1234567</Typography>
                         <Typography variant="body1"><EmailIcon /> PentaPulse@gmail.com</Typography>
