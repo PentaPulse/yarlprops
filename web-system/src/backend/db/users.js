@@ -1,7 +1,7 @@
 import "firebase/firestore";
 import { db } from "../firebase";
 import { doc, setDoc, collection, getDoc, getDocs, where, query } from "firebase/firestore";
-import { useAlerts } from "../SnackbarContext";
+import { useAlerts } from "../AlertService";
 
 //reference
 const userRef = collection(db, "systemusers")

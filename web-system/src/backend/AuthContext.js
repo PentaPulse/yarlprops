@@ -4,7 +4,7 @@ import { db, auth } from './firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { addUser, registerUser } from './db/users';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useAlerts } from './SnackbarContext';
+import { useAlerts } from './AlertService';
 
 const AuthContext = React.createContext();
 
@@ -99,13 +99,13 @@ export const AuthProvider = ({ children }) => {
     React.useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user && !user.emailVerified) {
-                showAlerts('Verify your email', 'error',);
+                showAlerts('Verify your email', 'error','top','center');
             }
         });
 
         // Cleanup subscription on unmount
         return () => unsubscribe();
-    }, []);
+    });
 
     return (
         <AuthContext.Provider value={{ user, register, login, logout, reset, google, home, dash }}>

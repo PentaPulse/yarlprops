@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { addProduct, fetchSelectedProduct, updateProduct } from '../../../../backend/db/products';
 import { TextField, Button, Paper, Typography, Grid } from '@mui/material';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { storage } from '../../../../backend/firebase';
+import { addProduct, fetchSelectedProduct, updateProduct } from '../../backend/db/products';
+import { storage } from '../../backend/firebase';
 
 const ProductForm = () => {
   const { pid } = useParams();
