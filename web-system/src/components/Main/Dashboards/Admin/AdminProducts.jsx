@@ -35,7 +35,6 @@ const AdminProducts = () => {
         <Routes>
           <Route path="/" element={<ProductList />} />
           <Route path="/product/:pid" element={<ProductDetail />} />
-          <Route path="/add-product" element={<ProductForm onSuccess={handleSuccess} />} />
           <Route path="/product/:pid/edit" element={<ProductForm onSuccess={handleSuccess} />} />
         </Routes>
         )}

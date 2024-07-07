@@ -41,7 +41,7 @@ const ProductList = () => {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell>ID</TableCell>
+                            {/* <TableCell>ID</TableCell> */}
                             <TableCell>Title</TableCell>
                             <TableCell>Category</TableCell>
                             <TableCell>Type</TableCell>
@@ -54,7 +54,7 @@ const ProductList = () => {
                     <TableBody>
                         {products.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(product => (
                             <TableRow key={product.id}>
-                                <TableCell>{product.id}</TableCell>
+                                {/* <TableCell>{product.id}</TableCell> */}
                                 <TableCell>{product.title}</TableCell>
                                 <TableCell>{product.category}</TableCell>
                                 <TableCell>{product.type}</TableCell>
@@ -62,8 +62,8 @@ const ProductList = () => {
                                 <TableCell>{product.quantity}</TableCell>
                                 <TableCell>{product.location}</TableCell>
                                 <TableCell>
-                                    <Button component={Link} to={`/dashboard/product/${product.id}`} variant="outlined" style={{ margin: '5px', width: '100%' }}>View</Button>
-                                    <Button component={Link} to={`/dashboard/product/${product.id}/edit`} variant="outlined" color="success" style={{ margin: '5px', width: '100%' }}>Edit</Button>
+                                    <Button component={Link} to={`/product/${product.id}`} variant="outlined" style={{ margin: '5px', width: '100%' }}>View</Button>
+                                    <Button component={Link} to={`/product/${product.id}/edit`} variant="outlined" color="success" style={{ margin: '5px', width: '100%' }}>Edit</Button>
                                     <Button onClick={() => handleDelete(product.id)} variant="outlined" color="error" style={{ margin: '5px', width: '100%' }}>Delete</Button>
                                 </TableCell>
                             </TableRow>

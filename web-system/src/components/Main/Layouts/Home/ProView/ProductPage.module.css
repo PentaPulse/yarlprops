@@ -2,9 +2,10 @@
     margin: 2rem;
     padding: 0.9rem;
     font-size: 18px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
     border-radius: 10px;
-    background-color: whitesmoke;
+    border: 3px solid white;
+    background-color: none;
 }
 .productImageSection {
     padding: 0.5rem;
@@ -19,6 +20,7 @@
 
 .productDetailsSection ul{
     text-align: justify;
+    color: white;
 }
 
 .productDetailsSection h2 {
@@ -29,6 +31,7 @@
 }
 .productDetailsSection h4 {
     font-weight: 600;
+    color: white;
 }
 
 .sellerDetailsSection{
@@ -44,6 +47,7 @@
     font-size: 20px;
     padding-top: 0.4rem;
     font-weight: 600;
+    color: white;
 }
 
 /*Adjust margins and padding for smaller screens*/
