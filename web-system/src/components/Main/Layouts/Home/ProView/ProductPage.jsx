@@ -9,7 +9,7 @@ import { fetchSelectedProduct } from '../../../../../backend/db/products';
 
 function ProductPage() {
   const [product, setProduct] = useState([]);
-  const { id } = useParams()
+  const { id } = useParams();
   const theme = useTheme();
 
   useEffect(() => {
@@ -38,7 +38,7 @@ function ProductPage() {
           <Col xs={11} md={5} lg={5} className={styles.productImageSection}>
             {/* Product Image */}
 
-            <Image style={{ width: '70vw', height: '50vh', borderRadius: '10px', paddingBottom: '20px' }} src={product.mainimage} fluid />
+            <Image style={{ width: '70vw', height: '50vh', borderRadius: '10px', paddingBottom: '20px' }} src={product.images} fluid />
 
             {/* Small Image Slide Show */}
 
@@ -47,7 +47,7 @@ function ProductPage() {
                 <img
                   style={{ width: '70vw', height: '35vh', borderRadius: '10px' }}/*Changed to viewport height & Width*/
                   className="d-block w-100"
-                  src={'product.images[0]'}
+                  src={'products.images[0]'}
                   alt="First slide"
                 />
               </Carousel.Item>
@@ -55,7 +55,7 @@ function ProductPage() {
                 <img
                   style={{ width: '70vw', height: '35vh', borderRadius: '10px' }}
                   className="d-block w-100"
-                  src={product.image2}
+                  src={product.images}
                   alt="Second slide"
                 />
               </Carousel.Item>
@@ -63,7 +63,7 @@ function ProductPage() {
                 <img
                   style={{ width: '70vw', height: '35vh', borderRadius: '10px' }}
                   className="d-block w-100"
-                  src={product.image3}
+                  src={product.images3}
                   alt="Third slide"
                 />
               </Carousel.Item>
@@ -73,16 +73,14 @@ function ProductPage() {
             <div className={styles.productDetailsSection}>
               {/* Product Details */}
               <h2>{product.title}</h2>
-              <h4 style={{ textAlign: 'center', fontStyle: 'italic' }}>Category : {product.category}</h4><br />
+              <h4 style={{ textAlign: 'center', fontStyle: 'italic' }}>Category : {product.category}</h4>
+              <h4 style={{ textAlign: 'center', fontStyle: 'italic' }}>Type : {product.type}</h4><br />
               <div style={{ marginLeft: '0.6rem', marginRight: '0rem' }}>
                 <h4>Description</h4>
                 <ul>
-                  <li>{product.name}</li>
-                  <li>{product.descriptionLine2}</li>
-                  <li>{product.descriptionLine3}</li>
-                  <li>{product.descriptionLine4}</li>
-                  <li>{product.descriptionLine5}</li>
-                  <li>{product.descriptionLine6}</li>
+                  <li>{product.description}</li>
+                  <li>Quantity: {product.quantity}</li>
+                  <li>Product Location: {product.location}</li>
                 </ul>
               </div>
             </div>
