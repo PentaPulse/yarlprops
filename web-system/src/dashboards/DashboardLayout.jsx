@@ -80,7 +80,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
-export default function Dashboards({ handleMode }) {
+export default function DashboardLayout({ handleMode }) {
     const [open, setOpen] = React.useState(false);
     const [board, setBoard] = React.useState(0)
     const { user } = useAuth()

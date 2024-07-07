@@ -6,7 +6,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import AlertProvider from './backend/AlertService';
 import { AuthProvider } from './backend/AuthContext';
 import PrivateRoute from './backend/PrivateRoute';
-import Dashboards from './dashboards/Dashboards';
+import DashboardLayout from './dashboards/DashboardLayout';
 import PageLayout from './pages/PageLayout';
 import Home from './pages/Home/Home';
 import Guide from './pages/Guide/Guide';
@@ -80,7 +80,7 @@ function Themed() {
       <AlertProvider>
       <CssBaseline />
       <Router>
-        <Routings handleMode={handleTheme} handleDashboardState={()=>setDash(sessionStorage.getItem('dash'))} dash={dash}/>
+        <Routings handleMode={handleTheme} handleDashboardLayouttate={()=>setDash(sessionStorage.getItem('dash'))} dash={dash}/>
       </Router>
 
       </AlertProvider>
@@ -99,7 +99,7 @@ function Routings({ handleMode }) {
               <Route path='/contact' element={<Contact />} />
               <Route path="/products" element={<Products />} />
               <Route path="/products/:id" element={<ProductPage />} />
-            <Route path='/dashboard' element={<PrivateRoute><Dashboards handleMode={handleMode} /></PrivateRoute>} />
+            <Route path='/dashboard' element={<PrivateRoute><DashboardLayout handleMode={handleMode} /></PrivateRoute>} />
           </Routes>
         </PageLayout>
       </AuthProvider>
