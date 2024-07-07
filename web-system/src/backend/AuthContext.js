@@ -99,7 +99,7 @@ export const AuthProvider = ({ children }) => {
     React.useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user && !user.emailVerified) {
-                showAlerts('Verify your email', 'error');
+                showAlerts('Verify your email', 'error',);
             }
         });
 
