@@ -1,10 +1,18 @@
 import * as React from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Routings from './components/Routings';
 import Maintain from './components/Maintain';
 import CssBaseline from '@mui/material/CssBaseline';
 import AlertProvider from './backend/SnackbarContext';
+import { AuthProvider } from './backend/AuthContext';
+import Layout from './components/Main/Layouts/Layout';
+import PrivateRoute from './backend/PrivateRoute';
+import Dashboards from './components/Main/Dashboards/Dashboards';
+import ProductPage from './components/Main/Layouts/Home/ProView/ProductPage';
+import Products from './components/Main/Layouts/Products/Products';
+import Contact from './components/Main/Layouts/Contact/Contact';
+import Guide from './components/Main/Layouts/Guide/Guide';
+import Home from './components/Main/Layouts/Home/Home';
 
 const lightTheme = createTheme({
   palette: {
@@ -78,6 +86,25 @@ function Themed() {
       </AlertProvider>
     </ThemeProvider>
   );
+}
+
+function Routings({ handleMode }) {
+  return (
+    <>
+        <AuthProvider>
+          <Layout handleMode={handleMode} >
+            <Routes>
+              <Route exact path='/' element={<Home />} />
+              <Route path='/guide' element={<Guide />} />
+              <Route path='/contact' element={<Contact />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/products/:id" element={<ProductPage />} />
+            <Route path='/dashboard' element={<PrivateRoute><Dashboards handleMode={handleMode} /></PrivateRoute>} />
+          </Routes>
+        </Layout>
+      </AuthProvider>
+    </>
+  )
 }
 
 export default App;
