@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Maintain from './components/Maintain';
+import Maintain from './Maintain';
 import CssBaseline from '@mui/material/CssBaseline';
 import AlertProvider from './backend/AlertService';
 import { AuthProvider } from './backend/AuthContext';
@@ -58,7 +58,7 @@ function Themed() {
   });
 
   const [dash, setDash] = React.useState(true)
-  
+
 
   const handleTheme = () => {
     setMode((prevMode) => {
@@ -78,11 +78,10 @@ function Themed() {
   return (
     <ThemeProvider theme={mode ? lightTheme : darkTheme}>
       <AlertProvider>
-      <CssBaseline />
-      <Router>
-        <Routings handleMode={handleTheme} handleDashboardLayouttate={()=>setDash(sessionStorage.getItem('dash'))} dash={dash}/>
-      </Router>
-
+        <CssBaseline />
+        <Router>
+          <Routings handleMode={handleTheme} handleDashboardLayouttate={() => setDash(sessionStorage.getItem('dash'))} dash={dash} />
+        </Router>
       </AlertProvider>
     </ThemeProvider>
   );
@@ -91,14 +90,14 @@ function Themed() {
 function Routings({ handleMode }) {
   return (
     <>
-        <AuthProvider>
-          <PageLayout handleMode={handleMode} >
-            <Routes>
-              <Route exact path='/' element={<Home />} />
-              <Route path='/guide' element={<Guide />} />
-              <Route path='/contact' element={<Contact />} />
-              <Route path="/products" element={<Products />} />
-              <Route path="/products/:id" element={<ProductPage />} />
+      <AuthProvider>
+        <PageLayout handleMode={handleMode} >
+          <Routes>
+            <Route exact path='/' element={<Home />} />
+            <Route path='/guide' element={<Guide />} />
+            <Route path='/contact' element={<Contact />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/products/:id" element={<ProductPage />} />
             <Route path='/dashboard' element={<PrivateRoute><DashboardLayout handleMode={handleMode} /></PrivateRoute>} />
           </Routes>
         </PageLayout>

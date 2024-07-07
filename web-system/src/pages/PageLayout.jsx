@@ -27,7 +27,7 @@ export default function PageLayout({ children, handleMode, handleDashboardState 
     const [welcome, setWelcome] = React.useState(false)
     const [login, setLogin] = React.useState(false)
     const navigate = useNavigate();
-    const {dash}=useAuth();
+    const { dash } = useAuth();
 
     const showWelcome = () => {
         setOpen(!open);
@@ -53,7 +53,7 @@ export default function PageLayout({ children, handleMode, handleDashboardState 
     const handleBackButton = () => {
         setWelcome(true)
     }
-    
+
     return (
         <>
             {dash && <NavigationBar handleLoginButton={showWelcome} handleMode={handleMode} />}

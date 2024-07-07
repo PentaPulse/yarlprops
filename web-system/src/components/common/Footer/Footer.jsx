@@ -61,8 +61,8 @@ export default function Footer() {
                     </Grid>
                 </Grid>
             </Container>
-            <Paper sx={{ width: '100%', display: 'flex', justifyContent: 'center', padding: '16px', marginTop: '16px' }}>
-                <Typography>© 2024 Designed By PentaPulse</Typography>
+            <Paper sx={{ width: '100%', padding: '16px'}}>
+                <Typography textAlign='center'>© 2024 Designed By PentaPulse</Typography>
             </Paper>
         </>
     );
