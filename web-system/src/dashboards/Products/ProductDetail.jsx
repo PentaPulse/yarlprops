@@ -4,13 +4,13 @@ import { Paper, Typography, CircularProgress, Grid } from '@mui/material';
 import { fetchSelectedProduct } from '../../backend/db/products';
 
 const ProductDetail = () => {
-  const { pid } = useParams();
+  const { pid } = useParams(); //Extracts the 'pid' parameter from the URL
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProduct = async () => {
-      const fetchedProduct = await fetchSelectedProduct(pid);
+      const fetchedProduct = await fetchSelectedProduct(pid); // Use 'pid' to fetch the product details
       if (fetchedProduct){
         setProduct(fetchedProduct);
       } else {

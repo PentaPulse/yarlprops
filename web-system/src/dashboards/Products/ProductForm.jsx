@@ -4,6 +4,8 @@ import { TextField, Button, Paper, Typography, Grid } from '@mui/material';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { addProduct, fetchSelectedProduct, updateProduct } from '../../backend/db/products';
 import { storage } from '../../backend/firebase';
+import { styled } from '@mui/material/styles';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 const ProductForm = () => {
   const { pid } = useParams();
@@ -102,6 +104,18 @@ const ProductForm = () => {
     }
   };
 
+  const VisuallyHiddenInput = styled('input')({
+    clip: 'rect(0 0 0 0)',
+    clipPath: 'inset(50%)',
+    height: 1,
+    overflow: 'hidden',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    whiteSpace: 'nowrap',
+    width: 1,
+  });
+
   return (
     <Paper style={{ padding: 16 }}>
       <Typography variant="h6">{pid ? 'Edit Product' : 'Add Product'}</Typography>
@@ -161,13 +175,27 @@ const ProductForm = () => {
           margin="normal"
           required
         />
-        <input
+        <Button
+          accept='image/*'
+          multiple
+          onChange={handleImageChange}
+          component="label"
+          role={undefined}
+          variant="contained"
+          tabIndex={-1}
+          startIcon={<CloudUploadIcon />}
+          style={{ marginTop:'15px', marginBottom: '25px' }}
+        >
+        Upload file
+        <VisuallyHiddenInput type="file" />
+        </Button>
+        {/* <input
           type='file'
           accept='image/*'
           multiple
           onChange={handleImageChange}
           style={{ display: 'block', margin: '20px 0' }}
-        />
+        /> */}
         <Grid container spacing={2}>
           {existingImages.map((src, index) => (
             <Grid item key={index}>
@@ -203,7 +231,7 @@ const ProductForm = () => {
           ))}
         </Grid>
         {validationMessage && <Typography color="error">{validationMessage}</Typography>}
-        <Button type="submit" variant="contained" color="primary" style={{ marginTop: '25px' }}>
+        <Button type="submit" variant="contained" color="success" style={{ marginTop: '25px' }}>
           Save
         </Button>
       </form>
