@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Button, ButtonGroup, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useAuth } from '../../../backend/AuthContext';
+import { useAlerts } from '../../../backend/AlertService';
 
 export function Welcome({ toLogin, toRegister, closeBox }) {
     const theme = useTheme()
@@ -44,9 +45,8 @@ export function Login({ handleBack, closeBox }) {
         e.preventDefault();
         try {
             await login(email, password);
-            closeBox()
         } catch (error) {
-            console.error(error)
+            
         }
     }
     const handleReset = async (e) => {
@@ -54,7 +54,7 @@ export function Login({ handleBack, closeBox }) {
         try {
             await reset(email);
         } catch (error) {
-            console.error(error)
+            
         }
     }
     return (
@@ -64,7 +64,7 @@ export function Login({ handleBack, closeBox }) {
                 <hr />
                 <div className="d-flex flex-column gap-4">
                     <TextField label="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                    <TextField label="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                    <TextField label="Password" type='password' value={password} onChange={(e) => setPassword(e.target.value)} />
                     <span className="btn" onClick={handleReset}>Forgot Your Password?</span>
                 </div>
                 <div className="text-center">
@@ -105,7 +105,7 @@ export function Register({ handleBack ,closeBox}) {
         try {
             await register(fname, lname,dname, email, password, role);
         } catch (error) {
-            console.error('ff.'+error)
+
         }
     }
 
@@ -125,13 +125,13 @@ export function Register({ handleBack ,closeBox}) {
                 <TextField label="Display name" value={dname} disabled />
                 <FormControl style={{ marginRight: '10px', minWidth: 120 }}>
                     <InputLabel>Role</InputLabel>
-                    <Select value={role} onChange={handleSelectChange}>
+                    <Select value={role} onChange={handleSelectChange} required>
                         {roles.map((role, index) => (
                             <MenuItem key={index} value={role}>{role}</MenuItem>
                         ))}
                     </Select>
                 </FormControl>
-                <TextField label="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                <TextField label="Email" type='email' value={email} onChange={(e) => setEmail(e.target.value)} required />
                 <TextField label="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                 <div className="text-center">
                     <ButtonGroup aria-label="Vertical button group" className="gap-3 text-center">

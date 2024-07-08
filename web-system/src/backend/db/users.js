@@ -2,14 +2,6 @@ import "firebase/firestore";
 import { db } from "../firebase";
 import { doc, setDoc, collection, getDoc, getDocs, where, query } from "firebase/firestore";
 
-class CustomError extends Error {
-    constructor(code,message){
-        super(message);
-        this.code = code;
-        this.name = this.constructor.name
-    }
-}
-
 //reference
 const userRef = collection(db, "systemusers")
 

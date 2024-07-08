@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
     const [dash, setDash] = React.useState(false)
     const navigate = useNavigate()
     const location = useLocation()
-    const showAlerts=useAlerts();
+    const showAlerts = useAlerts();
 
     React.useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -49,16 +49,22 @@ export const AuthProvider = ({ children }) => {
                 const userid = user.uid;
                 updateProfile(user, { displayName: dname })
                     .then(() => {
-                        registerUser(userid, fname, lname,dname, email,role);
+                        registerUser(userid, fname, lname, dname, email, role);
                     })
                     .catch((error) => {
                         console.error("Error updating profile:", error);
                     });
             })
             .catch((error) => {
-                console.error("Error creating user:", error);
+                showAlerts('ww' + error, 'error')
+                if (email === '' || password === '' || fname===''||lname===''||role==='') {
+                    showAlerts('Enter details', 'warning')
+                }
+                if(error.code==='auth/email-already-in-use'){
+
+                }
             });
-        }
+    }
 
     //login
     const provider = new GoogleAuthProvider();
@@ -67,17 +73,41 @@ export const AuthProvider = ({ children }) => {
             const user = result.user;
             const userid = user.uid
             addUser(userid, "", "", user.email, user.phoneNumber, "", user.photoURL, "")
-            showAlerts('Successfully logged','success')
+            showAlerts('Successfully logged', 'success')
         })
 
-    const login = (email, password) => signInWithEmailAndPassword(auth, email, password);
+    const login = (email, password) => signInWithEmailAndPassword(auth, email, password)
+        .then(() => {
+            window.location.reload()
+        })
+        .catch((error) => {
+            if (error.code === 'auth/invalid-email') {
+                showAlerts('Invalid credentials', 'error')
+            }
+            if (error.code === 'auth/missing-password') {
+                showAlerts('Enter your password', 'warning')
+            }
+            if (error.code === 'auth/invalid-credential') {
+                showAlerts('Check email and password and try again', 'warning')
+            }
+        })
 
     //reset password
     const reset = (email) => sendPasswordResetEmail(auth, email)
-        .then(alert("check " + email + " inbox"));
+        .then(() => {
+            showAlerts(`Check ${email} inbox`, 'info')
+        })
+        .catch((error) => {
+            if (error.code === 'auth/missing-email') {
+                showAlerts('Enter your email address', 'warning')
+            }
+        })
 
     //logout
-    const logout = () => signOut(auth);
+    const logout = () => signOut(auth)
+        .then(() => {
+            sessionStorage.clear()
+        })
 
     //back to home
     const home = () => {
@@ -94,11 +124,11 @@ export const AuthProvider = ({ children }) => {
             setDash(true)
         }
     }, [location]);
-    
+
     React.useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user && !user.emailVerified) {
-                showAlerts('Verify your email', 'error','top-center');
+                showAlerts('Verify your email', 'error', 'top-center');
             }
         });
 
