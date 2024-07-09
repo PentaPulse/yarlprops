@@ -1,3 +1,4 @@
+import { useTheme } from '@mui/material';
 import * as React from 'react'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -9,17 +10,7 @@ export const useAlerts = () => {
 }
 
 const AlertProvider = ({ children }) => {
-    /*
-    const [alerts, setAlerts] = React.useState({
-        open: false,
-        message: '',
-        variety: '',
-        timeout: 3000,
-        vertical: 'top',
-        horizontal: 'left'
-
-    })
-        */
+    const theme = useTheme()
 
     const showAlerts = (message, type = 'info', position = 'top-right', autoClose = 5000) => {
         toast(message, {
@@ -37,7 +28,11 @@ const AlertProvider = ({ children }) => {
     return (
         <AlertService.Provider value={showAlerts}>
             {children}
-            <ToastContainer />
+            <ToastContainer
+                newestOnTop
+                theme={theme.palette.mode}
+                limit={2}
+            />
         </AlertService.Provider>
     )
 }

@@ -1,6 +1,7 @@
 import { Grid, TextField } from '@mui/material';
 import * as React from 'react'
 import ProductsContents from '../Home/ProContent/ProductsContents';
+import Categories from '../Home/Filters/Categories';
 
 function Products() {
     const [searchTerm, setSearchTerm] = React.useState('');
@@ -18,7 +19,7 @@ function Products() {
                     />
                 </Grid>
                 <Grid item md={3}>
-                    <Categories />
+                    <Categories/>
                 </Grid>
                 <Grid item md={9}>
                     <ProductsContents searchTerm={searchTerm} />
@@ -29,11 +30,3 @@ function Products() {
 }
 
 export default Products;
-
-function Categories(){
-    return(
-        <>
-        Filters
-        </>
-    );
-}

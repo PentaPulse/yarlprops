@@ -1,8 +1,8 @@
 import * as React from 'react';
 import Slidshow from './Slideshow/Slidshow';
-import Categories from './Filters/Categories';
 import ProductsContents from './ProContent/ProductsContents';
-import { Divider, Grid, TextField } from '@mui/material';
+import { Box, Divider, Grid, TextField } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 function Home() {
   const [searchTerm, setSearchTerm] = React.useState('');
@@ -22,11 +22,11 @@ function Home() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </Grid>
-        <Grid item md={3}>
-          <Categories />
-        </Grid>
-        <Grid item md={9}>
-          <ProductsContents searchTerm={searchTerm}/>
+        <Grid item md={12}>
+          <ProductsContents searchTerm={searchTerm} />
+          <Box display='flex' justifyContent='flex-end' mr={4}>
+            <Link to='/products'>See all</Link>
+          </Box>
         </Grid>
       </Grid>
     </>

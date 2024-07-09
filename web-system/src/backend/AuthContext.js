@@ -146,10 +146,8 @@ export const AuthProvider = ({ children }) => {
                 );
             }
         });
-
-        // Cleanup subscription on unmount 
         return () => unsubscribe();
-    }, []);
+    });
 
     const VerifyEmail = () => {
         const verify=()=>{

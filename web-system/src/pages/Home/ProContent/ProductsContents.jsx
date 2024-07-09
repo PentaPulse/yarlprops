@@ -46,8 +46,8 @@ const ProductsContents = ({ searchTerm }) => {
                                     title={product.name}
                                 />
                                 <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                    <Typography gutterBottom variant='h4' component='div'>
-                                        {product.name}
+                                    <Typography gutterBottom variant='h6' component='div' color='inherit'>
+                                        {product.title}
                                     </Typography>
                                     <Button onClick={() => handleCardClick(product.pid)} size="medium">
                                         Read More
