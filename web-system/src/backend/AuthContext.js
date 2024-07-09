@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { GoogleAuthProvider, createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth';
+import { Button } from '@mui/material';
+import { GoogleAuthProvider, createUserWithEmailAndPassword, onAuthStateChanged, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth';
 import { db, auth } from './firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { addUser, registerUser } from './db/users';
@@ -54,14 +55,22 @@ export const AuthProvider = ({ children }) => {
                     .catch((error) => {
                         console.error("Error updating profile:", error);
                     });
+                showAlerts('Account created', 'success', 'top-center')
             })
             .catch((error) => {
                 showAlerts('ww' + error, 'error')
-                if (email === '' || password === '' || fname===''||lname===''||role==='') {
-                    showAlerts('Enter details', 'warning')
+                if (email === '' || password === '' || fname === '' || lname === '' || role === '') {
+                    if (error.code === 'auth/invalid-email' || error.code === 'auth/missing-password') {
+                        showAlerts('Enter details', 'warning')
+                    }
+                } else if (error.code === 'auth/invalid-email') {
+                    showAlerts('Try different email', 'warning')
                 }
-                if(error.code==='auth/email-already-in-use'){
-
+                if (error.code === 'auth/email-already-in-use') {
+                    showAlerts('Try different email', 'warning')
+                }
+                if (error.code === 'auth/weak-password') {
+                    showAlerts('Try different password', 'warning')
                 }
             });
     }
@@ -128,13 +137,36 @@ export const AuthProvider = ({ children }) => {
     React.useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user && !user.emailVerified) {
-                showAlerts('Verify your email', 'error', 'top-center');
+                showAlerts(
+                    <>
+                        Verify your email <VerifyEmail />
+                    </>,
+                    'error',
+                    'top-center'
+                );
             }
         });
 
-        // Cleanup subscription on unmount
+        // Cleanup subscription on unmount 
         return () => unsubscribe();
-    });
+    }, []);
+
+    const VerifyEmail = () => {
+        const verify=()=>{
+            sendEmailVerification(auth.currentUser)
+            .then(()=>{
+                showAlerts('Check your email inbox');
+            })
+            .catch((e)=>{
+                console.log(e)
+            })
+        }
+        return (
+            <>
+                <Button onClick={verify}>Verify now!</Button>
+            </>
+        )
+    }
 
     return (
         <AuthContext.Provider value={{ user, register, login, logout, reset, google, home, dash }}>
