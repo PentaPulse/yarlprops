@@ -1,40 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { TextField, Button, Paper, Typography, Grid } from '@mui/material';
+import { TextField, Button, Paper, Typography, Grid, CircularProgress } from '@mui/material';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { addProduct, fetchSelectedProduct, updateProduct } from '../../backend/db/products';
 import { storage } from '../../backend/firebase';
 import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import Swal from 'sweetalert2';
 
-const ProductForm = () => {
-  const { pid } = useParams();
-  const navigate = useNavigate();
+const ProductForm = ({ pid, onSuccess, onCancel }) => {
   const [product, setProduct] = useState({ title: '', category: '', type: '', description: '', quantity: '', location: '', images: [] });
   const [existingImages, setExistingImages] = useState([]);
   const [newImages, setNewImages] = useState([]);
   const [validationMessage, setValidationMessage] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (pid) {
       const fetchProduct = async () => {
         const fetchedProduct = await fetchSelectedProduct(pid);
         if (fetchedProduct) {
-          setProduct({
-            title: fetchedProduct.title,
-            category: fetchedProduct.category,
-            type: fetchedProduct.type,
-            description: fetchedProduct.description,
-            quantity: fetchedProduct.quantity,
-            location: fetchedProduct.location,
-            images: fetchedProduct.images || []
-          });
+          setProduct(fetchedProduct);
           setExistingImages(fetchedProduct.images || []);
         } else {
           console.log('No such document!');
         }
+        setLoading(false);
       };
       fetchProduct();
+    } else {
+      setLoading(false);
     }
   }, [pid]);
 
@@ -44,13 +38,10 @@ const ProductForm = () => {
   };
 
   const handleImageChange = (event) => {
-    const files = Array.from(event.target.files);
-    const validFiles = files.filter(file => file.name);
-    if (validFiles.length !== files.length) {
-      setValidationMessage('One or more of the selected files are invalid.');
-      return;
+    const file = event.target.files[0];
+    if (file) {
+      setNewImages([...newImages, file]);
     }
-    setNewImages([...newImages, ...validFiles]);
   };
 
   const handleRemoveImage = (index, type) => {
@@ -87,22 +78,32 @@ const ProductForm = () => {
       if (pid) {
         await updateProduct(pid, { ...product, images: allImageUrls });
       } else {
-        const productId = await addProduct(product.title, product.category, product.type, product.description, product.quantity, product.location, allImageUrls);
-        console.log('Product added with ID:', productId);
+        await addProduct({...product, images: allImageUrls });
       }
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Product saved successfully',
+        showConfirmButton: false,
+        timer: 1500,
+      });
 
       // Reset form state
       setProduct({ title: '', category: '', type: '', description: '', quantity: '', location: '', images: [] });
       setExistingImages([]);
       setNewImages([]);
+      onSuccess();
 
-      // Navigate to product list
-      navigate('/');
     } catch (e) {
-      console.error("Error adding product:", e);
-      setValidationMessage('An error occurred while adding the product. Please try again.');
+      Swal.fire({
+        icon: 'error',
+        title: 'Error saving product',
+        text: e.message,
+      });
     }
   };
+
+  if (loading) return <CircularProgress />;
 
   const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -233,6 +234,9 @@ const ProductForm = () => {
         {validationMessage && <Typography color="error">{validationMessage}</Typography>}
         <Button type="submit" variant="contained" color="success" style={{ marginTop: '25px' }}>
           Save
+        </Button>
+        <Button onClick={onCancel} variant="outlined" style={{ marginTop: '25px', marginLeft: '10px' }}>
+          Cancel
         </Button>
       </form>
     </Paper>

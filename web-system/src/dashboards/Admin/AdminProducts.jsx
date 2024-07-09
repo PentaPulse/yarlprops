@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
 import ProductList from '../Products/ProductList';
 import ProductDetail from '../Products/ProductDetail';
 import ProductForm from '../Products/ProductForm';
@@ -7,14 +6,34 @@ import { Container, Button } from '@mui/material';
 
 const AdminProducts = () => {
   const [showAddProduct, setShowAddProduct] = useState(false);
-  const navigate = useNavigate();
+  const [editingProductId, setEditingProductId] = useState(null);
+  const [viewingProductId, setViewingProductId] = useState(null);
 
-  const toggleAddProduct = () =>{
-    setShowAddProduct(!showAddProduct);
+  const handleAddProduct = () =>{
+    setEditingProductId(null);
+    setShowAddProduct(true);
+    setViewingProductId(null);
+  }
+
+  const handleEditProduct = (productId) => {
+    setEditingProductId(productId);
+    setShowAddProduct(true);
+    setViewingProductId(null);
+  }
+
+  const handleViewProduct = (productId) => {
+    setViewingProductId(productId);
+    setShowAddProduct(false);
   }
 
   const handleSuccess = () => {
-    navigate('/');
+    setShowAddProduct(false);
+    setViewingProductId(null);
+  };
+
+  const handleCancel = () => {
+    setShowAddProduct(false);
+    setViewingProductId(null);
   };
 
   return (
@@ -23,20 +42,18 @@ const AdminProducts = () => {
       <Button
         variant="contained"
         color="success"
-        onClick={toggleAddProduct}
+        onClick={handleAddProduct}
         style={{ margin: '20px' }}
       >
         {showAddProduct ? "Back to Product List" : "Add Product"}
       </Button>
       <Container>
         {showAddProduct ? (
-          <ProductForm onSuccess={() => setShowAddProduct(false)} />
-        ) : (
-        <Routes>
-          <Route path="/" element={<ProductList />} />
-          <Route path="/product/:pid" element={<ProductDetail />} />
-          <Route path="/product/:pid/edit" element={<ProductForm onSuccess={handleSuccess} />} />
-        </Routes>
+          <ProductForm pid={editingProductId} onSuccess={handleSuccess} onCancel={handleCancel} />
+        ) : viewingProductId? (
+          <ProductDetail pid={viewingProductId} onBack={handleCancel} />
+        ):(
+          <ProductList onEditProduct={handleEditProduct} onViewProduct={handleViewProduct}/>
         )}
       </Container>
     </>

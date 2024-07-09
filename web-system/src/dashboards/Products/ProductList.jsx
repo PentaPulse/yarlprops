@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { fetchProducts, db } from '../../backend/db/products';
 import { deleteDoc, doc } from 'firebase/firestore';
 import { Table, TableBody, TableContainer, TableHead, TableRow, Paper, Button, TablePagination } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 
-const ProductList = () => {
+const ProductList = ({ onEditProduct, onViewProduct }) => {
     const [products, setProducts] = useState([]);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);    
@@ -83,8 +82,8 @@ const ProductList = () => {
                         <StyledTableCell align="center">{product.quantity}</StyledTableCell>
                         <StyledTableCell align="center">{product.location}</StyledTableCell>
                         <StyledTableCell align="center">
-                            <Button component={Link} to={`/product/${product.id}`} variant="outlined" style={{ margin: '5px', width: '100%' }}>View</Button>
-                            <Button component={Link} to={`/product/${product.id}/edit`} variant="outlined" color="success" style={{ margin: '5px', width: '100%' }}>Edit</Button>
+                            <Button onClick={() => onViewProduct(product.id)} variant="outlined" color="secondary" style={{ margin: '5px', width: '100%' }}>View</Button>
+                            <Button onClick={() => onEditProduct(product.id)} variant="outlined" color="success" style={{ margin: '5px', width: '100%' }}>Edit</Button>
                             <Button onClick={() => handleDelete(product.id)} variant="outlined" color="error" style={{ margin: '5px', width: '100%' }}>Delete</Button>
                         </StyledTableCell>
                     </StyledTableRow>
