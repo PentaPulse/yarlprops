@@ -39,14 +39,16 @@ const AdminProducts = () => {
   return (
     <>
       <h2>PRODUCTS</h2>
+
       <Button
         variant="contained"
         color="success"
         onClick={handleAddProduct}
         style={{ margin: '20px' }}
       >
-        {showAddProduct ? "Back to Product List" : "Add Product"}
+        Add Product
       </Button>
+      
       <Container>
         {showAddProduct ? (
           <ProductForm pid={editingProductId} onSuccess={handleSuccess} onCancel={handleCancel} />
