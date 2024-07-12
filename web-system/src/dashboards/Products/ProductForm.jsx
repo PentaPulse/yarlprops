@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Paper, Typography, Grid, CircularProgress } from '@mui/material';
+import { TextField, Button, Paper, Typography, Grid } from '@mui/material';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { addProduct, fetchSelectedProduct, updateProduct } from '../../backend/db/products';
 import { storage } from '../../backend/firebase';
@@ -8,11 +8,21 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Swal from 'sweetalert2';
 
 const ProductForm = ({ pid, onSuccess, onCancel }) => {
-  const [product, setProduct] = useState({ title: '', category: '', type: '', description: '', quantity: '', location: '', images: [] });
+  const [product, setProduct] = useState({ 
+    title: '', 
+    category: '', 
+    type: '', 
+    description: '', 
+    quantity: '', 
+    location: '', 
+    images: [
+
+    ], 
+  });
+  
   const [existingImages, setExistingImages] = useState([]);
   const [newImages, setNewImages] = useState([]);
   const [validationMessage, setValidationMessage] = useState('');
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (pid) {
@@ -24,11 +34,8 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
         } else {
           console.log('No such document!');
         }
-        setLoading(false);
       };
       fetchProduct();
-    } else {
-      setLoading(false);
     }
   }, [pid]);
 
@@ -56,12 +63,13 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
     event.preventDefault();
 
     const totalImages = existingImages.length + newImages.length;
-    if (totalImages < 3 || totalImages > 6) {
-      setValidationMessage('You must have at least 3 images and no more than 6 images.');
+    if (totalImages < 3 || totalImages > 5) {
+      setValidationMessage('You must have at least 3 images and no more than 5 images.');
       return;
     }
 
     setValidationMessage('');
+
 
     try {
       // Upload new images and get their URLs
@@ -78,6 +86,8 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
       if (pid) {
         await updateProduct(pid, { ...product, images: allImageUrls });
       } else {
+        console.log("Stage 2",product)
+        
         await addProduct({...product, images: allImageUrls });
       }
 
@@ -89,7 +99,14 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
       });
 
       // Reset form state
-      setProduct({ title: '', category: '', type: '', description: '', quantity: '', location: '', images: [] });
+      setProduct({ 
+        title: '', 
+        category: '', 
+        type: '', 
+        description: '', 
+        quantity: '', 
+        location: '', 
+        images: [] });
       setExistingImages([]);
       setNewImages([]);
       onSuccess();
@@ -102,8 +119,6 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
       });
     }
   };
-
-  if (loading) return <CircularProgress />;
 
   const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',

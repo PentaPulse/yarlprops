@@ -27,3 +27,4 @@ Type: Chair
 Description: High-quality plastic,
       	     Colors: Maroon/Red
 Image: "chair".jpg
+
