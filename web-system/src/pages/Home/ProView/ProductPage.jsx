@@ -4,6 +4,7 @@ import { Container, Grid, Card, CardMedia, CardContent, Typography, Button, Circ
 import Carousel from 'react-material-ui-carousel';
 import { fetchSelectedProduct } from '../../../backend/db/products';
 import styles from './ProductPage.module.css';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 
 function ProductPage() {
   const [product, setProduct] = useState(null);
@@ -33,12 +34,12 @@ function ProductPage() {
         <Grid container spacing={4}>
           <Grid item xs={12} md={6} className={styles.productImageSection}>
             {/* Product Image */}
-            <Card>
+            <Card className={styles.productImageSection}>
               <CardMedia
                 component="img"
                 image={product.images}
                 alt={product.name}
-                sx={{ height: '50vh', borderRadius: '10px', paddingBottom: '20px' }}
+                sx={{ height: '52vh', borderRadius: '25px'}}
               />
               {/* Small Image Slide Show */}
               <Carousel>
@@ -48,11 +49,11 @@ function ProductPage() {
                       component="img"
                       image={image}
                       alt={`slide ${index}`}
-                      sx={{ height: '35vh', borderRadius: '10px' }}
+                      sx={{ height: '40vh', borderRadius: '25px', padding: '17px' }}
                     />
                   </Box>
                 ))}
-              </Carousel>
+              </Carousel> 
             </Card>
           </Grid>
           <Grid item xs={12} md={6}>
@@ -66,7 +67,7 @@ function ProductPage() {
                 <Typography variant="h6" component="h4" sx={{ textAlign: 'center', fontStyle: 'italic' }}>
                   Type: {product.type}
                 </Typography>
-                <Box sx={{ marginLeft: '0.6rem', marginRight: '0rem' }}>
+                <Box sx={{ marginLeft: '1rem', marginRight: '1rem', marginTop: '1rem' }}>
                   <Typography variant="h6" component="h4">Description</Typography>
                   <ul className={styles.productDetailsSectionUl}>
                     <li>{product.description}</li>
@@ -74,7 +75,7 @@ function ProductPage() {
                     <li>Product Location: {product.location}</li>
                   </ul>
                 </Box>
-                <Box className={styles.sellerDetailsSection} sx={{ marginTop: '2rem' }}>
+                <Box className={styles.sellerDetailsSection} sx={{ marginLeft: '1rem', marginRight: '1rem', marginTop: '3rem' }}>
                   {/* Seller Details */}
                   <Typography variant="h5" component="h3" className={styles.sellerDetailsSectionH3}>Seller/Renter Details</Typography>
                   <Typography variant="h6" component="h4"><i className="fa-solid fa-user"></i> Name</Typography>
@@ -88,9 +89,9 @@ function ProductPage() {
             </Card>
           </Grid>
         </Grid>
-        <Grid container spacing={4} sx={{ marginTop: '2rem' }}>
+        <Grid container spacing={4} sx={{ marginLeft: '0rem' }}>
           <Grid item>
-            <Button variant="contained" component={Link} to="/products" startIcon={<i className="fa-solid fa-arrow-left"></i>}>
+            <Button variant="contained" component={Link} to="/products" startIcon={<ChevronLeftIcon/>}>
               Back
             </Button>
           </Grid>
