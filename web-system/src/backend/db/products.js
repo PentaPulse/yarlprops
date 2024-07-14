@@ -1,12 +1,12 @@
 import "firebase/firestore";
 import { db } from "../firebase";
-import { doc, setDoc, collection, getDocs, query, where, addDoc, updateDoc } from "firebase/firestore";
+import { doc, setDoc, collection, getDocs, query, where, addDoc, updateDoc, serverTimestamp, orderBy, limit } from "firebase/firestore";
 
 // Reference
 const productRef = collection(db, "products");
 
 // Adding products
-const addProduct = async ({title, category, type, description, quantity, location, images}) => {
+const addProduct = async ({ title, category, type, description, quantity, location, images, sellerId }) => {
     try {
         const docRef = await addDoc(productRef, {
             title,
@@ -16,6 +16,8 @@ const addProduct = async ({title, category, type, description, quantity, locatio
             quantity,
             location,
             images,
+            sellerId,
+            timestamp: serverTimestamp()
         });
         await setDoc(docRef, { pid: docRef.id }, { merge: true });
         return docRef.id;
@@ -48,6 +50,18 @@ const fetchProducts = async () => {
     }
 };
 
+const fetchProductsToHome = async () => {
+    const proQuery = query(collection(db, 'products'), orderBy('timestamp', 'asc'), limit(3))
+    try {
+        const snapshot = await getDocs(proQuery)
+        const productList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        return productList
+    } catch (e) {
+        console.error(e)
+    }
+};
+
+
 // Fetching a specific product by ID
 const fetchSelectedProduct = async (pid) => {
     const q = query(productRef, where('pid', '==', pid));
@@ -72,5 +86,6 @@ export const countProducts = async () => {
     return productsSnapshot.size;
 };
 
-export { db, addProduct, updateProduct, fetchProducts, fetchSelectedProduct };
+export { db, addProduct, updateProduct, fetchProducts, fetchSelectedProduct, fetchProductsToHome };
 
+//filters

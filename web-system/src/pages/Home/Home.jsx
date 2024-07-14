@@ -1,8 +1,9 @@
 import * as React from 'react';
 import Slidshow from './Slideshow/Slidshow';
-import ProductsContents from './ProContent/ProductsContents';
-import { Box, Divider, Grid,  Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Box,  Divider, Grid, Typography } from '@mui/material';
+import { Link} from 'react-router-dom';
+import ProductList from './ProductList'
+import ServiceList from './ServiceList';
 
 function Home() {
   return (
@@ -13,15 +14,15 @@ function Home() {
         </Grid>
         <Divider />
         <Grid item md={12}>
-          <Typography variant='h4' >Latest Products</Typography>
-          <ProductsContents/>
+          <Typography variant='h5' >Latest Products</Typography>
+          <ProductList />
           <Box display='flex' justifyContent='flex-end' mr={4}>
             <Link to='/products'>See all</Link>
           </Box>
         </Grid>
         <Grid item md={12}>
-          <Typography variant='h4' >Latest Services</Typography>
-          <ProductsContents/>
+          <Typography variant='h5' >Latest Services</Typography>
+          <ServiceList/>
           <Box display='flex' justifyContent='flex-end' mr={4}>
             <Link to='/services'>See all</Link>
           </Box>

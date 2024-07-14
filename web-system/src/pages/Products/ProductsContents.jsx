@@ -2,8 +2,8 @@ import * as React from 'react';
 import { Button, Card, CardContent, CardMedia, Container, Grid, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { collection, getDocs, query, where } from 'firebase/firestore';
-import { db } from '../../../backend/firebase';
-import { fetchProducts } from '../../../backend/db/products';
+import { db } from '../../backend/firebase';
+import { fetchProducts } from '../../backend/db/products';
 
 
 const ProductsContents = ({ searchTerm }) => {

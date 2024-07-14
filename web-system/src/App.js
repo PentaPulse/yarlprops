@@ -12,9 +12,9 @@ import Home from './pages/Home/Home';
 import Guide from './pages/Guide/Guide';
 import Contact from './pages/Contact/Contact';
 import Products from './pages/Products/Products';
-import ProductPage from './pages/Home/ProView/ProductPage';
+import ProductPage from './pages/Products/ProView/View';
 import Services from './pages/Services/Services';
-import ServicePage from './pages/Home/SerPage/ServicePage';
+import ViewService from './pages/Services/ViewService'
 
 const lightTheme = createTheme({
   palette: {
@@ -101,7 +101,7 @@ function Routings({ handleMode }) {
             <Route path="/products" element={<Products />} />
             <Route path="/products/:id" element={<ProductPage />} />
             <Route path='/services' element={<Services/>}/>
-            <Route path='/services/:id' element={<ServicePage/>}/>
+            <Route path='/services/:id' element={<ViewService/>}/>
             <Route path='/dashboard' element={<PrivateRoute><DashboardLayout handleMode={handleMode} /></PrivateRoute>} />
           </Routes>
         </PageLayout>

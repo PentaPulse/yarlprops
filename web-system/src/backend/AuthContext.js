@@ -84,6 +84,9 @@ export const AuthProvider = ({ children }) => {
             addUser(userid, "", "", user.email, user.phoneNumber, "", user.photoURL, "")
             showAlerts('Successfully logged', 'success')
         })
+        .catch(()=>{
+            showAlerts('Error occured , Try again with different gmail','error')
+        })
 
     const login = (email, password) => signInWithEmailAndPassword(auth, email, password)
         .then(() => {
