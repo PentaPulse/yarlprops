@@ -13,6 +13,8 @@ import Guide from './pages/Guide/Guide';
 import Contact from './pages/Contact/Contact';
 import Products from './pages/Products/Products';
 import ProductPage from './pages/Home/ProView/ProductPage';
+import Services from './pages/Services/Services';
+import ServicePage from './pages/Home/SerPage/ServicePage';
 
 const lightTheme = createTheme({
   palette: {
@@ -98,6 +100,8 @@ function Routings({ handleMode }) {
             <Route path='/contact' element={<Contact />} />
             <Route path="/products" element={<Products />} />
             <Route path="/products/:id" element={<ProductPage />} />
+            <Route path='/services' element={<Services/>}/>
+            <Route path='/services/:id' element={<ServicePage/>}/>
             <Route path='/dashboard' element={<PrivateRoute><DashboardLayout handleMode={handleMode} /></PrivateRoute>} />
           </Routes>
         </PageLayout>

@@ -13,10 +13,17 @@ function Home() {
         </Grid>
         <Divider />
         <Grid item md={12}>
-          <Typography component='h3' >Latest Products</Typography>
+          <Typography variant='h4' >Latest Products</Typography>
           <ProductsContents/>
           <Box display='flex' justifyContent='flex-end' mr={4}>
             <Link to='/products'>See all</Link>
+          </Box>
+        </Grid>
+        <Grid item md={12}>
+          <Typography variant='h4' >Latest Services</Typography>
+          <ProductsContents/>
+          <Box display='flex' justifyContent='flex-end' mr={4}>
+            <Link to='/services'>See all</Link>
           </Box>
         </Grid>
       </Grid>

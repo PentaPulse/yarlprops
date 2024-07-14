@@ -6,7 +6,7 @@ import AdbIcon from '@mui/icons-material/Adb';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../backend/AuthContext';
 
-const pages = [['Home','/'],['Products','/products'], ['Guide','/guide'] ,[ 'Contact','/contact']];
+const pages = [['Home','/'],['Products','/products'],['Services','/services'], ['Guide','/guide'] ,[ 'Contact','/contact']];
 
 export default function NavigationBar({ handleLoginButton, handleMode }) {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
