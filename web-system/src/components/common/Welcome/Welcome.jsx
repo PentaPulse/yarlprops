@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { Button, ButtonGroup, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useAuth } from '../../../backend/AuthContext';
-import { useAlerts } from '../../../backend/AlertService';
 
 export function Welcome({ toLogin, toRegister, closeBox }) {
     const theme = useTheme()
