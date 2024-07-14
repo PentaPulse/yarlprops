@@ -4,6 +4,7 @@ import { deleteDoc, doc } from 'firebase/firestore';
 import { Table, TableBody, TableContainer, TableHead, TableRow, Paper, Button, TablePagination } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import Swal from 'sweetalert2';
 
 const ProductList = ({ onEditProduct, onViewProduct }) => {
     const [products, setProducts] = useState([]);
@@ -20,40 +21,36 @@ const ProductList = ({ onEditProduct, onViewProduct }) => {
 
     const handleDelete = async (id) => {
         try {
-            await deleteDoc(doc(db, 'products', id));
-            setProducts(products.filter(product => product.id !== id));
+            const result = await Swal.fire({
+                icon: 'warning',
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No, cancel!',
+            });
+
+            if (result.isConfirmed){
+                await deleteDoc(doc(db, 'products', id));
+                setProducts(products.filter(product => product.id !== id));
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Deleted!',
+                    text: `The product has been deleted.`,
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+            }
         } catch (error) {
             console.error("Error deleting product: ", error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: 'There was an error deleting the product.',
+            });
         }
     };
-
-    // const handleDelete = id => {
-    //     Swal.fire({
-    //       icon: 'warning',
-    //       title: 'Are you sure?',
-    //       text: "You won't be able to revert this!",
-    //       showCancelButton: true,
-    //       confirmButtonText: 'Yes, delete it!',
-    //       cancelButtonText: 'No, cancel!',
-    //     }).then(result => {
-    //       if (result.value) {
-    //         const [employee] = employees.filter(employee => employee.id === id);
-    
-    //         deleteDoc(doc(db, "employees", id));
-    
-    //         Swal.fire({
-    //           icon: 'success',
-    //           title: 'Deleted!',
-    //           text: `${employee.firstName} ${employee.lastName}'s data has been deleted.`,
-    //           showConfirmButton: false,
-    //           timer: 1500,
-    //         });
-    
-    //         const employeesCopy = employees.filter(employee => employee.id !== id);
-    //         setEmployees(employeesCopy);
-    //       }
-    //     });
-    //   };
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
