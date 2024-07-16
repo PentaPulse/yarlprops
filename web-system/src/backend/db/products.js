@@ -86,6 +86,6 @@ export const countProducts = async () => {
     return productsSnapshot.size;
 };
 
-export { db, addProduct, updateProduct, fetchProducts, fetchSelectedProduct, fetchProductsToHome };
+export { addProduct, updateProduct, fetchProducts, fetchSelectedProduct, fetchProductsToHome };
 
 //filters

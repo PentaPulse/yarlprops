@@ -21,8 +21,8 @@ import RenterOverview from './Renter/RenterOverview'
 import RenterOrders from './Renter/RenterOrders'
 import RenterProducts from './Renter/RenterProducts'
 //servicer
-import ServicerOverview from './Servicer/ServicerOverview';
-import ServicerOrders from './Servicer/ServicerOrders';
+import ServicerOverview from './Service/ServicerOverview';
+import ServicerOrders from './Service/ServicerOrders';
 //user imports
 import UserOverview from './User/UserOverview'
 import ContactusReqs from './Admin/ContactusReqs'

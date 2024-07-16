@@ -1,7 +1,7 @@
 import { Box, Button, Menu, MenuItem } from '@mui/material';
 import React from 'react'
 
-function Filters() {
+function ProductFilters() {
     return (
         <>
             <Box >
@@ -15,4 +15,4 @@ function Filters() {
     )
 }
 
-export default Filters;
+export default ProductFilters;
