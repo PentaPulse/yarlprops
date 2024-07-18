@@ -103,7 +103,7 @@ const ProfileSettings = () => {
     setEdit(false);
   };
 
-  const width = '35vw';
+  const width = '17.5vw';
 
   return (
     <>
