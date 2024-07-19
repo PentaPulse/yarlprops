@@ -6,7 +6,7 @@ import { doc, setDoc, collection, getDocs, query, where, addDoc, updateDoc, serv
 const productRef = collection(db, "products");
 
 // Adding products
-const addProduct = async ({ title, category, type, description, quantity, location, images, sellerId }) => {
+const addProduct = async ({ title, category, type, description, quantity, location, images }) => {
     try {
         const docRef = await addDoc(productRef, {
             title,
@@ -16,8 +16,8 @@ const addProduct = async ({ title, category, type, description, quantity, locati
             quantity,
             location,
             images,
-            sellerId,
-            timestamp: serverTimestamp()
+            // sellerId,
+            // timestamp: serverTimestamp()
         });
         await setDoc(docRef, { pid: docRef.id }, { merge: true });
         return docRef.id;
