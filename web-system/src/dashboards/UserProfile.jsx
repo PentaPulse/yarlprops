@@ -11,7 +11,7 @@ const Profile = () => {
   return (
     <Grid container spacing={2} mt={2}>
       <Grid container justifyContent="center" alignItems="center">
-        <Avatar alt="Profile Picture" src={user.photoUrl || sessionStorage.getItem('pp')} sx={{ width: 150, height: 150 }} />
+        <Avatar alt="Profile Picture" src={user.photoUrl || sessionStorage.getItem('pp')} sx={{ width: 150, height: 150 ,marginRight:'50px'}} />
         <Grid item>
           <TextField
             label="Name"
