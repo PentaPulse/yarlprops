@@ -1,12 +1,12 @@
 import "firebase/firestore";
 import { db } from "../firebase";
-import { doc, setDoc, collection, getDocs, query, where, addDoc, updateDoc, serverTimestamp, orderBy, limit } from "firebase/firestore";
+import { doc, setDoc, collection, getDocs, query, where, addDoc, updateDoc,  orderBy, limit } from "firebase/firestore";
 
 // Reference
 const productRef = collection(db, "products");
 
 // Adding products
-const addProduct = async ({ title, category, type, description, quantity, location, images, sellerId }) => {
+const addProduct = async ({ title, category, type, description, quantity, location, images }) => {
     try {
         const docRef = await addDoc(productRef, {
             title,
@@ -16,8 +16,8 @@ const addProduct = async ({ title, category, type, description, quantity, locati
             quantity,
             location,
             images,
-            sellerId,
-            timestamp: serverTimestamp()
+            // sellerId,
+            // timestamp: serverTimestamp()
         });
         await setDoc(docRef, { pid: docRef.id }, { merge: true });
         return docRef.id;
@@ -89,3 +89,13 @@ export const countProducts = async () => {
 export { addProduct, updateProduct, fetchProducts, fetchSelectedProduct, fetchProductsToHome };
 
 //filters
+export const filterByCat = async ({cat}) => {
+    const proQuery = query(collection(db, 'products'),where('category','==',cat))
+    try {
+        const snapshot = await getDocs(proQuery)
+        const productList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        return productList
+    } catch (e) {
+        console.error(e)
+    }
+};
