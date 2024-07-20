@@ -87,15 +87,3 @@ export const countProducts = async () => {
 };
 
 export { addProduct, updateProduct, fetchProducts, fetchSelectedProduct, fetchProductsToHome };
-
-//filters
-export const filterByCat = async ({cat}) => {
-    const proQuery = query(collection(db, 'products'),where('category','==',cat))
-    try {
-        const snapshot = await getDocs(proQuery)
-        const productList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        return productList
-    } catch (e) {
-        console.error(e)
-    }
-};

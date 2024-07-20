@@ -5,6 +5,7 @@ import ProductFilters from './ProductFilters';
 
 function Products() {
     const [searchTerm, setSearchTerm] = React.useState('');
+    const [cat,setCat]=React.useState('')
 
     return (
         <>
@@ -18,7 +19,7 @@ function Products() {
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
                 </Grid>
-                <Grid item md={3}>
+                <Grid item md={2}>
                     <ProductFilters/>
                 </Grid>
                 <Grid item md={9}>

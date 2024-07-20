@@ -1,16 +1,15 @@
-import { Box, Button, Menu, MenuItem } from '@mui/material';
+import { Box, Button, Checkbox, FormControlLabel, FormGroup, Menu, MenuItem } from '@mui/material';
 import React from 'react'
 
 function ProductFilters() {
-    
+
     return (
         <>
             <Box >
                 <Button sx={{ width: '100%' }}>Category</Button>
-                <Menu                >
-                    <MenuItem>Bordim</MenuItem>
-                    <MenuItem>Cycle</MenuItem>
-                </Menu>
+                <FormGroup>
+                    <FormControlLabel control={<Checkbox />} label="Bodim" />
+                </FormGroup>
             </Box>
         </>
     )
