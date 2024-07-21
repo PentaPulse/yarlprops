@@ -77,9 +77,9 @@ export default function PageLayout({ children, handleMode, handleDashboardState 
                     </Fade>
                 </Modal>
             </div>
-            <Container sx={{ marginTop: '12vh' }}>
+            <Box sx={{ marginTop: '12vh' }}>
                 {children}
-            </Container>
+            </Box>
             {dash && <Footer />}
         </>
     )

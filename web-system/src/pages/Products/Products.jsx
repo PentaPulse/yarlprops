@@ -1,7 +1,6 @@
-import { Grid, TextField } from '@mui/material';
+import { Button, Checkbox, FormControlLabel, FormGroup, Grid, TextField } from '@mui/material';
 import * as React from 'react'
 import ProductsContents from './ProductsContents';
-import ProductFilters from './ProductFilters';
 
 function Products() {
     const [searchTerm, setSearchTerm] = React.useState('');
@@ -20,7 +19,17 @@ function Products() {
                     />
                 </Grid>
                 <Grid item md={2}>
-                    <ProductFilters/>
+                <Button sx={{ width: '100%' }}>Category</Button>
+                <FormGroup>
+                    <FormControlLabel control={<Checkbox />} label="Bodim" />
+                </FormGroup>
+                <Button>
+                    Type
+                </Button>
+                <FormGroup>
+                    <FormControlLabel control={<Checkbox/>} label="girls"/>
+                    <FormControlLabel control={<Checkbox/>} label="boys"/>
+                </FormGroup>
                 </Grid>
                 <Grid item md={9}>
                     <ProductsContents searchTerm={searchTerm} />

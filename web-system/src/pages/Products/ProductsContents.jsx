@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Card, CardContent, CardMedia, Container, Grid, Typography } from '@mui/material';
+import { Button, Card, CardActionArea, CardContent, CardMedia, Container, Grid, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../../backend/firebase';
@@ -40,6 +40,7 @@ const ProductsContents = ({ searchTerm }) => {
                     {products.map((product, index) => (
                         <Grid item xs={1} sm={1} md={1} lg={1} key={index}>
                             <Card>
+                                <CardActionArea onClick={() => handleCardClick(product.pid)}>
                                 <CardMedia
                                     sx={{ height: '20rem' }}
                                     image={product.images[0] || 'https://picsum.photos/id/11/200/300'}
@@ -49,10 +50,8 @@ const ProductsContents = ({ searchTerm }) => {
                                     <Typography gutterBottom variant='h6' component='div' color='inherit'>
                                         {product.title}
                                     </Typography>
-                                    <Button onClick={() => handleCardClick(product.pid)} size="medium">
-                                        Read More
-                                    </Button>
                                 </CardContent>
+                                </CardActionArea>
                             </Card>
                         </Grid>
                     ))}
