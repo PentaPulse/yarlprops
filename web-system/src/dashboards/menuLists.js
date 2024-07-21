@@ -32,13 +32,13 @@ import Admins from './Admin/Admins'
 import Profile from './UserProfile'
 
 export const adminMenu = [
-    ['Overview', <DashboardIcon />],
-    ['Admins', <AdminPanelSettingsIcon />],
-    ['Users', <GroupIcon />],
-    ['Products', <InventoryIcon />],
-    ['Services', <MiscellaneousServicesIcon />],
-    ['Contact us requests', <CommentIcon />],
-    ['My Profile', <BadgeIcon />],
+    ['Overview', <DashboardIcon />,'/overview'],
+    ['Admins', <AdminPanelSettingsIcon />],'/admins',
+    ['Users', <GroupIcon />,'/users'],
+    ['Products', <InventoryIcon />,'/products'],
+    ['Services', <MiscellaneousServicesIcon />,'/services'],
+    ['Contact us requests', <CommentIcon />],'/contact',
+    ['My Profile', <BadgeIcon />,'/profile'],
 ]
 export const sellerMenu = [
     ['Overview', <DashboardIcon />],
@@ -57,7 +57,7 @@ export const userMenu = [
     ['My Profile', <BadgeIcon />],
 ]
 //boards
-export const adminBoard = [<AdminOverview />, <Admins />, <AdminUsers />, <AdminProducts />, <AdminProducts />,<SellerOverview/>, <ContactusReqs />, <Profile />]
+export const adminBoard = [<AdminOverview />, <Admins />, <AdminUsers />, <AdminProducts />, <AdminProducts />, <ContactusReqs />, <Profile />]
 export const sellerBoard = [<SellerOverview />, <SellerOrders />, <SellerProducts />, <Profile />]
 export const renterBoard = [<RenterOverview />, <RenterOrders />, <RenterProducts />, <Profile />]
 export const servicerBoard = [<ServicerOverview />, <ServicerOrders />, <Profile />]
