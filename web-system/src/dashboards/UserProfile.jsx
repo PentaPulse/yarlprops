@@ -3,7 +3,7 @@ import { useAuth } from '../backend/AuthContext';
 import { Box, Button, Container, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Avatar, Paper, Typography } from '@mui/material';
 import { doc, setDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../backend/firebase';
-import { updateEmail, updatePassword} from 'firebase/auth';
+import { updateEmail, updatePassword, updateProfile} from 'firebase/auth';
 
 const Profile = () => {
   const { user } = useAuth();
@@ -61,6 +61,7 @@ const ProfileSettings = () => {
   const [profile, setProfile] = useState({
     firstName: user?.firstName || '',
     lastName: user?.lastName || '',
+    displayName:user?.displayName||'',
     email: user?.email || '',
     phoneNumber: user?.phoneNumber || '',
     dateOfBirth: user?.dateOfBirth || '',
@@ -93,6 +94,9 @@ const ProfileSettings = () => {
   const handleSubmit = async () => {
     try {
       await setDoc(doc(db, 'systemusers', user.uid), profile);
+      await updateProfile(user,{
+        displayName:profile.displayName,
+      })
       setEdit(false);
     } catch (error) {
       console.error("Error updating profile: ", error);

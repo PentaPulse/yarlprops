@@ -81,6 +81,7 @@ export const AuthProvider = ({ children }) => {
         .then((result) => {
             const user = result.user;
             const userid = user.uid
+            
             addUser(userid, "", "", user.email, user.phoneNumber, "", user.photoURL, "")
             showAlerts('Successfully logged', 'success')
         })

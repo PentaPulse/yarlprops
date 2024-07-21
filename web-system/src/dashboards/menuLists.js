@@ -57,7 +57,7 @@ export const userMenu = [
     ['My Profile', <BadgeIcon />],
 ]
 //boards
-export const adminBoard = [<AdminOverview />, <Admins />, <AdminUsers />, <AdminProducts />, <AdminProducts />, <ContactusReqs />, <Profile />]
+export const adminBoard = [<AdminOverview />, <Admins />, <AdminUsers />, <AdminProducts />, <AdminProducts />,<SellerOverview/>, <ContactusReqs />, <Profile />]
 export const sellerBoard = [<SellerOverview />, <SellerOrders />, <SellerProducts />, <Profile />]
 export const renterBoard = [<RenterOverview />, <RenterOrders />, <RenterProducts />, <Profile />]
 export const servicerBoard = [<ServicerOverview />, <ServicerOrders />, <Profile />]

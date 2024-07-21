@@ -1,6 +1,6 @@
 import React from 'react';
 import '@fortawesome/fontawesome-free/css/all.css';
-import { Container, Grid, Paper, Typography, Link, List, ListItem, ListItemText, IconButton } from '@mui/material';
+import { Container, Grid, Paper, Typography, Link, List, ListItem, ListItemText, IconButton, Box } from '@mui/material';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import InstagramIcon from '@mui/icons-material/Instagram';
@@ -12,8 +12,7 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 export default function Footer() {
     return (
         <>
-            <Container sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-                <Grid container spacing={3} sx={{ justifyContent: 'center', textAlign: { xs: 'center', md: 'left' } }}>
+                <Grid container spacing={3} sx={{ margin:'0 6vw 0 6vw',justifyContent: 'center', textAlign: { xs: 'center', md: 'left' } }}>
                     <Grid item xs={12} md={4} sx={{ display: 'flex', flexDirection: 'column', alignItems: { xs: 'center', md: 'flex-start' } }}>
                         <Typography variant="h4"><span>YARL</span>PROPS</Typography>
                         <Typography variant="h5">Do You Have Questions?</Typography>
@@ -60,7 +59,6 @@ export default function Footer() {
                         <Typography variant="body1"><LocationOnIcon /> Ramanathan Road, Thirunelvely, Jaffna</Typography>
                     </Grid>
                 </Grid>
-            </Container>
             <Paper sx={{ width: '100%', padding: '16px'}}>
                 <Typography textAlign='center'>© 2024 Designed By PentaPulse</Typography>
             </Paper>
