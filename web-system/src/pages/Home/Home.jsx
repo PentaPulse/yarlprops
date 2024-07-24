@@ -5,7 +5,7 @@ import { Link} from 'react-router-dom';
 import ProductList from './ProductList'
 import ServiceList from './ServiceList';
 
-function Home() {
+function Home({setMaintain}) {
   return (
     <>
       <Grid container justifyContent='center' spacing={3} columns={12}>
@@ -16,7 +16,7 @@ function Home() {
         <Grid item md={12}>
           <Container>
           <Typography variant='h5' >Latest Products</Typography>
-          <ProductList />
+          <ProductList setMaintain={setMaintain}/>
           <Box display='flex' justifyContent='flex-end' mr={4}>
             <Link to='/products'>See all</Link>
           </Box>

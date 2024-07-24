@@ -160,8 +160,8 @@ const ProfileSettings = () => {
               onChange={handleSelectChange}
               label="Gender"
             >
-              {['Male', 'Female'].map((genderOption, index) => (
-                <MenuItem key={index} value={genderOption}>{genderOption}</MenuItem>
+              {['Male', 'Female'].map((roleOption, index) => (
+                <MenuItem key={index} value={roleOption}>{roleOption}</MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -222,6 +222,7 @@ const AccountSettings = () => {
   const [email, setEmail] = useState({ old: '', new: '', confirm: '' });
   const [phoneNumber, setPhoneNumber] = useState({ old: '', new: '', confirm: '' });
   const [password, setPassword] = useState({ old: '', new: '', confirm: '' });
+  const [role,setRole]=useState('')
 
   const handleInputChange = (setter) => (e) => {
     const { name, value } = e.target;
@@ -272,6 +273,13 @@ const AccountSettings = () => {
       console.error("Error updating password: ", error);
     }
   };
+  const handleSelectChange = (e) => {
+    const { value } = e.target;
+    setRole((prevProfile) => ({
+      ...prevProfile,
+      role: value,
+    }));
+  };
 
   return (
     <>
@@ -286,6 +294,21 @@ const AccountSettings = () => {
         noValidate
         autoComplete="off"
       >
+        <Box>
+          <Typography variant='h6'>Change role</Typography>
+          <FormControl sx={{ m: 1, width: width }} >
+            <InputLabel>Gender</InputLabel>
+            <Select
+              value={role}
+              onChange={handleSelectChange}
+              label="Gender"
+            >
+              {['Seller','Renter','Buyer'].map((roleOption, index) => (
+                <MenuItem key={index} value={roleOption}>{roleOption}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
         <Box>
           <Typography variant="h6">Change Email</Typography>
           <TextField

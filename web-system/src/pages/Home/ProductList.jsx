@@ -1,15 +1,21 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import { fetchProductsToHome } from '../../backend/db/products';
-import { Button, Card, CardContent, CardMedia, Container, Grid, Typography } from '@mui/material';
+import { Button, Card, CardActionArea, CardContent, CardMedia, Container, Grid, Typography } from '@mui/material';
 
-function ProductList() {
+function ProductList({setMaintain}) {
     const [products, setProducts] = React.useState([]);
     const navigate = useNavigate()
     React.useEffect(() => {
         const getProducts = async () => {
-            const productList = await fetchProductsToHome();
-            setProducts(productList);
+            try{
+                const productList = await fetchProductsToHome();
+                setProducts(productList);
+            } catch(e){
+                if(e.code==='quota-exceeded'){
+                    setMaintain(true)
+                }
+            }
         };
         getProducts();
     });
@@ -24,6 +30,7 @@ function ProductList() {
                     {products.map((product, index) => (
                         <Grid item xs={1} sm={1} md={1} lg={1} key={index}>
                             <Card>
+                                <CardActionArea onClick={() => handleCardClick(product.pid)}>
                                 <CardMedia
                                     sx={{ height: '20rem' }}
                                     image={product.images[0] || 'https://picsum.photos/id/11/200/300'}
@@ -33,10 +40,8 @@ function ProductList() {
                                     <Typography gutterBottom variant='h6' component='div' color='inherit'>
                                         {product.title}
                                     </Typography>
-                                    <Button onClick={() => handleCardClick(product.pid)} size="medium">
-                                        Read More
-                                    </Button>
                                 </CardContent>
+                                </CardActionArea>
                             </Card>
                         </Grid>
                     ))}
