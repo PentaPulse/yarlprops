@@ -72,7 +72,7 @@ function ProductPage() {
                   <ul className={styles.productDetailsSectionUl}>
                     <li>{product.description}</li>
                     <li>Quantity: {product.quantity}</li>
-                    <li>Product Location: {product.location}</li>
+                    <li>Location: {product.location}</li>
                   </ul>
                 </Box>
                 <Box className={styles.sellerDetailsSection} sx={{ marginLeft: '1rem', marginRight: '1rem', marginTop: '3rem' }}>
