@@ -35,7 +35,7 @@ const darkTheme = createTheme({
       main: '#FFFFFF'
     },
     background: {
-      default: '#0f1214',
+      default: '#000435',
     },
   },
 });

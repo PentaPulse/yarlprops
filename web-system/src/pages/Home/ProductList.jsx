@@ -1,7 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import { fetchProductsToHome } from '../../backend/db/products';
-import { Button, Card, CardActionArea, CardContent, CardMedia, Container, Grid, Typography } from '@mui/material';
+import {Card, CardActionArea, CardContent, CardMedia, Container, Grid, Typography } from '@mui/material';
 
 function ProductList({setMaintain}) {
     const [products, setProducts] = React.useState([]);
