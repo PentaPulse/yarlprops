@@ -33,11 +33,11 @@ import Profile from './UserProfile'
 
 export const adminMenu = [
     ['Overview', <DashboardIcon />,'/overview'],
-    ['Admins', <AdminPanelSettingsIcon />],'/admins',
+    ['Admins', <AdminPanelSettingsIcon />,'/admins'],
     ['Users', <GroupIcon />,'/users'],
     ['Products', <InventoryIcon />,'/products'],
     ['Services', <MiscellaneousServicesIcon />,'/services'],
-    ['Contact us requests', <CommentIcon />],'/contact',
+    ['Contact us requests', <CommentIcon />,'/contact'],
     ['My Profile', <BadgeIcon />,'/profile'],
 ]
 export const sellerMenu = [

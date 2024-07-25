@@ -35,17 +35,17 @@ const darkTheme = createTheme({
       main: '#FFFFFF'
     },
     background: {
-      default: '#0f1214',
+      default: '#000435',
     },
   },
 });
 
 function App() {
-  const web_status = true;
-  if (web_status) {
+  const [status,setStatus]=React.useState(false)
+  if (!status) {
     return (
       <div>
-        <Themed />
+        <Themed setMaintain={setStatus}/>
       </div>
     );
   } else {
@@ -53,7 +53,7 @@ function App() {
   }
 }
 
-function Themed() {
+function Themed({setMaintain}) {
   const [mode, setMode] = React.useState(() => {
     const storedTheme = sessionStorage.getItem('isLight');
     return storedTheme === null ? true : storedTheme === 'true';
@@ -82,20 +82,20 @@ function Themed() {
       <AlertProvider>
         <CssBaseline />
         <Router>
-          <Routings handleMode={handleTheme} handleDashboardLayouttate={() => setDash(sessionStorage.getItem('dash'))} dash={dash} />
+          <Routings handleMode={handleTheme} setMaintain={setMaintain} handleDashboardLayouttate={() => setDash(sessionStorage.getItem('dash'))} dash={dash} />
         </Router>
       </AlertProvider>
     </ThemeProvider>
   );
 }
 
-function Routings({ handleMode }) {
+function Routings({ handleMode ,setMaintain}) {
   return (
     <>
       <AuthProvider>
         <PageLayout handleMode={handleMode} >
           <Routes>
-            <Route exact path='/' element={<Home />} />
+            <Route exact path='/' element={<Home setMaintain={setMaintain}/>} />
             <Route path='/guide' element={<Guide />} />
             <Route path='/contact' element={<Contact />} />
             <Route path="/products" element={<Products />} />
