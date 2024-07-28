@@ -1,18 +1,38 @@
 import * as React from 'react';
-import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Button, Tooltip, MenuItem, Switch, FormControlLabel, ButtonGroup } from '@mui/material';
+import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Button, Tooltip, MenuItem, Switch, FormControlLabel, ButtonGroup, Modal, Backdrop, Fade } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import AdbIcon from '@mui/icons-material/Adb';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../backend/AuthContext';
+import { Login, Register, Welcome } from '../Welcome/Welcome';
 
 const pages = [['Home', '/'], ['Products', '/products'], ['Services', '/services'], ['Guide', '/guide'], ['Contact', '/contact']];
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 600,
+    boxShadow: '0 8px 32px 0 rgba( 31, 38, 135, 0.37 )',
+    p: 4,
+    backgroundColor: 'background.paper',
+    "box-shadow": '0 8px 32px 0 rgba( 31, 38, 135, 0.37 )',
+    'backdrop-filter': 'blur( 11.5px )',
+    '-webkit-backdrop-filter': 'blur( 11.5px )',
+    'border-radius': '10px',
+    textAlign: "center"
+};
 
-export default function NavigationBar({ handleSigninButton, handleSignupButton, handleMode }) {
+export default function NavigationBar({ handleMode }) {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [isLogged, setIsLogged] = React.useState(false);
     const { user } = useAuth()
     const theme = useTheme();
+    const [open, setOpen] = React.useState(false);
+    const [signin,setSignin]=React.useState(false);
+    const [signup,setSignup]=React.useState(false);
+
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -31,124 +51,166 @@ export default function NavigationBar({ handleSigninButton, handleSignupButton, 
         }
     }, [user])
 
+    //modal
+    const handleClose=()=>{
+        setOpen(!open)
+    }
+
+    const handleSigninButton=()=>{
+        setOpen(!open)
+        setSignin(!signin)
+    }
+
+    const handleSignupButton=()=>{
+        setOpen(!open)
+        setSignup(!signup)
+    }
+
     return (
-        <AppBar position="fixed" sx={{
-            background: 'rgba(255, 255, 255, 0.5)',
-            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-            borderRadius: '0 0 10px 10px',
-            border: '1px solid rgba(255, 255, 255, 0.18)',
-            backdropFilter: 'blur(3px)',
-        }}>
-            <Container maxWidth="xl">
-                <Toolbar disableGutters>
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component="a"
-                        href="/"
-                        sx={{
-                            mr: 2,
-                            display: { xs: 'none', md: 'flex' },
-                            fontFamily: 'monospace',
-                            fontWeight: 700,
-                            letterSpacing: '.2rem',
-                            textDecoration: 'none',
-                            color: theme.palette.mode === 'light' ? '#000000' : '#FFFFFF',
-                        }}
-                    >
-                        YarlProps
-                    </Typography>
-
-                    <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-                        <IconButton
-                            size="large"
-                            aria-label="account of current user"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
-                            onClick={handleOpenNavMenu}                            
-                            color={theme.palette.mode === 'light' ? '#000000' : '#FFFFFF'}
-                        >
-                            <MenuIcon />
-                        </IconButton>
-                        <Menu
-                            id="menu-appbar"
-                            anchorEl={anchorElNav}
-                            anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'left',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'left',
-                            }}
-                            open={Boolean(anchorElNav)}
-                            onClose={handleCloseNavMenu}
+        <>
+            <AppBar position="fixed" sx={{
+                background: 'rgba(255, 255, 255, 0.5)',
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+                borderRadius: '0 0 10px 10px',
+                border: '1px solid rgba(255, 255, 255, 0.18)',
+                backdropFilter: 'blur(3px)',
+            }}>
+                <Container maxWidth="xl">
+                    <Toolbar disableGutters>
+                        <Typography
+                            variant="h6"
+                            noWrap
+                            component="a"
+                            href="/"
                             sx={{
-                                display: { xs: 'block', md: 'none' }, color: 'black'
+                                mr: 2,
+                                display: { xs: 'none', md: 'flex' },
+                                fontFamily: 'monospace',
+                                fontWeight: 700,
+                                letterSpacing: '.2rem',
+                                textDecoration: 'none',
+                                color: theme.palette.mode === 'light' ? '#000000' : '#FFFFFF',
                             }}
                         >
-                            {pages.map((page) => (
-                                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                    <Typography component="a" textAlign="center" href={page[1]} sx={{ textDecoration: 'none', color: theme.palette.primary }}>
-                                        {page[0]}
-                                    </Typography>
-                                </MenuItem>
-                            ))}
-                        </Menu>
-                    </Box>
-                    <Typography
-                        variant="h5"
-                        noWrap
-                        component="a"
-                        href="/"
-                        sx={{
-                            mr: 2,
-                            display: { xs: 'flex', md: 'none' },
-                            flexGrow: 1,
-                            fontFamily: 'monospace',
-                            fontWeight: 700,
-                            letterSpacing: '.3rem',
-                            color: 'inherit',
-                            textDecoration: 'none',
-                            color: theme.palette.mode === 'light' ? '#000000' : '#FFFFFF',
-                        }}
-                    >
-                        YarlProps
-                    </Typography>
-                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        {pages.map((page) => (
-                            <Button
-                                key={page}
-                                onClick={handleCloseNavMenu}
-                                sx={{ my: 2, display: 'block', color: theme.palette.primary }}
-                                href={page[1]}
-                            >
-                                {page[0]}
-                            </Button>
-                        ))}
-                    </Box>
-                    <Box>
-                        <Tooltip title={`${theme.palette.mode} mode`}>
-                            <FormControlLabel
-                                control={<MaterialUISwitch sx={{ m: 1 }} checked={theme.palette.mode === 'light' ? false : true} onClick={handleMode} />}
-                            />
-                        </Tooltip>
-                    </Box>
+                            YarlProps
+                        </Typography>
 
-                    {isLogged ? (
-                        <ProfileBox isLogged={isLogged} />
-                    ) : (
-                        <>
-                            <ButtonGroup variant="text">
-                                <Button sx={{ color: theme.palette.primary }} onClick={handleSigninButton}>Sign In</Button>
-                                <Button sx={{ color: theme.palette.primary }} onClick={handleSignupButton}>Sign Up</Button>
-                            </ButtonGroup>
-                        </>
-                    )}
-                </Toolbar>
-            </Container>
-        </AppBar>
+                        <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+                            <IconButton
+                                size="large"
+                                aria-label="account of current user"
+                                aria-controls="menu-appbar"
+                                aria-haspopup="true"
+                                onClick={handleOpenNavMenu}
+                                color={theme.palette.mode === 'light' ? '#000000' : '#FFFFFF'}
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                            <Menu
+                                id="menu-appbar"
+                                anchorEl={anchorElNav}
+                                anchorOrigin={{
+                                    vertical: 'bottom',
+                                    horizontal: 'left',
+                                }}
+                                keepMounted
+                                transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'left',
+                                }}
+                                open={Boolean(anchorElNav)}
+                                onClose={handleCloseNavMenu}
+                                sx={{
+                                    display: { xs: 'block', md: 'none' }, color: 'black'
+                                }}
+                            >
+                                {pages.map((page) => (
+                                    <MenuItem key={page} onClick={handleCloseNavMenu}>
+                                        <Typography component="a" textAlign="center" href={page[1]} sx={{ textDecoration: 'none', color: theme.palette.primary }}>
+                                            {page[0]}
+                                        </Typography>
+                                    </MenuItem>
+                                ))}
+                            </Menu>
+                        </Box>
+                        <Typography
+                            variant="h5"
+                            noWrap
+                            component="a"
+                            href="/"
+                            sx={{
+                                mr: 2,
+                                display: { xs: 'flex', md: 'none' },
+                                flexGrow: 1,
+                                fontFamily: 'monospace',
+                                fontWeight: 700,
+                                letterSpacing: '.3rem',
+                                color: 'inherit',
+                                textDecoration: 'none',
+                                color: theme.palette.mode === 'light' ? '#000000' : '#FFFFFF',
+                            }}
+                        >
+                            YarlProps
+                        </Typography>
+                        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                            {pages.map((page) => (
+                                <Button
+                                    key={page}
+                                    onClick={handleCloseNavMenu}
+                                    sx={{ my: 2, display: 'block', color: theme.palette.primary }}
+                                    href={page[1]}
+                                >
+                                    {page[0]}
+                                </Button>
+                            ))}
+                        </Box>
+                        <Box>
+                            <Tooltip title={`${theme.palette.mode} mode`}>
+                                <FormControlLabel
+                                    control={<MaterialUISwitch sx={{ m: 1 }} checked={theme.palette.mode === 'light' ? false : true} onClick={handleMode} />}
+                                />
+                            </Tooltip>
+                        </Box>
+
+                        {isLogged ? (
+                            <ProfileBox isLogged={isLogged} />
+                        ) : (
+                            <>
+                                <ButtonGroup variant="text">
+                                    <Button sx={{ color: theme.palette.primary }} onClick={handleSigninButton}>Sign In</Button>
+                                    <Button sx={{ color: theme.palette.primary }} onClick={handleSignupButton}>Sign Up</Button>
+                                </ButtonGroup>
+                            </>
+                        )}
+                    </Toolbar>
+                </Container>
+            </AppBar>            
+            <Modal
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                open={open}
+                onClose={handleClose}
+                closeAfterTransition
+                slots={{ backdrop: Backdrop }}
+                slotProps={{
+                    backdrop: {
+                        timeout: 500,
+                    },
+                }}
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginTop: '30',
+                    textAlign: 'center'
+                }}>
+                <Fade in={open}>
+                    <Box sx={style}>
+                        {signin?<Login/>:''}
+                    </Box>
+                </Fade>
+            </Modal>
+        </>
     );
 }
 

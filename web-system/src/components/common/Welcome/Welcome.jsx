@@ -1,28 +1,13 @@
 import React, { useState } from 'react'
-import { Button, ButtonGroup, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { Button, ButtonGroup, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useAuth } from '../../../backend/AuthContext';
 
 export function Welcome({ toLogin, toRegister, closeBox }) {
     const theme = useTheme()
-    const { google } = useAuth();
-    const handleGoogle = async (e) => {
-        e.preventDefault();
-        try {
-            await google();
-            closeBox();
-        } catch (error) {
-            console.error(error)
-        }
-    }
     return (
         <>
-            <div className='d-flex justify-content-center flex-column text-center'>
-                <h2>Welcome to YarlProps</h2>
-                <Button sx={{ borderRadius: '100px', width: '80%', border: `1px solid ${theme.palette.mode === 'light' ? '#FFFFFF' : '#000000'}`, gap: 3, display: 'block', margin: 'auto' }} onClick={handleGoogle}>
-                    <img src="social-icons/google.svg" alt="G" width={30} /> Connect with Google
-                </Button>
-                <h5>OR</h5>
+            <div className='d-flex justify-content-center flex-column text-center'>                
                 <div className="text-center">
                     <ButtonGroup aria-label='Vertical button group' className='gap-3'>
                         <Button variant='contained' onClick={toLogin}>Login</Button>
@@ -38,7 +23,16 @@ export function Login({ handleBack, closeBox }) {
     const theme = useTheme()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const { login, reset } = useAuth();
+    const { login, reset,google } = useAuth();
+    const handleGoogle = async (e) => {
+        e.preventDefault();
+        try {
+            await google();
+            closeBox();
+        } catch (error) {
+            console.error(error)
+        }
+    }
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -59,17 +53,20 @@ export function Login({ handleBack, closeBox }) {
     return (
         <>
             <div className="d-flex flex-column gap-2">
-                <h2 color={theme.palette.welcomeTopics}>Login</h2>
+                <h2>Welcome to YarlProps</h2>
+                <Button sx={{ borderRadius: '100px', width: '80%', border: `1px solid ${theme.palette.mode === 'light' ? '#FFFFFF' : '#000000'}`, gap: 3, display: 'block', margin: 'auto' }} onClick={handleGoogle}>
+                    <img src="social-icons/google.svg" alt="G" width={30} /> Connect with Google
+                </Button>
+                <h5>OR</h5>
                 <hr />
                 <div className="d-flex flex-column gap-4">
                     <TextField label="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                     <TextField label="Password" type='password' value={password} onChange={(e) => setPassword(e.target.value)} />
-                    <span className="btn" onClick={handleReset}>Forgot Your Password?</span>
+                        <Typography onClick={handleReset}>Forgot Your Password?</Typography>
                 </div>
                 <div className="text-center">
                     <ButtonGroup aria-label='Vertical button group' className='gap-3'>
-                        <Button variant='contained' onClick={handleBack}>Back</Button>
-                        <Button variant='contained' onClick={handleLogin}>Login</Button>
+                        <Button variant='contained' onClick={handleLogin}>Signin</Button>
                     </ButtonGroup>
                 </div>
             </div>

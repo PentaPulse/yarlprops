@@ -43,16 +43,9 @@ const darkTheme = createTheme({
 });
 
 function App() {
-  const [status, setStatus] = React.useState(false)
-  if (!status) {
-    return (
-      <div>
-        <Themed setMaintain={setStatus} />
-      </div>
-    );
-  } else {
-    return (<Maintain reason />);
-  }
+  return (
+      <Themed/>
+  );
 }
 
 function Themed({ setMaintain }) {
@@ -60,9 +53,6 @@ function Themed({ setMaintain }) {
     const storedTheme = sessionStorage.getItem('isLight');
     return storedTheme === null ? true : storedTheme === 'true';
   });
-
-  const [dash, setDash] = React.useState(true)
-
 
   const handleTheme = () => {
     setMode((prevMode) => {
@@ -84,7 +74,7 @@ function Themed({ setMaintain }) {
       <AlertProvider>
         <CssBaseline />
         <Router>
-          <Routings handleMode={handleTheme} setMaintain={setMaintain} handleDashboardLayouttate={() => setDash(sessionStorage.getItem('dash'))} dash={dash} />
+          <Routings handleMode={handleTheme} setMaintain={setMaintain} />
         </Router>
       </AlertProvider>
     </ThemeProvider>
@@ -95,7 +85,7 @@ function Routings({ handleMode, setMaintain }) {
   return (
     <>
       <AuthProvider setMaintain={setMaintain}>
-        <PageLayout handleMode={handleMode} >
+        <PageLayout >
           <NavigationBar handleMode={handleMode} />
           <Routes>
             <Route exact path='/' element={<Home />} />
@@ -109,6 +99,7 @@ function Routings({ handleMode, setMaintain }) {
           </Routes>
           <Footer />
         </PageLayout>
+
       </AuthProvider>
     </>
   )
