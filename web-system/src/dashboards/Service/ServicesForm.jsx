@@ -1,4 +1,4 @@
-import React, { useState, UseEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import { TextField, Button, Paper, Typography, Grid } from '@mui/material';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -13,7 +13,9 @@ const ServicesForm = async ({ sid, onSuccess, onCancel }) => {
     serviceName : '',
     serviceDescription : '',
     serviceLocation : '',
-    images: [],
+    images: [
+      
+    ],
   });
 
   const [existingImages, setExistingImages] = useState([]);
@@ -21,9 +23,9 @@ const ServicesForm = async ({ sid, onSuccess, onCancel }) => {
   const [validationMessage, setValidationMessage] = useState('');
 
   useEffect(() => {
-    if (pid) {
+    if (sid) {
       const fetchServices = async() => {
-        const fetchedService = await fetchSelectedService(pid);
+        const fetchedService = await fetchSelectedService(sid);
         if (fetchedService){
           setService(fetchedService);
           setExistingImages(fetchedService.images || []);
@@ -75,7 +77,7 @@ const ServicesForm = async ({ sid, onSuccess, onCancel }) => {
 
     const allImageUrls = [...existingImages, ...newImageUrls];
 
-    if (pid) {
+    if (sid) {
       await updateService(sid, { ...service, images: allImageUrls });
     } else {
       await addService({ ...service, images: allImageUrls });

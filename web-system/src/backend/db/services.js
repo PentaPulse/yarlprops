@@ -82,4 +82,3 @@ export const countservices = async () => {
     return servicesSnapshot.size;
 };
 
-export { addService, updateService, fetchServices, fetchSelectedService, fetchServicesToHome };
