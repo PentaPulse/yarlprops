@@ -35,7 +35,7 @@ const darkTheme = createTheme({
       main: '#FFFFFF'
     },
     background: {
-      default: '#000435',
+      default: '#00072d',
     },
   },
 });
@@ -49,7 +49,7 @@ function App() {
       </div>
     );
   } else {
-    return (<Maintain />);
+    return (<Maintain reason/>);
   }
 }
 
@@ -92,10 +92,10 @@ function Themed({setMaintain}) {
 function Routings({ handleMode ,setMaintain}) {
   return (
     <>
-      <AuthProvider>
+      <AuthProvider setMaintain={setMaintain}>
         <PageLayout handleMode={handleMode} >
           <Routes>
-            <Route exact path='/' element={<Home setMaintain={setMaintain}/>} />
+            <Route exact path='/' element={<Home />} />
             <Route path='/guide' element={<Guide />} />
             <Route path='/contact' element={<Contact />} />
             <Route path="/products" element={<Products />} />

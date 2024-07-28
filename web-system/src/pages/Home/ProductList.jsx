@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { fetchProductsToHome } from '../../backend/db/products';
 import {Card, CardActionArea, CardContent, CardMedia, Container, Grid, Typography } from '@mui/material';
 
-function ProductList({setMaintain}) {
+function ProductList() {
     const [products, setProducts] = React.useState([]);
     const navigate = useNavigate()
     React.useEffect(() => {
@@ -12,9 +12,7 @@ function ProductList({setMaintain}) {
                 const productList = await fetchProductsToHome();
                 setProducts(productList);
             } catch(e){
-                if(e.code==='quota-exceeded'){
-                    setMaintain(true)
-                }
+                console.log(e)
             }
         };
         getProducts();

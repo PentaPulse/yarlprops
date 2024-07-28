@@ -6,10 +6,11 @@ import { doc, getDoc } from 'firebase/firestore';
 import { addUser, registerUser } from './db/users';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAlerts } from './AlertService';
+import Maintain from '../Maintain';
 
 const AuthContext = React.createContext();
 
-export const AuthProvider = ({ children }) => {
+export const AuthProvider = ({ children,setMaintain}) => {
     const [user, setUser] = React.useState(null);
     const [loading, setLoading] = React.useState(true);
     const [dash, setDash] = React.useState(false)
@@ -30,7 +31,9 @@ export const AuthProvider = ({ children }) => {
                         console.error('No such user document!');
                     }
                 } catch (error) {
-                    console.error('Error fetching user data:', error);
+                    if(error.code==='resource-exhausted'){
+                        setMaintain(true)
+                    }
                 }
             } else {
                 setUser(null);
@@ -40,7 +43,7 @@ export const AuthProvider = ({ children }) => {
         });
 
         return () => unsubscribe();
-    }, []);
+    });
 
     //registering
     const register = (fname, lname, dname, email, password, role) => {
@@ -172,7 +175,7 @@ export const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider value={{ user, register, login, logout, reset, google, home, dash }}>
-            {loading ? "" : children}
+            {loading ? <Maintain/>: children}
         </AuthContext.Provider>
     );
 };
