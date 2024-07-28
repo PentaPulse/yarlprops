@@ -16,8 +16,8 @@ const ProductsContents = ({ searchTerm }) => {
         };
         getProducts();
         const fetchData = async () => {
-            if (searchTerm) {
-                const q = query(collection(db, 'products'), where('name', '>=', searchTerm), where('name', '<=', searchTerm + '\uf8ff'));
+            if (searchTerm!=='') {
+                const q = query(collection(db, 'products'), where('title', '>=', searchTerm), where('title', '<=', searchTerm + '\uf8ff'));
                 const querySnapshot = await getDocs(q);
                 const items = querySnapshot.docs.map(doc => doc.data());
                 setProducts(items);

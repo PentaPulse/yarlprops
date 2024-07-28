@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Slidshow from './Slideshow/Slidshow';
-import { Box, Container, Divider, Grid, Typography, Card, CardContent, CardActionArea } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Box, Container, Divider, Grid, Typography, Card, CardContent, CardActionArea, Button } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
 import ProductList from './ProductList';
 import ServiceList from './ServiceList';
 import HomeIcon from '@mui/icons-material/Home';
@@ -10,10 +10,11 @@ import WeekendIcon from '@mui/icons-material/Weekend';
 import WatchIcon from '@mui/icons-material/Watch';
 import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 import LaptopIcon from '@mui/icons-material/Laptop';
-import FastfoodIcon from '@mui/icons-material/Fastfood'; 
+import FastfoodIcon from '@mui/icons-material/Fastfood';
 import SpaIcon from '@mui/icons-material/Spa'; // 
 
-function Home({ setMaintain }) {
+function Home() {
+  const navigate = useNavigate();
   const categories = [
     { name: 'Boarding', link: '/category/boarding', icon: <HomeIcon fontSize="large" /> },
     { name: 'Vehicles', link: '/category/vehicles', icon: <DirectionsCarIcon fontSize="large" /> },
@@ -21,9 +22,13 @@ function Home({ setMaintain }) {
     { name: 'Accessories', link: '/category/accessories', icon: <WatchIcon fontSize="large" /> },
     { name: 'Electronics', link: '/category/electronics', icon: <LaptopIcon fontSize="large" /> },
     { name: 'Mobile Phones', link: '/category/mobile-phones', icon: <PhoneIphoneIcon fontSize="large" /> },
-    { name: 'Foods', link: '/category/foods', icon: <FastfoodIcon fontSize="large" /> }, 
-    { name: 'Salon', link: '/category/salon', icon: <SpaIcon fontSize="large" /> }, 
+    { name: 'Foods', link: '/category/foods', icon: <FastfoodIcon fontSize="large" /> },
+    { name: 'Salon', link: '/category/salon', icon: <SpaIcon fontSize="large" /> },
   ];
+
+  const handleSeeAll = ( page ) => {
+    navigate(`/${page}`);
+  }
 
   return (
     <>
@@ -70,9 +75,9 @@ function Home({ setMaintain }) {
         <Grid item md={12}>
           <Container>
             <Typography variant='h5'>Latest Products</Typography>
-            <ProductList setMaintain={setMaintain} />
+            <ProductList />
             <Box display='flex' justifyContent='flex-end' mr={4}>
-              <Link to='/products'>See all</Link>
+              <Button onClick={() => handleSeeAll('products')}>See all</Button>
             </Box>
           </Container>
         </Grid>
@@ -81,7 +86,7 @@ function Home({ setMaintain }) {
             <Typography variant='h5'>Latest Services</Typography>
             <ServiceList />
             <Box display='flex' justifyContent='flex-end' mr={4}>
-              <Link to='/services'>See all</Link>
+              <Button onClick={() => handleSeeAll('services')}>See all</Button>
             </Box>
           </Container>
         </Grid>
