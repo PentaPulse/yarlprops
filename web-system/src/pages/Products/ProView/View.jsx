@@ -59,7 +59,7 @@ function ProductPage() {
             <Card sx={{ height: '100%', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }}>
               <CardContent sx={{ marginTop:'30px', marginBottom:'30px'}}>
                 {/* Product Details */}
-                <Typography variant="h4" component="h2" sx={{ fontWeight: 'bold', textAlign: 'center', color: 'blue' }}>{product.title}</Typography>
+                <Typography variant="h4" component="h2" sx={{ fontWeight: 'bold', textAlign: 'center' }}>{product.title}</Typography>
                 <Typography variant="h6" component="h4" sx={{ fontWeight: 'bold', textAlign: 'center', fontStyle: 'italic' }}>
                   Category: {product.category}
                 </Typography>
@@ -76,7 +76,7 @@ function ProductPage() {
                 </Box>
                 <Box sx={{ marginLeft: '1rem', marginRight: '1rem', marginTop: '4.5rem' }}>
                   {/* Seller Details */}
-                  <Typography variant="h5" component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', marginBottom: '1rem', color: 'blue' }}>Seller/Renter Details</Typography>
+                  <Typography variant="h5" component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', marginBottom: '1rem' }}>Seller/Renter Details</Typography>
                   <Typography variant="h6" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-user"></i> Name</Typography>
                   <Typography>{product.sellerName}</Typography>
                   <Typography variant="h6" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-location-dot"></i> Location</Typography>
