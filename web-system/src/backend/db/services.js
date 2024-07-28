@@ -6,19 +6,16 @@ import { doc, setDoc, collection, getDocs, query, where, addDoc, updateDoc, serv
 const serviceRef = collection(db, "services");
 
 // Adding services
-export const addService= async ({ title, type,subtype, description,  location, images, sellerId }) => {
+export const addService= async ({ serviceId, serviceName, serviceDescription,  serviceLocation, images}) => {
     try {
         const docRef = await addDoc(serviceRef, {
-            title,
-            type,
-            subtype,
-            description,            
-            location,
+            serviceId,
+            serviceName,
+            serviceDescription,
+            serviceLocation,
             images,
-            sellerId,
-            timestamp: serverTimestamp()
         });
-        await setDoc(docRef, { pid: docRef.id }, { merge: true });
+        await setDoc(docRef, { sid: docRef.id }, { merge: true });
         return docRef.id;
     } catch (e) {
         console.error("Error adding Service:", e);
@@ -62,8 +59,8 @@ export const fetchServicesToHome = async () => {
 
 
 // Fetching a specific Serviceby ID
-export const fetchSelectedService= async (pid) => {
-    const q = query(serviceRef, where('pid', '==', pid));
+export const fetchSelectedService= async (sid) => {
+    const q = query(serviceRef, where('sid', '==', sid));
     try {
         const qSnapshot = await getDocs(q);
         if (!qSnapshot.empty) {
@@ -85,4 +82,3 @@ export const countservices = async () => {
     return servicesSnapshot.size;
 };
 
-//filters
