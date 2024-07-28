@@ -22,12 +22,11 @@ const style = {
     textAlign: "center"
 };
 
-export default function PageLayout({ children, handleMode, handleDashboardState }) {
+export default function PageLayout({ children, handleMode }) {
     const [open, setOpen] = React.useState(false);
     const [welcome, setWelcome] = React.useState(false)
     const [login, setLogin] = React.useState(false)
     const navigate = useNavigate();
-    const { dash } = useAuth();
 
     const showWelcome = () => {
         setOpen(!open);
@@ -56,31 +55,34 @@ export default function PageLayout({ children, handleMode, handleDashboardState 
 
     return (
         <>
-            {dash && <NavigationBar handleLoginButton={showWelcome} handleMode={handleMode} />}
-            <div className='d-flex justify-content-center align-items-center mt-30 text-center'>
-                <Modal
-                    aria-labelledby="transition-modal-title"
-                    aria-describedby="transition-modal-description"
-                    open={open}
-                    onClose={handleClose}
-                    closeAfterTransition
-                    slots={{ backdrop: Backdrop }}
-                    slotProps={{
-                        backdrop: {
-                            timeout: 500,
-                        },
-                    }}>
-                    <Fade in={open}>
-                        <Box sx={style}>
-                            {welcome ? <Welcome toLogin={handleLoginButton} toRegister={handleRegisterButton} closeBox={closeBox} /> : (login ? <Login handleBack={handleBackButton} closeBox={closeBox} /> : <Register handleBack={handleBackButton} closeBox={closeBox} />)}
-                        </Box>
-                    </Fade>
-                </Modal>
-            </div>
+            <Modal
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                open={open}
+                onClose={handleClose}
+                closeAfterTransition
+                slots={{ backdrop: Backdrop }}
+                slotProps={{
+                    backdrop: {
+                        timeout: 500,
+                    },
+                }}
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginTop: '30',
+                    textAlign: 'center'
+                }}>
+                <Fade in={open}>
+                    <Box sx={style}>
+                        {welcome ? <Welcome toLogin={handleLoginButton} toRegister={handleRegisterButton} closeBox={closeBox} /> : (login ? <Login handleBack={handleBackButton} closeBox={closeBox} /> : <Register handleBack={handleBackButton} closeBox={closeBox} />)}
+                    </Box>
+                </Fade>
+            </Modal>
             <Box sx={{ marginTop: '12vh' }}>
                 {children}
             </Box>
-            {dash && <Footer />}
         </>
     )
 }

@@ -1,17 +1,17 @@
 import * as React from 'react';
-import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Button, Tooltip, MenuItem, Switch, FormControlLabel } from '@mui/material';
+import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Button, Tooltip, MenuItem, Switch, FormControlLabel, ButtonGroup } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import AdbIcon from '@mui/icons-material/Adb';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../backend/AuthContext';
 
-const pages = [['Home','/'],['Products','/products'],['Services','/services'], ['Guide','/guide'] ,[ 'Contact','/contact']];
+const pages = [['Home', '/'], ['Products', '/products'], ['Services', '/services'], ['Guide', '/guide'], ['Contact', '/contact']];
 
-export default function NavigationBar({ handleLoginButton, handleMode }) {
+export default function NavigationBar({ handleSigninButton, handleSignupButton, handleMode }) {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [isLogged, setIsLogged] = React.useState(false);
-    const {user} = useAuth()
+    const { user } = useAuth()
     const theme = useTheme();
 
     const handleOpenNavMenu = (event) => {
@@ -20,15 +20,15 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
     };
-    
+
     React.useEffect(() => {
-            if (user) {
-                setIsLogged(true);
-                sessionStorage.setItem('pp', user.photoURL);
-                sessionStorage.setItem('displayName', user.displayName);
-            } else {
-                setIsLogged(false);
-            }
+        if (user) {
+            setIsLogged(true);
+            sessionStorage.setItem('pp', user.photoURL);
+            sessionStorage.setItem('displayName', user.displayName);
+        } else {
+            setIsLogged(false);
+        }
     }, [user])
 
     return (
@@ -41,7 +41,6 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
         }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, color: theme.palette.mode === 'light' ? '#000000' : '#FFFFff' }} />
                     <Typography
                         variant="h6"
                         noWrap
@@ -66,8 +65,8 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
                             aria-label="account of current user"
                             aria-controls="menu-appbar"
                             aria-haspopup="true"
-                            onClick={handleOpenNavMenu}
-                            color="inherit"
+                            onClick={handleOpenNavMenu}                            
+                            color={theme.palette.mode === 'light' ? '#000000' : '#FFFFFF'}
                         >
                             <MenuIcon />
                         </IconButton>
@@ -98,7 +97,6 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
                             ))}
                         </Menu>
                     </Box>
-                    <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1, color: theme.palette.mode === 'light' ? '#000000' : '#FFFFFF' }} />
                     <Typography
                         variant="h5"
                         noWrap
@@ -113,6 +111,7 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
                             letterSpacing: '.3rem',
                             color: 'inherit',
                             textDecoration: 'none',
+                            color: theme.palette.mode === 'light' ? '#000000' : '#FFFFFF',
                         }}
                     >
                         YarlProps
@@ -140,7 +139,12 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
                     {isLogged ? (
                         <ProfileBox isLogged={isLogged} />
                     ) : (
-                        <Button sx={{ color: theme.palette.primary }} onClick={handleLoginButton}>Sign In</Button>
+                        <>
+                            <ButtonGroup variant="text">
+                                <Button sx={{ color: theme.palette.primary }} onClick={handleSigninButton}>Sign In</Button>
+                                <Button sx={{ color: theme.palette.primary }} onClick={handleSignupButton}>Sign Up</Button>
+                            </ButtonGroup>
+                        </>
                     )}
                 </Toolbar>
             </Container>
@@ -151,7 +155,7 @@ export default function NavigationBar({ handleLoginButton, handleMode }) {
 export function ProfileBox({ isLogged }) {
     const theme = useTheme();
     const navigate = useNavigate()
-    const {logout}=useAuth()
+    const { logout } = useAuth()
 
     const handleSignout = () => {
         isLogged = false

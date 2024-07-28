@@ -10,7 +10,7 @@ import Maintain from '../Maintain';
 
 const AuthContext = React.createContext();
 
-export const AuthProvider = ({ children,setMaintain}) => {
+export const AuthProvider = ({ children, setMaintain }) => {
     const [user, setUser] = React.useState(null);
     const [loading, setLoading] = React.useState(true);
     const [dash, setDash] = React.useState(false)
@@ -31,7 +31,7 @@ export const AuthProvider = ({ children,setMaintain}) => {
                         console.error('No such user document!');
                     }
                 } catch (error) {
-                    if(error.code==='resource-exhausted'){
+                    if (error.code === 'resource-exhausted') {
                         setMaintain(true)
                     }
                 }
@@ -84,12 +84,12 @@ export const AuthProvider = ({ children,setMaintain}) => {
         .then((result) => {
             const user = result.user;
             const userid = user.uid
-            
+
             addUser(userid, "", "", user.email, user.phoneNumber, "", user.photoURL, "")
             showAlerts('Successfully logged', 'success')
         })
-        .catch(()=>{
-            showAlerts('Error occured , Try again with different gmail','error')
+        .catch(() => {
+            showAlerts('Error occured , Try again with different gmail', 'error')
         })
 
     const login = (email, password) => signInWithEmailAndPassword(auth, email, password)
@@ -157,14 +157,14 @@ export const AuthProvider = ({ children,setMaintain}) => {
     });
 
     const VerifyEmail = () => {
-        const verify=()=>{
+        const verify = () => {
             sendEmailVerification(auth.currentUser)
-            .then(()=>{
-                showAlerts('Check your email inbox');
-            })
-            .catch((e)=>{
-                console.log(e)
-            })
+                .then(() => {
+                    showAlerts('Check your email inbox');
+                })
+                .catch((e) => {
+                    console.log(e)
+                })
         }
         return (
             <>
@@ -175,7 +175,7 @@ export const AuthProvider = ({ children,setMaintain}) => {
 
     return (
         <AuthContext.Provider value={{ user, register, login, logout, reset, google, home, dash }}>
-            {loading ? <Maintain/>: children}
+            {loading ? <Maintain /> : children}
         </AuthContext.Provider>
     );
 };
