@@ -29,9 +29,9 @@ function Contact() {
         backgroundColor: "black",
         backgroundAttachment: "fixed",
         backgroundPosition: "center",
-        backgroundSize: "contain",
+        backgroundSize: "cover",
         height: 600,
-        width: "90%",
+        width: "93%",
         display: "flex",
         justifyContent: "center",
         marginX: 6,
@@ -107,7 +107,7 @@ function Contact() {
       </Box>
       <Box sx={{ width: "100%", marginTop: 10, marginX: 6 }}>
         <iframe title='our-map' src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3932.966514762512!2d80.02048177450527!3d9.683898978395154!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3afe55d8c70c5db9%3A0xc4ee5d6945ad9bbd!2sUniversity%20of%20Jaffna!5e0!3m2!1sen!2slk!4v1712031159798!5m2!1sen!2slk"
-          width="90%" height="450" allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
+          width="93%" height="450" allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
       </Box>
     </div>
   );
