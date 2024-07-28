@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Table, TableBody, TableContainer, TableHead, TableRow, Paper, Button, TablePagination } from '@mui/material';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import { db } from '../../backend/firebase';
-import { fetchServices} from '../../backend/db/services';
+import { fetchServices } from '../../backend/db/services';
 import { deleteDoc, doc } from 'firebase/firestore';
 import { styled } from '@mui/material/styles';
 import Swal from 'sweetalert2';
@@ -10,7 +10,7 @@ import Swal from 'sweetalert2';
 const ServicesList = ({ onEditService, onViewService }) => {
     const [services, setServices] = useState([]);
     const [page, setPage] = useState(0);
-    const [rowPerPage, setRowsPerPage] = useState(10);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
     
     useEffect(() => {
         const fetchServiceList = async () => {
@@ -96,17 +96,17 @@ const ServicesList = ({ onEditService, onViewService }) => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {products.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(product => (
-                    <StyledTableRow key={service.id}>
+                    {services.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(product => (
+                    <StyledTableRow key={services.id}>
                         {/* <TableCell>{product.id}</TableCell> */}
-                        <StyledTableCell align="center">{service.serviceId}</StyledTableCell>
-                        <StyledTableCell align="center">{service.serviceName}</StyledTableCell>
-                        <StyledTableCell align="justify">{service.serviceDescription}</StyledTableCell>
-                        <StyledTableCell align="center">{service.serviceLocation}</StyledTableCell>
+                        <StyledTableCell align="center">{services.serviceId}</StyledTableCell>
+                        <StyledTableCell align="center">{services.serviceName}</StyledTableCell>
+                        <StyledTableCell align="justify">{services.serviceDescription}</StyledTableCell>
+                        <StyledTableCell align="center">{services.serviceLocation}</StyledTableCell>
                         <StyledTableCell align="center">
-                            <Button onClick={() => onViewService(service.id)} variant="outlined" color="secondary" style={{ margin: '5px', width: '100%' }}>View</Button>
-                            <Button onClick={() => onEditService(service.id)} variant="outlined" color="success" style={{ margin: '5px', width: '100%' }}>Edit</Button>
-                            <Button onClick={() => handleDelete(service.id)} variant="outlined" color="error" style={{ margin: '5px', width: '100%' }}>Delete</Button>
+                            <Button onClick={() => onViewService(services.id)} variant="outlined" color="secondary" style={{ margin: '5px', width: '100%' }}>View</Button>
+                            <Button onClick={() => onEditService(services.id)} variant="outlined" color="success" style={{ margin: '5px', width: '100%' }}>Edit</Button>
+                            <Button onClick={() => handleDelete(services.id)} variant="outlined" color="error" style={{ margin: '5px', width: '100%' }}>Delete</Button>
                         </StyledTableCell>
                     </StyledTableRow>
                    ))}
@@ -115,7 +115,7 @@ const ServicesList = ({ onEditService, onViewService }) => {
             <TablePagination
                 rowsPerPageOptions={[5, 10, 25]}
                 component="div"
-                count={products.length} 
+                count={services.length} 
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}

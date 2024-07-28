@@ -39,7 +39,7 @@ const ProductsContents = ({ searchTerm }) => {
                 <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 1, sm: 2, md: 3, lg: 3 }}>
                     {products.map((product, index) => (
                         <Grid item xs={1} sm={1} md={1} lg={1} key={index}>
-                            <Card>
+                            <Card sx={{ boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }}>
                                 <CardActionArea onClick={() => handleCardClick(product.pid)}>
                                 <CardMedia
                                     sx={{ height: '20rem' }}
