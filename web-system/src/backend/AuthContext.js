@@ -10,7 +10,7 @@ import Maintain from '../Maintain';
 
 const AuthContext = React.createContext();
 
-export const AuthProvider = ({ children, setMaintain }) => {
+export const AuthProvider = ({ children }) => {
     const [user, setUser] = React.useState(null);
     const [loading, setLoading] = React.useState(true);
     const [dash, setDash] = React.useState(false)
@@ -31,9 +31,7 @@ export const AuthProvider = ({ children, setMaintain }) => {
                         console.error('No such user document!');
                     }
                 } catch (error) {
-                    if (error.code === 'resource-exhausted') {
-                        setMaintain(true)
-                    }
+                    
                 }
             } else {
                 setUser(null);

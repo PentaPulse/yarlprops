@@ -1,10 +1,9 @@
 import * as React from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Maintain from './Maintain';
 import CssBaseline from '@mui/material/CssBaseline';
 import AlertProvider from './backend/AlertService';
-import { AuthProvider, useAuth } from './backend/AuthContext';
+import { AuthProvider } from './backend/AuthContext';
 import PrivateRoute from './backend/PrivateRoute';
 import DashboardLayout from './dashboards/DashboardLayout';
 import PageLayout from './pages/PageLayout';
@@ -15,8 +14,9 @@ import Products from './pages/Products/Products';
 import ProductPage from './pages/Products/ProView/View';
 import Services from './pages/Services/Services';
 import ViewService from './pages/Services/ViewService'
-import NavigationBar from './components/common/NavigationBar/NavigationBar';
-import Footer from './components/common/Footer/Footer';
+import NavigationBar from './components/NavigationBar/NavigationBar';
+import Footer from './components/Footer/Footer';
+import Maintain from './Maintain';
 
 const lightTheme = createTheme({
   palette: {
@@ -44,11 +44,14 @@ const darkTheme = createTheme({
 
 function App() {
   return (
-      <Themed/>
+    <>
+    <Maintain/>
+    {/*<Themed />*/}
+    </>
   );
 }
 
-function Themed({ setMaintain }) {
+function Themed() {
   const [mode, setMode] = React.useState(() => {
     const storedTheme = sessionStorage.getItem('isLight');
     return storedTheme === null ? true : storedTheme === 'true';
@@ -74,17 +77,17 @@ function Themed({ setMaintain }) {
       <AlertProvider>
         <CssBaseline />
         <Router>
-          <Routings handleMode={handleTheme} setMaintain={setMaintain} />
+          <Routings handleMode={handleTheme} />
         </Router>
       </AlertProvider>
     </ThemeProvider>
   );
 }
 
-function Routings({ handleMode, setMaintain }) {
+function Routings({ handleMode }) {
   return (
     <>
-      <AuthProvider setMaintain={setMaintain}>
+      <AuthProvider>
         <PageLayout >
           <NavigationBar handleMode={handleMode} />
           <Routes>

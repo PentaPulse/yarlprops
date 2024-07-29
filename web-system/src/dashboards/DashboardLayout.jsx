@@ -7,11 +7,9 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import * as React from 'react'
 import { useAuth } from '../backend/AuthContext'
 
-
-import { MaterialUISwitch, ProfileBox } from '../components/common/NavigationBar/NavigationBar';
+import { MaterialUISwitch, ProfileBox } from '../components/NavigationBar/NavigationBar';
 import { adminBoard, adminMenu, backToHome, renterBoard, renterMenu, sellerBoard, sellerMenu, userBoard, userMenu } from './menuLists';
 import { useNavigate } from 'react-router-dom';
-import { Container } from 'react-bootstrap';
 
 //menus
 
