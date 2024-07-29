@@ -6,7 +6,6 @@ import { doc, getDoc } from 'firebase/firestore';
 import { addUser, registerUser } from './db/users';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAlerts } from './AlertService';
-import Maintain from '../Maintain';
 
 const AuthContext = React.createContext();
 
@@ -173,7 +172,7 @@ export const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider value={{ user, register, login, logout, reset, google, home, dash }}>
-            {loading ? <Maintain /> : children}
+            {loading ? '': children}
         </AuthContext.Provider>
     );
 };

@@ -45,8 +45,7 @@ const darkTheme = createTheme({
 function App() {
   return (
     <>
-    <Maintain/>
-    {/*<Themed />*/}
+    <Themed />
     </>
   );
 }
