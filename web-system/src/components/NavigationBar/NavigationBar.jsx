@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Button, Tooltip, MenuItem, Switch, FormControlLabel, ButtonGroup, Modal, Backdrop, Fade } from '@mui/material';
+import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Button, Tooltip, MenuItem, Switch, FormControlLabel, ButtonGroup, Modal, Backdrop, Fade, TextField, Stepper, Step, StepLabel, FormControl, InputLabel, Select, StepContent } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../backend/AuthContext';
-import { Login } from '../Welcome/Welcome';
 
 const pages = [['Home', '/'], ['Products', '/products'], ['Services', '/services'], ['Guide', '/guide'], ['Contact', '/contact']];
 const style = {
@@ -28,9 +27,8 @@ export default function NavigationBar({ handleMode }) {
     const [isLogged, setIsLogged] = React.useState(false);
     const { user } = useAuth()
     const theme = useTheme();
-    const [open, setOpen] = React.useState(false);
-    const [signin,setSignin]=React.useState(false);
-    const [signup,setSignup]=React.useState(false);
+    const [signin, setSignin] = React.useState(false);
+    const [signup, setSignup] = React.useState(false);
 
 
     const handleOpenNavMenu = (event) => {
@@ -49,21 +47,6 @@ export default function NavigationBar({ handleMode }) {
             setIsLogged(false);
         }
     }, [user])
-
-    //modal
-    const handleClose=()=>{
-        setOpen(!open)
-    }
-
-    const handleSigninButton=()=>{
-        setOpen(!open)
-        setSignin(!signin)
-    }
-
-    const handleSignupButton=()=>{
-        setOpen(!open)
-        setSignup(!signup)
-    }
 
     return (
         <>
@@ -176,19 +159,19 @@ export default function NavigationBar({ handleMode }) {
                         ) : (
                             <>
                                 <ButtonGroup variant="text">
-                                    <Button sx={{ color: theme.palette.primary }} onClick={handleSigninButton}>Sign In</Button>
-                                    <Button sx={{ color: theme.palette.primary }} onClick={handleSignupButton}>Sign Up</Button>
+                                    <Button sx={{ color: theme.palette.primary }} onClick={() => setSignin(true)}>Sign In</Button>
+                                    <Button sx={{ color: theme.palette.primary }} onClick={() => setSignup(true)}>Sign Up</Button>
                                 </ButtonGroup>
                             </>
                         )}
                     </Toolbar>
                 </Container>
-            </AppBar>            
+            </AppBar>
             <Modal
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"
-                open={open}
-                onClose={handleClose}
+                open={signin}
+                onClose={() => setSignin(false)}
                 closeAfterTransition
                 slots={{ backdrop: Backdrop }}
                 slotProps={{
@@ -203,9 +186,34 @@ export default function NavigationBar({ handleMode }) {
                     marginTop: '30',
                     textAlign: 'center'
                 }}>
-                <Fade in={open}>
+                <Fade in={signin}>
                     <Box sx={style}>
-                        {signin?<Login/>:''}
+                        {signin ? <Login closeBox={() => setSignin(false)} /> : ''}
+                    </Box>
+                </Fade>
+            </Modal>
+            <Modal
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                open={signup}
+                onClose={() => setSignup(false)}
+                closeAfterTransition
+                slots={{ backdrop: Backdrop }}
+                slotProps={{
+                    backdrop: {
+                        timeout: 500,
+                    },
+                }}
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginTop: '30',
+                    textAlign: 'center'
+                }}>
+                <Fade in={signup}>
+                    <Box sx={style}>
+                        {signup ? <RegisterSteps /> : ''}
                     </Box>
                 </Fade>
             </Modal>
@@ -213,13 +221,12 @@ export default function NavigationBar({ handleMode }) {
     );
 }
 
-export function ProfileBox({ isLogged }) {
+export function ProfileBox() {
     const theme = useTheme();
     const navigate = useNavigate()
     const { logout } = useAuth()
 
     const handleSignout = () => {
-        isLogged = false
         logout()
         const them = sessionStorage.getItem('isLight')
         sessionStorage.clear();
@@ -227,7 +234,7 @@ export function ProfileBox({ isLogged }) {
         navigate('/')
     };
 
-    const handleDashboards = (e) => {
+    const handleDashboards = () => {
         navigate(`/dashboard`)
     }
 
@@ -294,3 +301,192 @@ export const MaterialUISwitch = styled(Switch)(({ theme }) => ({
         borderRadius: 20 / 2,
     },
 }));
+
+export function Login({ closeBox }) {
+    const theme = useTheme()
+    const [email, setEmail] = React.useState('')
+    const [password, setPassword] = React.useState('')
+    const { login, reset, google } = useAuth();
+    const handleGoogle = async (e) => {
+        e.preventDefault();
+        try {
+            await google();
+            closeBox();
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        try {
+            await login(email, password);
+        } catch (error) {
+
+        }
+    }
+    const handleReset = async (e) => {
+        e.preventDefault();
+        try {
+            await reset(email);
+        } catch (error) {
+
+        }
+    }
+    return (
+        <>
+            <div className="d-flex flex-column gap-2">
+                <h2>Welcome to YarlProps</h2>
+                <Button sx={{ borderRadius: '100px', width: '80%', border: `1px solid ${theme.palette.mode === 'light' ? '#FFFFFF' : '#000000'}`, gap: 3, display: 'block', margin: 'auto' }} onClick={handleGoogle}>
+                    <img src="social-icons/google.svg" alt="G" width={30} /> Connect with Google
+                </Button>
+                <h5>OR</h5>
+                <hr />
+                <div className="d-flex flex-column gap-4">
+                    <TextField label="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                    <TextField label="Password" type='password' value={password} onChange={(e) => setPassword(e.target.value)} />
+                    <Typography onClick={handleReset}>Forgot Your Password?</Typography>
+                </div>
+                <div className="text-center">
+                    <ButtonGroup aria-label='Vertical button group' className='gap-3'>
+                        <Button variant='contained' onClick={handleLogin}>Signin</Button>
+                    </ButtonGroup>
+                </div>
+            </div>
+        </>
+    )
+}
+
+//register
+/*
+const steps = [{
+    label:'Choose role',
+    description:<Register/>,
+},{
+    label:'Choose role',
+    description:'',
+},{
+    label:'Choose role',
+    description:'',
+},
+];*/
+
+function RegisterSteps() {
+    const [activeStep, setActiveStep] = React.useState(0);
+
+    const steps = ['Personal Information', 'Contact Details', 'Review & Submit'];
+
+    const handleReset = () => {
+        setActiveStep(0);
+    };
+
+    return (
+        <Box sx={{ width: '100%' }}>
+            <Stepper activeStep={activeStep}>
+                {steps.map((step, index) => {
+                    const stepProps = {};
+                    const labelProps = {};
+                    return (
+                        <Step key={index} {...stepProps}>
+                            <StepLabel {...labelProps}>{step}</StepLabel>
+                        </Step>
+                    );
+                })}
+            </Stepper>
+            {activeStep === steps.length ? (
+                <React.Fragment>
+                    <Typography sx={{ mt: 2, mb: 1 }}>
+                        All steps completed - you&apos;re finished
+                    </Typography>
+                    <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+                        <Box sx={{ flex: '1 1 auto' }} />
+                        <Button onClick={handleReset}>Reset</Button>
+                    </Box>
+                </React.Fragment>
+            ) : (
+                <React.Fragment>
+                    <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
+                    <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+                        <Button
+                            color="inherit"
+                            disabled={activeStep === 0}
+                            onClick={() => setActiveStep((prevActiveStep) => prevActiveStep - 1)}
+                            sx={{ mr: 1 }}
+                        >
+                            Back
+                        </Button>
+                        <Button onClick={() => setActiveStep((prevActiveStep) => prevActiveStep + 1)}>
+                            {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                        </Button>
+                    </Box>
+                </React.Fragment>
+            )}
+        </Box>
+    );
+}
+
+function Register({ handleBack }) {
+    const [fname, setFname] = React.useState('');
+    const [lname, setLname] = React.useState('');
+    const [dname, setDname] = React.useState('');
+    const [email, setEmail] = React.useState('');
+    const [password, setPassword] = React.useState('');
+    const [role, setRole] = React.useState('');
+    const { register } = useAuth();
+
+    const roles = ['', 'Seller', 'Renter', 'Buyer'];
+
+    const handleFname = (e) => {
+        const value = e.target.value;
+        setFname(value);
+        setDname(value + " " + lname);
+    };
+
+    const handleLname = (e) => {
+        const value = e.target.value;
+        setLname(value);
+        setDname(fname + " " + value);
+    };
+    const handleRegister = async (e) => {
+        e.preventDefault();
+        try {
+            await register(fname, lname, dname, email, password, role);
+        } catch (error) {
+
+        }
+    }
+
+    const handleSelectChange = (e) => {
+        setRole(e.target.value);
+    };
+
+    return (
+        <div className="d-flex flex-column justify-content-center text-center">
+            <h2>Create account</h2>
+            <hr />
+            <div className="d-flex flex-column gap-3">
+                <div className="d-flex gap-4 w-100">
+                    <TextField className="w-50" label="First name" value={fname} onChange={handleFname} required />
+                    <TextField className="w-50" label="Last name" value={lname} onChange={handleLname} required />
+                </div>
+                <TextField label="Display name" value={dname} disabled />
+                <FormControl style={{ marginRight: '10px', minWidth: 120 }}>
+                    <InputLabel>Role</InputLabel>
+                    <Select value={role} onChange={handleSelectChange} required>
+                        {roles.map((role, index) => (
+                            <MenuItem key={index} value={role}>{role}</MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+                <TextField label="Email" type='email' value={email} onChange={(e) => setEmail(e.target.value)} required />
+                <TextField label="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                <div className="text-center">
+                    <ButtonGroup aria-label="Vertical button group" className="gap-3 text-center">
+                        <Button variant="contained" onClick={handleBack}>Back</Button>
+                        <Button variant="contained" onClick={handleRegister}>Register</Button>
+                    </ButtonGroup>
+                </div>
+            </div>
+        </div>
+    );
+}
