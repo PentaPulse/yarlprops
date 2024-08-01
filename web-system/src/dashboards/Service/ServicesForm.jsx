@@ -7,7 +7,7 @@ import { storage } from '../../backend/firebase';
 import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
-const ServicesForm = async ({ sid, onSuccess, onCancel }) => {
+const ServicesForm =  ({ sid, onSuccess, onCancel }) => {
   const [service, setService] = useState({
     serviceId : '',
     serviceName : '',
@@ -59,9 +59,7 @@ const ServicesForm = async ({ sid, onSuccess, onCancel }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-  }
-
-  const totalImages = existingImages.length + newImages.length;
+    const totalImages = existingImages.length + newImages.length;
   if(totalImages > 2){
     setValidationMessage('You can only upload 2 images');
     return;
@@ -111,6 +109,9 @@ const ServicesForm = async ({ sid, onSuccess, onCancel }) => {
     });
   }
 
+  }
+
+  
   const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
     clipPath: 'inset(50%)',

@@ -12,7 +12,7 @@ import MiscellaneousServicesIcon from '@mui/icons-material/MiscellaneousServices
 import AdminOverview from './Admin/AdminOverview'
 import AdminUsers from './Admin/AdminUsers'
 import AdminProducts from './Admin/AdminProducts'
-//import AdminServices from './Admin/AdminServices'
+import AdminServices from './Admin/AdminServices'
 //seller imports
 import SellerOverview from './Seller/SellerOverview'
 import SellerOrders from './Seller/SellerOrders'
@@ -58,7 +58,7 @@ export const userMenu = [
     ['My Profile', <BadgeIcon />],
 ]
 //boards
-export const adminBoard = [<AdminOverview />, <Admins />, <AdminUsers />, <AdminProducts />, <AdminProducts />, <ContactusReqs />, <Profile />]
+export const adminBoard = [<AdminOverview />, <Admins />, <AdminUsers />, <AdminProducts />, <AdminServices />, <ContactusReqs />, <Profile />]
 export const sellerBoard = [<SellerOverview />, <SellerOrders />, <SellerProducts />, <Profile />]
 export const renterBoard = [<RenterOverview />, <RenterOrders />, <RenterProducts />, <Profile />]
 export const servicerBoard = [<ServicerOverview />, <ServicerOrders />, <Profile />]
