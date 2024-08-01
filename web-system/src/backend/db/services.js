@@ -42,7 +42,6 @@ export const fetchServices = async () => {
         return serviceList;
     } catch (e) {
         console.error("Error fetching services:", e);
-        throw new Error("Error fetching services: " + e.message);
     }
 };
 
