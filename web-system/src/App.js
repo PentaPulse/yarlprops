@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Maintain from './Maintain';
 import CssBaseline from '@mui/material/CssBaseline';
 import AlertProvider from './backend/AlertService';
 import { AuthProvider } from './backend/AuthContext';
@@ -15,6 +14,9 @@ import Products from './pages/Products/Products';
 import ProductPage from './pages/Products/ProView/View';
 import Services from './pages/Services/Services';
 import ViewService from './pages/Services/ViewService'
+import NavigationBar from './components/NavigationBar/NavigationBar';
+import Footer from './components/Footer/Footer';
+import Maintain from './Maintain';
 
 const lightTheme = createTheme({
   palette: {
@@ -35,32 +37,24 @@ const darkTheme = createTheme({
       main: '#FFFFFF'
     },
     background: {
-      default: '#000435',
+      default: '#00072d',
     },
   },
 });
 
 function App() {
-  const [status,setStatus]=React.useState(false)
-  if (!status) {
-    return (
-      <div>
-        <Themed setMaintain={setStatus}/>
-      </div>
-    );
-  } else {
-    return (<Maintain />);
-  }
+  return (
+    <>
+    <Themed />
+    </>
+  );
 }
 
-function Themed({setMaintain}) {
+function Themed() {
   const [mode, setMode] = React.useState(() => {
     const storedTheme = sessionStorage.getItem('isLight');
     return storedTheme === null ? true : storedTheme === 'true';
   });
-
-  const [dash, setDash] = React.useState(true)
-
 
   const handleTheme = () => {
     setMode((prevMode) => {
@@ -82,29 +76,32 @@ function Themed({setMaintain}) {
       <AlertProvider>
         <CssBaseline />
         <Router>
-          <Routings handleMode={handleTheme} setMaintain={setMaintain} handleDashboardLayouttate={() => setDash(sessionStorage.getItem('dash'))} dash={dash} />
+          <Routings handleMode={handleTheme} />
         </Router>
       </AlertProvider>
     </ThemeProvider>
   );
 }
 
-function Routings({ handleMode ,setMaintain}) {
+function Routings({ handleMode }) {
   return (
     <>
       <AuthProvider>
-        <PageLayout handleMode={handleMode} >
+        <PageLayout >
+          <NavigationBar handleMode={handleMode} />
           <Routes>
-            <Route exact path='/' element={<Home setMaintain={setMaintain}/>} />
+            <Route exact path='/' element={<Home />} />
             <Route path='/guide' element={<Guide />} />
             <Route path='/contact' element={<Contact />} />
             <Route path="/products" element={<Products />} />
             <Route path="/products/:id" element={<ProductPage />} />
-            <Route path='/services' element={<Services/>}/>
-            <Route path='/services/:id' element={<ViewService/>}/>
+            <Route path='/services' element={<Services />} />
+            <Route path='/services/:id' element={<ViewService />} />
             <Route path='/dashboard' element={<PrivateRoute><DashboardLayout handleMode={handleMode} /></PrivateRoute>} />
           </Routes>
+          <Footer />
         </PageLayout>
+
       </AuthProvider>
     </>
   )

@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
                         console.error('No such user document!');
                     }
                 } catch (error) {
-                    console.error('Error fetching user data:', error);
+                    
                 }
             } else {
                 setUser(null);
@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }) => {
         });
 
         return () => unsubscribe();
-    }, []);
+    });
 
     //registering
     const register = (fname, lname, dname, email, password, role) => {
@@ -81,12 +81,12 @@ export const AuthProvider = ({ children }) => {
         .then((result) => {
             const user = result.user;
             const userid = user.uid
-            
+
             addUser(userid, "", "", user.email, user.phoneNumber, "", user.photoURL, "")
             showAlerts('Successfully logged', 'success')
         })
-        .catch(()=>{
-            showAlerts('Error occured , Try again with different gmail','error')
+        .catch(() => {
+            showAlerts('Error occured , Try again with different gmail', 'error')
         })
 
     const login = (email, password) => signInWithEmailAndPassword(auth, email, password)
@@ -154,14 +154,14 @@ export const AuthProvider = ({ children }) => {
     });
 
     const VerifyEmail = () => {
-        const verify=()=>{
+        const verify = () => {
             sendEmailVerification(auth.currentUser)
-            .then(()=>{
-                showAlerts('Check your email inbox');
-            })
-            .catch((e)=>{
-                console.log(e)
-            })
+                .then(() => {
+                    showAlerts('Check your email inbox');
+                })
+                .catch((e) => {
+                    console.log(e)
+                })
         }
         return (
             <>
@@ -172,9 +172,9 @@ export const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider value={{ user, register, login, logout, reset, google, home, dash }}>
-            {loading ? "" : children}
+            {loading ? '': children}
         </AuthContext.Provider>
     );
 };
 
-export const useAuth = () => React.useContext(AuthContext);
+export const useAuth = () => React.useContext(AuthContext); 

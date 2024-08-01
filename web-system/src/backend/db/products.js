@@ -57,7 +57,7 @@ const fetchProductsToHome = async () => {
         const productList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         return productList
     } catch (e) {
-        console.error(e)
+        console.error(e.code)
     }
 };
 
