@@ -1,20 +1,11 @@
-const express = require("express");
-const { MongoClient } = require("mongodb");
+import express from 'express'
+import db from './db.js';
 
 const app = express();
-const port = 3000;
+const port = 5000;
 
-// Replace with your MongoDB Atlas connection string
-const uri = "mongodb+srv://Cluster33761:X2dxeXpaUktf@cluster33761.q1ofbfy.mongodb.net/yarlprops?retryWrites=true&w=majority";
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-
-async function main() {
   try {
-    await client.connect();
-    console.log("Connected to MongoDB Atlas");
-
-    const database = client.db("yarlprops");
-    const collection = database.collection("users");
+    const collection = db.collection("users");
 
     app.get("/data", async (req, res) => {
       try {
@@ -26,13 +17,10 @@ async function main() {
       }
     });
 
-    app.listen(5000, () => {
-      console.log(`Server running at http://localhost:${5000}`);
+    app.listen(port, () => {
+      console.log(`Server running at http://localhost:${port}`);
     });
 
   } catch (error) {
     console.error("Error connecting to MongoDB Atlas:", error);
   }
-}
-
-main();
