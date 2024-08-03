@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 
-router.post('/users',async(req,res)=>{
+router.post('/signup',async(req,res)=>{
     const {firstName,lastName,displayName,email,role,password} = req.body
 
     const newUser = new User({
@@ -16,9 +16,9 @@ router.post('/users',async(req,res)=>{
 
     try{
         const savedUser = await newUser.save();
-        res.status(201).json(savedUser);
+        res.status(200).json(savedUser);
     } catch(error){
-        res.status(500).json({message:'Error handling user : ',error});
+        res.status(500).json({message:'Error handling user : '+error});
     }
 });
 
