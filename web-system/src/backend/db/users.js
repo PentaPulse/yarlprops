@@ -46,15 +46,6 @@ export const registerUser = async (uid, fname, lname, dname, email, role) => {
     }
 };
 
-export const addUserM = async (fname,lname,dname,email,role)=>{
-    try{
-        const mongoRes = await axios.post('http://localhost:5000/api/users',{fname,lname,dname,email,role});
-        console.log('added mongo: ',mongoRes)
-    } catch(e){
-        console.log('Mongo error: ',e)
-    }
-}
-
 export const addUser = async (uid, fname, lname, email, phone, gender, picture, address, role) => {
     try {
         const userRef = doc(db, 'systemusers', uid);

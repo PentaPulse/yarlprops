@@ -211,6 +211,7 @@ export default function DashboardLayout({ handleMode }) {
                     </List>
                 </Drawer >
                 <Grid item m='0 2vw 0 6vw'>
+                    
                     {(user.role === 'admin' ? adminBoard : (user.role === 'seller' ? sellerBoard : (user.role === 'renter' ? renterBoard : userBoard))).map((boardComponent, index) => (
                         board === index && boardComponent
                     ))}

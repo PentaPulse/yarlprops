@@ -3,10 +3,11 @@ import { Button } from '@mui/material';
 import { GoogleAuthProvider, createUserWithEmailAndPassword, onAuthStateChanged, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth';
 import { db, auth } from './firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import { addUser, addUserM, registerUser } from './db/users';
+import { addUser,  registerUser } from './db/users';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAlerts } from './AlertService';
-import axios from 'axios'
+
+import { addUserM } from './mongodb/users';
 
 const AuthContext = React.createContext();
 
@@ -44,24 +45,25 @@ export const AuthProvider = ({ children }) => {
     });
 
     //registering
-    const register = (fname, lname, dname, email, password, role) => {
+    const register = (firstName, lastName, displayName, email, password, role) => {
         createUserWithEmailAndPassword(auth, email, password)
             .then((result) => {
+                addUserM(firstName,lastName,displayName,email,role,password)
                 const user = result.user;
                 const userid = user.uid;
-                updateProfile(user, { displayName: dname })
+                updateProfile(user, { displayName: displayName })
                     .then(() => {
-                        registerUser(userid, fname, lname, dname, email, role);
-                        addUserM(fname,lname,dname,email,role)
+                        registerUser(userid, firstName, lastName, displayName, email, role);
                     })
                     .catch((error) => {
                         console.error("Error updating profile:", error);
                     });
                 showAlerts('Account created', 'success', 'top-center')
+                user.signOut()
             })
             .catch((error) => {
                 showAlerts('ww' + error, 'error')
-                if (email === '' || password === '' || fname === '' || lname === '' || role === '') {
+                if (email === '' || password === '' || firstName === '' || lastName === '' || role === '') {
                     if (error.code === 'auth/invalid-email' || error.code === 'auth/missing-password') {
                         showAlerts('Enter details', 'warning')
                     }
@@ -93,7 +95,8 @@ export const AuthProvider = ({ children }) => {
 
     const login = (email, password) => signInWithEmailAndPassword(auth, email, password)
         .then(() => {
-            window.location.reload()
+
+            //window.location.reload()
         })
         .catch((error) => {
             if (error.code === 'auth/invalid-email') {
@@ -140,6 +143,7 @@ export const AuthProvider = ({ children }) => {
         }
     }, [location]);
 
+/*
     React.useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user && !user.emailVerified) {
@@ -154,6 +158,7 @@ export const AuthProvider = ({ children }) => {
         });
         return () => unsubscribe();
     });
+    */
 
     const VerifyEmail = () => {
         const verify = () => {

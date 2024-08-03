@@ -1,5 +1,5 @@
 import * as React from "react";
-import {  Button, ButtonGroup, FormControl, InputLabel, MenuItem, Select,  TextField, Typography, useTheme } from "@mui/material";
+import { Button, ButtonGroup, FormControl, InputLabel, MenuItem, Select, TextField, Typography, useTheme } from "@mui/material";
 import { useAuth } from "../../backend/AuthContext";
 
 export function Login({ closeBox }) {
@@ -57,108 +57,10 @@ export function Login({ closeBox }) {
     )
 }
 
-//register
-/*
-export function RegisterStep() {
-    const [activeStep, setActiveStep] = React.useState(0);
-
-    const steps = ['Personal Information', 'Contact Details', 'Review & Submit'];
-
-    return (
-        <Box sx={{ width: '100%' }}>
-            <Stepper activeStep={activeStep}>
-                {steps.map((step, index) => {
-                    const stepProps = {};
-                    const labelProps = {};
-                    return (
-                        <Step key={index} {...stepProps}>
-                            <StepLabel {...labelProps}>{step}</StepLabel>
-                        </Step>
-                    );
-                })}
-            </Stepper>
-            {activeStep === 0 && <StepOne next={() => setActiveStep((prevActiveStep) => prevActiveStep + 1)} />}
-            {activeStep === 1 && <StepTwo next={() => setActiveStep((prevActiveStep) => prevActiveStep + 1)} back={() => setActiveStep((prevActiveStep) => prevActiveStep - 1)} />}
-        </Box>
-    );
-}
-function StepOne({ next }) {
-    const [fname, setFname] = React.useState('');
-    const [lname, setLname] = React.useState('');
-    const [dname, setDname] = React.useState('');
-    const [email, setEmail] = React.useState('');
-    const [password, setPassword] = React.useState('');
-    const [role, setRole] = React.useState('');
-    const { register } = useAuth();
-
-    const roles = ['', 'Seller', 'Renter', 'Buyer'];
-
-    const handleFname = (e) => {
-        const value = e.target.value;
-        setFname(value);
-        setDname(value + " " + lname);
-    };
-
-    const handleLname = (e) => {
-        const value = e.target.value;
-        setLname(value);
-        setDname(fname + " " + value);
-    };
-    const handleRegister = async (e) => {
-        e.preventDefault();
-        try {
-            await register(fname, lname, dname, email, password, role);
-        } catch (error) {
-
-        }
-    }
-
-    const handleSelectChange = (e) => {
-        setRole(e.target.value);
-    };
-
-    return (
-        <div className="d-flex flex-column justify-content-center text-center">
-            <h2>Create account</h2>
-            <hr />
-            <div className="d-flex flex-column gap-3">
-                <div className="d-flex gap-4 w-100">
-                    <TextField className="w-50" label="First name" value={fname} onChange={handleFname} required />
-                    <TextField className="w-50" label="Last name" value={lname} onChange={handleLname} required />
-                </div>
-                <TextField label="Display name" value={dname} disabled />
-                <FormControl style={{ marginRight: '10px', minWidth: 120 }}>
-                    <InputLabel>Role</InputLabel>
-                    <Select value={role} onChange={handleSelectChange} required>
-                        {roles.map((role, index) => (
-                            <MenuItem key={index} value={role}>{role}</MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-                <TextField label="Email" type='email' value={email} onChange={(e) => setEmail(e.target.value)} required />
-                <TextField label="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-                <div className="text-center">
-                    <ButtonGroup aria-label="Vertical button group" className="gap-3 text-center">
-                        <Button variant="contained" onClick={handleRegister}>Register</Button>
-                    </ButtonGroup>
-                </div>
-            </div>
-        </div>
-    );
-}
-
-function StepTwo({ next, back }) {
-    return (
-        <>
-            step two
-        </>
-    )
-}
-*/
 export function Register() {
-    const [fname, setFname] = React.useState('');
-    const [lname, setLname] = React.useState('');
-    const [dname, setDname] = React.useState('');
+    const [firstName, setFirstName] = React.useState('');
+    const [lastName, setLastName] = React.useState('');
+    const [displayName, setDisplayName] = React.useState('');
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [role, setRole] = React.useState('');
@@ -166,27 +68,17 @@ export function Register() {
 
     const roles = ['', 'Seller', 'Renter', 'Buyer'];
 
-    const handleFname = (e) => {
-        const value = e.target.value;
-        setFname(value);
-        setDname(value + " " + lname);
-    };
-
-    const handleLname = (e) => {
-        const value = e.target.value;
-        setLname(value);
-        setDname(fname + " " + value);
-    };
     const handleRegister = async (e) => {
         e.preventDefault();
         try {
-            await register(fname, lname, dname, email, password, role);
+            await register(firstName, lastName, displayName, email, password, role);
         } catch (error) {
 
         }
     }
 
     const handleSelectChange = (e) => {
+        e.preventDefault();
         setRole(e.target.value);
     };
 
@@ -196,10 +88,10 @@ export function Register() {
             <hr />
             <div className="d-flex flex-column gap-3">
                 <div className="d-flex gap-4 w-100">
-                    <TextField className="w-50" label="First name" value={fname} onChange={handleFname} required />
-                    <TextField className="w-50" label="Last name" value={lname} onChange={handleLname} required />
+                    <TextField className="w-50" label="First name" value={firstName} onChange={(e) => { setFirstName(e.target.value); setDisplayName(e.target.value + " " + lastName); }} required />
+                    <TextField className="w-50" label="Last name" value={lastName} onChange={(e) => { setLastName(e.target.value); setDisplayName(firstName + " " + e.target.value); }} required />
                 </div>
-                <TextField label="Display name" value={dname} disabled />
+                <TextField label="Display name" value={displayName} disabled />
                 <FormControl style={{ marginRight: '10px', minWidth: 120 }}>
                     <InputLabel>Role</InputLabel>
                     <Select value={role} onChange={handleSelectChange} required>
@@ -211,7 +103,7 @@ export function Register() {
                 <TextField label="Email" type='email' value={email} onChange={(e) => setEmail(e.target.value)} required />
                 <TextField label="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                 <div className="text-center">
-                        <Button variant="contained" onClick={handleRegister}>Register</Button>
+                    <Button variant="contained" onClick={handleRegister}>Register</Button>
                 </div>
             </div>
         </div>
