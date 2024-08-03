@@ -4,8 +4,8 @@ import { Paper, Typography, CircularProgress, Grid, Button } from '@mui/material
 import { styled } from '@mui/system';
 
 const Image = styled('img')({
-  width: 100,
-  height: 100,
+  width: 200,
+  height: 200,
   objectFit: 'cover',
   margin: 5,
 });

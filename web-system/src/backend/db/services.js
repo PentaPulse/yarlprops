@@ -6,10 +6,9 @@ import { doc, setDoc, collection, getDocs, query, where, addDoc, updateDoc, orde
 const serviceRef = collection(db, "services");
 
 // Adding services
-export const addService= async ({ serviceId, serviceName, serviceDescription,  serviceLocation, images}) => {
+export const addService= async ({ serviceName, serviceDescription, serviceLocation, images }) => {
     try {
         const docRef = await addDoc(serviceRef, {
-            serviceId,
             serviceName,
             serviceDescription,
             serviceLocation,
@@ -39,6 +38,7 @@ export const fetchServices = async () => {
     try {
         const qSnapshot = await getDocs(serviceRef);
         const serviceList = qSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        console.log("Fetched services:", serviceList);
         return serviceList;
     } catch (e) {
         console.error("Error fetching services:", e);
@@ -57,8 +57,12 @@ export const fetchServicesToHome = async () => {
 };
 
 
-// Fetching a specific Serviceby ID
-export const fetchSelectedService= async (sid) => {
+// Fetching a specific Service by ID
+export const fetchSelectedService = async (sid) => {
+    if (!sid) {
+        console.error("Service ID is undefined");
+        throw new Error("Service ID is undefined");
+    }
     const q = query(serviceRef, where('sid', '==', sid));
     try {
         const qSnapshot = await getDocs(q);

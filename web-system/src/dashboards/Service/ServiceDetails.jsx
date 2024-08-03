@@ -34,7 +34,6 @@ const ServiceDetails = ({ sid, onBack }) => {
       <Button variant="contained" color="primary" onClick={onBack} style={{ marginBottom: 16 }}>
         Back to Services List
       </Button>
-      <Typography variant="h4">{service.serviceId}</Typography>
       <Typography variant="h4">{service.serviceName}</Typography>
       <Typography variant="body1">Description: {service.serviceDescription}</Typography>
       <Typography variant="body1">Location: {service.serviceLocation}</Typography>
