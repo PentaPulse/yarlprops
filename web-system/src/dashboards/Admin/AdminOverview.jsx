@@ -3,6 +3,7 @@ import { Box, Grid, Paper, Typography, Table, TableHead, TableRow, TableCell, Ta
 import { countRenters, countSellers, countUsers, fetchUserList} from '../../backend/db/users';
 import {fetchContactUsResponsesList}from '../../backend/db/contactus'
 import { countProducts ,fetchProducts} from '../../backend/db/products';
+import axios from 'axios';
 
 export default function AdminOverview() {
     const [userCount, setUserCount] = React.useState(0);
@@ -83,7 +84,7 @@ export default function AdminOverview() {
 
 function UsersTable() {
     const [users, setUsers] = React.useState([]);
-
+/*
     React.useEffect(() => {
         async function fetchData() {
             const data = await fetchUserList();
@@ -91,6 +92,19 @@ function UsersTable() {
         }
         fetchData();
     }, []);
+*/
+    React.useEffect(()=>{
+        const fetchItems = async () => {
+            try {
+              const response = await axios.get('http://localhost:5000/api/users'); // Update URL as needed
+              setUsers(response.data);
+            } catch (error) {
+              console.error('Error fetching users:', error);
+            }
+          };
+      
+          fetchItems();
+    })
     const cols = ["No", "Name", "Email", "Role"]
     return (
         <>

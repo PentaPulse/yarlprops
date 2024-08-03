@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Button, Tooltip, MenuItem, Switch, FormControlLabel, ButtonGroup, Modal, Backdrop, Fade, TextField, Stepper, Step, StepLabel, FormControl, InputLabel, Select, StepContent } from '@mui/material';
+import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Button, Tooltip, MenuItem, Switch, FormControlLabel, ButtonGroup, Modal, Backdrop, Fade } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../backend/AuthContext';
-import { Login, Register, RegisterSteps } from '../Signup/Signup';
+import { Login, Register } from '../Signup/Signup';
 
 const pages = [['Home', '/'], ['Products', '/products'], ['Services', '/services'], ['Guide', '/guide'], ['Contact', '/contact']];
 const style = {
@@ -22,6 +22,7 @@ const style = {
     'border-radius': '10px',
     textAlign: "center"
 };
+
 
 export default function NavigationBar({ handleMode }) {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -129,7 +130,7 @@ export default function NavigationBar({ handleMode }) {
                                 fontWeight: 700,
                                 letterSpacing: '.3rem',
                                 color: 'inherit',
-                                textDecoration: 'none',
+                                textDecoration: 'none', // eslint-disable-next-line
                                 color: theme.palette.mode === 'light' ? '#000000' : '#FFFFFF',
                             }}
                         >

@@ -3,9 +3,10 @@ import { Button } from '@mui/material';
 import { GoogleAuthProvider, createUserWithEmailAndPassword, onAuthStateChanged, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth';
 import { db, auth } from './firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import { addUser, registerUser } from './db/users';
+import { addUser, addUserM, registerUser } from './db/users';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAlerts } from './AlertService';
+import axios from 'axios'
 
 const AuthContext = React.createContext();
 
@@ -51,6 +52,7 @@ export const AuthProvider = ({ children }) => {
                 updateProfile(user, { displayName: dname })
                     .then(() => {
                         registerUser(userid, fname, lname, dname, email, role);
+                        addUserM(fname,lname,dname,email,role)
                     })
                     .catch((error) => {
                         console.error("Error updating profile:", error);
@@ -81,7 +83,7 @@ export const AuthProvider = ({ children }) => {
         .then((result) => {
             const user = result.user;
             const userid = user.uid
-
+            
             addUser(userid, "", "", user.email, user.phoneNumber, "", user.photoURL, "")
             showAlerts('Successfully logged', 'success')
         })
