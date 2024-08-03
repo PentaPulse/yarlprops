@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Box, Button, ButtonGroup, FormControl, InputLabel, MenuItem, Select, Step, StepLabel, Stepper, TextField, Typography, useTheme } from "@mui/material";
+import {  Button, ButtonGroup, FormControl, InputLabel, MenuItem, Select,  TextField, Typography, useTheme } from "@mui/material";
 import { useAuth } from "../../backend/AuthContext";
 
 export function Login({ closeBox }) {
@@ -155,7 +155,7 @@ function StepTwo({ next, back }) {
     )
 }
 */
-export function Register({ handleBack }) {
+export function Register() {
     const [fname, setFname] = React.useState('');
     const [lname, setLname] = React.useState('');
     const [dname, setDname] = React.useState('');
@@ -204,7 +204,7 @@ export function Register({ handleBack }) {
                     <InputLabel>Role</InputLabel>
                     <Select value={role} onChange={handleSelectChange} required>
                         {roles.map((role, index) => (
-                            <MenuItem key={index} value={role}>{role}</MenuItem>
+                            <MenuItem key={index} value={role.toLowerCase()}>{role}</MenuItem>
                         ))}
                     </Select>
                 </FormControl>

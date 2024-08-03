@@ -1,6 +1,7 @@
 import "firebase/firestore";
 import { db } from "../firebase";
 import { doc, setDoc, collection, getDoc, getDocs, where, query } from "firebase/firestore";
+import axios from "axios";
 
 //reference
 const userRef = collection(db, "systemusers")
@@ -44,6 +45,15 @@ export const registerUser = async (uid, fname, lname, dname, email, role) => {
         return { success: false, message: `${eCode}: ${eMsg}` };
     }
 };
+
+export const addUserM = async (fname,lname,dname,email,role)=>{
+    try{
+        const mongoRes = await axios.post('http://localhost:5000/api/users',{fname,lname,dname,email,role});
+        console.log('added mongo: ',mongoRes)
+    } catch(e){
+        console.log('Mongo error: ',e)
+    }
+}
 
 export const addUser = async (uid, fname, lname, email, phone, gender, picture, address, role) => {
     try {
