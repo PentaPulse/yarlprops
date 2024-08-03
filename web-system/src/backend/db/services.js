@@ -59,6 +59,10 @@ export const fetchServicesToHome = async () => {
 
 // Fetching a specific Service by ID
 export const fetchSelectedService = async (sid) => {
+    if (!sid) {
+        console.error("Service ID is undefined");
+        throw new Error("Service ID is undefined");
+    }
     const q = query(serviceRef, where('sid', '==', sid));
     try {
         const qSnapshot = await getDocs(q);

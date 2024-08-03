@@ -123,7 +123,7 @@ const ServicesForm =  ({ sid, onSuccess, onCancel }) => {
   });
 
   return(
-    <Paper>
+    <Paper style={{ padding: 16 }}>
       <Typography varient="h6">{sid ? 'Edit Service' : 'Add Service'}</Typography>
       <form onSubmit={handleSubmit}>
         <TextField

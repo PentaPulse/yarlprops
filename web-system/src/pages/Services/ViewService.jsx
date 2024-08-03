@@ -35,7 +35,7 @@ function ViewService() {
             <Card sx={{ boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }}>
               <CardMedia
                 component="img"
-                image={service.images}
+                image={service.images[0]}
                 alt={service.name}
                 sx={{ height: '52vh', borderRadius: '0px'}}
               />
