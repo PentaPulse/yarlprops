@@ -9,7 +9,6 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 const ServicesForm =  ({ sid, onSuccess, onCancel }) => {
   const [service, setService] = useState({
-    serviceId : '',
     serviceName : '',
     serviceDescription : '',
     serviceLocation : '',
@@ -24,7 +23,7 @@ const ServicesForm =  ({ sid, onSuccess, onCancel }) => {
 
   useEffect(() => {
     if (sid) {
-      const fetchServices = async() => {
+      const fetchServices = async () => {
         const fetchedService = await fetchSelectedService(sid);
         if (fetchedService){
           setService(fetchedService);
@@ -89,7 +88,6 @@ const ServicesForm =  ({ sid, onSuccess, onCancel }) => {
     });
 
     setService({
-      serviceId : '',
       serviceName : '',
       serviceDescription : '',
       serviceLocation : '',
@@ -129,20 +127,10 @@ const ServicesForm =  ({ sid, onSuccess, onCancel }) => {
       <Typography varient="h6">{sid ? 'Edit Service' : 'Add Service'}</Typography>
       <form onSubmit={handleSubmit}>
         <TextField
-          label="Service Id"
-          name="serviceId"
-          value={service.serviceId}
-          onchange={handleChange}
-          fullWidth
-          margin="normal"
-          required
-        />
-
-        <TextField
           label="Service Name"
           name="serviceName"
           value={service.serviceName}
-          onchange={handleChange}
+          onChange={handleChange}
           fullWidth
           margin="normal"
           required
@@ -152,7 +140,7 @@ const ServicesForm =  ({ sid, onSuccess, onCancel }) => {
           label="Description"
           name="serviceDescription"
           value={service.serviceDescription}
-          onchange={handleChange}
+          onChange={handleChange}
           fullWidth
           margin="normal"
           required
@@ -162,7 +150,7 @@ const ServicesForm =  ({ sid, onSuccess, onCancel }) => {
           label="Location"
           name="serviceLocation"
           value={service.serviceLocation}
-          onchange={handleChange}
+          onChange={handleChange}
           fullWidth
           margin="normal"
           required

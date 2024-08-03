@@ -88,7 +88,7 @@ const ServicesList = ({ onEditService, onViewService }) => {
                 <TableHead>
                     <TableRow>
                         {/* <TableCell>ID</TableCell> */}
-                        <StyledTableCell align="center">Service ID</StyledTableCell>
+                        
                         <StyledTableCell align="center">Service Name</StyledTableCell>
                         <StyledTableCell align="center">Description</StyledTableCell>
                         <StyledTableCell align="center">Location</StyledTableCell>
@@ -96,17 +96,16 @@ const ServicesList = ({ onEditService, onViewService }) => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {services.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(product => (
-                    <StyledTableRow key={services.id}>
+                    {services.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(service => (
+                    <StyledTableRow key={service.id}>
                         {/* <TableCell>{product.id}</TableCell> */}
-                        <StyledTableCell align="center">{services.serviceId}</StyledTableCell>
-                        <StyledTableCell align="center">{services.serviceName}</StyledTableCell>
-                        <StyledTableCell align="justify">{services.serviceDescription}</StyledTableCell>
-                        <StyledTableCell align="center">{services.serviceLocation}</StyledTableCell>
+                        <StyledTableCell align="center">{service.serviceName}</StyledTableCell>
+                        <StyledTableCell align="center">{service.serviceDescription}</StyledTableCell>
+                        <StyledTableCell align="center">{service.serviceLocation}</StyledTableCell>
                         <StyledTableCell align="center">
-                            <Button onClick={() => onViewService(services.id)} variant="outlined" color="secondary" style={{ margin: '5px', width: '100%' }}>View</Button>
-                            <Button onClick={() => onEditService(services.id)} variant="outlined" color="success" style={{ margin: '5px', width: '100%' }}>Edit</Button>
-                            <Button onClick={() => handleDelete(services.id)} variant="outlined" color="error" style={{ margin: '5px', width: '100%' }}>Delete</Button>
+                            <Button onClick={() => onViewService(service.id)} variant="outlined" color="secondary" style={{ margin: '5px', width: '100%' }}>View</Button>
+                            <Button onClick={() => onEditService(service.id)} variant="outlined" color="success" style={{ margin: '5px', width: '100%' }}>Edit</Button>
+                            <Button onClick={() => handleDelete(service.id)} variant="outlined" color="error" style={{ margin: '5px', width: '100%' }}>Delete</Button>
                         </StyledTableCell>
                     </StyledTableRow>
                    ))}

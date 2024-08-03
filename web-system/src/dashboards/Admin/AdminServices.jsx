@@ -15,14 +15,14 @@ const AdminServices = () => {
     setViewingServiceId(null);
   }
 
-  const handleEditService = (serviceId) => {
-    setEditingServiceId(serviceId);
+  const handleEditService = (sId) => {
+    setEditingServiceId(sId);
     setShowAddService(true);
     setViewingServiceId(null);
   }
 
-  const handleViewService = (serviceId) => {
-    setViewingServiceId(serviceId);
+  const handleViewService = (sId) => {
+    setViewingServiceId(sId);
     setShowAddService(false);
   }
 
