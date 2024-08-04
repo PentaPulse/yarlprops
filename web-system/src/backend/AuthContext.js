@@ -137,7 +137,7 @@ export const AuthProvider = ({ children }) => {
             setDash(true)
         }
     }, [location]);
-
+/*
     React.useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user && !user.emailVerified) {
@@ -169,7 +169,7 @@ export const AuthProvider = ({ children }) => {
             </>
         )
     }
-
+*/
     return (
         <AuthContext.Provider value={{ user, register, login, logout, reset, google, home, dash }}>
             {loading ? '': children}
