@@ -16,10 +16,10 @@ const style = {
     boxShadow: '0 8px 32px 0 rgba( 31, 38, 135, 0.37 )',
     p: 4,
     backgroundColor: 'background.paper',
-    "box-shadow": '0 8px 32px 0 rgba( 31, 38, 135, 0.37 )',
-    'backdrop-filter': 'blur( 11.5px )',
-    '-webkit-backdrop-filter': 'blur( 11.5px )',
-    'border-radius': '10px',
+    boxShadow: '0 8px 32px 0 rgba( 31, 38, 135, 0.37 )',
+    backdropFilter: 'blur( 11.5px )',
+    webkitBackdropFilter: 'blur( 11.5px )',
+    borderRadius: '10px',
     textAlign: "center"
 };
 

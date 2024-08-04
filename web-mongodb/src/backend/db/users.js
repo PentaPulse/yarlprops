@@ -27,9 +27,11 @@ export const addUser = async (firstName, lastName, displayName, email, role, pas
 
 export const logUser = async (email, password) => {
     try {
-        const response = await axios.get(`${api}/login`, { email, password });
+        const response = await axios.post(`${api}/login`, { email, password });
         return response.data;
-    } catch (e) { }
+    } catch (e) {
+        console.log("login error: "+e)
+     }
 };
 //register user
 export const registerUser = async (uid, fname, lname, dname, email, role) => {
@@ -69,33 +71,6 @@ export const registerUser = async (uid, fname, lname, dname, email, role) => {
         return { success: false, message: `${eCode}: ${eMsg}` };
     }
 };
-/*
-export const addUser = async (uid, fname, lname, email, phone, gender, picture, address, role) => {
-    try {
-        const userRef = doc(db, 'systemusers', uid);
-        const userSnap = await getDoc(userRef)
-        if (!userSnap.exists()) {
-            await setDoc(userRef, {
-                uid: uid,
-                fname: fname,
-                lname: lname,
-                email: email,
-                phone: phone,
-                gender: gender,
-                picture: picture,
-                address: address,
-                role: role
-            });
-        } else {
-            console.log("user exists")
-        }
-
-    } catch (e) {
-        console.error('Error adding user: ', e);
-    }
-};
-*/
-
 // fetching lists
 export const fetchUserList = async () => {
     try {
