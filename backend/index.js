@@ -1,12 +1,24 @@
 //"mongodb+srv://Cluster33761:X2dxeXpaUktf@cluster33761.q1ofbfy.mongodb.net/yarlprops?retryWrites=true&w=majority"
 
 const express = require('express');
-const userRouter = require('./routes/users');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const userRouter = require('./routes/users');
+const authMiddleware = require('./middleware/auth');
 
 const app = express();
 app.use(express.json());
+
+const whitelist = ['http://localhost:3000', 'https://yarlprops.web.app']; // Ensure the frontend port is correct
+const corsOptions = {
+    origin: function (origin, callback) {
+        if (whitelist.indexOf(origin) !== -1 || !origin) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    }
+};
 
 app.use(cors());
 const port = 5000;

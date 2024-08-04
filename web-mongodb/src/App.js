@@ -95,13 +95,9 @@ function Routings({ handleMode }) {
             <Route path="/products/:id" element={<><NavigationBar handleMode={handleMode} /><ProductPage/><Footer /></>} />
             <Route path="/services" element={<><NavigationBar handleMode={handleMode} /><Services/><Footer /></>} />
             <Route path="/services/:id" element={<><NavigationBar handleMode={handleMode} /><ViewService/><Footer /></>} />
-          </Routes>          
-        </PageLayout>
-        <PrivateRoute>
-          <Routes>
-            <Route path="/dashboard" element={<DashboardLayout handleMode={handleMode} />} />
+            <Route path="/dashboard" element={<PrivateRoute><DashboardLayout handleMode={handleMode} /></PrivateRoute>} />
           </Routes>
-        </PrivateRoute>
+          </PageLayout>
       </AuthProvider>
     </>
   );
