@@ -1,7 +1,6 @@
 import "firebase/firestore";
 import { db } from "../firebase";
 import { doc, setDoc, collection, getDoc, getDocs, where, query } from "firebase/firestore";
-import axios from "axios";
 
 //reference
 const userRef = collection(db, "systemusers")
