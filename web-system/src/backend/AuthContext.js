@@ -80,9 +80,7 @@ export const AuthProvider = ({ children }) => {
     const google = () => signInWithPopup(auth, provider)
         .then((result) => {
             const user = result.user;
-            const userid = user.uid
-
-            addUser(userid, "", "", user.email, user.phoneNumber, "", user.photoURL, "")
+            addUser(user.uid,"","",user.email,user.phoneNumber,"",user.photoURL,"","buyer")
             showAlerts('Successfully logged', 'success')
         })
         .catch(() => {
