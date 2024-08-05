@@ -1,11 +1,11 @@
 import React from 'react'
 
-function SellerProducts() {
+function ServiceFilters() {
   return (
     <div>
-      
+
     </div>
   )
 }
 
-export default SellerProducts
+export default ServiceFilters

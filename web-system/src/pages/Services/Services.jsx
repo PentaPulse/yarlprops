@@ -1,7 +1,7 @@
 import { Grid, TextField } from '@mui/material';
 import * as React from 'react'
 import ViewService from './ViewService'
-import ServiceList from '../Home/ServiceList';
+import ServiceFilters from './ServiceFilters';
 
 function Services() {
     const [searchTerm, setSearchTerm] = React.useState('');
@@ -19,10 +19,10 @@ function Services() {
                     />
                 </Grid>
                 <Grid item md={3}>
-                   
+                    <ServiceFilters/>
                 </Grid>
                 <Grid item md={9}>
-                    <ServiceList/>
+                    <ViewService searchTerm={searchTerm} />
                 </Grid>
             </Grid>
         </>

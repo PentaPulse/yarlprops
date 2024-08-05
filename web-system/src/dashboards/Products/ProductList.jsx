@@ -94,7 +94,6 @@ const ProductList = ({ onEditProduct, onViewProduct }) => {
                         <StyledTableCell align="center">Description</StyledTableCell>
                         <StyledTableCell align="center">Quantity</StyledTableCell>
                         <StyledTableCell align="center">Location</StyledTableCell>
-                        <StyledTableCell align="center">Current Status</StyledTableCell>
                         <StyledTableCell align="center">Actions</StyledTableCell>
                     </TableRow>
                 </TableHead>
@@ -108,7 +107,6 @@ const ProductList = ({ onEditProduct, onViewProduct }) => {
                         <StyledTableCell align="justify">{product.description}</StyledTableCell>
                         <StyledTableCell align="center">{product.quantity}</StyledTableCell>
                         <StyledTableCell align="center">{product.location}</StyledTableCell>
-                        <StyledTableCell align="center">{product.status}</StyledTableCell>
                         <StyledTableCell align="center">
                             <Button onClick={() => onViewProduct(product.id)} variant="outlined" color="secondary" style={{ margin: '5px', width: '100%' }}>View</Button>
                             <Button onClick={() => onEditProduct(product.id)} variant="outlined" color="success" style={{ margin: '5px', width: '100%' }}>Edit</Button>

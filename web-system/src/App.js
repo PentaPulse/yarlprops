@@ -10,7 +10,7 @@ import PageLayout from './pages/PageLayout';
 import Home from './pages/Home/Home';
 import Guide from './pages/Guide/Guide';
 import Contact from './pages/Contact/Contact';
-import Products from './pages/Products/ProductsContents';
+import Products from './pages/Products/Products';
 import ProductPage from './pages/Products/ProView/View';
 import Services from './pages/Services/Services';
 import ViewService from './pages/Services/ViewService'
@@ -95,12 +95,11 @@ function Routings({ handleMode }) {
             <Route path="/products" element={<Products />} />
             <Route path="/products/:id" element={<ProductPage />} />
             <Route path='/services' element={<Services />} />
-            <Route path='/service/:id' element={<ViewService />} />
+            <Route path='/services/:id' element={<ViewService />} />
             <Route path='/dashboard' element={<PrivateRoute><DashboardLayout handleMode={handleMode} /></PrivateRoute>} />
           </Routes>
-     
+          <Footer />
         </PageLayout>
-        <Footer />
       </AuthProvider>
     </>
   )

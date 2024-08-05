@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Card, CardActionArea, CardContent, CardMedia, CardActions, Container, Grid, Typography } from '@mui/material';
+import { Card, CardActionArea, CardContent, CardMedia, Container, Grid, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../../backend/firebase';
@@ -38,9 +38,6 @@ const ProductsContents = ({ searchTerm }) => {
                     products.map((product, index) => (
                         <Grid item xs={1} sm={1} md={1} lg={1} key={index}>
                             <Card sx={{ boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }}>
-                                <CardActions>
-                                    {(products.status === "For Sale")? (<Button size='small' style={{ backgroundColor: "green", fontWeight: 'bold' }}>For Sale</Button>):(<Button size='small' style={{ backgroundColor: "orange", fontWeight: 'bold' }}>For Sell</Button>)}
-                                </CardActions>
                                 <CardActionArea onClick={() => handleCardClick(product.pid)}>
                                     <CardMedia
                                         sx={{ height: '20rem' }}
@@ -62,4 +59,3 @@ const ProductsContents = ({ searchTerm }) => {
 };
 
 export default ProductsContents;
-

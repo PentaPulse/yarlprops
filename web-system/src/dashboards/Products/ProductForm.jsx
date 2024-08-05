@@ -6,11 +6,6 @@ import { storage } from '../../backend/firebase';
 import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Swal from 'sweetalert2';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
 
 const ProductForm = ({ pid, onSuccess, onCancel }) => {
   const [product, setProduct] = useState({ 
@@ -19,8 +14,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
     type: '', 
     description: '', 
     quantity: '', 
-    location: '',
-    status: '', 
+    location: '', 
     images: [
 
     ], 
@@ -50,10 +44,6 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
     setProduct({ ...product, [name]: value });
   };
 
-  const handleStatusChange = (event) => {
-    setProduct({ ...product, status: event.target.value });
-  };
-
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -78,11 +68,8 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
       return;
     }
 
-    if (product.quantity <= 1) {
-      setValidationMessage('Quantity must be greater than 1 or equal to 1.');
-      return;
-    }
     setValidationMessage('');
+
 
     try {
       // Upload new images and get their URLs
@@ -118,8 +105,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
         type: '', 
         description: '', 
         quantity: '', 
-        location: '',
-        status: '', 
+        location: '', 
         images: [] });
       setExistingImages([]);
       setNewImages([]);
@@ -205,26 +191,6 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
           margin="normal"
           required
         />
-        <FormControl component="fieldset" sx={{ ml: "14px" }}>
-        <FormLabel component="legend">Status :</FormLabel>
-        <RadioGroup 
-          row 
-          aria-label="status" 
-          name="status"
-          value={product.status}
-          onChange={handleStatusChange}
-          required
-        >
-          <FormControlLabel value="For Rent" control={<Radio />} label="For Rent" />
-          <FormControlLabel value="For Sale" control={<Radio />} label="For Sale" />
-          <FormControlLabel
-            value="disabled"
-            disabled
-            control={<Radio />}
-            label="Sold Out!"
-          />
-        </RadioGroup>
-        </FormControl><br/>
         <Button
           accept='image/*'
           multiple
@@ -239,6 +205,13 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
         Upload file
         <VisuallyHiddenInput type="file" />
         </Button>
+        {/* <input
+          type='file'
+          accept='image/*'
+          multiple
+          onChange={handleImageChange}
+          style={{ display: 'block', margin: '20px 0' }}
+        /> */}
         <Grid container spacing={2}>
           {existingImages.map((src, index) => (
             <Grid item key={index}>

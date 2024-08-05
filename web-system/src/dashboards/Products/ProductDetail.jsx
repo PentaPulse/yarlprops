@@ -40,7 +40,6 @@ const ProductDetail = ({ pid, onBack }) => {
       <Typography variant="body1">Description: {product.description}</Typography>
       <Typography variant="body1">Quantity: {product.quantity}</Typography>
       <Typography variant="body1">Location: {product.location}</Typography>
-      <Typography variant="body1">Status: {product.status}</Typography>
       <Grid container spacing={2} style={{ marginTop: 16 }}>
         {product.images && product.images.map((src, index) => (
           <Grid item key={index}>

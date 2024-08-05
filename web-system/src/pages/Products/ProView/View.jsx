@@ -48,7 +48,7 @@ function ProductPage() {
                       component="img"
                       image={image}
                       alt={`slide ${index}`}
-                      sx={{ height: '40vh', borderRadius: '25px', p: '15px' }}
+                      sx={{ height: '40vh', borderRadius: '25px', padding: '15px' }}
                     />
                   </Box>
                 ))}
@@ -66,10 +66,7 @@ function ProductPage() {
                 <Typography variant="h6" component="h4" sx={{ fontWeight: 'bold', textAlign: 'center', fontStyle: 'italic' }}>
                   Type: {product.type}
                 </Typography>
-                <Typography variant="h6" component="h4" sx={{ fontWeight: 'bold', textAlign: 'center', fontStyle: 'italic' }}>
-                  Status: {product.status}
-                </Typography>
-                <Box sx={{ mx: '1.9rem', mt: '1rem' }}>
+                <Box sx={{ marginLeft: '1.9rem', marginRight: '1.9rem', marginTop: '1rem' }}>
                   <Typography variant="h6" component="h4" sx={{ fontWeight: 'bold' }}>Description</Typography>
                   <ul style={{ textAlign: 'justify', fontSize: '18px' }}>
                     <li>{product.description}</li>
@@ -79,7 +76,7 @@ function ProductPage() {
                 </Box>
                 <Box sx={{ marginLeft: '1rem', marginRight: '1rem', marginTop: '4.5rem' }}>
                   {/* Seller Details */}
-                  <Typography variant="h5" component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
+                  <Typography variant="h5" component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', marginBottom: '1rem' }}>Seller/Renter Details</Typography>
                   <Typography variant="h6" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-user"></i> Name</Typography>
                   <Typography>{product.sellerName}</Typography>
                   <Typography variant="h6" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-location-dot"></i> Location</Typography>
