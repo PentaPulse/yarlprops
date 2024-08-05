@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { fetchServicesToHome } from '../../backend/db/services';
+import { fetchServices } from '../../backend/db/services';
 import { Card, CardActionArea, CardContent, CardMedia, Container, Grid, Typography } from '@mui/material';
 import DbError from '../../components/DbError/DbError';
 
@@ -10,13 +10,13 @@ export default function ServiceList() {
   const navigate = useNavigate();
 
   const handleCardClick = (pid) => {
-    navigate(`/services/${pid}`);
+    navigate(`/service/${pid}`);
   };
 
   React.useEffect(() => {
     const getServices = async () => {
       try {
-        const serviceList = await fetchServicesToHome();
+        const serviceList = await fetchServices();
         console.log("Fetched services:", serviceList); // Log the fetched data
         setServices(serviceList || []); // Ensure services is always an array
       } catch (error) {
@@ -47,7 +47,7 @@ export default function ServiceList() {
           services.map((service, index) => (
             <Grid item xs={1} sm={1} md={1} lg={1} key={index}>
               <Card>
-                <CardActionArea onClick={() => handleCardClick(service.pid)}>
+                <CardActionArea onClick={() => handleCardClick(service.id)}>
                   <CardMedia
                     sx={{ height: '20rem' }}
                     image={service.images && service.images[0] ? service.images[0] : 'https://picsum.photos/id/11/200/300'}
