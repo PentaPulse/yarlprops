@@ -1,6 +1,6 @@
 import "firebase/firestore";
 import { db } from "../firebase";
-import { doc, setDoc, collection, getDocs } from "firebase/firestore";
+import { doc, setDoc, collection, getDocs, addDoc } from "firebase/firestore";
 
 //reference
 const contactRef = collection(db, "contactUs");
@@ -9,7 +9,7 @@ const contactRef = collection(db, "contactUs");
 // contact us responses
 export const sendMessage = async (fname, lname, email, message) => {
   try {
-    await setDoc(doc(contactRef, email), {
+    const docRef = await addDoc(contactRef, {
       fname,
       lname,
       email,
