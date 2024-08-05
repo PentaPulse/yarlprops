@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+//const jwt = require('jsonwebtoken');
 
-const JWT_SECRET = 'your_jwt_secret'; // Use environment variables in production
+//const JWT_SECRET = 'your_jwt_secret';
 
 // Signup Route
 router.post('/signup', async (req, res) => {
@@ -46,14 +46,12 @@ router.post('/login', async (req, res) => {
 
 // Logout Route
 router.post('/logout', (req, res) => {
-    // Handle logout logic (e.g., clear session or token)
     res.status(200).json({ message: 'Logged out successfully' });
 });
 
 // Get Current User Route
 router.get('/me', async (req, res) => {
-    // Assume you have middleware to authenticate and add user to req.user
-    const user = req.user; // From authenticated middleware
+    const user = req.user; 
     if (user) {
         res.status(200).json(user);
     } else {

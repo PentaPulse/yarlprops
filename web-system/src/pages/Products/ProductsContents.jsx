@@ -62,3 +62,4 @@ const ProductsContents = ({ searchTerm }) => {
 };
 
 export default ProductsContents;
+

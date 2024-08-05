@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { addUser, logUser } from './api/users'; // Adjust path according to your structure
 import { useAlerts } from './AlertService';
 
 const AuthContext = React.createContext();
