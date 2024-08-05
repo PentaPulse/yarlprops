@@ -20,7 +20,7 @@ const corsOptions = {
     }
 };
 
-app.use(cors());
+app.use(cors(corsOptions));
 const port = 5000;
 
 mongoose.connect("mongodb+srv://Cluster33761:X2dxeXpaUktf@cluster33761.q1ofbfy.mongodb.net/yarlprops?retryWrites=true&w=majority")

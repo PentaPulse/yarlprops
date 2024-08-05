@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Container, Grid, Card, CardMedia, CardContent, Typography, Button, CircularProgress, useTheme, Box } from '@mui/material';
 import Carousel from 'react-material-ui-carousel';
-import { fetchSelectedService } from '../../../src/backend/db/services';
+import { fetchSelectedService } from '../../backend/db/services';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 
 function ViewService() {
