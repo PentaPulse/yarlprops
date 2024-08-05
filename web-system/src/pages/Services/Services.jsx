@@ -1,7 +1,6 @@
 import { Grid, TextField } from '@mui/material';
 import * as React from 'react'
 import ViewService from './ViewService'
-import ServiceFilters from './ServiceFilters';
 import ServiceList from '../Home/ServiceList';
 
 function Services() {
@@ -20,7 +19,7 @@ function Services() {
                     />
                 </Grid>
                 <Grid item md={3}>
-                    <ServiceFilters/>
+                   
                 </Grid>
                 <Grid item md={9}>
                     <ServiceList/>
