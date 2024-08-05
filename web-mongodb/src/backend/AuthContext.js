@@ -7,15 +7,13 @@ const AuthContext = React.createContext();
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [dash, setDash] = useState(false);
     const navigate = useNavigate();
-    const location = useLocation();
     const showAlerts = useAlerts();
 
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const response = await fetch('/api/me', { // Assuming you have a /me route to get user info
+                const response = await fetch('/api/me', {
                     credentials: 'include'
                 });
                 if (response.ok) {
@@ -54,7 +52,7 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (email, password) => {
         try {
-            const response = await fetch('/api/login', {
+            const response = await fetch('http://localhost:5000/api/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password })
@@ -65,10 +63,10 @@ export const AuthProvider = ({ children }) => {
                 showAlerts('Login successful!', 'success');
             } else {
                 const error = await response.json();
-                showAlerts('Login failed: ' + error.message, 'error');
+                showAlerts('Login failed1: ' + error.message, 'error');
             }
         } catch (error) {
-            showAlerts('Login failed: ' + error.message, 'error');
+            showAlerts('Login failed2: ' + error.message, 'error');
         }
     };
 
@@ -86,12 +84,8 @@ export const AuthProvider = ({ children }) => {
         navigate('/');
     };
 
-    useEffect(() => {
-        setDash(location.pathname !== "/dashboard");
-    }, [location]);
-
     return (
-        <AuthContext.Provider value={{ user, register, login, logout, home, dash }}>
+        <AuthContext.Provider value={{ user, register, login, logout, home }}>
             {loading ? '' : children}
         </AuthContext.Provider>
     );
