@@ -12,6 +12,7 @@ function ViewService() {
 
   useEffect(() => {
     const fetchService = async () => {
+      
       try {
         const serviceData = await fetchSelectedService(id);
         setService(serviceData);
@@ -47,7 +48,7 @@ function ViewService() {
                       component="img"
                       image={image}
                       alt={`slide ${index}`}
-                      sx={{ height: '40vh', borderRadius: '25px', padding: '15px' }}
+                      sx={{ height: '40vh', borderRadius: '25px', p: '15px' }}
                     />
                   </Box>
                 ))}
@@ -56,19 +57,19 @@ function ViewService() {
           </Grid>
           <Grid item xs={12} md={6}>
             <Card sx={{ height: '100%', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }}>
-              <CardContent sx={{ marginTop:'30px', marginBottom:'30px'}}>
+              <CardContent sx={{ my:'30px'}}>
                 {/* Service Details */}
                 <Typography variant="h4" component="h2" sx={{ fontWeight: 'bold', textAlign: 'center' }}>{service.serviceName}</Typography>
-                <Box sx={{ marginLeft: '1.9rem', marginRight: '1.9rem', marginTop: '1rem' }}>
+                <Box sx={{ mx: '1.9rem', mt: '1rem' }}>
                   <Typography variant="h6" component="h4" sx={{ fontWeight: 'bold' }}>Description</Typography>
                   <ul style={{ textAlign: 'justify', fontSize: '18px' }}>
                     <li>{service.description}</li>
                     <li>Location: {service.location}</li>
                   </ul>
                 </Box>
-                <Box sx={{ marginLeft: '1rem', marginRight: '1rem', marginTop: '4.5rem' }}>
+                <Box sx={{ mx: '1rem', mt: '4.5rem' }}>
                   {/* Seller Details */}
-                  <Typography variant="h5" component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', marginBottom: '1rem' }}>Service Provider's Details</Typography>
+                  <Typography variant="h5" component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Service Provider's Details</Typography>
                   <Typography variant="h6" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-user"></i> Name</Typography>
                   <Typography>{service.spName}</Typography>
                   <Typography variant="h6" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-location-dot"></i> Location</Typography>
@@ -80,7 +81,7 @@ function ViewService() {
             </Card>
           </Grid>
         </Grid>
-        <Grid container spacing={0} sx={{ marginTop: '0.5rem' }}>
+        <Grid container spacing={0} sx={{ mt: '0.5rem' }}>
           <Grid item>
             <Button variant="contained" component={Link} to="/services" startIcon={<ChevronLeftIcon/>}>
               Back
