@@ -10,6 +10,8 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import SendIcon from '@mui/icons-material/Send';
 import { keyframes } from '@mui/system';
+import { sendMessage } from '../../backend/db/contactus';
+//import { useAlerts } from '../../backend/AlertService';
 
 const bounceAnimation = keyframes`
   0%, 100% {
@@ -21,11 +23,38 @@ const bounceAnimation = keyframes`
 `;
 
 function Contact() {
+  const [details, setDetails] = React.useState({
+    fname: '',
+    lname: '',
+    email: '',
+    message: '',
+    status: 'new'
+  })
+  //const { showAlerts } = useAlerts()
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setDetails((prevDetails) => ({ ...prevDetails, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await sendMessage(details);
+      console.log('1')
+      //showAlerts('Message sent successfully', 'success');
+    } catch (error) {
+      console.log(error)
+      //showAlerts('Try again', 'info');
+    }
+  };
   return (
     <div>
       {/* About Us Section */}
-      <Box sx={{ padding: 4, backgroundColor: "#333", color: "#fff", marginBottom: 4 , height: 300,
-        width: "93%",marginX: 6}}>
+      <Box sx={{
+        padding: 4, backgroundColor: "#333", color: "#fff", marginBottom: 4, height: 300,
+        width: "93%", marginX: 6
+      }}>
         <Typography variant="h2" align="center" gutterBottom>
           <b>About Us</b>
         </Typography>
@@ -76,7 +105,7 @@ function Contact() {
           If you want to know more about our service or have any issue, simply get in touch with us. Fill in the form here or please call one of our toll-free numbers below or email using the contact form below.
         </Typography>
       </Box>
-      <Box sx={{ padding: 5}}>
+      <Box sx={{ padding: 5 }}>
         <Grid container spacing={3}>
           <Grid item xs={12} sm={8}>
             <Card sx={{ backgroundColor: "rgba(255, 255, 255, 0.3)", padding: { xs: 3 }, borderRadius: 4 }}>
@@ -87,25 +116,22 @@ function Contact() {
                 <Typography variant="body2" color="textSecondary" component="p" gutterBottom>
                   Fill up the form and our team will get back to you within 24 hours.
                 </Typography>
-                <form>
+                <form >
                   <Grid container spacing={2}>
                     <Grid item xs={12} sm={6}>
-                      <TextField placeholder="Enter first name" label="First Name" variant="outlined" fullWidth required />
+                      <TextField placeholder="Enter first name" label="First Name" variant="outlined" name='fname' fullWidth value={details.fname} onChange={handleChange} required />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      <TextField placeholder="Enter last name" label="Last Name" variant="outlined" fullWidth required />
+                      <TextField placeholder="Enter last name" label="Last Name" variant="outlined" name='lname' fullWidth value={details.lname} onChange={handleChange} required />
                     </Grid>
                     <Grid item xs={12}>
-                      <TextField type="email" placeholder="Enter email" label="Email" variant="outlined" fullWidth required />
+                      <TextField type="email" placeholder="Enter email" label="Email" variant="outlined" name='email' fullWidth value={details.email} onChange={handleChange} required />
                     </Grid>
                     <Grid item xs={12}>
-                      <TextField type="number" placeholder="Enter phone number" label="Phone" variant="outlined" fullWidth required />
+                      <TextField label="Message" multiline rows={4} placeholder="Type your message here" name='message' variant="outlined" fullWidth value={details.message} onChange={handleChange} required />
                     </Grid>
                     <Grid item xs={12}>
-                      <TextField label="Message" multiline rows={4} placeholder="Type your message here" variant="outlined" fullWidth required />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Button type="submit" variant="contained" endIcon={<SendIcon />} fullWidth>Send</Button>
+                      <Button type="submit" variant="contained" onClick={handleSubmit} endIcon={<SendIcon />} fullWidth>Send</Button>
                     </Grid>
                   </Grid>
                 </form>

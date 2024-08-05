@@ -46,8 +46,7 @@ const fetchProducts = async () => {
         const productList = qSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         return productList;
     } catch (e) {
-        console.error("Error fetching products:", e);
-        throw new Error("Error fetching products: " + e.message);
+        return []
     }
 };
 
@@ -58,7 +57,7 @@ const fetchProductsToHome = async () => {
         const productList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         return productList
     } catch (e) {
-        console.error(e.code)
+        return []
     }
 };
 
