@@ -1,42 +1,42 @@
-import * as React from 'react';
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import AlertProvider from './backend/AlertService';
-import { AuthProvider } from './backend/AuthContext';
-import PrivateRoute from './backend/PrivateRoute';
-import DashboardLayout from './dashboards/DashboardLayout';
-import PageLayout from './pages/PageLayout';
-import Home from './pages/Home/Home';
-import Guide from './pages/Guide/Guide';
-import Contact from './pages/Contact/Contact';
-import Products from './pages/Products/Products';
-import ProductPage from './pages/Products/ProView/View';
-import Services from './pages/Services/Services';
-import ViewService from './pages/Services/ViewService'
-import NavigationBar from './components/NavigationBar/NavigationBar';
-import Footer from './components/Footer/Footer';
+import * as React from "react";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import AlertProvider from "./backend/AlertService";
+import { AuthProvider } from "./backend/AuthContext";
+import PrivateRoute from "./backend/PrivateRoute";
+import DashboardLayout from "./dashboards/DashboardLayout";
+import PageLayout from "./pages/PageLayout";
+import Home from "./pages/Home/Home";
+import Guide from "./pages/Guide/Guide";
+import Contact from "./pages/Contact/Contact";
+import Products from "./pages/Products/Products";
+import ProductPage from "./pages/Products/ProView/View";
+import Services from "./pages/Services/Services";
+import ViewService from "./pages/Services/ViewService";
+import NavigationBar from "./components/NavigationBar/NavigationBar";
+import Footer from "./components/Footer/Footer";
 
 const lightTheme = createTheme({
   palette: {
-    mode: 'light',
+    mode: "light",
     primary: {
-      main: '#000000'
+      main: "#000000",
     },
     background: {
-      default: '#E3E1D9',
+      default: "#E3E1D9",
     },
-  }
+  },
 });
 
 const darkTheme = createTheme({
   palette: {
-    mode: 'dark',
+    mode: "dark",
     primary: {
-      main: '#FFFFFF'
+      main: "#FFFFFF",
     },
     background: {
-      default: '#00072d',
+      default: "#00072d",
     },
   },
 });
@@ -44,29 +44,29 @@ const darkTheme = createTheme({
 function App() {
   return (
     <>
-    <Themed />
+      <Themed />
     </>
   );
 }
 
 function Themed() {
   const [mode, setMode] = React.useState(() => {
-    const storedTheme = sessionStorage.getItem('isLight');
-    return storedTheme === null ? true : storedTheme === 'true';
+    const storedTheme = sessionStorage.getItem("isLight");
+    return storedTheme === null ? true : storedTheme === "true";
   });
 
   const handleTheme = () => {
     setMode((prevMode) => {
       const newMode = !prevMode;
-      sessionStorage.setItem('isLight', newMode);
+      sessionStorage.setItem("isLight", newMode);
       return newMode;
     });
   };
 
   React.useEffect(() => {
-    const storedTheme = sessionStorage.getItem('isLight');
+    const storedTheme = sessionStorage.getItem("isLight");
     if (storedTheme !== null) {
-      setMode(storedTheme === 'true');
+      setMode(storedTheme === "true");
     }
   }, []);
 
@@ -86,23 +86,91 @@ function Routings({ handleMode }) {
   return (
     <>
       <AuthProvider>
-        <PageLayout >
-          <NavigationBar handleMode={handleMode} />
+        <PageLayout>
           <Routes>
-            <Route exact path='/' element={<Home />} />
-            <Route path='/guide' element={<Guide />} />
-            <Route path='/contact' element={<Contact />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/products/:id" element={<ProductPage />} />
-            <Route path='/services' element={<Services />} />
-            <Route path='/service/:id' element={<ViewService />} />
-            <Route path='/dashboard' element={<PrivateRoute><DashboardLayout handleMode={handleMode} /></PrivateRoute>} />
+            <Route
+              exact
+              path="/"
+              element={
+                <>
+                  <NavigationBar handleMode={handleMode} />
+                  <Home />
+                  <Footer />
+                </>
+              }
+            />
+            <Route
+              path="/guide"
+              element={
+                <>
+                  <NavigationBar handleMode={handleMode} />
+                  <Guide />
+                  <Footer />
+                </>
+              }
+            />
+            <Route
+              path="/contact"
+              element={
+                <>
+                  <NavigationBar handleMode={handleMode} />
+                  <Contact />
+                  <Footer />
+                </>
+              }
+            />
+            <Route
+              path="/products"
+              element={
+                <>
+                  <NavigationBar handleMode={handleMode} />
+                  <Products />
+                  <Footer />
+                </>
+              }
+            />
+            <Route
+              path="/products/:id"
+              element={
+                <>
+                  <NavigationBar handleMode={handleMode} />
+                  <ProductPage /> <Footer />
+                </>
+              }
+            />
+            <Route
+              path="/services"
+              element={
+                <>
+                  <NavigationBar handleMode={handleMode} />
+                  <Services />
+                  <Footer />
+                </>
+              }
+            />
+            <Route
+              path="/service/:id"
+              element={
+                <>
+                  <NavigationBar handleMode={handleMode} />
+                  <ViewService />
+                  <Footer />
+                </>
+              }
+            />
+            <Route
+              path="/dashboard"
+              element={
+                <PrivateRoute>
+                  <DashboardLayout handleMode={handleMode} />
+                </PrivateRoute>
+              }
+            />
           </Routes>
         </PageLayout>
-        <Footer />
       </AuthProvider>
     </>
-  )
+  );
 }
 
 export default App;

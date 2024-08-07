@@ -16,7 +16,7 @@ export default function Footer() {
     const footerTextColor = theme.palette.mode === 'dark' ? '#fff' : '#000';
 
     return (
-        <Box sx={{ backgroundColor: footerBackground, color: footerTextColor, paddingTop: '2rem', paddingBottom: '2rem' }}>
+        <Box sx={{ backgroundColor: footerBackground, color: footerTextColor,marginTop:3, paddingTop: '2rem', paddingBottom: '2rem' }}>
             <Container>
                 <Grid container spacing={3} sx={{ justifyContent: 'center', textAlign: { xs: 'center', md: 'left' } }}>
                     <Grid item xs={12} md={4} sx={{ display: 'flex', flexDirection: 'column', alignItems: { xs: 'center', md: 'flex-start' } }}>
