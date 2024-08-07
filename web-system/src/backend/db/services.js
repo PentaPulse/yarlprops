@@ -41,7 +41,7 @@ export const fetchServices = async () => {
         console.log("Fetched services:", serviceList);
         return serviceList;
     } catch (e) {
-        console.error("Error fetching services:", e);
+        return []
     }
 };
 
@@ -52,7 +52,7 @@ export const fetchServicesToHome = async () => {
         const ServiceList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         return ServiceList
     } catch (e) {
-        console.error(e)
+        return []
     }
 };
 

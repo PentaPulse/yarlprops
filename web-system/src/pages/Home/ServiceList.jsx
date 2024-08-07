@@ -41,9 +41,9 @@ export default function ServiceList() {
   return (
     <Container fixed>
       <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 1, sm: 2, md: 3, lg: 3 }}>
-        {services.length === 0 ? (
+        {services.length === 0 ? 
           <DbError items={3} />
-        ) : (
+         : (
           services.map((service, index) => (
             <Grid item xs={1} sm={1} md={1} lg={1} key={index}>
               <Card>

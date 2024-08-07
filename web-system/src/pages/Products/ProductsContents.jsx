@@ -23,7 +23,7 @@ const ProductsContents = ({ searchTerm }) => {
             }
         };
 
-        fetchData();
+        fetchData()
     }, [searchTerm]);
 
     const handleCardClick = (pid) => {
@@ -32,7 +32,7 @@ const ProductsContents = ({ searchTerm }) => {
     return (
         <Container fixed>
             <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 1, sm: 2, md: 3, lg: 3 }}>
-                {products.length === 0 ?
+                {!products ? <DbError items={9} /> : products.length === 0 ?
                     <DbError items={9} />
                     :
                     products.map((product, index) => (
