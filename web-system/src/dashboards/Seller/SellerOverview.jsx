@@ -34,19 +34,19 @@ function SellerOverview() {
             <Box sx={{ p: 3 }}>
                 <Grid container spacing={3}>
                     <Grid item xs={12} sm={6} md={4}>
-                        <Paper sx={{ p: 2 }}>
+                        <Paper sx={{ marginTop: 1, marginRight: 4, marginBottom: 1, marginLeft: 4 }}>
                             <Typography variant="h6">Sales</Typography>
                             <Typography variant="body1">$10,000</Typography>
                         </Paper>
                     </Grid>
                     <Grid item xs={12} sm={6} md={4}>
-                        <Paper sx={{ p: 2 }}>
+                        <Paper sx={{ marginTop: 1, marginRight: 4, marginBottom: 1, marginLeft: 4 }}>
                             <Typography variant="h6">Orders</Typography>
                             <Typography variant="body1">150</Typography>
                         </Paper>
                     </Grid>
                     <Grid item xs={12} sm={6} md={4}>
-                        <Paper sx={{ p: 2 }}>
+                        <Paper sx={{ marginTop: 1, marginRight: 4, marginBottom: 1, marginLeft: 4 }}>
                             <Typography variant="h6">Products</Typography>
                             <Typography variant="body1">300</Typography>
                         </Paper>
@@ -54,7 +54,7 @@ function SellerOverview() {
                 </Grid>
 
                 <Grid item xs={12}>
-                    <Paper sx={{ p: 2 }}>
+                    <Paper  sx={{ margin: 4 }}>
                         <Typography variant="h6">Sales Chart</Typography>
                         <ResponsiveContainer width="100%" height={300}>
                             <LineChart data={salesData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
@@ -69,7 +69,7 @@ function SellerOverview() {
                 </Grid>
 
                 <Grid item xs={12}>
-                    <Paper sx={{ p: 2 }}>
+                    <Paper sx={{ margin: 4 }}>
                         <Typography variant="h6">Recent Orders</Typography>
                         <TableContainer>
                             <Table>

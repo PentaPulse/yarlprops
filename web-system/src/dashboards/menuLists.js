@@ -59,7 +59,7 @@ export const userMenu = [
 ]
 //boards
 export const adminBoard = [<AdminOverview />, <Admins />, <AdminUsers />, <AdminProducts />, <AdminServices />, <ContactusReqs />, <Profile />]
-export const sellerBoard = [<SellerOverview />, <SellerOrders />, <SellerProducts />, <Profile />]
+export const sellerBoard = [<SellerOverview />, <SellerProducts />, <SellerOrders />, <Profile />]
 export const renterBoard = [<RenterOverview />, <RenterOrders />, <RenterProducts />, <Profile />]
 export const servicerBoard = [<ServicerOverview />, <ServicerOrders />, <Profile />]
 export const userBoard = [<UserOverview />, <Profile />]
