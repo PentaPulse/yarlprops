@@ -39,7 +39,7 @@ const ProductsContents = ({ searchTerm }) => {
                         <Grid item xs={1} sm={1} md={1} lg={1} key={index}>
                             <Card sx={{ boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }}>
                                 <CardActions>
-                                    {(products.status === "For Sale")? (<Button size='small' style={{ backgroundColor: "green", fontWeight: 'bold' }}>For Sale</Button>):(<Button size='small' style={{ backgroundColor: "orange", fontWeight: 'bold' }}>For Sell</Button>)}
+                                    {(product.status === "For Sale")? (<Button size='small' style={{ backgroundColor: "green", color: 'white', fontWeight: 'bold' }}>For Sale</Button>):((product.status === "For Rent")? (<Button size='small' style={{ backgroundColor: "orange", color: 'white', fontWeight: 'bold' }}>For Rent</Button>):((<Button size='small' style={{ backgroundColor: "red", color: 'white', fontWeight: 'bold' }}>Sold Out!</Button>)))}
                                 </CardActions>
                                 <CardActionArea onClick={() => handleCardClick(product.pid)}>
                                     <CardMedia

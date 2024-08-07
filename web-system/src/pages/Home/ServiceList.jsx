@@ -51,11 +51,11 @@ export default function ServiceList() {
                   <CardMedia
                     sx={{ height: '20rem' }}
                     image={service.images && service.images[0] ? service.images[0] : 'https://picsum.photos/id/11/200/300'}
-                    title={service.name}
+                    title={service.serviceName}
                   />
                   <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     <Typography gutterBottom variant='h6' component='div' color='inherit'>
-                      {service.title}
+                      {service.serviceName}
                     </Typography>
                   </CardContent>
                 </CardActionArea>

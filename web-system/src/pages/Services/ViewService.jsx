@@ -33,12 +33,12 @@ function ViewService() {
           <Grid item xs={12} md={6}>
             {/* Service Image */}
             <Card sx={{ boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }}>
-              <CardMedia
+              {/* <CardMedia
                 component="img"
                 image={service.images[0]}
                 alt={service.name}
                 sx={{ height: '52vh', borderRadius: '0px'}}
-              />
+              /> */}
               {/* Small Image Slide Show */}
               <Carousel>
                 {service.images.map((image, index) => (
@@ -47,7 +47,7 @@ function ViewService() {
                       component="img"
                       image={image}
                       alt={`slide ${index}`}
-                      sx={{ height: '40vh', borderRadius: '25px', p: '15px' }}
+                      sx={{ height: '80vh', borderRadius: '25px', p: '15px' }}
                     />
                   </Box>
                 ))}
@@ -62,8 +62,8 @@ function ViewService() {
                 <Box sx={{ mx: '1.9rem', mt: '1rem' }}>
                   <Typography variant="h6" component="h4" sx={{ fontWeight: 'bold' }}>Description</Typography>
                   <ul style={{ textAlign: 'justify', fontSize: '18px' }}>
-                    <li>{service.description}</li>
-                    <li>Location: {service.location}</li>
+                    <li>{service.serviceDescription}</li>
+                    <li>Location: {service.serviceLocation}</li>
                   </ul>
                 </Box>
                 <Box sx={{ mx: '1rem', mt: '4.5rem' }}>

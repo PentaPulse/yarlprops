@@ -67,8 +67,9 @@ function ProductPage() {
                   Type: {product.type}
                 </Typography>
                 <Typography variant="h6" component="h4" sx={{ fontWeight: 'bold', textAlign: 'center', fontStyle: 'italic' }}>
-                  Status: {product.status}
+                  {(product.status === "For Sale")? (<h4 style={{ backgroundColor: "green", color: 'white', fontWeight: 'bold' }}>For Sale</h4>):((product.status === "For Rent")? (<h4 style={{ backgroundColor: "orange", color: 'white', fontWeight: 'bold' }}>For Rent</h4>):((<h4 style={{ backgroundColor: "red", color: 'white', fontWeight: 'bold' }}>Sold Out!</h4>)))}
                 </Typography>
+                
                 <Box sx={{ mx: '1.9rem', mt: '1rem' }}>
                   <Typography variant="h6" component="h4" sx={{ fontWeight: 'bold' }}>Description</Typography>
                   <ul style={{ textAlign: 'justify', fontSize: '18px' }}>

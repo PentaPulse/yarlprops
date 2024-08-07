@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchProductsToHome } from '../../backend/db/products';
-import { Card, CardActionArea, CardContent, CardMedia, Container, Grid, Typography } from '@mui/material';
+import { Button, CardActions, Card, CardActionArea, CardContent, CardMedia, Container, Grid, Typography } from '@mui/material';
 import DbError from '../../components/DbError/DbError';
 
 function ProductList() {
@@ -29,6 +29,9 @@ function ProductList() {
                     products.map((product, index) => (
                         <Grid item xs={1} sm={1} md={1} lg={1} key={index}>
                             <Card>
+                                <CardActions>
+                                    {(product.status === "For Sale")? (<Button size='small' style={{ backgroundColor: "green", color: 'white', fontWeight: 'bold' }}>For Sale</Button>):((product.status === "For Rent")? (<Button size='small' style={{ backgroundColor: "orange", color: 'white', fontWeight: 'bold' }}>For Rent</Button>):((<Button size='small' style={{ backgroundColor: "red", color: 'white', fontWeight: 'bold' }}>Sold Out!</Button>)))}
+                                </CardActions>
                                 <CardActionArea onClick={() => handleCardClick(product.pid)}>
                                     <CardMedia
                                         sx={{ height: '20rem' }}
