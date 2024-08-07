@@ -30,7 +30,7 @@ function ProductList() {
                         <Grid item xs={1} sm={1} md={1} lg={1} key={index}>
                             <Card>
                                 <CardActions>
-                                    {(product.status === "For Sale")? (<Button size='small' style={{ backgroundColor: "green", color: 'white', fontWeight: 'bold' }}>For Sale</Button>):((product.status === "For Rent")? (<Button size='small' style={{ backgroundColor: "orange", color: 'white', fontWeight: 'bold' }}>For Rent</Button>):((<Button size='small' style={{ backgroundColor: "red", color: 'white', fontWeight: 'bold' }}>Sold Out!</Button>)))}
+                                    {(product.status === "For Sale")? (<Button size='small' style={{ backgroundColor: "green", color: 'white', fontWeight: 'bold' }}>For Sale</Button>):((product.status === "For Rent")? (<Button size='small' style={{ backgroundColor: "darkorange", color: 'white', fontWeight: 'bold' }}>For Rent</Button>):((<Button size='small' style={{ backgroundColor: "red", color: 'white', fontWeight: 'bold' }}>Sold Out!</Button>)))}
                                 </CardActions>
                                 <CardActionArea onClick={() => handleCardClick(product.pid)}>
                                     <CardMedia
