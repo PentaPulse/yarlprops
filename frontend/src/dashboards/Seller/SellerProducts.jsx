@@ -1,6 +1,6 @@
 import React from 'react'
 import { Container } from 'react-bootstrap'
-import { Typography, Box, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button } from '@mui/material';
+import { Typography, Box, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, Stack } from '@mui/material';
 
 const productData = [
   { id: 1, description: 'Damro Plastic Table', quantity: '4', unitPrice: '$120', size: '3x3' },
@@ -9,8 +9,20 @@ const productData = [
   { id: 4, description: 'UOJ Band', quantity: '100', unitPrice: '$0.8', size: 'S M L' },
 ];
 
-const handleDelete = [];
-const onEditProduct = [];
+const handleView = (orderId) => {
+  console.log(`Viewing order ${orderId}`);
+  // Add your view logic here
+};
+
+const handleEdit = (orderId) => {
+  console.log(`Editing order ${orderId}`);
+  // Add your edit logic here
+};
+
+const handleDelete = (orderId) => {
+  console.log(`Deleting order ${orderId}`);
+  // Add your delete logic here
+};
 
 function SellerProducts() {
   return (
@@ -41,10 +53,25 @@ function SellerProducts() {
                                             <TableCell>{product.quantity}</TableCell>
                                             <TableCell>{product.unitPrice}</TableCell>
                                             <TableCell>{product.size}</TableCell>
-                                            <TableCell align="center">
-                                                <Button onClick={() => onEditProduct(product.id)} variant="outlined" >Edit</Button>
-                                                <Button onClick={() => handleDelete(product.id)} variant="outlined" >Delete</Button>
-                                            </TableCell>
+                                            <TableCell>
+                  <Stack direction="row" spacing={1}>
+                   
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={() => handleEdit(product.id)}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="error"
+                      onClick={() => handleDelete(product.id)}
+                    >
+                      Delete
+                    </Button>
+                  </Stack>
+                </TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
