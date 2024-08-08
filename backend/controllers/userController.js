@@ -6,7 +6,9 @@ exports.getUsers = async (req, res) => {
     const users = await User.find();
     res.json(users);
   } catch (err) {
-    res.status(500).send("Server Error");
+    res
+      .status(500)
+      .send({ code: "user/loading-error", message: "Server Error", err });
   }
 };
 
@@ -30,15 +32,18 @@ exports.signup = async (req, res) => {
     await userNew.save();
 
     res.status(201).json({
-      code: "add-user-ok",
+      code: "user/add-ok",
       message: "User created successfully",
       user: userNew,
     });
   } catch (e) {
-    res.status(500).send(e);
+    res
+      .status(500)
+      .send({ code: "user/add-error", message: "Signup failed", e });
   }
 };
 
+// HAVE A PROBLEM IN SIGNIN 
 exports.signin = async (req, res) => {
   const { token } = req.body;
   try {
@@ -54,8 +59,12 @@ exports.signin = async (req, res) => {
     const user = await User.find({ email: tokenDecode.email });
     res
       .status(200)
-      .json({ code: "user-signed", message: "Login successful", user });
-  } catch (e) {}
+      .json({ code: "user/signed", message: "Login successful", user });
+  } catch (e) {
+    res
+      .status(500)
+      .json({ code: "user/signin-error", message: "Signin failed", e });
+  }
 };
 
 exports.updateUser = async (req, res) => {
@@ -67,15 +76,13 @@ exports.updateUser = async (req, res) => {
     );
     res
       .status(200)
-      .json({ code: "update-user-ok", message: "updated", response });
+      .json({ code: "user/update-ok", message: "updated", response });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        code: "update-user-error",
-        message: "Error occured updating user",
-        error,
-      });
+    res.status(500).json({
+      code: "user/update-error",
+      message: "User update failed",
+      error,
+    });
   }
 };
 
@@ -83,19 +90,119 @@ exports.deleteUser = async (req, res) => {
   const { email } = req.body;
   try {
     //after implement when user have or not advertised services or products
-    const user = await User.find({email});
-    await admin.auth().deleteUser({uid:user.uid})
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({
+        code: "user/not-found",
+        message: "User not found in the database",
+      });
+    }
+
+    await admin.auth().deleteUser(user.uid);
     const response = await User.deleteOne({ email });
+    res.status(200).json({
+      code: "user/delete-ok",
+      message: "User removed successfully!",
+      response,
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ code: "user/delete-error", message: "User not deleted", error });
+  }
+};
+
+exports.changePassword = async (req, res) => {
+  const { email, newPassword } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({
+        code: "user/not-found",
+        message: "User not found in the database",
+      });
+    }
+    const response = await admin
+      .auth()
+      .updateUser(user.uid, { password: newPassword });
     res
       .status(200)
       .json({
-        code: "user/delete-ok",
-        message: "User removed successfully!",
+        code: "user/passChange-ok",
+        message: "Password successfully changed",
         response,
       });
   } catch (error) {
     res
       .status(500)
-      .json({ code: "user/delete-error", message: "User not deleted", error });
+      .json({
+        code: "user/change-password-error",
+        message: "Password change failed",
+        error,
+      });
+  }
+};
+
+exports.changeEmail = async (req, res) => {
+  const { oldEmail, newEmail } = req.body;
+  try {
+    const user = await User.findOne({ email: oldEmail });
+    if (!user) {
+      return res.status(404).json({
+        code: "user/not-found",
+        message: "User not found in the database",
+      });
+    }
+    const response = await admin
+      .auth()
+      .updateUser(user.uid, { email: newEmail });
+    const upEmail = await User.updateOne(
+      { email: oldEmail },
+      { $set: { email: newEmail } }
+    );
+    res
+      .status(200)
+      .json({
+        code: "user/change-email-ok",
+        message: "successfully changed email",
+        response,
+        upEmail,
+      });
+  } catch (error) {
+    res
+      .status(500)
+      .json({
+        code: "user/change-email-error",
+        message: "Email not changed",
+        error,
+      });
+  }
+};
+
+exports.changeRole = async (req, res) => {
+  const { email, oldRole, newRole } = req.body;
+  try {
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      return res.status(404).json({
+        code: "user/not-found",
+        message: "User not found in the database",
+      });
+    }
+    const response = await User.updateOne(
+      { email: email },
+      { $set: { role: newRole } }
+    );
+    res
+      .status(200)
+      .json({
+        code: "user/role-ok",
+        message: `Role changed ${oldRole} to ${newRole}`,
+        response,
+      });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ code: "user/role-error", message: "Role not changed", error });
   }
 };
