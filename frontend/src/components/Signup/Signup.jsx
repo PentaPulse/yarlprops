@@ -71,6 +71,7 @@ export function Register() {
     const handleRegister = async (e) => {
         e.preventDefault();
         try {
+            //await axios.post('http://localhost:5000/api/u/signup',(firstName,lastName,displayName,role,email,password))
             await register(firstName, lastName, displayName, email, password, role);
         } catch (error) {
 
