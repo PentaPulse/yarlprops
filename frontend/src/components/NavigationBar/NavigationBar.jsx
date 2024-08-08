@@ -3,7 +3,7 @@ import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, 
 import { styled, useTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../backend/AuthContext';
+import { useAuth } from '../../api/AuthContext';
 import { Login, Register } from '../Signup/Signup';
 
 const pages = [['Home', '/'], ['Products', '/products'], ['Services', '/services'], ['Guide', '/guide'], ['Contact', '/contact']];

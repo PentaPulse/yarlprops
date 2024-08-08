@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import { TextField, Button, Paper, Typography, Grid } from '@mui/material';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { addService, fetchSelectedService, updateService } from '../../backend/db/services';
-import { storage } from '../../backend/firebase';
+import { addService, fetchSelectedService, updateService } from '../../api/db/services';
+import { storage } from '../../api/firebase';
 import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 

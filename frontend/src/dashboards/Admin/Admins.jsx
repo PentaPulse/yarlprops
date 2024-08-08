@@ -1,6 +1,6 @@
 import { collection, getDocs, query, where } from 'firebase/firestore'
 import * as React from 'react'
-import { db } from '../../backend/firebase'
+import { db } from '../../api/firebase'
 import { Box, Button, Grid, Modal, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material';
 
 function Admins() {

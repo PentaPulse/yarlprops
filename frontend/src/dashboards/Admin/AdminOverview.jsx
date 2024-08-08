@@ -1,8 +1,8 @@
 import React from 'react';
 import { Box, Grid, Paper, Typography, Table, TableHead, TableRow, TableCell, TableBody, TableContainer } from '@mui/material';
-import { countRenters, countSellers, countUsers, fetchUserList} from '../../backend/db/users';
-import {fetchContactUsResponsesList}from '../../backend/db/contactus'
-import { countProducts ,fetchProducts} from '../../backend/db/products';
+import { countRenters, countSellers, countUsers, fetchUserList} from '../../api/db/users';
+import {fetchContactUsResponsesList}from '../../api/db/contactus'
+import { countProducts ,fetchProducts} from '../../api/db/products';
 
 export default function AdminOverview() {
     const [userCount, setUserCount] = React.useState(0);

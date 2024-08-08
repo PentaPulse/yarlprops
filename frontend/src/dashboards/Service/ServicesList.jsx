@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Table, TableBody, TableContainer, TableHead, TableRow, Paper, Button, TablePagination } from '@mui/material';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import { db } from '../../backend/firebase';
-import { fetchServices } from '../../backend/db/services';
+import { db } from '../../api/firebase';
+import { fetchServices } from '../../api/db/services';
 import { deleteDoc, doc } from 'firebase/firestore';
 import { styled } from '@mui/material/styles';
 import Swal from 'sweetalert2';

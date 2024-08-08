@@ -5,7 +5,7 @@ import MuiAppBar from '@mui/material/AppBar';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import * as React from 'react'
-import { useAuth } from '../backend/AuthContext'
+import { useAuth } from '../api/AuthContext'
 
 import { MaterialUISwitch, ProfileBox } from '../components/NavigationBar/NavigationBar';
 import { adminBoard, adminMenu, backToHome, renterBoard, renterMenu, sellerBoard, sellerMenu, userBoard, userMenu } from './menuLists';

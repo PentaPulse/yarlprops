@@ -10,7 +10,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import SendIcon from '@mui/icons-material/Send';
 import { keyframes } from '@mui/system';
-import { sendMessage } from '../../backend/db/contactus';
+import { sendMessage } from '../../api/db/contactus';
 //import { useAlerts } from '../../backend/AlertService';
 
 const bounceAnimation = keyframes`

@@ -1,6 +1,6 @@
 import "firebase/firestore";
 import { db } from "../firebase";
-import { doc, setDoc, collection, getDocs, addDoc } from "firebase/firestore";
+import { collection, getDocs, addDoc } from "firebase/firestore";
 
 //reference
 const contactRef = collection(db, "contactUs");

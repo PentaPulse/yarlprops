@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fetchSelectedProduct } from '../../backend/db/products';
+import { fetchSelectedProduct } from '../../api/db/products';
 import { Paper, Typography, CircularProgress, Grid, Button } from '@mui/material';
 import { styled } from '@mui/system';
 

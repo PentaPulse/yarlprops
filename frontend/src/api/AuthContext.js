@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button } from '@mui/material';
-import { GoogleAuthProvider, createUserWithEmailAndPassword, onAuthStateChanged, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth';
+import { GoogleAuthProvider, createUserWithEmailAndPassword, onAuthStateChanged,  sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth';
 import { db, auth } from './firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { addUser, registerUser } from './db/users';

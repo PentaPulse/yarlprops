@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Container, Grid, Card, CardMedia, CardContent, Typography, Button, CircularProgress, useTheme, Box } from '@mui/material';
 import Carousel from 'react-material-ui-carousel';
-import { fetchSelectedProduct } from '../../../backend/db/products';
+import { fetchSelectedProduct } from '../../../api/db/products';
 //import styles from './ProductPage.module.css';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 
@@ -113,7 +113,7 @@ export default ProductPage;
 // import { Link, useParams } from 'react-router-dom';
 // import { Container, Grid, Card, CardMedia, CardContent, Typography, Button, CircularProgress, useTheme, Box } from '@mui/material';
 // import Carousel from 'react-material-ui-carousel';
-// import { fetchSelectedProduct } from '../../../backend/db/products';
+// import { fetchSelectedProduct } from '../../../api/db/products';
 // import styles from './ProductPage.module.css';
 // import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 
@@ -221,7 +221,7 @@ export default ProductPage;
 // import { Container } from '@mui/material'
 // import styles from './ProductPage.module.css';
 // import { useTheme } from '@mui/material/styles';
-// import { fetchSelectedProduct } from '../../../backend/db/products';
+// import { fetchSelectedProduct } from '../../../api/db/products';
 
 
 // function ProductPage() {
@@ -332,7 +332,7 @@ export default ProductPage;
 // import { Container } from '@mui/material'
 // import styles from './ProductPage.module.css';
 // import { useTheme } from '@mui/material/styles';
-// import { fetchSelectedProduct } from '../../../backend/db/products';
+// import { fetchSelectedProduct } from '../../../api/db/products';
 
 
 // function ProductPage() {

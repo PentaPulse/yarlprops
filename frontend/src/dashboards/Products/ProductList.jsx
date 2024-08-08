@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { fetchProducts} from '../../backend/db/products';
+import { fetchProducts} from '../../api/db/products';
 import { deleteDoc, doc } from 'firebase/firestore';
 import { Table, TableBody, TableContainer, TableHead, TableRow, Paper, Button, TablePagination } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import Swal from 'sweetalert2';
-import { db } from '../../backend/firebase';
+import { db } from '../../api/firebase';
 
 const ProductList = ({ onEditProduct, onViewProduct }) => {
     const [products, setProducts] = useState([]);

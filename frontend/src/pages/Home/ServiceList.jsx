@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { fetchServices } from '../../backend/db/services';
+import { fetchServices } from '../../api/db/services';
 import { Card, CardActionArea, CardContent, CardMedia, Container, Grid, Typography } from '@mui/material';
 import DbError from '../../components/DbError/DbError';
 

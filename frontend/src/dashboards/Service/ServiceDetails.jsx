@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fetchSelectedService } from '../../backend/db/services';
+import { fetchSelectedService } from '../../api/db/services';
 import { Paper, Typography, CircularProgress, Grid, Button } from '@mui/material';
 import { styled } from '@mui/system';
 

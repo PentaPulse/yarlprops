@@ -1,6 +1,5 @@
 import { Grid, TextField } from '@mui/material';
 import * as React from 'react'
-import ViewService from './ViewService'
 import ServiceFilters from './ServiceFilters';
 import ServiceList from '../Home/ServiceList';
 

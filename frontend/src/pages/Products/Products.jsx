@@ -1,4 +1,4 @@
-import { Checkbox, FormControlLabel, FormGroup, Grid, TextField, Typography, Slider, Paper, Box, Divider } from '@mui/material';
+import { Checkbox, FormControlLabel, FormGroup, Grid, TextField, Typography, Slider, Paper,  Divider } from '@mui/material';
 import * as React from 'react';
 import ProductsContents from './ProductsContents';
 
