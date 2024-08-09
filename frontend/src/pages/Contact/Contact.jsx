@@ -10,7 +10,6 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import SendIcon from '@mui/icons-material/Send';
 import { keyframes } from '@mui/system';
-import { sendMessage } from '../../api/db/contactus';
 import axios from 'axios';
 //import { useAlerts } from '../../backend/AlertService';
 
@@ -42,7 +41,7 @@ function Contact() {
     try {
       await axios.post('http://localhost:5000/api/c/send',details)
       console.log('1')
-      
+
     } catch (error) {
       console.log(error)
       //showAlerts('Try again', 'info');
