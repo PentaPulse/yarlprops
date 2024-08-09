@@ -206,3 +206,43 @@ exports.changeRole = async (req, res) => {
       .json({ code: "user/role-error", message: "Role not changed", error });
   }
 };
+
+exports.dummy=async(req,res)=>{
+  const dummies = [{
+    firstName:"sample",
+    lastName:"buyer",
+    displayName:"buyer",
+    role:"buyer",
+    email:"buyer@p5p.lk",
+    password:"123456321"
+  },{
+    firstName:"sample",
+    lastName:"seller",
+    displayName:"seller",
+    role:"seller",
+    email:"seller@p5p.lk",
+    password:"123456321"
+  },{
+    firstName:"sample",
+    lastName:"renter",
+    displayName:"renter",
+    role:"renter",
+    email:"renter@p5p.lk",
+    password:"123456321"
+  }]
+  try {
+    // Insert all dummy users into the database
+    const users = await User.insertMany(dummies);
+    res.status(200).json({
+      code: "user/dummy-ok",
+      message: "Dummies added successfully",
+      users
+    });
+  } catch (error) {
+    res.status(500).json({
+      code: "user/dummy-error",
+      message: "Error creating dummy users or users already exist",
+      error: error.message
+    });
+  }
+}
