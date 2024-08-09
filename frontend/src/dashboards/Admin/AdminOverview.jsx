@@ -3,6 +3,7 @@ import { Box, Grid, Paper, Typography, Table, TableHead, TableRow, TableCell, Ta
 import { countRenters, countSellers, countUsers, fetchUserList} from '../../api/db/users';
 import {fetchContactUsResponsesList}from '../../api/db/contactus'
 import { countProducts ,fetchProducts} from '../../api/db/products';
+import axios from 'axios';
 
 export default function AdminOverview() {
     const [userCount, setUserCount] = React.useState(0);
@@ -129,48 +130,70 @@ function UsersTable() {
 
 function ContactResponsesTable() {
     const [responses, setResponses] = React.useState([]);
+    const [error, setError] = React.useState(null);
 
     React.useEffect(() => {
         async function fetchData() {
-            const data = await fetchContactUsResponsesList();
-            setResponses(data);
+            try {
+                // Fetch data from the API
+                const response = await axios.get('http://localhost:5000/api/c/responses');
+                // Set responses data
+                setResponses(response.data);
+            } catch (err) {
+                // Handle error
+                setError(err.message);
+            }
         }
         fetchData();
     }, []);
-    const cols = ['No', 'Name', 'Email', 'Status', 'Message']
+
+    const cols = ['No', 'Name', 'Email', 'Status', 'Message'];
+
     return (
         <>
             <Typography variant="h6" gutterBottom>
-                Contact us responses
+                Contact Us Responses
             </Typography>
             <Paper sx={{ width: '100%', mb: 4 }}>
                 <TableContainer sx={{ maxHeight: 450 }}>
                     <Table stickyHeader>
                         <TableHead>
                             <TableRow>
-                                {cols.map((column) => (
-                                    <TableCell style={{ backgroundColor: 'black', color: 'white' }} >{column}</TableCell>
+                                {cols.map((column, index) => (
+                                    <TableCell key={index} style={{ backgroundColor: 'black', color: 'white' }}>
+                                        {column}
+                                    </TableCell>
                                 ))}
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {responses.slice(0,5).map((response, index) => (
+                            {responses.length > 0 ? (
+                                responses.map((response, index) => (
+                                    <TableRow key={index}>
+                                        <TableCell>{index + 1}</TableCell>
+                                        <TableCell>{response.firstName+' '+response.lastName}</TableCell>
+                                        <TableCell>{response.email}</TableCell>
+                                        <TableCell>{response.status}</TableCell>
+                                        <TableCell>{response.message}</TableCell>
+                                    </TableRow>
+                                ))
+                            ) : (
                                 <TableRow>
-                                    <TableCell>{index + 1}</TableCell>
-                                    <TableCell>{response.custName}</TableCell>
-                                    <TableCell>{response.custEmail}</TableCell>
-                                    <TableCell>{response.status}</TableCell>
-                                    <TableCell>{response.custMessage}</TableCell>
+                                    <TableCell colSpan={cols.length}>No data available</TableCell>
                                 </TableRow>
-                            ))}
+                            )}
                         </TableBody>
                     </Table>
                 </TableContainer>
             </Paper>
+            {error && (
+                <Typography color="error">
+                    Error fetching data: {error}
+                </Typography>
+            )}
         </>
     );
 }
-
 
 function ProductsTable() {
     const [products, setProducts] = React.useState([]);

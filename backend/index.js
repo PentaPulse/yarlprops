@@ -4,6 +4,7 @@ const userRoutes = require("./routes/userRoutes");
 const productRoutes = require("./routes/productRoutes");
 const serviceRoutes = require("./routes/serviceRoutes");
 const contactusRoutes = require("./routes/contactusRoutes");
+const cors = require('cors')
 require("dotenv").config();
 
 const app = express();
@@ -13,6 +14,19 @@ connectDB();
 
 // Middleware
 app.use(express.json());
+
+const whitelist = ['http://localhost:3000', 'https://yarlprops.web.app']; // Ensure the frontend port is correct
+const corsOptions = {
+    origin: function (origin, callback) {
+        if (whitelist.indexOf(origin) !== -1 || !origin) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    }
+};
+
+app.use(cors(corsOptions));
 
 // Routes
 app.use("/api/u", userRoutes);

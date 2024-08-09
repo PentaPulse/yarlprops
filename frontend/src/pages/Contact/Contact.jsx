@@ -11,6 +11,7 @@ import CardContent from '@mui/material/CardContent';
 import SendIcon from '@mui/icons-material/Send';
 import { keyframes } from '@mui/system';
 import { sendMessage } from '../../api/db/contactus';
+import axios from 'axios';
 //import { useAlerts } from '../../backend/AlertService';
 
 const bounceAnimation = keyframes`
@@ -24,11 +25,10 @@ const bounceAnimation = keyframes`
 
 function Contact() {
   const [details, setDetails] = React.useState({
-    fname: '',
-    lname: '',
+    firstName: '',
+    lastName: '',
     email: '',
     message: '',
-    status: 'new'
   })
   //const { showAlerts } = useAlerts()
 
@@ -40,9 +40,9 @@ function Contact() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await sendMessage(details);
+      await axios.post('http://localhost:5000/api/c/send',details)
       console.log('1')
-      //showAlerts('Message sent successfully', 'success');
+      
     } catch (error) {
       console.log(error)
       //showAlerts('Try again', 'info');
@@ -119,10 +119,10 @@ function Contact() {
                 <form >
                   <Grid container spacing={2}>
                     <Grid item xs={12} sm={6}>
-                      <TextField placeholder="Enter first name" label="First Name" variant="outlined" name='fname' fullWidth value={details.fname} onChange={handleChange} required />
+                      <TextField placeholder="Enter first name" label="First Name" variant="outlined" name='firstName' fullWidth value={details.firstName} onChange={handleChange} required />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      <TextField placeholder="Enter last name" label="Last Name" variant="outlined" name='lname' fullWidth value={details.lname} onChange={handleChange} required />
+                      <TextField placeholder="Enter last name" label="Last Name" variant="outlined" name='lastName' fullWidth value={details.lastName} onChange={handleChange} required />
                     </Grid>
                     <Grid item xs={12}>
                       <TextField type="email" placeholder="Enter email" label="Email" variant="outlined" name='email' fullWidth value={details.email} onChange={handleChange} required />
