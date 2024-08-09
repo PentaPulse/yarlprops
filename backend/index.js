@@ -4,7 +4,6 @@ const userRoutes = require("./routes/userRoutes");
 const productRoutes = require("./routes/productRoutes");
 const serviceRoutes = require("./routes/serviceRoutes");
 const contactusRoutes = require("./routes/contactusRoutes");
-const authMiddleware = require("./utils/authMiddleware");
 require("dotenv").config();
 
 const app = express();
