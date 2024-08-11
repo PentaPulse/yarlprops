@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt')
 exports.getUsers = async (req, res) => {
   try {
     const users = await User.find();
-    if(users.length===0) res.json("No users")
+    if (users.length === 0) res.json("No users")
     res.json(users);
   } catch (err) {
     res
@@ -100,7 +100,7 @@ exports.deleteUser = async (req, res) => {
   const { email } = req.body;
   try {
     //after implement when user have or not advertised services or products
-    const response = await User.findOneAndDelete({ email:email });
+    const response = await User.findOneAndDelete({ email: email });
     if (!response) {
       return res.status(404).json({
         code: "user/not-found",
@@ -182,11 +182,10 @@ exports.changeEmail = async (req, res) => {
 };
 
 exports.changeRole = async (req, res) => {
-  const { email, oldRole, newRole } = req.body;
+  const { email, newRole } = req.body;
   try {
-    const response = await User.findOneAndUpdate(
-      { email: email },
-      { $set: { role: newRole } }
+    const response = await User.findOne(
+      { email: email }
     );
     if (!response) {
       return res.status(404).json({
@@ -194,12 +193,58 @@ exports.changeRole = async (req, res) => {
         message: "User not found or already deleted",
       });
     }
+
+    if (!response.myProducts && !response.myRentals && !myServices) {
+      res.status(500).json({ code: "user/role-error", message: "Remove your productss, rentals , services" })
+    }
+
+    const oldRole = response.role;
+    let OldRoleModel;
+    switch (response.role) {
+      case 'merchant':
+        OldRoleModel = User.Merchant;
+        break;
+      case 'admin':
+        OldRoleModel = User.Admin;
+        break;
+      case 'customer':
+        OldRoleModel = User.Customer;
+        break;
+      default:
+        throw new Error('Invalid role')
+    }
+
+    const newUserData = {
+      ...response.toObject(),
+      role: newRole
+    }
+
+    let NewRoleModel;
+    switch (newRole) {
+      case 'merchant':
+        NewRoleModel = User.Merchant;
+        break;
+      case 'admin':
+        NewRoleModel = User.Admin;
+        break;
+      case 'customer':
+        NewRoleModel = User.Customer;
+        break;
+      default:
+        throw new Error('Invalid role')
+    }
+
+    const newUser = new NewRoleModel(newUserData);
+    await newUser.save();
+
+    await OldRoleModel.findOneAndDelete({"email":email})
+
     res
       .status(200)
       .json({
         code: "user/role-ok",
         message: `Role changed ${oldRole} to ${newRole}`,
-        response,
+        newUser,
       });
   } catch (error) {
     res

@@ -13,9 +13,6 @@ const userSchema = new mongoose.Schema({
     address: { type: String },
     role: { type: String, required: true },
     password: { type: String ,required:true},
-    myProducts:{type:Array},
-    myRents:{type:Array},
-    myServices:{type:Array}
 });
 
 // Hash password before saving
@@ -36,6 +33,32 @@ userSchema.methods.comparePassword = async function (candidatePassword) {
     return await bcrypt.compare(candidatePassword, this.password);
 };
 
-const User = mongoose.model('User', userSchema);
+// Admin Schema
+const adminSchema = userSchema.clone();
+adminSchema.add({
+    adminSpecificField: { type: String }
+});
+adminSchema.statics.role = 'admin';
 
-module.exports = User;
+// Merchant Schema
+const merchantSchema = userSchema.clone();
+merchantSchema.add({
+    myProducts:{type:Array},
+    myRents:{type:Array},
+    myServices:{type:Array}
+});
+merchantSchema.statics.role = 'merchant';
+
+// Customer Schema
+const customerSchema = userSchema.clone();
+customerSchema.add({
+    customerSpecificField: { type: String }
+});
+customerSchema.statics.role = 'customer';
+
+const User = mongoose.model('User', userSchema);
+const Admin = mongoose.model('Admin', adminSchema);
+const Merchant = mongoose.model('Merchant', merchantSchema);
+const Customer = mongoose.model('Customer', customerSchema);
+
+module.exports = {User,Admin,Merchant,Customer};
