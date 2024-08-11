@@ -1,5 +1,5 @@
 const Contactus = require("../models/contactusModel");
-//const transporter = require("../config/mailService")
+//zconst transporter = require("../config/mailService")
 
 exports.getContactusResponses = async (req, res) => {
   try {

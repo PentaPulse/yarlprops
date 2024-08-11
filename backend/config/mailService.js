@@ -10,7 +10,7 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-/*
+/*z
 transporter.verify(function(error, success) {
   if (error) {
     console.error('Mail server error:', error);

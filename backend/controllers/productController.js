@@ -8,3 +8,7 @@ exports.getProducts = async (req, res) => {
     res.status(500).send("Server Error");
   }
 };
+
+exports.dummy = async(req,res)=>{
+  
+}
