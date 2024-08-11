@@ -74,7 +74,7 @@ function Home() {
         <Divider />
         <Grid item md={12}>
           <Container>
-            <Typography variant='h5'>Latest Products</Typography>
+            <Typography variant='h5' sx={{ mb: '1rem'}}>Latest Products</Typography>
             <ProductList />
             <Box display='flex' justifyContent='flex-end' mr={4}>
               <Button onClick={() => handleSeeAll('products')}>See all</Button>
@@ -83,7 +83,7 @@ function Home() {
         </Grid>
         <Grid item md={12}>
           <Container>
-            <Typography variant='h5'>Latest Services</Typography>
+            <Typography variant='h5' sx={{ mb: '1rem'}}>Latest Services</Typography>
             <ServiceList />
             <Box display='flex' justifyContent='flex-end' mr={4}>
               <Button onClick={() => handleSeeAll('services')}>See all</Button>
