@@ -59,8 +59,8 @@ const ServicesForm =  ({ sid, onSuccess, onCancel }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const totalImages = existingImages.length + newImages.length;
-  if(totalImages > 2){
-    setValidationMessage('You can only upload 2 images');
+  if(totalImages > 5){
+    setValidationMessage('You can only upload 5 images');
     return;
   }
   setValidationMessage('');
