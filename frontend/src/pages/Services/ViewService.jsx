@@ -62,7 +62,9 @@ function ViewService() {
                 <Box sx={{ mx: '1.9rem', mt: '1rem' }}>
                   <Typography variant="h6" component="h4" sx={{ fontWeight: 'bold' }}>Description</Typography>
                   <ul style={{ textAlign: 'justify', fontSize: '18px' }}>
-                    <li>{service.serviceDescription}</li>
+                    {service.serviceDescription.map((description, index) => (
+                        <li key={index}>{description}</li>
+                    ))}
                     <li>Location: {service.serviceLocation}</li>
                   </ul>
                 </Box>

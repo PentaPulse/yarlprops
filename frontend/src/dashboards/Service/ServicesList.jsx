@@ -100,7 +100,13 @@ const ServicesList = ({ onEditService, onViewService }) => {
                     <StyledTableRow key={service.id}>
                         {/* <TableCell>{product.id}</TableCell> */}
                         <StyledTableCell align="center">{service.serviceName}</StyledTableCell>
-                        <StyledTableCell align="center">{service.serviceDescription}</StyledTableCell>
+                        <StyledTableCell>
+                            <ul style={{ textAlign: 'justify'}}>
+                                {service.serviceDescription.map((description, index) => (
+                                    <li key={index}>{description}</li>
+                                ))}
+                            </ul>
+                        </StyledTableCell>
                         <StyledTableCell align="center">{service.serviceLocation}</StyledTableCell>
                         <StyledTableCell align="center">
                             <Button onClick={() => onViewService(service.id)} variant="outlined" color="secondary" style={{ margin: '5px', width: '100%' }}>View</Button>

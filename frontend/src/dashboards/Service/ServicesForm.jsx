@@ -6,15 +6,14 @@ import { addService, fetchSelectedService, updateService } from '../../api/db/se
 import { storage } from '../../api/firebase';
 import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import AddIcon from '@mui/icons-material/Add';
 
 const ServicesForm =  ({ sid, onSuccess, onCancel }) => {
   const [service, setService] = useState({
     serviceName : '',
-    serviceDescription : '',
+    serviceDescription : [''],
     serviceLocation : '',
-    images: [
-      
-    ],
+    images: [],
   });
 
   const [existingImages, setExistingImages] = useState([]);
@@ -41,6 +40,16 @@ const ServicesForm =  ({ sid, onSuccess, onCancel }) => {
     setService({ ...service, [name]: value });
   }
 
+  const handleDescriptionChange = (index, event) => {
+    const newServiceDescription = [...service.serviceDescription];
+    newServiceDescription[index] = event.target.value;
+    setService({ ...service, serviceDescription: newServiceDescription });
+  }
+
+  const addDescriptionLine = () => {
+    setService({ ...service, serviceDescription: [...service.serviceDescription, '']});
+  }
+
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -59,10 +68,11 @@ const ServicesForm =  ({ sid, onSuccess, onCancel }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const totalImages = existingImages.length + newImages.length;
-  if(totalImages > 5){
-    setValidationMessage('You can only upload 5 images');
-    return;
-  }
+  
+    if(totalImages < 2 || totalImages > 5){
+      setValidationMessage('You must upload at least 2 images and no more than 5 images');
+      return;
+    }
   setValidationMessage('');
 
   try{
@@ -89,7 +99,7 @@ const ServicesForm =  ({ sid, onSuccess, onCancel }) => {
 
     setService({
       serviceName : '',
-      serviceDescription : '',
+      serviceDescription : [''],
       serviceLocation : '',
       images: [],
     });
@@ -136,15 +146,25 @@ const ServicesForm =  ({ sid, onSuccess, onCancel }) => {
           required
         />
 
-        <TextField
-          label="Description"
-          name="serviceDescription"
-          value={service.serviceDescription}
-          onChange={handleChange}
+        {service.serviceDescription.map((description, index) => (
+          <TextField
+          key={index}
+          label= {`Description ${index + 1}`}
+          value={description}
+          onChange={(event) => handleDescriptionChange(index, event)}
           fullWidth
           margin="normal"
           required
         />
+        ))}
+
+        <Button
+          onClick={addDescriptionLine}
+          variant='outlined'
+          startIcon = {<AddIcon />}
+          style={{ marginTop: '10px', marginBottom: '10px'}}
+        > Add new line
+        </Button>
 
         <TextField
           label="Location"

@@ -74,7 +74,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
 
     const totalImages = existingImages.length + newImages.length;
     if (totalImages < 3 || totalImages > 5) {
-      setValidationMessage('You must have at least 3 images and no more than 5 images.');
+      setValidationMessage('You must upload at least 3 images and no more than 5 images.');
       return;
     }
 

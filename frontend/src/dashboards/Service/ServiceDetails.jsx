@@ -35,7 +35,14 @@ const ServiceDetails = ({ sid, onBack }) => {
         Back to Services List
       </Button>
       <Typography variant="h4">{service.serviceName}</Typography>
-      <Typography variant="body1">Description: {service.serviceDescription}</Typography>
+      <Typography variant="body1">
+        Description: 
+      <ul style={{ textAlign: 'justify'}}>
+        {service.serviceDescription.map((description, index) => (
+          <li key={index}>{description}</li>
+      ))}          
+      </ul>
+      </Typography>
       <Typography variant="body1">Location: {service.serviceLocation}</Typography>
       <Grid container spacing={2} style={{ marginTop: 16 }}>
         {service.images && service.images.map((src, index) => (
