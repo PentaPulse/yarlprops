@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Grid, Paper, Typography, Table, TableHead, TableRow, TableCell, TableBody, TableContainer } from '@mui/material';
 import { countRenters, countSellers, countUsers, fetchUserList} from '../../api/db/users';
 import { countProducts ,fetchProducts} from '../../api/db/products';
+import { countservices ,fetchServices} from '../../api/db/services';
 import axios from 'axios';
 
 export default function AdminOverview() {
@@ -9,6 +10,7 @@ export default function AdminOverview() {
     const [sellerCount, setSellerCount] = React.useState(0);
     const [renterCount, setRenterCount] = React.useState(0);
     const [productCount, setProductCount] = React.useState(0);
+    const [serviceCount, setServiceCount] = React.useState(0);
 
     React.useEffect(() => {
         const fetchCounts = async () => {
@@ -16,10 +18,12 @@ export default function AdminOverview() {
             const sellers = await countSellers();
             const renters = await countRenters();
             const products = await countProducts();
+            const services = await countservices();
             setUserCount(users);
             setSellerCount(sellers);
             setRenterCount(renters);
             setProductCount(products);
+            setServiceCount(services);
         };
 
         fetchCounts();
@@ -64,6 +68,16 @@ export default function AdminOverview() {
                         </Typography>
                         <Typography variant="h4">
                             {productCount}
+                        </Typography>
+                    </Paper>
+                </Grid>
+                <Grid item xs={12} md={3}>
+                    <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: 150 }}>
+                        <Typography variant="h6" gutterBottom>
+                            Total Services
+                        </Typography>
+                        <Typography variant="h4">
+                            {serviceCount}
                         </Typography>
                     </Paper>
                 </Grid>
