@@ -3,6 +3,7 @@ import ProductList from '../Products/ProductList';
 import ProductDetail from '../Products/ProductDetail';
 import ProductForm from '../Products/ProductForm';
 import { Container, Button } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 
 const AdminProducts = () => {
   const [showAddProduct, setShowAddProduct] = useState(false);
@@ -43,6 +44,7 @@ const AdminProducts = () => {
       <Button
         variant="contained"
         color="success"
+        startIcon={<AddIcon />}
         onClick={handleAddProduct}
         style={{ margin: '20px' }}
       >
