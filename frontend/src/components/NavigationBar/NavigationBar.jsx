@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../api/AuthContext';
 import { Login, Register } from '../Signup/Signup';
 
-const pages = [['Home', '/'], ['Products', '/products'], ['Services', '/services'], ['Guide', '/guide'], ['Contact', '/contact']];
+const pages = [['Home', '/'], ['Products', '/products'],['Rentals','/rentals'], ['Services', '/services'], ['Guide', '/guide'], ['Contact', '/contact']];
 const style = {
     position: 'absolute',
     top: '50%',
