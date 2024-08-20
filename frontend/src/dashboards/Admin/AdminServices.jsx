@@ -3,6 +3,7 @@ import ServicesList from '../Service/ServicesList';
 import ServiceDetails from '../Service/ServiceDetails';
 import ServicesForm from '../Service/ServicesForm';
 import { Container, Button } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 
 const AdminServices = () => {
   const [showAddService, setShowAddService] = useState(false);
@@ -43,6 +44,7 @@ const AdminServices = () => {
       <Button
         variant="contained"
         color="success"
+        startIcon={<AddIcon />}
         onClick={handleAddService}
         style={{ margin: '20px' }}
       >

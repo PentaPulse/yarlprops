@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
-import { TextField, Button, Paper, Typography, Grid } from '@mui/material';
+import { TextField, Button, Paper, Typography, Grid, IconButton } from '@mui/material';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { addService, fetchSelectedService, updateService } from '../../api/db/services';
 import { storage } from '../../api/firebase';
 import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const ServicesForm =  ({ sid, onSuccess, onCancel }) => {
   const [service, setService] = useState({
@@ -49,6 +50,11 @@ const ServicesForm =  ({ sid, onSuccess, onCancel }) => {
   const addDescriptionLine = () => {
     setService({ ...service, serviceDescription: [...service.serviceDescription, '']});
   }
+
+  const handleRemoveDescriptionLine = (index) =>{
+    const updatedDescriptions = service.serviceDescription.filter((_, i) => i !== index);
+    setService({ ...service, serviceDescription: updatedDescriptions });
+  };
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -136,7 +142,7 @@ const ServicesForm =  ({ sid, onSuccess, onCancel }) => {
     <Paper style={{ padding: 16 }}>
       <Typography varient="h6">{sid ? 'Edit Service' : 'Add Service'}</Typography>
       <form onSubmit={handleSubmit}>
-        <TextField
+        <TextField      
           label="Service Name"
           name="serviceName"
           value={service.serviceName}
@@ -147,21 +153,33 @@ const ServicesForm =  ({ sid, onSuccess, onCancel }) => {
         />
 
         {service.serviceDescription.map((description, index) => (
-          <TextField
-          key={index}
-          label= {`Description ${index + 1}`}
-          value={description}
-          onChange={(event) => handleDescriptionChange(index, event)}
-          fullWidth
-          margin="normal"
-          required
-        />
+          <Grid container key={index} spacing={1} alignItems="center">
+            <Grid item xs={11}>
+            <TextField
+              label= {`Description Line ${index + 1}`}
+              value={description}
+              onChange={(event) => handleDescriptionChange(index, event)}
+              fullWidth
+              margin="normal"
+              required
+            />
+            </Grid>
+            {index > 0 && (
+                // <Button onClick={() => handleRemoveDescriptionLine(index)} variant='outlined' color='error' startIcon={<DeleteIcon />}>
+                //   Delete
+                // </Button>
+                <IconButton onClick={() => handleRemoveDescriptionLine(index)} style={{ marginTop: '1rem' }} aria-label="delete">
+                    <DeleteIcon />
+                </IconButton>
+            )}
+          </Grid>
         ))}
 
         <Button
           onClick={addDescriptionLine}
           variant='outlined'
           startIcon = {<AddIcon />}
+          color='success'
           style={{ marginTop: '10px', marginBottom: '10px'}}
         > Add new line
         </Button>
