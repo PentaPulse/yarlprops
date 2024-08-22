@@ -33,7 +33,7 @@ export default function ContactusRequests() {
     }
     fetchData();
     console.log("hh")
-  },[]);
+  }, []);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -81,32 +81,24 @@ export default function ContactusRequests() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {responses.length > 0 ? (
-              responses.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(response => (
-                <StyledTableRow key={response.id}>
-                  <StyledTableCell align="center">{response.firstName}</StyledTableCell>
-                  <StyledTableCell align="center">{response.lastName}</StyledTableCell>
-                  <StyledTableCell align="center">{response.email}</StyledTableCell>
-                  <StyledTableCell align="center">{response.status}</StyledTableCell>
-                  <StyledTableCell align="center">
-                    <Button 
-                      onClick={() => setView(response)}
-                      variant="outlined" 
-                      color="secondary" 
-                      style={{ margin: '5px', width: '100%' }}
-                    >
-                      View
-                    </Button>
-                  </StyledTableCell>
-                </StyledTableRow>
-              ))
-            ) : (
-              <StyledTableRow>
-                <StyledTableCell colSpan={5} align="center">
-                  No data available
+            {responses && responses.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(response => (
+              <StyledTableRow key={response.id}>
+                <StyledTableCell align="center">{response.fname}</StyledTableCell>
+                <StyledTableCell align="center">{response.lname}</StyledTableCell>
+                <StyledTableCell align="center">{response.email}</StyledTableCell>
+                <StyledTableCell align="center">{response.status}</StyledTableCell>
+                <StyledTableCell align="center">
+                  <Button
+                    onClick={() => setView(response)}
+                    variant="outlined"
+                    color="secondary"
+                    style={{ margin: '5px', width: '100%' }}
+                  >
+                    View
+                  </Button>
                 </StyledTableCell>
               </StyledTableRow>
-            )}
+            ))}
           </TableBody>
         </Table>
         <TablePagination

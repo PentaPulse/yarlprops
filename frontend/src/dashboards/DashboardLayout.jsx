@@ -1,4 +1,4 @@
-import { Avatar, Box, CssBaseline, Divider, FormControlLabel, Grid, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Tooltip, Typography, capitalize, styled, useTheme } from '@mui/material'
+import { Avatar, Box, CssBaseline, Divider, FormControlLabel, Grid, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Tooltip, Typography, styled, useTheme } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
@@ -125,7 +125,7 @@ export default function DashboardLayout({ handleMode }) {
                                 <MenuIcon />
                             </IconButton>
                             <Typography variant="h6" noWrap component="div">
-                                {capitalize(user.role)} DASHBOARD
+                                MY DASHBOARD
                             </Typography>
                         </Box>
                         <Box display={'flex'} >
@@ -226,7 +226,6 @@ export default function DashboardLayout({ handleMode }) {
                         <Route path='productlist' element={<AdminProducts/>} />
                         <Route path='servicelist' element={<AdminServices />} />
                         <Route path='contactreqs' element={<ContactusRequests />} />
-                        <Route path='' element/>
                         {/* Merch */}
                         {/* Cust */}
                     </Routes>

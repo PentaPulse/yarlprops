@@ -10,11 +10,11 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import SendIcon from '@mui/icons-material/Send';
 import { keyframes } from '@mui/system';
-import axios from 'axios';
+import { sendMessage } from '../../api/db/contactus';
+//import axios from 'axios';
 //import { useAlerts } from '../../backend/AlertService';
 
-const bounceAnimation = keyframes`
-  0%, 100% {
+const bounceAnimation = keyframes`  0%, 100% {
     transform: translateY(0);
   }
   50% {
@@ -39,7 +39,7 @@ function Contact() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/c/send',details)
+      await sendMessage(details.firstName, details.lastName, details.email, details.message)
       console.log('1')
 
     } catch (error) {

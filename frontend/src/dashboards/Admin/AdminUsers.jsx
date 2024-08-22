@@ -1,7 +1,7 @@
 import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Grid, Modal, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import AddIcon from '@mui/icons-material/Add';
-import { collection, getDocs, query, where} from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../api/firebase";
 
 const AdminUsers = () => {
@@ -70,7 +70,7 @@ const AdminUsers = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const q = query(collection(db, "systemusers"),where('role','!=','admin'))
+                const q = query(collection(db, "systemusers"), where('role', '!=', 'admin'))
                 const qSnapshot = await getDocs(q)
                 if (!qSnapshot.empty) {
                     const userList = qSnapshot.docs.map(doc => doc.data());
@@ -81,10 +81,10 @@ const AdminUsers = () => {
             }
         }
         fetchUsers()
-    },[])
+    }, [])
 
     return (
-        <Box sx={{ textAlign: 'center',  margin: 'auto' }}>
+        <Box sx={{ textAlign: 'center', margin: 'auto' }}>
             <Grid container alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
                 <Grid item sx={{ mt: 5 }}>
                     <h1>Users</h1>
@@ -106,7 +106,7 @@ const AdminUsers = () => {
                         <TableHead>
                             <TableRow>
                                 {columns.map((column) => (
-                                    <TableCell style={{ backgroundColor: 'black', color: 'white' }} key={column.id}>{column.name}</TableCell>
+                                    <TableCell style={{ backgroundColor: 'black', color: 'white' }}>{column.name}</TableCell>
                                 ))}
                             </TableRow>
                         </TableHead>
@@ -114,10 +114,10 @@ const AdminUsers = () => {
                             {users.map((user, index) => (
                                 <TableRow>
                                     <TableCell>
-                                        {index+1 }
+                                        {index + 1}
                                     </TableCell>
                                     <TableCell>
-                                        {(user.displayName?user.displayName:(user.fname," ",user.lname)) || "-"}
+                                        {(user.displayName ? user.displayName : (user.fname, " ", user.lname)) || "-"}
                                     </TableCell>
                                     <TableCell>
                                         {user.email || "-"}
@@ -126,7 +126,7 @@ const AdminUsers = () => {
                                         {user.phone || "-"}
                                     </TableCell>
                                     <TableCell>
-                                    {user.address || "-"}
+                                        {user.address || "-"}
                                     </TableCell>
                                     <TableCell>
                                         {user.role}
