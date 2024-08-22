@@ -6,12 +6,18 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import * as React from 'react'
 import { useAuth } from '../api/AuthContext'
-
 import { MaterialUISwitch, ProfileBox } from '../components/NavigationBar/NavigationBar';
-import { adminBoard, adminMenu, backToHome, renterBoard, renterMenu, sellerBoard, sellerMenu, userBoard, userMenu } from './menuLists';
-import { useNavigate } from 'react-router-dom';
-
-//menus
+import { adminMenu, backToHome, renterMenu, sellerMenu, userMenu } from './menuLists';
+import { Route, Routes, useNavigate } from 'react-router-dom';
+import AdminOverview from './Admin/AdminOverview';
+import SellerOverview from './Seller/SellerOverview';
+import UserOverview from './User/UserOverview';
+import Profile from './UserProfile';
+import Admins from './Admin/Admins';
+import AdminUsers from './Admin/AdminUsers';
+import AdminProducts from './Admin/AdminProducts';
+import AdminServices from './Admin/AdminServices';
+import ContactusRequests from './Admin/ContactusReqs';
 
 const drawerWidth = 240;
 
@@ -81,7 +87,6 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 export default function DashboardLayout({ handleMode }) {
     const [open, setOpen] = React.useState(false);
-    const [board, setBoard] = React.useState(0)
     const { user } = useAuth()
     const theme = useTheme();
     const navigate = useNavigate();
@@ -93,17 +98,16 @@ export default function DashboardLayout({ handleMode }) {
     const handleDrawerClose = () => {
         setOpen(false);
     };
-    const handleMenu = (index) => {
-        setBoard(index)
+    const handleMenu = (path) => {
+        navigate(`/d/${path}`)
         setOpen(false)
     }
     const back = () => {
-        sessionStorage.setItem('dash', true)
         navigate('/')
     }
     return (
         <>
-            <Box >
+            <Box mt={5}>
                 <CssBaseline />
                 <AppBar position="fixed" open={open} color='inherit'>
                     <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -154,7 +158,7 @@ export default function DashboardLayout({ handleMode }) {
                                         justifyContent: open ? 'initial' : 'center',
                                         px: 2.5,
                                     }}
-                                    onClick={() => handleMenu(index)}
+                                    onClick={() => handleMenu(text[2], text[3])}
                                 >
                                     <ListItemIcon
                                         sx={{
@@ -165,7 +169,7 @@ export default function DashboardLayout({ handleMode }) {
                                     >
                                         {text[1]}
                                     </ListItemIcon>
-                                    <ListItemText primary={text[0]} sx={{ opacity: open ? 1 : 0 }} onClick={() => setBoard(index)} />
+                                    <ListItemText primary={text[0]} sx={{ opacity: open ? 1 : 0 }} onClick={() => handleMenu(text[2], text[3])} />
                                 </ListItemButton>
                             </ListItem>
                         ))}
@@ -210,11 +214,22 @@ export default function DashboardLayout({ handleMode }) {
                         </ListItem>
                     </List>
                 </Drawer >
-                <Grid item m='0 2vw 0 6vw'>
-                    
-                    {(user.role === 'admin' ? adminBoard : (user.role === 'seller' ? sellerBoard : (user.role === 'renter' ? renterBoard : userBoard))).map((boardComponent, index) => (
-                        board === index && boardComponent
-                    ))}
+                <Grid item m='5vh 2vw 0 8vw'>
+                    <Routes>
+                        {/* Common */}
+                        <Route path='overview' element={user.role==='admin'?<AdminOverview />:user.role==='seller'?<SellerOverview/>:<UserOverview/>} />
+                        <Route path='profile' element={<Profile/>}/>
+
+                        {/* Admin */}
+                        <Route path='adminlist' element={<Admins/>}/>
+                        <Route path='userlist' element={<AdminUsers/>} />
+                        <Route path='productlist' element={<AdminProducts/>} />
+                        <Route path='servicelist' element={<AdminServices />} />
+                        <Route path='contactreqs' element={<ContactusRequests />} />
+                        <Route path='' element/>
+                        {/* Merch */}
+                        {/* Cust */}
+                    </Routes>
                 </Grid>
             </Box >
         </>

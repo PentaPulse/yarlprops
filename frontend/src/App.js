@@ -4,11 +4,10 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import AlertProvider from "./api/AlertService";
 import { AuthProvider } from "./api/AuthContext";
-import PrivateRoute from "./api/PrivateRoute";
+//import PrivateRoute from "./api/PrivateRoute";
 import DashboardLayout from "./dashboards/DashboardLayout";
-import PageLayout from "./pages/PageLayout";
 import Home from "./pages/Home/Home";
-import Guide from "./pages/Guide/Guide";
+//import Guide from "./pages/Guide/Guide";
 import Contact from "./pages/Contact/Contact";
 import Products from "./pages/Products/Products";
 import ProductPage from "./pages/Products/ProView/View";
@@ -16,6 +15,7 @@ import Services from "./pages/Services/Services";
 import ViewService from "./pages/Services/ViewService";
 import NavigationBar from "./components/NavigationBar/NavigationBar";
 import Footer from "./components/Footer/Footer";
+import { Box } from "@mui/material";
 
 const lightTheme = createTheme({
   palette: {
@@ -41,7 +41,7 @@ const darkTheme = createTheme({
   },
 });
 
-function App() {
+export default function App() {
   return (
     <>
       <Themed />
@@ -86,91 +86,32 @@ function Routings({ handleMode }) {
   return (
     <>
       <AuthProvider>
-        <PageLayout>
-          <Routes>
-            <Route
-              exact
-              path="/"
-              element={
-                <>
-                  <NavigationBar handleMode={handleMode} />
-                  <Home />
-                  <Footer />
-                </>
-              }
-            />
-            <Route
-              path="/guide"
-              element={
-                <>
-                  <NavigationBar handleMode={handleMode} />
-                  <Guide />
-                  <Footer />
-                </>
-              }
-            />
-            <Route
-              path="/contact"
-              element={
-                <>
-                  <NavigationBar handleMode={handleMode} />
-                  <Contact />
-                  <Footer />
-                </>
-              }
-            />
-            <Route
-              path="/products"
-              element={
-                <>
-                  <NavigationBar handleMode={handleMode} />
-                  <Products />
-                  <Footer />
-                </>
-              }
-            />
-            <Route
-              path="/products/:id"
-              element={
-                <>
-                  <NavigationBar handleMode={handleMode} />
-                  <ProductPage /> <Footer />
-                </>
-              }
-            />
-            <Route
-              path="/services"
-              element={
-                <>
-                  <NavigationBar handleMode={handleMode} />
-                  <Services />
-                  <Footer />
-                </>
-              }
-            />
-            <Route
-              path="/service/:id"
-              element={
-                <>
-                  <NavigationBar handleMode={handleMode} />
-                  <ViewService />
-                  <Footer />
-                </>
-              }
-            />
-            <Route
-              path="/dashboard"
-              element={
-                <PrivateRoute>
-                  <DashboardLayout handleMode={handleMode} />
-                </PrivateRoute>
-              }
-            />
-          </Routes>
-        </PageLayout>
+        <Routes>
+          <Route path="/" element={<PageLayout handleMode={handleMode} />} />
+          <Route path="/p/*" element={<PageLayout handleMode={handleMode} />} />
+          <Route path="/d/*" element={<DashboardLayout handleMode={handleMode} />} />
+        </Routes>
       </AuthProvider>
     </>
-  );
+  )
 }
 
-export default App;
+function PageLayout({handleMode}) {
+  return (
+    <>
+      <Box sx={{ marginTop: '12vh' }}>
+        <NavigationBar handleMode={handleMode} />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="products" element={<Products />} />
+          <Route path="product/:id" element={<ProductPage />} />
+          <Route path="rentals" element={<Products />} />
+          <Route path="services" element={<Services />} />
+          <Route path="service/:id" element={<ViewService />} />
+          <Route path="contact" element={<Contact />} />
+        </Routes>
+        <Footer />
+      </Box>
+    </>
+  )
+}

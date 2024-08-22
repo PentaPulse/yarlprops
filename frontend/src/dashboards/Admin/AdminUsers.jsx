@@ -81,11 +81,11 @@ const AdminUsers = () => {
             }
         }
         fetchUsers()
-    })
+    },[])
 
     return (
-        <Box sx={{ textAlign: 'center', width: '80%', margin: 'auto' }}>
-            <Grid container alignItems="center" justifyContent="center" sx={{ mb: 2 }}>
+        <Box sx={{ textAlign: 'center',  margin: 'auto' }}>
+            <Grid container alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
                 <Grid item sx={{ mt: 5 }}>
                     <h1>Users</h1>
                 </Grid>

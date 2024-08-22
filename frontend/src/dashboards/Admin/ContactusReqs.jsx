@@ -7,9 +7,10 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import axios from 'axios';
+//import axios from 'axios';
 import { Button, styled, Dialog, DialogTitle, DialogContent, DialogActions, Typography } from '@mui/material';
 import { tableCellClasses } from '@mui/material/TableCell';
+import { fetchContactUsResponsesList } from '../../api/db/contactus';
 
 export default function ContactusRequests() {
   const [responses, setResponses] = React.useState([]);
@@ -22,16 +23,17 @@ export default function ContactusRequests() {
     async function fetchData() {
       try {
         // Fetch data from the API
-        const response = await axios.get('http://localhost:5000/api/c/responses');
+        const response = await fetchContactUsResponsesList
         // Set responses data
-        setResponses(response.data);
+        setResponses(response);
       } catch (err) {
         // Handle error
         setError(err.message);
       }
     }
     fetchData();
-  }, []);
+    console.log("hh")
+  },[]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -65,7 +67,6 @@ export default function ContactusRequests() {
       border: 0,
     },
   }));
-
   return (
     <>
       <TableContainer component={Paper}>

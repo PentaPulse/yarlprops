@@ -10,7 +10,7 @@ export default function ServiceList() {
   const navigate = useNavigate();
 
   const handleCardClick = (pid) => {
-    navigate(`/service/${pid}`);
+    navigate(`/p/service/${pid}`);
   };
 
   React.useEffect(() => {

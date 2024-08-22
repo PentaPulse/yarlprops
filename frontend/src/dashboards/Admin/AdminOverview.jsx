@@ -3,7 +3,8 @@ import { Box, Grid, Paper, Typography, Table, TableHead, TableRow, TableCell, Ta
 import { countRenters, countSellers, countUsers, fetchUserList} from '../../api/db/users';
 import { countProducts ,fetchProducts} from '../../api/db/products';
 import { countservices ,fetchServices} from '../../api/db/services';
-import axios from 'axios';
+//import axios from 'axios';
+import { fetchContactUsResponsesList } from '../../api/db/contactus';
 
 export default function AdminOverview() {
     const [userCount, setUserCount] = React.useState(0);
@@ -149,9 +150,9 @@ function ContactResponsesTable() {
         async function fetchData() {
             try {
                 // Fetch data from the API
-                const response = await axios.get('http://localhost:5000/api/c/responses');
+                const response = await fetchContactUsResponsesList
                 // Set responses data
-                setResponses(response.data);
+                setResponses(response);
             } catch (err) {
                 // Handle error
                 setError(err.message);

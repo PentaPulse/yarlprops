@@ -9,7 +9,7 @@ function ProductList() {
     const navigate = useNavigate();
 
     const handleCardClick = (pid) => {
-        navigate(`/products/${pid}`);
+        navigate(`/p/product/${pid}`);
     };
 
     React.useEffect(() => {
