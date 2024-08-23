@@ -33,6 +33,11 @@
     "ui": {
       "enabled": true
     },
+    "exportOnExit":{
+      "enabled":true,
+      "path":"./data"
+    },
+    "importOnStart":"./data",
     "singleProjectMode": true
   },
   "storage": {

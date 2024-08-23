@@ -7,10 +7,10 @@ const userRef = collection(db, "systemusers")
 
 //functions
 //register user
-export const registerUser = async (uid, fname, lname, dname, email, role) => {
+export const registerUser = async (uid, fname, lname, dname, email) => {
     try {
         // Ensure all required fields are provided
-        if (!uid || !email || !role) {
+        if (!uid || !email) {
             throw new Error('Missing required user information');
         }
 
@@ -28,7 +28,7 @@ export const registerUser = async (uid, fname, lname, dname, email, role) => {
                 gender: '',
                 picture: '',
                 address: '',
-                role:role
+                role:'customer'
             });
             console.log("User registered successfully");
             return { success: true, message: 'User registered successfully' };

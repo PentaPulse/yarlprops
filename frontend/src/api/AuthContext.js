@@ -43,14 +43,14 @@ export const AuthProvider = ({ children }) => {
     },[]);
 
     //registering
-    const register = (fname, lname, dname, email, password, role) => {
+    const register = (fname, lname, dname, email, password) => {
         createUserWithEmailAndPassword(auth, email, password)
             .then((result) => {
                 const user = result.user;
                 const userid = user.uid;
                 updateProfile(user, { displayName: dname })
                     .then(() => {
-                        registerUser(userid, fname, lname, dname, email, role);
+                        registerUser(userid, fname, lname, dname, email);
                     })
                     .catch((error) => {
                         console.error("Error updating profile:", error);
@@ -59,7 +59,7 @@ export const AuthProvider = ({ children }) => {
             })
             .catch((error) => {
                 showAlerts('ww' + error, 'error')
-                if (email === '' || password === '' || fname === '' || lname === '' || role === '') {
+                if (email === '' || password === '' || fname === '' || lname === '' ) {
                     if (error.code === 'auth/invalid-email' || error.code === 'auth/missing-password') {
                         showAlerts('Enter details', 'warning')
                     }
