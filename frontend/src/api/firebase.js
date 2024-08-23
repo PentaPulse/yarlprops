@@ -34,7 +34,7 @@ if (window.location.hostname === "localhost" || window.location.hostname==='127.
   connectAuthEmulator(auth, "http://127.0.0.1:9099");
   connectStorageEmulator(storage,'127.0.0.1',9199);
 }
-enableIndexedDbPersistence(db, { synchronizeTabs: true })
+
 
 export { db,auth,storage,analytics}
 
