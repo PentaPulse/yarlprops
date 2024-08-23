@@ -27,7 +27,7 @@ const ProductsContents = ({ searchTerm }) => {
     }, [searchTerm]);
 
     const handleCardClick = (pid) => {
-        navigate(`/p/products/${pid}`);
+        navigate(`/p/product/${pid}`);
     };
     return (
         <Container fixed>

@@ -1,8 +1,8 @@
-import { getAuth } from 'firebase/auth';
+import { connectAuthEmulator, getAuth } from 'firebase/auth';
 //import { initializeApp } from "firebase/app";
 import firebase from 'firebase/compat/app';
-import { getFirestore } from 'firebase/firestore';
-import { getStorage } from 'firebase/storage';
+import { connectFirestoreEmulator, enableIndexedDbPersistence, getFirestore } from 'firebase/firestore';
+import { connectStorageEmulator, getStorage } from 'firebase/storage';
  import {getAnalytics} from 'firebase/analytics'
 //import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 
@@ -29,6 +29,13 @@ const appCheck = initializeAppCheck(app, {
   isTokenAutoRefreshEnabled: true
 });
 */
+if (window.location.hostname === "localhost" || window.location.hostname==='127.0.0.1') {
+  connectFirestoreEmulator(db, '127.0.0.1', 8080);
+  connectAuthEmulator(auth, "http://127.0.0.1:9099");
+  connectStorageEmulator(storage,'127.0.0.1',9199);
+}
+enableIndexedDbPersistence(db, { synchronizeTabs: true })
+
 export { db,auth,storage,analytics}
 
 //setDoc(doc(db,'systemusers',user.uid),profile)

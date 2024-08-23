@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }) => {
         });
 
         return () => unsubscribe();
-    });
+    },[]);
 
     //registering
     const register = (fname, lname, dname, email, password, role) => {
