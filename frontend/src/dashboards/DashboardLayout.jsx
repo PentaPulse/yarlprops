@@ -7,10 +7,9 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import * as React from 'react'
 import { useAuth } from '../api/AuthContext'
 import { MaterialUISwitch, ProfileBox } from '../components/NavigationBar/NavigationBar';
-import { adminMenu, backToHome, renterMenu, sellerMenu, userMenu } from './menuLists';
+import { adminMenu, backToHome, merchMenu, userMenu } from './menuLists';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import AdminOverview from './Admin/AdminOverview';
-import SellerOverview from './Seller/SellerOverview';
 import UserOverview from './User/UserOverview';
 import Profile from './UserProfile';
 import Admins from './Admin/Admins';
@@ -18,6 +17,11 @@ import AdminUsers from './Admin/AdminUsers';
 import AdminProducts from './Admin/AdminProducts';
 import AdminServices from './Admin/AdminServices';
 import ContactusRequests from './Admin/ContactusReqs';
+import MerchantProducts from './Merchant/MerchantProducts';
+import MerchantRentals from './Merchant/MerchantRentals';
+import MerchantServices from './Merchant/MerchantServices';
+import MerchantOrders from './Merchant/MerchantOrders';
+import MerchantOverview from './Merchant/MerchantOverview';
 
 const drawerWidth = 240;
 
@@ -150,7 +154,7 @@ export default function DashboardLayout({ handleMode }) {
                     </DrawerHeader>
                     <Divider />
                     <List>
-                        {(user.role === 'admin' ? adminMenu : (user.role === 'seller' ? sellerMenu : (user.role === 'renter' ? renterMenu : userMenu))).map((text, index) => (
+                        {(user.role === 'admin' ? adminMenu : (user.role === 'merch' ? merchMenu : userMenu)).map((text, index) => (
                             <ListItem key={text} disablePadding sx={{ display: 'block' }}>
                                 <ListItemButton
                                     sx={{
@@ -217,7 +221,7 @@ export default function DashboardLayout({ handleMode }) {
                 <Grid item m='5vh 2vw 0 8vw'>
                     <Routes>
                         {/* Common */}
-                        <Route path='overview' element={user.role==='admin'?<AdminOverview />:user.role==='seller'?<SellerOverview/>:<UserOverview/>} />
+                        <Route path='overview' element={user.role==='admin'?<AdminOverview />:user.role==='merch'?<MerchantOverview/>:<UserOverview/>} />
                         <Route path='profile' element={<Profile/>}/>
 
                         {/* Admin */}
@@ -227,6 +231,10 @@ export default function DashboardLayout({ handleMode }) {
                         <Route path='servicelist' element={<AdminServices />} />
                         <Route path='contactreqs' element={<ContactusRequests />} />
                         {/* Merch */}
+                        <Route path='myproducts' element={<MerchantProducts/>} />
+                        <Route path='myrentals' element={<MerchantRentals/>} />
+                        <Route path='myservices' element={<MerchantServices/>} />
+                        <Route path='myorders' element={<MerchantOrders/>} />
                         {/* Cust */}
                     </Routes>
                 </Grid>
