@@ -45,32 +45,6 @@ export const registerUser = async (uid, fname, lname, dname, email) => {
     }
 };
 
-export const addUser = async (uid, fname, lname, email, phone, gender, picture, address, role) => {
-    try {
-        const userRef = doc(db, 'systemusers', uid);
-        const userSnap = await getDoc(userRef)
-        if (!userSnap.exists()) {
-            await setDoc(userRef, {
-                uid: uid,
-                fname: fname,
-                lname: lname,
-                email: email,
-                phone: phone,
-                gender: gender,
-                picture: picture,
-                address: address,
-                role: role
-            });
-        } else {
-            console.log("user exists")
-        }
-
-    } catch (e) {
-        console.error('Error adding user: ', e);
-    }
-};
-
-
 // fetching lists
 export const fetchUserList = async () => {
     try {

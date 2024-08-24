@@ -3,7 +3,7 @@ import { Button } from '@mui/material';
 import { GoogleAuthProvider, createUserWithEmailAndPassword, onAuthStateChanged,  sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth';
 import { db, auth } from './firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import { addUser, registerUser } from './db/users';
+import {  registerUser } from './db/users';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAlerts } from './AlertService';
 
@@ -79,7 +79,7 @@ export const AuthProvider = ({ children }) => {
     const google = () => signInWithPopup(auth, provider)
         .then((result) => {
             const user = result.user;
-            addUser(user.uid,"","",user.email,user.phoneNumber,"",user.photoURL,"","buyer")
+            registerUser(user.uid, '', '', user.displayName, user.email);
             showAlerts('Successfully logged', 'success')
         })
         .catch(() => {
@@ -88,6 +88,7 @@ export const AuthProvider = ({ children }) => {
 
     const login = (email, password) => signInWithEmailAndPassword(auth, email, password)
         .then(() => {
+            showAlerts('Successfully logged', 'success')
             window.location.reload()
         })
         .catch((error) => {

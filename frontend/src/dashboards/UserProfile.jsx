@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useAuth } from '../api/AuthContext';
-import { Box, Button, Container, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Avatar, Paper, Typography } from '@mui/material';
+import { Box, Button, Container, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Avatar, Paper, Typography, CircularProgress } from '@mui/material';
 import { doc, setDoc, updateDoc } from 'firebase/firestore';
-import { db, storage } from '../api/firebase';
-import { updateEmail, updatePassword, updateProfile} from 'firebase/auth';
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { db, storage ,auth} from '../api/firebase';
+import { updateEmail, updatePassword, updateProfile } from 'firebase/auth';
+import { getDownloadURL, ref,  uploadBytesResumable } from 'firebase/storage';
 
 const Profile = () => {
   const { user } = useAuth();
@@ -12,7 +12,9 @@ const Profile = () => {
   return (
     <Grid container spacing={2} mt={2}>
       <Grid container justifyContent="center" alignItems="center">
-        <Avatar alt="Profile Picture" src={user.photoUrl || sessionStorage.getItem('pp')} sx={{ width: 150, height: 150 ,marginRight:'50px'}} />
+        <Grid item>
+          <Avatar alt="Profile Picture" src={user.photoUrl || sessionStorage.getItem('pp')} sx={{ width: 200, height: 200, marginRight: 10 }} />
+        </Grid>
         <Grid item>
           <TextField
             label="Name"
@@ -62,7 +64,7 @@ const ProfileSettings = () => {
   const [profile, setProfile] = useState({
     firstName: user?.firstName || '',
     lastName: user?.lastName || '',
-    displayName:user?.displayName||'',
+    displayName: user?.displayName || '',
     email: user?.email || '',
     phoneNumber: user?.phoneNumber || '',
     dateOfBirth: user?.dateOfBirth || '',
@@ -70,7 +72,10 @@ const ProfileSettings = () => {
     address: user?.address || '',
     gender: user?.gender || '',
   });
+  const [file, setFile] = useState(null)
   const [edit, setEdit] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -88,6 +93,12 @@ const ProfileSettings = () => {
     }));
   };
 
+  const handleChange = (e) => {
+    if (e.target.files[0]) {
+      setFile(e.target.files[0]);
+    }
+  };
+
   const handleEditProfile = () => {
     setEdit(true);
   };
@@ -95,12 +106,14 @@ const ProfileSettings = () => {
   const handleSubmit = async () => {
     try {
       await setDoc(doc(db, 'systemusers', user.uid), profile);
-      await updateProfile(user,{
-        displayName:profile.displayName,
+      await updateProfile(user, {
+        displayName: profile.displayName,
       })
       setEdit(false);
     } catch (error) {
       console.error("Error updating profile: ", error);
+    } finally {
+      setEdit(false)
     }
   };
 
@@ -108,18 +121,42 @@ const ProfileSettings = () => {
     setEdit(false);
   };
 
-  const uploadPP = async(file)=>{
-    try{
-      const storePath = ref(storage,`${user.uid}/pp/${file.name}`);
-      const snapshot=await uploadBytes(storePath,file);
-      const storedURL = await getDownloadURL(snapshot.ref);
-      await updateProfile(user,{
-        photoURL:storedURL
-      })
-    }catch(e){
-      console.log("upload error pp :"+e)
+  const uploadPP = async () => {
+    if (!file) return;
+    try {
+      if (!file) return;
+    
+      setLoading(true);
+  
+      const storageRef = ref(storage, `${user.uid}/profile_pictures/${file.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+  
+      uploadTask.on('state_changed', 
+        (snapshot) => {
+          // Progress function
+          const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+          setProgress(progress);
+        }, 
+        (error) => {
+          console.error(error);
+          setLoading(false);
+        }, 
+        () => {
+          // Complete function
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            updateProfile(auth.currentUser,{
+              photoURL:downloadURL
+            })
+            setLoading(false);
+            sessionStorage.setItem('pp',downloadURL)
+          });
+        }
+      );
+    } catch (e) {
+      console.log("upload error pp :" + e)
     }
   }
+  console.log(user.photoUrl)
   const width = '17.5vw';
 
   return (
@@ -178,6 +215,45 @@ const ProfileSettings = () => {
               ))}
             </Select>
           </FormControl>
+          <Box>
+            <input
+              accept="file/*"
+              style={{ display: 'none' }}
+              id="contained-button-file"
+              type="file"
+              onChange={handleChange}
+            />
+            <label htmlFor="contained-button-file">
+              <Button variant="contained" component="span">
+                Upload Profile Picture
+              </Button>
+            </label>
+            {file && (
+              <TextField
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                disabled
+                value={file.name}
+              />
+            )}
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={uploadPP}
+              disabled={loading}
+            >
+              {loading ? <CircularProgress size={24} /> : 'Upload'}
+            </Button>
+
+            {loading && <p>Uploading: {progress}%</p>}
+
+            {user.photoURL && (
+              <div>
+                <p>Profile Picture Uploaded Successfully</p>
+              </div>
+            )}
+          </Box>
         </Box>
         <Box>
           <Typography>Contact details</Typography>
@@ -235,7 +311,7 @@ const AccountSettings = () => {
   const [email, setEmail] = useState({ old: '', new: '', confirm: '' });
   const [phoneNumber, setPhoneNumber] = useState({ old: '', new: '', confirm: '' });
   const [password, setPassword] = useState({ old: '', new: '', confirm: '' });
-  const [role,setRole]=useState('')
+  const [role, setRole] = useState('')
 
   const handleInputChange = (setter) => (e) => {
     const { name, value } = e.target;
@@ -296,9 +372,9 @@ const AccountSettings = () => {
 
   return (
     <>
-    <Box display='flex' justifyContent='center'>
-    <Typography variant="h5">Account Settings</Typography>
-    </Box>      
+      <Box display='flex' justifyContent='center'>
+        <Typography variant="h5">Account Settings</Typography>
+      </Box>
       <Box
         component="form"
         sx={{
@@ -316,7 +392,7 @@ const AccountSettings = () => {
               onChange={handleSelectChange}
               label="Gender"
             >
-              {['Seller','Renter','Buyer'].map((roleOption, index) => (
+              {['Seller', 'Renter', 'Buyer'].map((roleOption, index) => (
                 <MenuItem key={index} value={roleOption}>{roleOption}</MenuItem>
               ))}
             </Select>

@@ -7,9 +7,9 @@ import { countservices ,fetchServices} from '../../api/db/services';
 import { fetchContactUsResponsesList } from '../../api/db/contactus';
 
 export default function AdminOverview() {
-    const [userCount, setUserCount] = React.useState(0);
-    const [sellerCount, setSellerCount] = React.useState(0);
-    const [renterCount, setRenterCount] = React.useState(0);
+    const [adminCount, setadminCount] = React.useState(0);
+    const [merchantCount, setmerchantCount] = React.useState(0);
+    const [customerCount, setcustomerCount] = React.useState(0);
     const [productCount, setProductCount] = React.useState(0);
     const [serviceCount, setServiceCount] = React.useState(0);
 
@@ -20,9 +20,9 @@ export default function AdminOverview() {
             const renters = await countRenters();
             const products = await countProducts();
             const services = await countservices();
-            setUserCount(users);
-            setSellerCount(sellers);
-            setRenterCount(renters);
+            setadminCount(users);
+            setmerchantCount(sellers);
+            setcustomerCount(renters);
             setProductCount(products);
             setServiceCount(services);
         };
