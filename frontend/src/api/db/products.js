@@ -42,6 +42,7 @@ const updateProduct = async (id, updatedProduct) => {
 // Fetching all products
 const fetchProducts = async () => {
     try {
+        //if()
         const qSnapshot = await getDocs(productRef);
         const productList = qSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         return productList;
@@ -51,7 +52,7 @@ const fetchProducts = async () => {
 };
 
 const fetchProductsToHome = async () => {
-    const proQuery = query(collection(db, 'products'), orderBy('timestamp', 'asc'), limit(3))
+    const proQuery = query(productRef, orderBy('timestamp', 'asc'), limit(3))
     try {
         const snapshot = await getDocs(proQuery)
         const productList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
