@@ -35,30 +35,30 @@ export default function AdminOverview() {
                 <Grid item xs={12} md={3}>
                     <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: 150 }}>
                         <Typography variant="h6" gutterBottom>
-                            Total Users
+                            Total Admins
                         </Typography>
                         <Typography variant="h4">
-                            {userCount}
+                            {adminCount}
                         </Typography>
                     </Paper>
                 </Grid>
                 <Grid item xs={12} md={3}>
                     <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: 150 }}>
                         <Typography variant="h6" gutterBottom>
-                            Total Sellers
+                            Total Merchants
                         </Typography>
                         <Typography variant="h4">
-                            {sellerCount}
+                            {merchantCount}
                         </Typography>
                     </Paper>
                 </Grid>
                 <Grid item xs={12} md={3}>
                     <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: 150 }}>
                         <Typography variant="h6" gutterBottom>
-                            Total Renters
+                            Total Customers
                         </Typography>
                         <Typography variant="h4">
-                            {renterCount}
+                            {customerCount}
                         </Typography>
                     </Paper>
                 </Grid>
