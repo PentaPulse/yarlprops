@@ -21,7 +21,6 @@ export const AuthProvider = ({ children }) => {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
             if (currentUser) {
                 try {
-                    // Get the user document using the UID
                     const userDocRef = doc(db, 'systemusers', currentUser.uid);
                     const userDoc = await getDoc(userDocRef);
                     if (userDoc.exists()) {
