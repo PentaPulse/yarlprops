@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { useAuth } from '../api/AuthContext';
 import { Box, Button, Container, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Avatar, Paper, Typography } from '@mui/material';
 import { doc, setDoc, updateDoc } from 'firebase/firestore';
-import { db } from '../api/firebase';
+import { db, storage } from '../api/firebase';
 import { updateEmail, updatePassword, updateProfile} from 'firebase/auth';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
 const Profile = () => {
   const { user } = useAuth();
@@ -107,6 +108,18 @@ const ProfileSettings = () => {
     setEdit(false);
   };
 
+  const uploadPP = async(file)=>{
+    try{
+      const storePath = ref(storage,`${user.uid}/pp/${file.name}`);
+      const snapshot=await uploadBytes(storePath,file);
+      const storedURL = await getDownloadURL(snapshot.ref);
+      await updateProfile(user,{
+        photoURL:storedURL
+      })
+    }catch(e){
+      console.log("upload error pp :"+e)
+    }
+  }
   const width = '17.5vw';
 
   return (
