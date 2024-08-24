@@ -16,6 +16,7 @@ import ViewService from "./pages/Services/ViewService";
 import NavigationBar from "./components/NavigationBar/NavigationBar";
 import Footer from "./components/Footer/Footer";
 import { Box } from "@mui/material";
+import AdminLogin from "./dashboards/Admin/AdminLogin";
 
 const lightTheme = createTheme({
   palette: {
@@ -90,6 +91,7 @@ function Routings({ handleMode }) {
           <Route path="/" element={<PageLayout handleMode={handleMode} />} />
           <Route path="/p/*" element={<PageLayout handleMode={handleMode} />} />
           <Route path="/d/*" element={<DashboardLayout handleMode={handleMode} />} />
+          <Route path="/adminLogin" element={<AdminLogin handleMode={handleMode}/>}/>
         </Routes>
       </AuthProvider>
     </>

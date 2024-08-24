@@ -45,6 +45,43 @@ export const registerUser = async (uid, fname, lname, dname, email) => {
     }
 };
 
+//register admin
+export const registerAdmin = async (uid, fname, lname, dname, email) => {
+    try {
+        // Ensure all required fields are provided
+        if (!uid || !email) {
+            throw new Error('Missing required user information');
+        }
+
+        const newUserRef = doc(db, "admins", uid);
+        const userSnap = await getDoc(newUserRef);
+
+        if (!userSnap.exists()) {
+            await setDoc(newUserRef, {
+                uid,
+                firstName: fname || '',
+                lastName: lname || '',
+                displayName: dname || '',
+                email:email,
+                phoneNumber: '',
+                gender: '',
+                profilePicture: '',
+                address: ''
+            });
+            console.log("User registered successfully");
+            return { success: true, message: 'User registered successfully' };
+        } else {
+            console.log("User already exists");
+            return { success: false, message: 'User already exists' };
+        }
+    } catch (e) {
+        const eMsg = e.message;
+        const eCode = e.code || 'unknown_error';
+
+        console.log(`${eCode}: ${eMsg}`);
+        return { success: false, message: `${eCode}: ${eMsg}` };
+    }
+};
 // fetching lists
 export const fetchUserList = async () => {
     try {

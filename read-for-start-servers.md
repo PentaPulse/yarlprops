@@ -15,6 +15,6 @@ Alternative
 run the run_emulator.sh in bash
 ./run_emulator.sh
 
-while script is executed run "firebase emulators:export ./data" to export from emulators
+while script is executed , run "firebase emulators:export ./data" to export from emulators
 
 Note : export must done while emulator running 

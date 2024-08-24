@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Grid, Paper, Typography, Table, TableHead, TableRow, TableCell, TableBody, TableContainer } from '@mui/material';
+import { Box, Grid, Paper, Typography, Table, TableHead, TableRow, TableCell, TableBody, TableContainer, Button } from '@mui/material';
 import { countRenters, countSellers, countUsers, fetchUserList} from '../../api/db/users';
 import { countProducts ,fetchProducts} from '../../api/db/products';
 import { countservices ,fetchServices} from '../../api/db/services';
@@ -107,7 +107,7 @@ function UsersTable() {
         fetchData();
     }, []);
 
-    const cols = ["No", "Name", "Email", "Role"]
+    const cols = ["No", "Name", "Email", "Role","Action"]
     return (
         <>
             <Typography variant="h6" gutterBottom>
@@ -130,7 +130,7 @@ function UsersTable() {
                                     <TableCell>{usr.fname + ' ' + usr.lname}</TableCell>
                                     <TableCell>{usr.email}</TableCell>
                                     <TableCell>{usr.role}</TableCell>
-
+                                    <TableCell><Button variant='primary' >Assign</Button></TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

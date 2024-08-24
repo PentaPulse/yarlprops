@@ -32,10 +32,6 @@ const AdminUsers = () => {
     const [newUser, setNewUser] = useState({ id: '', name: '', email: '', phone: '', address: '', status: 'Active' });
     const [selectedUser, setSelectedUser] = useState(null);
 
-    const handleAddUser = () => {
-        setOpen(true);
-    };
-
     const handleClose = () => {
         setOpen(false);
         setNewUser({ id: '', name: '', email: '', phone: '', address: '', status: 'Active' });
@@ -67,37 +63,32 @@ const AdminUsers = () => {
         setRows(rows.filter(row => row.id !== rowId));
     };
 
-    useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const q = query(collection(db, "systemusers"), where('role', '!=', 'admin'))
-                const qSnapshot = await getDocs(q)
-                if (!qSnapshot.empty) {
-                    const userList = qSnapshot.docs.map(doc => doc.data());
-                    setUsers(userList)
-                }
-            } catch (e) {
-                console.log(e)
+
+    const fetchUsers = async () => {
+        try {
+            const q = query(collection(db, "systemusers"),where('role','!=','admin'),where())
+            const qSnapshot = await getDocs(q)
+            if (!qSnapshot.empty) {
+                const userList = qSnapshot.docs.map(doc => doc.data());
+                setUsers(userList)
             }
+        } catch (e) {
+            console.log(e)
         }
+    }
+    useEffect(() => {
         fetchUsers()
     }, [])
+
+    const handleAssign = () => {
+
+    }
 
     return (
         <Box sx={{ textAlign: 'center', margin: 'auto' }}>
             <Grid container alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
                 <Grid item sx={{ mt: 5 }}>
                     <h1>Users</h1>
-                </Grid>
-                <Grid item sx={{ ml: 50, mt: 5 }}>
-                    <Button
-                        variant="contained"
-                        sx={{ backgroundColor: 'green', color: 'white' }}
-                        startIcon={<AddIcon />}
-                        onClick={handleAddUser}
-                    >
-                        Add User
-                    </Button>
                 </Grid>
             </Grid>
             <Paper sx={{ width: '100%', mb: 4 }}>
@@ -133,7 +124,8 @@ const AdminUsers = () => {
                                     </TableCell>
                                     <TableCell>
                                         <Box display="flex" gap={1}>
-                                            <Button variant="outlined" color="secondary" size="small">View</Button>
+                                            <Button variant="outlined" color="primary" size="small" onClick={handleAssign}>Assign</Button>
+                                            <Button variant="outlined" color="secondary" size="small" onClick={handleView}>View</Button>
                                             <Button variant="outlined" color="error" size="small" >Delete</Button>
                                         </Box>
                                     </TableCell>
@@ -193,52 +185,7 @@ const AdminUsers = () => {
                         p: 4
                     }}
                 >
-                    <Typography id="add-user-modal-title" variant="h6" component="h2">
-                        Add New User
-                    </Typography>
-                    <TextField
-                        fullWidth
-                        margin="normal"
-                        name="name"
-                        label="Name"
-                        value={newUser.name}
-                        onChange={handleInputChange}
-                    />
-                    <TextField
-                        fullWidth
-                        margin="normal"
-                        name="email"
-                        label="Email"
-                        value={newUser.email}
-                        onChange={handleInputChange}
-                    />
-                    <TextField
-                        fullWidth
-                        margin="normal"
-                        name="phone"
-                        label="Phone"
-                        value={newUser.phone}
-                        onChange={handleInputChange}
-                    />
-                    <TextField
-                        fullWidth
-                        margin="normal"
-                        name="address"
-                        label="Address"
-                        value={newUser.address}
-                        onChange={handleInputChange}
-                    />
-                    <TextField
-                        fullWidth
-                        margin="normal"
-                        name="status"
-                        label="Status"
-                        value={newUser.status}
-                        onChange={handleInputChange}
-                    />
-                    <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
-                        Add User
-                    </Button>
+
                 </Box>
             </Modal>
 
@@ -266,10 +213,10 @@ const AdminUsers = () => {
                             User Details
                         </Typography>
                         <Typography id="view-user-modal-description" sx={{ mt: 2 }}>
-                            <strong>Id:</strong> {selectedUser.id}
+                            <strong>Id:</strong> {selectedUser.uid}
                         </Typography>
                         <Typography id="view-user-modal-description" sx={{ mt: 2 }}>
-                            <strong>Name:</strong> {selectedUser.name}
+                            <strong>Name:</strong> {selectedUser.dname}
                         </Typography>
                         <Typography id="view-user-modal-description" sx={{ mt: 2 }}>
                             <strong>Email:</strong> {selectedUser.email}
@@ -281,7 +228,7 @@ const AdminUsers = () => {
                             <strong>Address:</strong> {selectedUser.address}
                         </Typography>
                         <Typography id="view-user-modal-description" sx={{ mt: 2 }}>
-                            <strong>Status:</strong> {selectedUser.status}
+                            <strong>Status:</strong> {selectedUser.role}
                         </Typography>
                         <Button onClick={handleViewClose} variant="contained" color="primary" sx={{ mt: 2 }}>
                             Close
