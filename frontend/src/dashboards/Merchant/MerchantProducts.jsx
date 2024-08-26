@@ -1,11 +1,67 @@
-import React from 'react'
+import React, { useState } from 'react';
+import ProductList from '../Products/ProductList';
+import ProductDetail from '../Products/ProductDetail';
+import ProductForm from '../Products/ProductForm';
+import { Container, Button } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 
-function MerchantProducts() {
+const MerchantProducts = () => {
+  const [showAddProduct, setShowAddProduct] = useState(false);
+  const [editingProductId, setEditingProductId] = useState(null);
+  const [viewingProductId, setViewingProductId] = useState(null);
+
+  const handleAddProduct = () =>{
+    setEditingProductId(null);
+    setShowAddProduct(true);
+    setViewingProductId(null);
+  }
+
+  const handleEditProduct = (productId) => {
+    setEditingProductId(productId);
+    setShowAddProduct(true);
+    setViewingProductId(null);
+  }
+
+  const handleViewProduct = (productId) => {
+    setViewingProductId(productId);
+    setShowAddProduct(false);
+  }
+
+  const handleSuccess = () => {
+    setShowAddProduct(false);
+    setViewingProductId(null);
+  };
+
+  const handleCancel = () => {
+    setShowAddProduct(false);
+    setViewingProductId(null);
+  };
+
   return (
-    <div>
-      M p
-    </div>
-  )
-}
+    <>
+      <h2>PRODUCTS</h2>
 
-export default MerchantProducts
+      <Button
+        variant="contained"
+        color="success"
+        startIcon={<AddIcon />}
+        onClick={handleAddProduct}
+        style={{ margin: '20px' }}
+      >
+        Add Product
+      </Button>
+      
+      <Container>
+        {showAddProduct ? (
+          <ProductForm pid={editingProductId} onSuccess={handleSuccess} onCancel={handleCancel} />
+        ) : viewingProductId? (
+          <ProductDetail pid={viewingProductId} onBack={handleCancel} />
+        ):(
+          <ProductList onEditProduct={handleEditProduct} onViewProduct={handleViewProduct}/>
+        )}
+      </Container>
+    </>
+  );
+};
+
+export default MerchantProducts;
