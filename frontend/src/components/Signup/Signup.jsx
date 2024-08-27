@@ -48,6 +48,16 @@ export function Login({ closeBox }) {
         }
     };
 
+    const handleKeyDown = (event) => {
+        if(event.key==='Enter'){
+            
+        console.log(event)
+            event.preventDefault()
+            handleLogin()
+        }
+    }
+
+
     return (
         <div className="d-flex flex-column gap-2">
             <h2>Welcome to YarlProps</h2>
@@ -93,6 +103,7 @@ export function Login({ closeBox }) {
                             </InputAdornment>
                         }
                         label="Password"
+                        onKeyDown={(event) => handleKeyDown(event)}
                     />
                 </FormControl>
                 <Typography
@@ -104,7 +115,7 @@ export function Login({ closeBox }) {
             </div>
             <div className="text-center">
                 <ButtonGroup aria-label="Vertical button group" className="gap-3">
-                    <Button variant="contained" onClick={handleLogin}>
+                    <Button variant="contained" onClick={handleLogin} >
                         Sign in
                     </Button>
                 </ButtonGroup>
