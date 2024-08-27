@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { useAuth } from '../api/AuthContext';
 import { Box, Button, Container, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Avatar, Paper, Typography, CircularProgress } from '@mui/material';
 import { doc, setDoc, updateDoc } from 'firebase/firestore';
-import { db, storage ,auth} from '../api/firebase';
+import { db, storage, auth } from '../api/firebase';
 import { updateEmail, updatePassword, updateProfile } from 'firebase/auth';
-import { getDownloadURL, ref,  uploadBytesResumable } from 'firebase/storage';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 
 const Profile = () => {
   const { user } = useAuth();
@@ -107,7 +107,7 @@ const ProfileSettings = () => {
     try {
       await setDoc(doc(db, 'systemusers', user.uid), profile);
       await updateProfile(user, {
-        displayName: profile.displayName,
+        displayName: profile.displayName
       })
       setEdit(false);
     } catch (error) {
@@ -125,30 +125,31 @@ const ProfileSettings = () => {
     if (!file) return;
     try {
       if (!file) return;
-    
+
       setLoading(true);
-  
+
       const storageRef = ref(storage, `${user.uid}/profile_pictures/${file.name}`);
       const uploadTask = uploadBytesResumable(storageRef, file);
-  
-      uploadTask.on('state_changed', 
+
+      uploadTask.on('state_changed',
         (snapshot) => {
           // Progress function
           const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
           setProgress(progress);
-        }, 
+        },
         (error) => {
           console.error(error);
           setLoading(false);
-        }, 
+        },
         () => {
           // Complete function
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            updateProfile(auth.currentUser,{
-              photoURL:downloadURL
+            updateProfile(auth.currentUser, {
+              photoURL: downloadURL
             })
             setLoading(false);
-            sessionStorage.setItem('pp',downloadURL)
+            sessionStorage.setItem('pp', downloadURL)
+            window.location.reload()
           });
         }
       );
@@ -191,6 +192,15 @@ const ProfileSettings = () => {
             }}
           />
           <TextField
+            label="Display name"
+            name="displayname"
+            value={profile.displayName}
+            onChange={handleInputChange}
+            InputProps={{
+              readOnly: !edit,
+            }}
+          />
+          <TextField
             label="Date of Birth"
             name="dateOfBirth"
             type="date"
@@ -215,20 +225,23 @@ const ProfileSettings = () => {
               ))}
             </Select>
           </FormControl>
+        </Box>
+        <Box>
+          <Typography>Profile picture</Typography>
           <Box>
-            <input
-              accept="file/*"
-              style={{ display: 'none' }}
-              id="contained-button-file"
-              type="file"
-              onChange={handleChange}
-            />
-            <label htmlFor="contained-button-file">
-              <Button variant="contained" component="span">
-                Upload Profile Picture
-              </Button>
-            </label>
-            {file && (
+            {!file ? <>
+              <input
+                accept="file/*"
+                style={{ display: 'none' }}
+                id="contained-button-file"
+                type="file"
+                onChange={handleChange}
+              />
+              <label htmlFor="contained-button-file">
+                <Button variant="contained" component="span">
+                  Upload Profile Picture
+                </Button>
+              </label></> : <>
               <TextField
                 variant="outlined"
                 fullWidth
@@ -236,26 +249,26 @@ const ProfileSettings = () => {
                 disabled
                 value={file.name}
               />
-            )}
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={uploadPP}
-              disabled={loading}
-            >
-              {loading ? <CircularProgress size={24} /> : 'Upload'}
-            </Button>
 
-            {loading && <p>Uploading: {progress}%</p>}
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={uploadPP}
+                disabled={loading}
+              >
 
-            {user.photoURL && (
-              <div>
-                <p>Profile Picture Uploaded Successfully</p>
-              </div>
-            )}
+                {loading ? <CircularProgress size={24} /> : 'Upload'}
+              </Button>
+
+              {loading && <p>Uploading: {progress}%</p>}
+
+              {progress === 100 && (
+                <div>
+                  <p>Profile Picture Uploaded Successfully</p>
+                </div>
+              )}</>
+            }
           </Box>
-        </Box>
-        <Box>
           <Typography>Contact details</Typography>
           <TextField
             label="Email"
@@ -321,6 +334,9 @@ const AccountSettings = () => {
     }));
   };
 
+  const changeRole=async()=>{
+    
+  }
   const changeEmail = async () => {
     if (email.new !== email.confirm) {
       alert("New email and confirm email do not match");
@@ -397,6 +413,9 @@ const AccountSettings = () => {
               ))}
             </Select>
           </FormControl>
+          <Container sx={{ display: 'flex', justifyContent: 'end', marginTop: '20px' }}>
+            <Button variant="contained" fullWidth color="primary" onClick={changeRole}>Change Role</Button>
+          </Container>
         </Box>
         <Box>
           <Typography variant="h6">Change Email</Typography>
@@ -419,7 +438,7 @@ const AccountSettings = () => {
             onChange={handleInputChange(setEmail)}
           />
           <Container sx={{ display: 'flex', justifyContent: 'end', marginTop: '20px' }}>
-            <Button variant="contained" color="primary" onClick={changeEmail}>Change Email</Button>
+            <Button variant="contained" fullWidth color="primary" onClick={changeEmail}>Change Email</Button>
           </Container>
         </Box>
         <Box>
@@ -443,7 +462,7 @@ const AccountSettings = () => {
             onChange={handleInputChange(setPhoneNumber)}
           />
           <Container sx={{ display: 'flex', justifyContent: 'end', marginTop: '20px' }}>
-            <Button variant="contained" color="primary" onClick={changePhonenumber}>Change Phone Number</Button>
+            <Button variant="contained" fullWidth color="primary" onClick={changePhonenumber}>Change Phone Number</Button>
           </Container>
         </Box>
         <Box>
@@ -470,7 +489,7 @@ const AccountSettings = () => {
             onChange={handleInputChange(setPassword)}
           />
           <Container sx={{ display: 'flex', justifyContent: 'end', marginTop: '20px' }}>
-            <Button variant="contained" color="primary" onClick={changePassword}>Change Password</Button>
+            <Button variant="contained" fullWidth color="primary" onClick={changePassword}>Change Password</Button>
           </Container>
         </Box>
       </Box>

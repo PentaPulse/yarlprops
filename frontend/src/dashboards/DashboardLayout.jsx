@@ -93,7 +93,11 @@ export default function DashboardLayout({ handleMode }) {
     const [open, setOpen] = React.useState(false);
     const { user } = useAuth()
     const theme = useTheme();
+    const [admin,setAdmin]=React.useState(false);
+    const [merchant,setMerchant]=React.useState(false)
     const navigate = useNavigate();
+
+
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -154,7 +158,7 @@ export default function DashboardLayout({ handleMode }) {
                     </DrawerHeader>
                     <Divider />
                     <List>
-                        {(user.role === 'admin' ? adminMenu : (user.role === 'merch' ? merchMenu : userMenu)).map((text, index) => (
+                        {(user.adminid ? adminMenu : (user.isMerchant === 'merch' ? merchMenu : userMenu)).map((text, index) => (
                             <ListItem key={text} disablePadding sx={{ display: 'block' }}>
                                 <ListItemButton
                                     sx={{
