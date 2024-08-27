@@ -10,7 +10,9 @@ const MerchantProducts = () => {
   const [editingProductId, setEditingProductId] = useState(null);
   const [viewingProductId, setViewingProductId] = useState(null);
 
-  const handleAddProduct = () =>{
+  const pros = []
+
+  const handleAddProduct = () => {
     setEditingProductId(null);
     setShowAddProduct(true);
     setViewingProductId(null);
@@ -37,31 +39,33 @@ const MerchantProducts = () => {
     setViewingProductId(null);
   };
 
-  return (
-    <>
-      <h2>PRODUCTS</h2>
+return (
+  <>
+    <h2>PRODUCTS</h2>
 
-      <Button
-        variant="contained"
-        color="success"
-        startIcon={<AddIcon />}
-        onClick={handleAddProduct}
-        style={{ margin: '20px' }}
-      >
-        Add Product
-      </Button>
-      
-      <Container>
-        {showAddProduct ? (
+    <Button
+      variant="contained"
+      color="success"
+      startIcon={<AddIcon />}
+      onClick={handleAddProduct}
+      style={{ margin: '20px' }}
+    >
+      Add Product
+    </Button>
+
+    <Container>
+      {pros.length > 0 ? (
+        showAddProduct ? (
           <ProductForm pid={editingProductId} onSuccess={handleSuccess} onCancel={handleCancel} />
-        ) : viewingProductId? (
+        ) : viewingProductId ? (
           <ProductDetail pid={viewingProductId} onBack={handleCancel} />
-        ):(
-          <ProductList onEditProduct={handleEditProduct} onViewProduct={handleViewProduct}/>
-        )}
-      </Container>
-    </>
-  );
+        ) : (
+          <ProductList onEditProduct={handleEditProduct} onViewProduct={handleViewProduct} />
+        )
+      ) : null}
+    </Container>
+  </>
+);
 };
 
 export default MerchantProducts;
