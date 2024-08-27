@@ -94,6 +94,7 @@ export const fetchUserList = async () => {
     }
 }
 
+
 //counts
 async function countUsersFromRef(Ref) {
     try {
@@ -105,9 +106,14 @@ async function countUsersFromRef(Ref) {
     }
 }
 
-export const countUsers = async () => {
-    const usersRef = collection(db, 'systemusers');
-    return await countUsersFromRef(usersRef);
+export const countAdmins=async()=>{
+    const q = query(collection(db,'admins'))
+    return await countUsersFromRef(q)
+}
+
+export const countUsers = async (isMerchant) => {
+    const q = query(collection(db, 'systemusers'),where('isMerchant','==',isMerchant));
+    return await countUsersFromRef(q);
 };
 
 export const countSellers = async () => {

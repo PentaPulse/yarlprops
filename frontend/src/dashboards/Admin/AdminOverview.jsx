@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Grid, Paper, Typography, Table, TableHead, TableRow, TableCell, TableBody, TableContainer, Button } from '@mui/material';
-import { countRenters, countSellers, countUsers, fetchUserList} from '../../api/db/users';
+import { countAdmins, countUsers, fetchUserList} from '../../api/db/users';
 import { countProducts ,fetchProducts} from '../../api/db/products';
 import { countservices ,fetchServices} from '../../api/db/services';
 //import axios from 'axios';
@@ -12,18 +12,21 @@ export default function AdminOverview() {
     const [customerCount, setcustomerCount] = React.useState(0);
     const [productCount, setProductCount] = React.useState(0);
     const [serviceCount, setServiceCount] = React.useState(0);
+    const [rentalCount,setRentalCount]=React.useState(0);
 
     React.useEffect(() => {
         const fetchCounts = async () => {
-            const users = await countUsers();
-            const sellers = await countSellers();
-            const renters = await countRenters();
+            const admins = await countAdmins();
+            const merchants = await countUsers(true); //ismerchant
+            const customers = await countUsers(false);//ismerchant
             const products = await countProducts();
+           // const rentals = await countRentals();
             const services = await countservices();
-            setadminCount(users);
-            setmerchantCount(sellers);
-            setcustomerCount(renters);
+            setadminCount(admins);
+            setmerchantCount(merchants);
+            setcustomerCount(customers);
             setProductCount(products);
+            setRentalCount(3);
             setServiceCount(services);
         };
 
@@ -62,6 +65,8 @@ export default function AdminOverview() {
                         </Typography>
                     </Paper>
                 </Grid>
+                </Grid>
+                <Grid container spacing={3} mt={2}>
                 <Grid item xs={12} md={3}>
                     <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: 150 }}>
                         <Typography variant="h6" gutterBottom>
@@ -69,6 +74,16 @@ export default function AdminOverview() {
                         </Typography>
                         <Typography variant="h4">
                             {productCount}
+                        </Typography>
+                    </Paper>
+                </Grid>
+                <Grid item xs={12} md={3}>
+                    <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: 150 }}>
+                        <Typography variant="h6" gutterBottom>
+                            Total Rentals
+                        </Typography>
+                        <Typography variant="h4">
+                            {rentalCount}
                         </Typography>
                     </Paper>
                 </Grid>
@@ -90,6 +105,12 @@ export default function AdminOverview() {
                 </Grid>
                 <Grid item xs={12}>
                     <ProductsTable />
+                </Grid>
+                <Grid item xs={12}>
+                    <RentalsTable />
+                </Grid>
+                <Grid item xs={12}>
+                    <ServicesTable />
                 </Grid>
             </Grid>
         </Box>
@@ -129,7 +150,7 @@ function UsersTable() {
                                     <TableCell>{index + 1}</TableCell>
                                     <TableCell>{usr.fname + ' ' + usr.lname}</TableCell>
                                     <TableCell>{usr.email}</TableCell>
-                                    <TableCell>{usr.role}</TableCell>
+                                    <TableCell>{usr.isMerchant?'Merchant':'Customer'}</TableCell>
                                     <TableCell><Button variant='primary' >Assign</Button></TableCell>
                                 </TableRow>
                             ))}
@@ -210,12 +231,12 @@ function ContactResponsesTable() {
 }
 
 function ProductsTable() {
-    const [products, setProducts] = React.useState([]);
+    const [products, setServices] = React.useState([]);
 
     React.useEffect(() => {
         async function fetchData() {
             const data = await fetchProducts();
-            setProducts(data);
+            setServices(data);
         }
         fetchData();
     }, []);
@@ -236,7 +257,8 @@ function ProductsTable() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {products.slice(0,5).map((pro, index) => (
+                            {products.length>0?(
+                            products.slice(0,5).map((pro, index) => (
                                 <TableRow>
                                     <TableCell>{index + 1}</TableCell>
                                     <TableCell>{pro.name}</TableCell>
@@ -244,7 +266,109 @@ function ProductsTable() {
                                     <TableCell>{pro.price}</TableCell>
 
                                 </TableRow>
-                            ))}
+                            ))):(                                
+                                <TableRow>
+                                    <TableCell colSpan={cols.length}>No data available</TableCell>
+                                </TableRow>
+                            )}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Paper>
+        </>
+    );
+}
+
+function RentalsTable() {
+    const [rentals, setRentals] = React.useState([]);
+
+    React.useEffect(() => {
+        async function fetchData() {
+            const data = await fetchProducts();
+            setRentals(data);
+        }
+        fetchData();
+    }, []);
+    const cols = ["No", "Name", "Category", "Price"]
+    return (
+        <>
+            <Typography variant="h6" gutterBottom>
+                Rentals
+            </Typography>
+            <Paper sx={{ width: '100%', mb: 4 }}>
+                <TableContainer sx={{ maxHeight: 450 }}>
+                    <Table stickyHeader>
+                        <TableHead>
+                            <TableRow>
+                                {cols.map((column) => (
+                                    <TableCell style={{ backgroundColor: 'black', color: 'white' }} >{column}</TableCell>
+                                ))}
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {rentals.length>0?(
+                            rentals.slice(0,5).map((rental, index) => (
+                                <TableRow>
+                                    <TableCell>{index + 1}</TableCell>
+                                    <TableCell>{rental.name}</TableCell>
+                                    <TableCell>{rental.type}</TableCell>
+                                    <TableCell>{rental.price}</TableCell>
+
+                                </TableRow>
+                            ))):(                                
+                                <TableRow>
+                                    <TableCell colSpan={cols.length}>No data available</TableCell>
+                                </TableRow>
+                            )}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Paper>
+        </>
+    );
+}
+
+function ServicesTable() {
+    const [services, setServices] = React.useState([]);
+
+    React.useEffect(() => {
+        async function fetchData() {
+            const data = await fetchServices();
+            setServices(data);
+        }
+        fetchData();
+    }, []);
+    const cols = ["No", "Name", "Category", "Price"]
+    return (
+        <>
+            <Typography variant="h6" gutterBottom>
+                Services
+            </Typography>
+            <Paper sx={{ width: '100%', mb: 4 }}>
+                <TableContainer sx={{ maxHeight: 450 }}>
+                    <Table stickyHeader>
+                        <TableHead>
+                            <TableRow>
+                                {cols.map((column) => (
+                                    <TableCell style={{ backgroundColor: 'black', color: 'white' }} >{column}</TableCell>
+                                ))}
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {services.length>0?(
+                            services.slice(0,5).map((service, index) => (
+                                <TableRow>
+                                    <TableCell>{index + 1}</TableCell>
+                                    <TableCell>{service.name}</TableCell>
+                                    <TableCell>{service.type}</TableCell>
+                                    <TableCell>{service.price}</TableCell>
+
+                                </TableRow>
+                            ))):(                                
+                                <TableRow>
+                                    <TableCell colSpan={cols.length}>No data available</TableCell>
+                                </TableRow>
+                            )}
                         </TableBody>
                     </Table>
                 </TableContainer>

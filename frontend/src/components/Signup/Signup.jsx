@@ -21,7 +21,7 @@ export function Login({ closeBox }) {
         e.preventDefault();
         try {
             await google();
-            closeBox();
+            window.location.reload()
         } catch (error) {
             console.error(error);
         }
@@ -34,7 +34,6 @@ export function Login({ closeBox }) {
             window.location.reload();
         } catch (error) {
             console.error(error);
-            // Consider adding user feedback here instead of just throwing the error
         }
     };
 
@@ -42,15 +41,13 @@ export function Login({ closeBox }) {
         e.preventDefault();
         try {
             await reset(email);
-            // Consider adding user feedback here to inform them that reset email has been sent
         } catch (error) {
             console.error(error);
         }
     };
 
     const handleKeyDown = (event) => {
-        if(event.key==='Enter'){
-            
+        if(event.key==='Enter'){            
         console.log(event)
             event.preventDefault()
             handleLogin()
@@ -142,7 +139,6 @@ export function Register() {
     const handleRegister = async (e) => {
         e.preventDefault();
         try {
-            //await axios.post('http://localhost:5000/api/u/signup',(firstName,lastName,displayName,role,email,password))
             await register(firstName, lastName, displayName, email, password);
             window.location.reload()
         } catch (error) {

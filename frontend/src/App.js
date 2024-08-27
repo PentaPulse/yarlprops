@@ -4,7 +4,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import AlertProvider from "./api/AlertService";
 import { AuthProvider } from "./api/AuthContext";
-//import PrivateRoute from "./api/PrivateRoute";
+import PrivateRoute from "./api/PrivateRoute";
 import DashboardLayout from "./dashboards/DashboardLayout";
 import Home from "./pages/Home/Home";
 //import Guide from "./pages/Guide/Guide";
@@ -17,6 +17,7 @@ import NavigationBar from "./components/NavigationBar/NavigationBar";
 import Footer from "./components/Footer/Footer";
 import { Box } from "@mui/material";
 import AdminLogin from "./dashboards/Admin/AdminLogin";
+import RentalsPage from "./pages/Rentals/Rental.pages";
 
 const lightTheme = createTheme({
   palette: {
@@ -90,7 +91,7 @@ function Routings({ handleMode }) {
         <Routes>
           <Route path="/" element={<PageLayout handleMode={handleMode} />} />
           <Route path="/p/*" element={<PageLayout handleMode={handleMode} />} />
-          <Route path="/d/*" element={<DashboardLayout handleMode={handleMode} />} />
+          <Route path="/d/*" element={<PrivateRoute><DashboardLayout handleMode={handleMode} /></PrivateRoute>} />
           <Route path="/adminLogin" element={<AdminLogin handleMode={handleMode}/>}/>
         </Routes>
       </AuthProvider>
@@ -107,7 +108,8 @@ function PageLayout({handleMode}) {
           <Route path="/" element={<Home />} />
           <Route path="products" element={<Products />} />
           <Route path="product/:id" element={<ProductPage />} />
-          <Route path="rentals" element={<Products />} />
+          <Route path="rentals" element={<RentalsPage />} />
+          <Route path="rentals/:id" element={<RentalsPage />} />
           <Route path="services" element={<Services />} />
           <Route path="service/:id" element={<ViewService />} />
           <Route path="contact" element={<Contact />} />

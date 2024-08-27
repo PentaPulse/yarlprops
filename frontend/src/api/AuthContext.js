@@ -22,8 +22,13 @@ export const AuthProvider = ({ children }) => {
             if (currentUser) {
                 try {
                     const userDocRef = doc(db, 'systemusers', currentUser.uid);
+                    const adminDocRef = doc(db,'admins',currentUser.uid);
+                    const adminDoc = await getDoc(adminDocRef)
                     const userDoc = await getDoc(userDocRef);
-                    if (userDoc.exists()) {
+                    if(adminDoc.exists()){
+                        setUser({ ...adminDoc.data(), ...currentUser})
+                    }
+                    else if (userDoc.exists()) {
                         setUser({ ...userDoc.data(), ...currentUser });
                     } else {
                         console.error('No such user document!');
