@@ -80,7 +80,6 @@ export const AuthProvider = ({ children }) => {
         .then((result) => {
             const user = result.user;
             registerUser(user.uid, '', '', user.displayName, user.email);
-            showAlerts('Successfully logged', 'success')
         })
         .catch(() => {
             showAlerts('Error occured , Try again with different gmail', 'error')
@@ -89,7 +88,6 @@ export const AuthProvider = ({ children }) => {
     const login = (email, password) => signInWithEmailAndPassword(auth, email, password)
         .then(() => {
             showAlerts('Successfully logged', 'success')
-            window.location.reload()
         })
         .catch((error) => {
             if (error.code === 'auth/invalid-email') {
