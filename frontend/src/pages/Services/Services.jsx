@@ -1,13 +1,11 @@
-import { Box, Button, Card, CardActionArea, CardActions, CardContent, CardMedia, CircularProgress, Container, Divider, FormControl, FormControlLabel, FormLabel, Grid, IconButton, Paper, Radio, RadioGroup, Slider, TextField, Typography } from '@mui/material';
-import { collection, getDoc, getDocs, query, where } from 'firebase/firestore';
+import { Box, Button, Card, CardActionArea,  CardContent, CardMedia, CircularProgress, Container, Divider, FormControl, FormControlLabel, FormLabel, Grid,  Paper, Radio, RadioGroup, Slider, TextField, Typography } from '@mui/material';
+import { collection,  getDocs, query, where } from 'firebase/firestore';
 import * as React from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { db } from '../../api/firebase';
 import DbError from '../../components/DbError/DbError';
 import { useTheme } from '@emotion/react';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { fetchSelectedService, fetchServices } from '../../api/db/services';
 import Carousel from 'react-material-ui-carousel';
 
@@ -16,7 +14,6 @@ export default function Services() {
     const [cat, setCat] = React.useState(null)
     const [subCat, setSubCat] = React.useState(null)
     const [priceRange, setPriceRange] = React.useState([0, 10000]);
-    const [quantity, setQuantity] = React.useState(1);
 
     const handleCategoryChange = (event) => {
         const value = event.target.value;
@@ -29,10 +26,6 @@ export default function Services() {
 
     const handlePriceRangeChange = (event, newValue) => {
         setPriceRange(newValue);
-    };
-
-    const handleQuantityChange = (event) => {
-        setQuantity(event.target.value);
     };
 
     return (

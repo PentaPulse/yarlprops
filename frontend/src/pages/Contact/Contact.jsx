@@ -11,6 +11,7 @@ import CardContent from '@mui/material/CardContent';
 import SendIcon from '@mui/icons-material/Send';
 import { keyframes } from '@mui/system';
 import { sendMessage } from '../../api/db/contactus';
+import { useAlerts } from '../../api/AlertService';
 //import axios from 'axios';
 //import { useAlerts } from '../../backend/AlertService';
 
@@ -29,7 +30,7 @@ function Contact() {
     email: '',
     message: '',
   })
-  //const { showAlerts } = useAlerts()
+  const  showAlerts  = useAlerts()
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -40,11 +41,10 @@ function Contact() {
     e.preventDefault();
     try {
       await sendMessage(details.firstName, details.lastName, details.email, details.message)
-      console.log('1')
+      showAlerts('Message sent ','success')
 
     } catch (error) {
       console.log(error)
-      //showAlerts('Try again', 'info');
     }
   };
   return (
