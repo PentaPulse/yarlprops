@@ -18,6 +18,7 @@ import Footer from "./components/Footer/Footer";
 import { Box } from "@mui/material";
 import AdminLogin from "./dashboards/Admin/AdminLogin";
 import RentalsPage from "./pages/Rentals/Rental.pages";
+import Rentals from "./pages/Rentals/Rental.pages";
 
 const lightTheme = createTheme({
   palette: {
@@ -108,7 +109,7 @@ function PageLayout({handleMode}) {
           <Route path="/" element={<Home />} />
           <Route path="products" element={<Products />} />
           <Route path="product/:id" element={<ProductPage />} />
-          <Route path="rentals" element={<RentalsPage />} />
+          <Route path="rentals" element={<Rentals />} />
           <Route path="rentals/:id" element={<RentalsPage />} />
           <Route path="services" element={<Services />} />
           <Route path="service/:id" element={<ViewService />} />

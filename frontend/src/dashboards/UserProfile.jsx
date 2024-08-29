@@ -402,13 +402,13 @@ const AccountSettings = () => {
         <Box>
           <Typography variant='h6'>Change role</Typography>
           <FormControl sx={{ m: 1, width: width }} >
-            <InputLabel>Gender</InputLabel>
+            <InputLabel>Role</InputLabel>
             <Select
               value={role}
               onChange={handleSelectChange}
               label="Gender"
             >
-              {['Seller', 'Renter', 'Buyer'].map((roleOption, index) => (
+              {['Merchant','Customer'].map((roleOption, index) => (
                 <MenuItem key={index} value={roleOption}>{roleOption}</MenuItem>
               ))}
             </Select>

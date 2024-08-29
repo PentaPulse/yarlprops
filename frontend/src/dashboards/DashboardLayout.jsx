@@ -93,11 +93,7 @@ export default function DashboardLayout({ handleMode }) {
     const [open, setOpen] = React.useState(false);
     const { user } = useAuth()
     const theme = useTheme();
-    const [admin,setAdmin]=React.useState(false);
-    const [merchant,setMerchant]=React.useState(false)
     const navigate = useNavigate();
-
-
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -225,7 +221,7 @@ export default function DashboardLayout({ handleMode }) {
                 <Grid item m='5vh 2vw 0 8vw'>
                     <Routes>
                         {/* Common */}
-                        <Route path='overview' element={user.role==='admin'?<AdminOverview />:user.role==='merch'?<MerchantOverview/>:<UserOverview/>} />
+                        <Route path='overview' element={user.adminid?<AdminOverview />:(user.isMerchant?<MerchantOverview/>:<UserOverview/>)} />
                         <Route path='profile' element={<Profile/>}/>
 
                         {/* Admin */}

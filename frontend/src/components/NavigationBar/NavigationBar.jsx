@@ -161,8 +161,8 @@ export default function NavigationBar({ handleMode }) {
                         ) : (
                             <>
                                 <ButtonGroup variant="text">
-                                    <Button sx={{ color: theme.palette.primary }} onClick={() => setSignin(true)}>Sign In</Button>
-                                    <Button sx={{ color: theme.palette.primary }} onClick={() => setSignup(true)}>Sign Up</Button>
+                                    <Button sx={{ color: theme.palette.primary }}/* onClick={() => setSignin(true)}*/>Sign In</Button>
+                                    <Button sx={{ color: theme.palette.primary }} /*onClick={() => setSignup(true)}*/>Sign Up</Button>
                                 </ButtonGroup>
                             </>
                         )}

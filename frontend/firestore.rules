@@ -20,5 +20,8 @@ service cloud.firestore {
     match /services/{serviceId}{
       allow read, write;
     }
+    match /rentals/{rentalId}{
+      allow read, write;
+    }
   }
 }

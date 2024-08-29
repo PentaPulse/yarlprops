@@ -42,11 +42,11 @@ function AdminLogin({ handleMode }) {
                 .then((result) => {
                     const admin = result.user;
                     showAlerts('Successfully logged', 'success')
+                    sessionStorage.setItem('pp',admin.photoURL)
                 })
-            //window.location.reload();
+            window.location.reload();
         } catch (error) {
             console.error(error);
-            // Consider adding user feedback here instead of just throwing the error
         }
     }
     const handleRegister = () => createUserWithEmailAndPassword(auth, remail, rpassword)

@@ -20,15 +20,14 @@ export const registerUser = async (uid, fname, lname, dname, email) => {
         if (!userSnap.exists()) {
             await setDoc(newUserRef, {
                 uid,
-                fname: fname || '',
-                lname: lname || '',
-                dname: dname || '',
+                firstName: fname || '',
+                lastName: lname || '',
                 email:email,
-                phone: '',
+                phoneNumber: '',
                 gender: '',
-                picture: '',
+                profilePicture: '',
                 address: '',
-                role:'customer'
+                isMerchant:false
             });
             console.log("User registered successfully");
             return { success: true, message: 'User registered successfully' };
@@ -58,15 +57,15 @@ export const registerAdmin = async (uid, fname, lname, dname, email) => {
 
         if (!userSnap.exists()) {
             await setDoc(newUserRef, {
-                uid,
+                adminid:uid,
                 firstName: fname || '',
                 lastName: lname || '',
-                displayName: dname || '',
                 email:email,
                 phoneNumber: '',
                 gender: '',
                 profilePicture: '',
-                address: ''
+                address: '',
+                approved:false
             });
             console.log("User registered successfully");
             return { success: true, message: 'User registered successfully' };

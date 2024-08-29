@@ -1,18 +1,21 @@
-import { Checkbox, FormControlLabel, FormGroup, Grid, TextField, Typography, Slider, Paper,  Divider } from '@mui/material';
+import { Radio, FormControlLabel,  Grid, TextField, Typography, Slider, Paper, Divider, FormControl, FormLabel, RadioGroup, Button } from '@mui/material';
 import * as React from 'react';
 import ProductsContents from './ProductsContents';
 
 function Products() {
     const [searchTerm, setSearchTerm] = React.useState('');
-    const [selectedCategories, setSelectedCategories] = React.useState([]);
+    const [cat,setCat]=React.useState(null)
+    const [subCat,setSubCat]=React.useState(null)
     const [priceRange, setPriceRange] = React.useState([0, 10000]);
     const [quantity, setQuantity] = React.useState(1);
 
     const handleCategoryChange = (event) => {
         const value = event.target.value;
-        setSelectedCategories((prev) =>
-            prev.includes(value) ? prev.filter((cat) => cat !== value) : [...prev, value]
-        );
+        setCat(value);
+    };
+    const handleSubCategoryChange = (event) => {
+        const value = event.target.value;
+        setSubCat(value)
     };
 
     const handlePriceRangeChange = (event, newValue) => {
@@ -26,12 +29,12 @@ function Products() {
     return (
         <Grid container spacing={3} justifyContent="center">
             <Grid item xs={11} sm={11} md={11} lg={3}>
-                <Paper 
-                    sx={{ 
-                        padding: '1.5rem', 
-                        borderRadius: '8px', 
+                <Paper
+                    sx={{
+                        padding: '1.5rem',
+                        borderRadius: '8px',
                         boxShadow: 3,
-                        marginLeft: '5rem' 
+                        marginLeft: '5rem'
                     }}
                 >
                     <Typography variant="h6" gutterBottom>
@@ -46,80 +49,80 @@ function Products() {
                     />
 
                     <Divider sx={{ my: 2 }} />
-
-                    <Typography variant="h6" gutterBottom>
-                        Categories
-                    </Typography>
-                    <FormGroup>
-                        <FormControlLabel 
-                            control={<Checkbox value="vehicles" onChange={handleCategoryChange} />} 
-                            label="Vehicles" 
-                        />
-                        <FormControlLabel 
-                            control={<Checkbox value="bodim" onChange={handleCategoryChange} />} 
-                            label="Bodim" 
-                        />
-                        <FormControlLabel 
-                            control={<Checkbox value="tools" onChange={handleCategoryChange} />} 
-                            label="Tools" 
-                        />
-                        <FormControlLabel 
-                            control={<Checkbox value="accessories" onChange={handleCategoryChange} />} 
-                            label="Accessories" 
-                        />
-                    </FormGroup>
+                    <FormControl>
+                        <FormLabel>Categories</FormLabel>
+                        <RadioGroup name='categories' value={cat} onChange={handleCategoryChange}>
+                            <FormControlLabel
+                                control={<Radio value="Vehicals" onChange={handleCategoryChange} />}
+                                label="Vehicles"
+                            />
+                            <FormControlLabel
+                                control={<Radio value="Furniture" onChange={handleCategoryChange} />}
+                                label="Furniture"
+                            />
+                            <FormControlLabel
+                                control={<Radio value="tools" onChange={handleCategoryChange} />}
+                                label="Tools"
+                            />
+                            <FormControlLabel
+                                control={<Radio value="accessories" onChange={handleCategoryChange} />}
+                                label="Accessories"
+                            />
+                        </RadioGroup>
+                        {cat && <Button onClick={()=>setCat(null)}>Clear</Button>}
+                    </FormControl>
 
                     <Divider sx={{ my: 2 }} />
 
-                    <Typography variant="h6" gutterBottom>
-                        Sub-Categories
-                    </Typography>
-                    <FormGroup>
-                        {selectedCategories.includes('vehicles') && (
-                            <>
-                                <FormControlLabel 
-                                    control={<Checkbox value="3wheels" onChange={handleCategoryChange} />} 
-                                    label="3 Wheels" 
+                    <FormControl>
+                        <FormLabel>Sub Categories</FormLabel>
+
+                        {cat==='Vehicals' &&
+                            <RadioGroup value={subCat} onChange={handleSubCategoryChange}>
+                                <FormControlLabel
+                                    control={<Radio value="3wheels" onChange={handleSubCategoryChange} />}
+                                    label="Three Wheels"
                                 />
-                                <FormControlLabel 
-                                    control={<Checkbox value="cycle" onChange={handleCategoryChange} />} 
-                                    label="Cycle" 
+                                <FormControlLabel
+                                    control={<Radio value="cycle" onChange={handleSubCategoryChange} />}
+                                    label="Cycle"
                                 />
-                                <FormControlLabel 
-                                    control={<Checkbox value="bike" onChange={handleCategoryChange} />} 
-                                    label="Bike" 
+                                <FormControlLabel
+                                    control={<Radio value="bike" onChange={handleSubCategoryChange} />}
+                                    label="Bike"
                                 />
-                            </>
-                        )}
-                        {selectedCategories.includes('bodim') && (
-                            <>
-                                <FormControlLabel 
-                                    control={<Checkbox value="girls" onChange={handleCategoryChange} />} 
-                                    label="Girls" 
+                            </RadioGroup>
+                        }
+                        {cat==='Tools' &&
+                            <RadioGroup value={subCat} onChange={handleSubCategoryChange}>
+                                <FormControlLabel
+                                    control={<Radio value="kitchen" onChange={handleSubCategoryChange} />}
+                                    label="Kitchen Items"
                                 />
-                                <FormControlLabel 
-                                    control={<Checkbox value="boys" onChange={handleCategoryChange} />} 
-                                    label="Boys" 
+                                <FormControlLabel
+                                    control={<Radio value="Mattress" onChange={handleSubCategoryChange} />}
+                                    label="Mettress"
                                 />
-                            </>
-                        )}
-                        {selectedCategories.includes('tools') && (
-                            <>
-                                <FormControlLabel 
-                                    control={<Checkbox value="kitchen" onChange={handleCategoryChange} />} 
-                                    label="Kitchen Items" 
+                            </RadioGroup>
+                        }
+                        {cat==='Furniture' &&
+                            <RadioGroup value={subCat} onChange={handleSubCategoryChange}>
+                                <FormControlLabel
+                                    control={<Radio value="Table" onChange={handleSubCategoryChange} />}
+                                    label="Table"
                                 />
-                                <FormControlLabel 
-                                    control={<Checkbox value="table" onChange={handleCategoryChange} />} 
-                                    label="Table" 
+                                <FormControlLabel
+                                    control={<Radio value="Bed" onChange={handleSubCategoryChange} />}
+                                    label="Bed"
                                 />
-                                <FormControlLabel 
-                                    control={<Checkbox value="chair" onChange={handleCategoryChange} />} 
-                                    label="Chair" 
+                                <FormControlLabel
+                                    control={<Radio value="Chair" onChange={handleSubCategoryChange} />}
+                                    label="Chair"
                                 />
-                            </>
-                        )}
-                    </FormGroup>
+                            </RadioGroup>
+                        }
+                        {subCat && <Button onClick={()=>setSubCat(null)}>Clear</Button>}
+                    </FormControl>
 
                     <Divider sx={{ my: 2 }} />
 
@@ -133,7 +136,7 @@ function Products() {
                         min={0}
                         max={10000}
                         step={500}
-                       
+
                     />
 
                     <Divider sx={{ my: 2 }} />
@@ -151,11 +154,12 @@ function Products() {
                 </Paper>
             </Grid>
             <Grid item md={9}>
-                <ProductsContents 
-                    searchTerm={searchTerm} 
-                    selectedCategories={selectedCategories} 
-                    priceRange={priceRange} 
-                    quantity={quantity} 
+                <ProductsContents
+                    searchTerm={searchTerm}
+                    category={cat}
+                    subCategory={subCat}
+                    priceRange={priceRange}
+                    quantity={quantity}
                 />
             </Grid>
         </Grid>

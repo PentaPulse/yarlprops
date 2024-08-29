@@ -16,8 +16,8 @@ import SpaIcon from '@mui/icons-material/Spa'; //
 function Home() {
   const navigate = useNavigate();
   const categories = [
-    { name: 'Boarding', link: '/category/boarding', icon: <HomeIcon fontSize="large" /> },
-    { name: 'Vehicles', link: '/category/vehicles', icon: <DirectionsCarIcon fontSize="large" /> },
+    { name: 'Boarding', link: '/rentals/bordim', icon: <HomeIcon fontSize="large" /> },
+    { name: 'Vehicles', link: '/rentals/vehicles', icon: <DirectionsCarIcon fontSize="large" /> },
     { name: 'Furniture', link: '/category/furniture', icon: <WeekendIcon fontSize="large" /> },
     { name: 'Accessories', link: '/category/accessories', icon: <WatchIcon fontSize="large" /> },
     { name: 'Electronics', link: '/category/electronics', icon: <LaptopIcon fontSize="large" /> },
