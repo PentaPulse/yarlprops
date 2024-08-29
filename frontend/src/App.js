@@ -11,8 +11,7 @@ import Home from "./pages/Home/Home";
 import Contact from "./pages/Contact/Contact";
 import Products from "./pages/Products/Products";
 import ProductPage from "./pages/Products/ProView/View";
-import Services from "./pages/Services/Services";
-import ViewService from "./pages/Services/ViewService";
+import Services, { ServicesPage } from "./pages/Services/Services";
 import NavigationBar from "./components/NavigationBar/NavigationBar";
 import Footer from "./components/Footer/Footer";
 import { Box } from "@mui/material";
@@ -112,7 +111,7 @@ function PageLayout({handleMode}) {
           <Route path="rentals" element={<Rentals />} />
           <Route path="rentals/:id" element={<RentalsPage />} />
           <Route path="services" element={<Services />} />
-          <Route path="service/:id" element={<ViewService />} />
+          <Route path="service/:id" element={<ServicesPage />} />
           <Route path="contact" element={<Contact />} />
         </Routes>
         <Footer />

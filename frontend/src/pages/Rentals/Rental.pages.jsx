@@ -375,7 +375,7 @@ export function RentalsPage() {
             </Grid>
             <Grid container spacing={0} sx={{ marginTop: '0.5rem' }}>
                 <Grid item>
-                    <Button variant="contained" component={Link} to="/rentals" startIcon={<ChevronLeftIcon />}>
+                    <Button variant="contained" component={Link} to="/p/rentals" startIcon={<ChevronLeftIcon />}>
                         Back
                     </Button>
                 </Grid>

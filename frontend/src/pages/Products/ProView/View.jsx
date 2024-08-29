@@ -135,7 +135,7 @@ function ProductPage() {
       </Grid>
       <Grid container spacing={0} sx={{ marginTop: '0.5rem' }}>
         <Grid item>
-          <Button variant="contained" component={Link} to="/products" startIcon={<ChevronLeftIcon />}>
+          <Button variant="contained" component={Link} to="/p/products" startIcon={<ChevronLeftIcon />}>
             Back
           </Button>
         </Grid>
