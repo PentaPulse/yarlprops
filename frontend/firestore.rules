@@ -10,7 +10,7 @@ service cloud.firestore {
       allow read,write;
     }
 
-    match /contactUs/{id}{
+    match /contactus/{id}{
       allow read,write;
     }
 

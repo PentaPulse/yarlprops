@@ -5,6 +5,9 @@ import { countProducts ,fetchProducts} from '../../api/db/products';
 import { countservices ,fetchServices} from '../../api/db/services';
 //import axios from 'axios';
 import { fetchContactUsResponsesList } from '../../api/db/contactus';
+import { countRentals } from '../../api/db/rentals';
+import { collection, doc, getDocs, query } from 'firebase/firestore';
+import { db } from '../../api/firebase';
 
 export default function AdminOverview() {
     const [adminCount, setadminCount] = React.useState(0);
@@ -20,13 +23,13 @@ export default function AdminOverview() {
             const merchants = await countUsers(true); //ismerchant
             const customers = await countUsers(false);//ismerchant
             const products = await countProducts();
-           // const rentals = await countRentals();
+           const rentals = await countRentals();
             const services = await countservices();
             setadminCount(admins);
             setmerchantCount(merchants);
             setcustomerCount(customers);
             setProductCount(products);
-            setRentalCount(3);
+            setRentalCount(rentals);
             setServiceCount(services);
         };
 
@@ -148,7 +151,7 @@ function UsersTable() {
                             {users.slice(0,5).map((usr, index) => (
                                 <TableRow>
                                     <TableCell>{index + 1}</TableCell>
-                                    <TableCell>{usr.fname + ' ' + usr.lname}</TableCell>
+                                    <TableCell>{usr.firstName + ' ' + usr.lastName}</TableCell>
                                     <TableCell>{usr.email}</TableCell>
                                     <TableCell>{usr.isMerchant?'Merchant':'Customer'}</TableCell>
                                     <TableCell><Button variant='primary' >Assign</Button></TableCell>
@@ -170,12 +173,10 @@ function ContactResponsesTable() {
     React.useEffect(() => {
         async function fetchData() {
             try {
-                // Fetch data from the API
-                const response = await fetchContactUsResponsesList
-                // Set responses data
-                setResponses(response);
+                const q = await getDocs(collection(db,'contactus'))
+                const responses = q.docs.map((doc)=>doc.data())
+                setResponses(responses);
             } catch (err) {
-                // Handle error
                 setError(err.message);
             }
         }

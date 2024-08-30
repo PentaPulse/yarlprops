@@ -8,32 +8,95 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 //import axios from 'axios';
-import { Button, styled, Dialog, DialogTitle, DialogContent, DialogActions, Typography } from '@mui/material';
+import { Button, styled, Typography, Container, CircularProgress, TextField, ButtonGroup, Divider } from '@mui/material';
 import { tableCellClasses } from '@mui/material/TableCell';
-import { fetchContactUsResponsesList } from '../../api/db/contactus';
+import { fetchSelectedRequest } from '../../api/db/contactus';
+import Swal from 'sweetalert2';
+import { db } from '../../api/firebase';
+import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
 
 export default function ContactusRequests() {
+  const [editingresponseId, setEditingresponseId] = React.useState(null);
+  const [viewingResponseId, setViewingResponseId] = React.useState(null);
+
+  const handleEditresponse = (responseId) => {
+    setEditingresponseId(responseId);
+    setViewingResponseId(null);
+  }
+
+  const handleViewresponse = (responseId) => {
+    setViewingResponseId(responseId);
+  }
+
+  const handleSuccess = () => {
+    setViewingResponseId(null);
+  };
+
+  const handleCancel = () => {
+    setViewingResponseId(null);
+  };
+
+  return (
+    <>
+      <Typography variant='h4'>Contact us Requests</Typography>
+
+      <Container>
+        {viewingResponseId ? (
+          <ContactusResponseDetail id={viewingResponseId} onBack={handleCancel} />
+        ) : (
+          <ContactusRequestsList onViewresponse={handleViewresponse} />
+        )}
+      </Container>
+    </>
+  );
+};
+
+function ContactusRequestsList({ onViewresponse }) {
   const [responses, setResponses] = React.useState([]);
-  const [error, setError] = React.useState(null);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [view, setView] = React.useState(null);
 
   React.useEffect(() => {
-    async function fetchData() {
-      try {
-        // Fetch data from the API
-        const response = await fetchContactUsResponsesList
-        // Set responses data
-        setResponses(response);
-      } catch (err) {
-        // Handle error
-        setError(err.message);
-      }
-    }
-    fetchData();
-    console.log("hh")
+    const fetchresponseList = async () => {
+      const q = await getDocs(collection(db, 'contactus'))
+      const responses = q.docs.map((doc) => doc.data())
+      setResponses(responses);
+    };
+    fetchresponseList();
   }, []);
+
+  const handleDelete = async (id) => {
+    try {
+      const result = await Swal.fire({
+        icon: 'warning',
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'No, cancel!',
+      });
+
+      if (result.isConfirmed) {
+        await deleteDoc(doc(db, 'responses', id));
+        setResponses(responses.filter(response => response.id !== id));
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Deleted!',
+          text: `The response has been deleted.`,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    } catch (error) {
+      console.error("Error deleting response: ", error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'There was an error deleting the response.',
+      });
+    }
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -42,10 +105,6 @@ export default function ContactusRequests() {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
-  };
-
-  const handleCloseView = () => {
-    setView(null);
   };
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -67,35 +126,31 @@ export default function ContactusRequests() {
       border: 0,
     },
   }));
+
   return (
     <>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
             <TableRow>
-              <StyledTableCell align="center">First name</StyledTableCell>
-              <StyledTableCell align="center">Last name</StyledTableCell>
+              <StyledTableCell align="center">No</StyledTableCell>
+              <StyledTableCell align="center">Name</StyledTableCell>
               <StyledTableCell align="center">Email</StyledTableCell>
               <StyledTableCell align="center">Status</StyledTableCell>
-              <StyledTableCell align="center">Message</StyledTableCell>
+              <StyledTableCell align="center">Actions</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {responses && responses.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(response => (
+            {responses.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((response, index) => (
               <StyledTableRow key={response.id}>
-                <StyledTableCell align="center">{response.fname}</StyledTableCell>
-                <StyledTableCell align="center">{response.lname}</StyledTableCell>
+                <StyledTableCell align="center">{index + 1}</StyledTableCell>
+                <StyledTableCell align="center">{response.firstName + ' ' + response.lastName}</StyledTableCell>
                 <StyledTableCell align="center">{response.email}</StyledTableCell>
                 <StyledTableCell align="center">{response.status}</StyledTableCell>
                 <StyledTableCell align="center">
-                  <Button
-                    onClick={() => setView(response)}
-                    variant="outlined"
-                    color="secondary"
-                    style={{ margin: '5px', width: '100%' }}
-                  >
-                    View
-                  </Button>
+                  {response.status === 'new' ?
+                    <Button onClick={() => onViewresponse(response.id)} variant="outlined" color="secondary" style={{ margin: '5px', width: '100%' }}>Reply</Button> :
+                    <Button onClick={() => handleDelete(response.id)} variant="outlined" color="error" style={{ margin: '5px', width: '100%' }}>Delete</Button>}
                 </StyledTableCell>
               </StyledTableRow>
             ))}
@@ -111,32 +166,47 @@ export default function ContactusRequests() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </TableContainer>
-
-      {/* View Dialog */}
-      <Dialog open={!!view} onClose={handleCloseView}>
-        <DialogTitle>Message Details</DialogTitle>
-        <DialogContent>
-          {view && (
-            <>
-              <Typography variant="h6">{view.firstName} {view.lastName}</Typography>
-              <Typography variant="subtitle1">{view.email}</Typography>
-              <Typography variant="body1">{view.status}</Typography>
-              <Typography variant="body2" paragraph>{view.message}</Typography>
-            </>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseView} color="primary">
-            Close
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      {error && (
-        <Typography color="error" style={{ textAlign: 'center', margin: '10px' }}>
-          Error fetching data: {error}
-        </Typography>
-      )}
     </>
   );
 }
+
+const ContactusResponseDetail = ({ id, onBack }) => {
+  const [response, setResponse] = React.useState(null);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    const fetchResponse = async () => {
+      const fetchedResponse = await fetchSelectedRequest(id);
+      if (fetchedResponse) {
+        setResponse(fetchedResponse);
+      } else {
+        console.log('No such document!');
+      }
+      setLoading(false);
+    };
+    fetchResponse();
+  }, [id]);
+
+  if (loading) return <CircularProgress />;
+
+  return (
+    <Paper style={{ padding: 16, display: 'flex', flexDirection: 'column' }} >
+      <Button variant="contained" color="primary" onClick={onBack} style={{ marginBottom: 16, width: '25%' }}>
+        Back to Response List
+      </Button>
+      <Typography variant="subtitle1">First name: {response.firstName}</Typography>
+      <Typography variant="subtitle1">Last name: {response.lastName}</Typography>
+      <Typography variant="body1">Email: {response.email}</Typography>
+      <Typography variant="body1">Message: {response.message}</Typography>
+      <Typography variant="body1">Status: {response.status}</Typography>
+      <Divider/>
+      <TextField
+        label='Reply'
+      />
+      <ButtonGroup>
+        <Button variant="outlined" color="success" style={{ margin: '5px', width: '50%' }}>Reply</Button>
+        <Button variant="outlined" color="secondary" style={{ margin: '5px', width: '50%' }}>Cancel</Button>
+      </ButtonGroup>
+    </Paper>
+  );
+};

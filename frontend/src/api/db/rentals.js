@@ -52,3 +52,8 @@ export const fetchSelectedRental = async (rid) => {
         throw new Error("Error fetching rental: " + e.message);
     }
 };
+
+export const countRentals = async () => {
+    const productsSnapshot = await getDocs(rentalRef);
+    return productsSnapshot.size;
+};
