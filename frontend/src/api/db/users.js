@@ -1,6 +1,7 @@
 import "firebase/firestore";
-import { db } from "../firebase";
+import { auth, db } from "../firebase";
 import { doc, setDoc, collection, getDoc, getDocs, where, query } from "firebase/firestore";
+import { updateProfile } from "firebase/auth";
 
 //reference
 const userRef = collection(db, "systemusers")
@@ -25,7 +26,6 @@ export const registerUser = async (uid, fname, lname, dname, email) => {
                 email:email,
                 phoneNumber: '',
                 gender: '',
-                profilePicture: '',
                 address: '',
                 isMerchant:false
             });
@@ -63,10 +63,10 @@ export const registerAdmin = async (uid, fname, lname, dname, email) => {
                 email:email,
                 phoneNumber: '',
                 gender: '',
-                profilePicture: '',
                 address: '',
                 approved:false
             });
+            await updateProfile(auth.currentUser,{displayName:dname})
             console.log("User registered successfully");
             return { success: true, message: 'User registered successfully' };
         } else {

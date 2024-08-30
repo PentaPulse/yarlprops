@@ -105,8 +105,13 @@ const ProfileSettings = () => {
 
   const handleSubmit = async () => {
     try {
-      await setDoc(doc(db, 'systemusers', user.uid), profile);
-      await updateProfile(user, {
+      if (user.adminid) {
+        await updateDoc(doc(db, 'admins', user.adminid), profile)
+      }
+      else {
+        await updateDoc(doc(db, 'systemusers', user.uid), profile);
+      }
+      await updateProfile(auth.currentUser, {
         displayName: profile.displayName
       })
       setEdit(false);
@@ -336,11 +341,11 @@ const AccountSettings = () => {
 
   const changeRole = async () => {
     try {
-      let isM=false;
-      if(role==='Merchant'){
-        isM=true
+      let isM = false;
+      if (role === 'Merchant') {
+        isM = true
       }
-      await updateDoc(doc(db, 'systemusers', user.uid), { 'isMerchant': isM ,myProducts:[],myRentals:[],myServices:[]});
+      await updateDoc(doc(db, 'systemusers', user.uid), { 'isMerchant': isM });
       console.log('Role updated successfully');
     } catch (error) {
       console.error('Error updating role:', error);
@@ -352,7 +357,7 @@ const AccountSettings = () => {
       return;
     }
     try {
-      await updateEmail(user, email.confirm);
+      await updateEmail(auth.currentUser, email.confirm);
       await updateDoc(doc(db, 'systemusers', user.uid), { email: email.confirm });
       alert("Email updated successfully");
     } catch (error) {
@@ -381,7 +386,7 @@ const AccountSettings = () => {
       return;
     }
     try {
-      await updatePassword(user, password.confirm);
+      await updatePassword(auth.currentUser, password.confirm);
       alert("Password updated successfully");
     } catch (error) {
       console.error("Error updating password: ", error);
@@ -409,6 +414,7 @@ const AccountSettings = () => {
           <FormControl sx={{ m: 1, width: width }} >
             <InputLabel>Role</InputLabel>
             <Select
+              disabled={user.adminid && true}
               value={role}
               onChange={handleSelectChange}
               label="Role"
