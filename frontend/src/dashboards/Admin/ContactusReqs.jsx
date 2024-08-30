@@ -17,21 +17,11 @@ import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
 import { useAuth } from '../../api/AuthContext';
 
 export default function ContactusRequests() {
-  const [editingresponseId, setEditingresponseId] = React.useState(null);
   const [viewingResponseId, setViewingResponseId] = React.useState(null);
-
-  const handleEditresponse = (responseId) => {
-    setEditingresponseId(responseId);
-    setViewingResponseId(null);
-  }
 
   const handleViewresponse = (responseId) => {
     setViewingResponseId(responseId);
   }
-
-  const handleSuccess = () => {
-    setViewingResponseId(null);
-  };
 
   const handleCancel = () => {
     setViewingResponseId(null);

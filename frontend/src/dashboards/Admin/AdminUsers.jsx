@@ -1,7 +1,6 @@
-import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Grid, Modal, TextField, Typography } from "@mui/material";
+import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Grid, Modal, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import AddIcon from '@mui/icons-material/Add';
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, query } from "firebase/firestore";
 import { db } from "../../api/firebase";
 
 const AdminUsers = () => {
@@ -35,11 +34,6 @@ const AdminUsers = () => {
     const handleClose = () => {
         setOpen(false);
         setNewUser({ id: '', name: '', email: '', phone: '', address: '', status: 'Active' });
-    };
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setNewUser({ ...newUser, [name]: value });
     };
 
     const handleSubmit = (e) => {

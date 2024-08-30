@@ -1,24 +1,17 @@
 import React, { useState } from 'react';
 import { Container, Button, styled, Paper, Typography, TextField, FormControl, FormLabel, RadioGroup, Radio, FormControlLabel, Grid, TableCell, tableCellClasses, TableRow, TableContainer, Table, TableHead, TableBody, TablePagination, CircularProgress } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { db, storage } from '../../api/firebase';
 import Swal from 'sweetalert2';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useAuth } from '../../api/AuthContext';
-import {  collection, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
+import {  collection, deleteDoc, doc, getDocs, query } from 'firebase/firestore';
 import { addRental, fetchSelectedRental, updateRental } from '../../api/db/rentals';
 
 export default function AdminRentals() {
   const [showAddRental, setShowAddRental] = React.useState(false);
   const [editingRentalId, setEditingRentalId] = React.useState(null);
   const [viewingRentalId, setViewingRentalId] = React.useState(null);
-
-  const handleAddRental = () => {
-    setEditingRentalId(null);
-    setShowAddRental(true);
-    setViewingRentalId(null);
-  }
 
   const handleEditRental = (rentalId) => {
     setEditingRentalId(rentalId);
