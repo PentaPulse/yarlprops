@@ -154,7 +154,7 @@ export default function DashboardLayout({ handleMode }) {
                     </DrawerHeader>
                     <Divider />
                     <List>
-                        {(user.adminid ? adminMenu : (user.isMerchant === 'merch' ? merchMenu : userMenu)).map((text, index) => (
+                        {(user.adminid ? adminMenu : (user.isMerchant ? merchMenu : userMenu)).map((text, index) => (
                             <ListItem key={text} disablePadding sx={{ display: 'block' }}>
                                 <ListItemButton
                                     sx={{

@@ -334,9 +334,18 @@ const AccountSettings = () => {
     }));
   };
 
-  const changeRole=async()=>{
-    
-  }
+  const changeRole = async () => {
+    try {
+      let isM=false;
+      if(role==='Merchant'){
+        isM=true
+      }
+      await updateDoc(doc(db, 'systemusers', user.uid), { 'isMerchant': isM ,myProducts:[],myRentals:[],myServices:[]});
+      console.log('Role updated successfully');
+    } catch (error) {
+      console.error('Error updating role:', error);
+    }
+  };
   const changeEmail = async () => {
     if (email.new !== email.confirm) {
       alert("New email and confirm email do not match");
@@ -379,11 +388,7 @@ const AccountSettings = () => {
     }
   };
   const handleSelectChange = (e) => {
-    const { value } = e.target;
-    setRole((prevProfile) => ({
-      ...prevProfile,
-      role: value,
-    }));
+    setRole(e.target.value)
   };
 
   return (
@@ -406,9 +411,9 @@ const AccountSettings = () => {
             <Select
               value={role}
               onChange={handleSelectChange}
-              label="Gender"
+              label="Role"
             >
-              {['Merchant','Customer'].map((roleOption, index) => (
+              {['Merchant', 'Customer'].map((roleOption, index) => (
                 <MenuItem key={index} value={roleOption}>{roleOption}</MenuItem>
               ))}
             </Select>

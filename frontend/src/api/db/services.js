@@ -1,20 +1,22 @@
 import "firebase/firestore";
 import { db } from "../firebase";
-import { doc, setDoc, collection, getDocs, query, where, addDoc, updateDoc, orderBy, limit } from "firebase/firestore";
+import { doc, setDoc, collection, getDocs, query, where, addDoc, updateDoc,  arrayUnion } from "firebase/firestore";
 
 // Reference
 const serviceRef = collection(db, "services");
 
 // Adding services
-export const addService= async ({ serviceName, serviceDescription, serviceLocation, images }) => {
+export const addService= async ({ merchantId,serviceName, serviceDescription, serviceLocation, images }) => {
     try {
         const docRef = await addDoc(serviceRef, {
+            merchantId,
             serviceName,
             serviceDescription,
             serviceLocation,
             images,
         });
         await setDoc(docRef, { sid: docRef.id }, { merge: true });
+        await updateDoc(doc(db,'systemusers',merchantId),{myServices:arrayUnion(docRef.id)})
         return docRef.id;
     } catch (e) {
         console.error("Error adding Service:", e);
@@ -44,18 +46,6 @@ export const fetchServices = async () => {
         return []
     }
 };
-
-export const fetchServicesToHome = async () => {
-    const proQuery = query(collection(db, 'services'), orderBy('timestamp', 'asc'), limit(3))
-    try {
-        const snapshot = await getDocs(proQuery)
-        const ServiceList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        return ServiceList
-    } catch (e) {
-        return []
-    }
-};
-
 
 // Fetching a specific Service by ID
 export const fetchSelectedService = async (sid) => {

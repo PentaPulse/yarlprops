@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Slidshow from './Slideshow/Slidshow';
-import { Box, Container, Divider, Grid, Typography, Card, CardContent, CardActionArea, Button, CardMedia,CardActions } from '@mui/material';
+import { Box, Container, Divider, Grid, Typography, Card, CardContent, CardActionArea, Button, CardMedia, CardActions } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
@@ -27,7 +27,7 @@ export default function Home() {
     { name: 'Salon', link: '/category/salon', icon: <SpaIcon fontSize="large" /> },
   ];
 
-  const handleSeeAll = ( page ) => {
+  const handleSeeAll = (page) => {
     navigate(`/p/${page}`);
   }
 
@@ -75,7 +75,7 @@ export default function Home() {
         <Divider />
         <Grid item md={12}>
           <Container>
-            <Typography variant='h5' sx={{ mb: '1rem'}}>Latest Products</Typography>
+            <Typography variant='h5' sx={{ mb: '1rem' }}>Latest Products</Typography>
             <ProductList />
             <Box display='flex' justifyContent='flex-end' mr={4}>
               <Button onClick={() => handleSeeAll('products')}>See all</Button>
@@ -84,7 +84,7 @@ export default function Home() {
         </Grid>
         <Grid item md={12}>
           <Container>
-            <Typography variant='h5' sx={{ mb: '1rem'}}>Latest Rentals</Typography>
+            <Typography variant='h5' sx={{ mb: '1rem' }}>Latest Rentals</Typography>
             <RentalsList />
             <Box display='flex' justifyContent='flex-end' mr={4}>
               <Button onClick={() => handleSeeAll('rentals')}>See all</Button>
@@ -93,7 +93,7 @@ export default function Home() {
         </Grid>
         <Grid item md={12}>
           <Container>
-            <Typography variant='h5' sx={{ mb: '1rem'}}>Latest Services</Typography>
+            <Typography variant='h5' sx={{ mb: '1rem' }}>Latest Services</Typography>
             <ServicesList />
             <Box display='flex' justifyContent='flex-end' mr={4}>
               <Button onClick={() => handleSeeAll('services')}>See all</Button>
@@ -110,48 +110,48 @@ function ProductList() {
   const navigate = useNavigate();
 
   const handleCardClick = (pid) => {
-      navigate(`/p/product/${pid}`);
+    navigate(`/p/product/${pid}`);
   };
 
   React.useEffect(() => {
-      const getProducts = async () => {
-        const q = await getDocs(query(collection(db,'products'),limit(3)))
-          const productList = q.docs.map(doc=>doc.data())
-          setProducts(productList);
-      };
-      getProducts();
+    const getProducts = async () => {
+      const q = await getDocs(query(collection(db, 'products'), limit(3)))
+      const productList = q.docs.map(doc => doc.data())
+      setProducts(productList);
+    };
+    getProducts();
   }, []);
 
   return (
-      <Container fixed>
-          <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 1, sm: 2, md: 3, lg: 3 }}>
-              {products.length === 0 ?
-                  <DbError items={3} />
-                  :
-                  products.map((product, index) => (
-                      <Grid item xs={1} sm={1} md={1} lg={1} key={index}>
-                          <Card sx={{ boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)', position: 'relative' }}>
-                              
-                              <CardActionArea onClick={() => handleCardClick(product.pid)}>
-                                  <CardMedia
-                                      sx={{ height: '20rem' }}
-                                      image={product.images[0] || 'https://picsum.photos/id/11/200/300'}
-                                      title={product.name}
-                                  />
-                                  <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                      <Typography gutterBottom variant='h6' component='div' color='inherit'>
-                                          {product.title}
-                                      </Typography>
-                                  </CardContent>
-                                  <CardActions sx={{ position: 'absolute', top: '2px', left: '5px'}}>
-                                      {(product.status === "For Sale")? (<Button size='small' style={{ backgroundColor: "green", color: 'white', fontWeight: 'bold' }}>For Sale</Button>):((product.status === "For Rent")? (<Button size='small' style={{ backgroundColor: "darkorange", color: 'white', fontWeight: 'bold' }}>For Rent</Button>):((<Button size='small' style={{ backgroundColor: "red", color: 'white', fontWeight: 'bold' }}>Sold Out!</Button>)))}
-                                  </CardActions>
-                              </CardActionArea>
-                          </Card>
-                      </Grid>
-                  ))}
-          </Grid>
-      </Container>
+    <Container fixed>
+      <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 1, sm: 2, md: 3, lg: 3 }}>
+        {products.length === 0 ?
+          <DbError items={3} />
+          :
+          products.map((product, index) => (
+            <Grid item xs={1} sm={1} md={1} lg={1} key={index}>
+              <Card sx={{ boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)', position: 'relative' }}>
+
+                <CardActionArea onClick={() => handleCardClick(product.pid)}>
+                  <CardMedia
+                    sx={{ height: '20rem' }}
+                    image={product.images[0] || 'https://picsum.photos/id/11/200/300'}
+                    title={product.name}
+                  />
+                  <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Typography gutterBottom variant='h6' component='div' color='inherit'>
+                      {product.title}
+                    </Typography>
+                  </CardContent>
+                  <CardActions sx={{ position: 'absolute', top: '2px', left: '5px' }}>
+                    {(product.status === "For Sale") ? (<Button size='small' style={{ backgroundColor: "green", color: 'white', fontWeight: 'bold' }}>For Sale</Button>) : ((product.status === "For Rent") ? (<Button size='small' style={{ backgroundColor: "darkorange", color: 'white', fontWeight: 'bold' }}>For Rent</Button>) : ((<Button size='small' style={{ backgroundColor: "red", color: 'white', fontWeight: 'bold' }}>Sold Out!</Button>)))}
+                  </CardActions>
+                </CardActionArea>
+              </Card>
+            </Grid>
+          ))}
+      </Grid>
+    </Container>
   );
 }
 
@@ -160,48 +160,48 @@ function RentalsList() {
   const navigate = useNavigate();
 
   const handleCardClick = (rid) => {
-      navigate(`/p/rental/${rid}`);
+    navigate(`/p/rental/${rid}`);
   };
 
   React.useEffect(() => {
-      const getRentals = async () => {
-        const q = await getDocs(query(collection(db,'rentals'),limit(3)))
-          const rentalsList = q.docs.map(doc=>doc.data())
-          setRentals(rentalsList);
-      };
-      getRentals();
+    const getRentals = async () => {
+      const q = await getDocs(query(collection(db, 'rentals'), limit(3)))
+      const rentalsList = q.docs.map(doc => doc.data())
+      setRentals(rentalsList);
+    };
+    getRentals();
   }, []);
 
   return (
-      <Container fixed>
-          <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 1, sm: 2, md: 3, lg: 3 }}>
-              {rentals.length === 0 ?
-                  <DbError items={3} />
-                  :
-                  rentals.map((rental, index) => (
-                      <Grid item xs={1} sm={1} md={1} lg={1} key={index}>
-                          <Card sx={{ boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)', position: 'relative' }}>
-                              
-                              <CardActionArea onClick={() => handleCardClick(rental.pid)}>
-                                  <CardMedia
-                                      sx={{ height: '20rem' }}
-                                      image={rental.images[0] || 'https://picsum.photos/id/11/200/300'}
-                                      title={rental.name}
-                                  />
-                                  <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                      <Typography gutterBottom variant='h6' component='div' color='inherit'>
-                                          {rental.title}
-                                      </Typography>
-                                  </CardContent>
-                                  <CardActions sx={{ position: 'absolute', top: '2px', left: '5px'}}>
-                                      {(rental.status === "For Sale")? (<Button size='small' style={{ backgroundColor: "green", color: 'white', fontWeight: 'bold' }}>For Sale</Button>):((rental.status === "For Rent")? (<Button size='small' style={{ backgroundColor: "darkorange", color: 'white', fontWeight: 'bold' }}>For Rent</Button>):((<Button size='small' style={{ backgroundColor: "red", color: 'white', fontWeight: 'bold' }}>Sold Out!</Button>)))}
-                                  </CardActions>
-                              </CardActionArea>
-                          </Card>
-                      </Grid>
-                  ))}
-          </Grid>
-      </Container>
+    <Container fixed>
+      <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 1, sm: 2, md: 3, lg: 3 }}>
+        {rentals.length === 0 ?
+          <DbError items={3} />
+          :
+          rentals.map((rental, index) => (
+            <Grid item xs={1} sm={1} md={1} lg={1} key={index}>
+              <Card sx={{ boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)', position: 'relative' }}>
+
+                <CardActionArea onClick={() => handleCardClick(rental.pid)}>
+                  <CardMedia
+                    sx={{ height: '20rem' }}
+                    image={rental.images[0] || 'https://picsum.photos/id/11/200/300'}
+                    title={rental.name}
+                  />
+                  <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Typography gutterBottom variant='h6' component='div' color='inherit'>
+                      {rental.title}
+                    </Typography>
+                  </CardContent>
+                  <CardActions sx={{ position: 'absolute', top: '2px', left: '5px' }}>
+                    {(rental.status === "For Sale") ? (<Button size='small' style={{ backgroundColor: "green", color: 'white', fontWeight: 'bold' }}>For Sale</Button>) : ((rental.status === "For Rent") ? (<Button size='small' style={{ backgroundColor: "darkorange", color: 'white', fontWeight: 'bold' }}>For Rent</Button>) : ((<Button size='small' style={{ backgroundColor: "red", color: 'white', fontWeight: 'bold' }}>Sold Out!</Button>)))}
+                  </CardActions>
+                </CardActionArea>
+              </Card>
+            </Grid>
+          ))}
+      </Grid>
+    </Container>
   );
 }
 function ServicesList() {
@@ -209,47 +209,44 @@ function ServicesList() {
   const navigate = useNavigate();
 
   const handleCardClick = (pid) => {
-      navigate(`/p/service/${pid}`);
+    navigate(`/p/service/${pid}`);
   };
 
   React.useEffect(() => {
-      const getServices = async () => {
-        const q = await getDocs(query(collection(db,'services'),limit(3)))
-          const serviceList = q.docs.map(doc=>doc.data())
-          setServices(serviceList);
-      };
-      getServices();
+    const getServices = async () => {
+      const q = await getDocs(query(collection(db, 'services'), limit(3)))
+      const serviceList = q.docs.map(doc => doc.data())
+      setServices(serviceList);
+    };
+    getServices();
   }, []);
 
   return (
-      <Container fixed>
-          <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 1, sm: 2, md: 3, lg: 3 }}>
-              {services.length === 0 ?
-                  <DbError items={3} />
-                  :
-                  services.map((service, index) => (
-                      <Grid item xs={1} sm={1} md={1} lg={1} key={index}>
-                          <Card sx={{ boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)', position: 'relative' }}>
-                              
-                              <CardActionArea onClick={() => handleCardClick(service.pid)}>
-                                  <CardMedia
-                                      sx={{ height: '20rem' }}
-                                      image={service.images[0] || 'https://picsum.photos/id/11/200/300'}
-                                      title={service.name}
-                                  />
-                                  <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                      <Typography gutterBottom variant='h6' component='div' color='inherit'>
-                                          {service.title}
-                                      </Typography>
-                                  </CardContent>
-                                  <CardActions sx={{ position: 'absolute', top: '2px', left: '5px'}}>
-                                      {(service.status === "For Sale")? (<Button size='small' style={{ backgroundColor: "green", color: 'white', fontWeight: 'bold' }}>For Sale</Button>):((service.status === "For Rent")? (<Button size='small' style={{ backgroundColor: "darkorange", color: 'white', fontWeight: 'bold' }}>For Rent</Button>):((<Button size='small' style={{ backgroundColor: "red", color: 'white', fontWeight: 'bold' }}>Sold Out!</Button>)))}
-                                  </CardActions>
-                              </CardActionArea>
-                          </Card>
-                      </Grid>
-                  ))}
-          </Grid>
-      </Container>
+    <Container fixed>
+      <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 1, sm: 2, md: 3, lg: 3 }}>
+        {services.length === 0 ?
+          <DbError items={3} />
+          :
+          services.map((service, index) => (
+            <Grid item xs={1} sm={1} md={1} lg={1} key={index}>
+              <Card sx={{ boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)', position: 'relative' }}>
+
+                <CardActionArea onClick={() => handleCardClick(service.pid)}>
+                  <CardMedia
+                    sx={{ height: '20rem' }}
+                    image={service.images[0] || 'https://picsum.photos/id/11/200/300'}
+                    title={service.name}
+                  />
+                  <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Typography gutterBottom variant='h6' component='div' color='inherit'>
+                      {service.serviceName}
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </Grid>
+          ))}
+      </Grid>
+    </Container>
   );
 }

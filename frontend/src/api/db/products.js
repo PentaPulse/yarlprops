@@ -1,12 +1,12 @@
 import "firebase/firestore";
 import { db } from "../firebase";
-import { doc, setDoc, collection, getDocs, query, where, addDoc, updateDoc,  orderBy, limit } from "firebase/firestore";
+import { doc, setDoc, collection, getDocs, query, where, addDoc, updateDoc,  orderBy, limit, serverTimestamp, arrayUnion } from "firebase/firestore";
 
 // Reference
 const productRef = collection(db, "products");
 
 // Adding products
-const addProduct = async ({ title, category, type, description, quantity, location, status, images }) => {
+const addProduct = async ({merchantId, title, category, type, description, quantity, location, status, images }) => {
     try {
         const docRef = await addDoc(productRef, {
             title,
@@ -17,10 +17,11 @@ const addProduct = async ({ title, category, type, description, quantity, locati
             location,
             status,
             images,
-            // sellerId,
-            // timestamp: serverTimestamp()
+            merchantId,
+            timestamp: serverTimestamp()
         });
         await setDoc(docRef, { pid: docRef.id }, { merge: true });
+        await updateDoc(doc(db,'systemusers',merchantId),{myProducts:arrayUnion(docRef.id)})
         return docRef.id;
     } catch (e) {
         console.error("Error adding product:", e);
@@ -51,18 +52,6 @@ const fetchProducts = async () => {
     }
 };
 
-const fetchProductsToHome = async () => {
-    const proQuery = query(productRef, orderBy('timestamp', 'asc'), limit(3))
-    try {
-        const snapshot = await getDocs(proQuery)
-        const productList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        return productList
-    } catch (e) {
-        return []
-    }
-};
-
-
 // Fetching a specific product by ID
 const fetchSelectedProduct = async (pid) => {
     const q = query(productRef, where('pid', '==', pid));
@@ -87,4 +76,4 @@ export const countProducts = async () => {
     return productsSnapshot.size;
 };
 
-export { addProduct, updateProduct, fetchProducts, fetchSelectedProduct, fetchProductsToHome };
+export { addProduct, updateProduct, fetchProducts, fetchSelectedProduct };
