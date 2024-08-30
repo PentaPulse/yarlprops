@@ -1,10 +1,10 @@
 import React from 'react';
 import { Box, Grid, Paper, Typography, Table, TableHead, TableRow, TableCell, TableBody, TableContainer, Button } from '@mui/material';
 import { countAdmins, countUsers, fetchUserList} from '../../api/db/users';
-import { countProducts ,fetchProducts} from '../../api/db/products';
-import { countservices ,fetchServices} from '../../api/db/services';
+import { countProducts } from '../../api/db/products';
+import { countservices} from '../../api/db/services';
 import { countRentals } from '../../api/db/rentals';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, limit, orderBy, query, where } from 'firebase/firestore';
 import { db } from '../../api/firebase';
 import { useAuth } from '../../api/AuthContext';
 
@@ -31,7 +31,6 @@ export default function AdminOverview() {
             setRentalCount(rentals);
             setServiceCount(services);
         };
-
         fetchCounts();
     }, []);
     return (
@@ -131,7 +130,7 @@ function UsersTable() {
         fetchData();
     }, []);
 
-    const cols = ["No", "Name", "Email", "Role","Action"]
+    const cols = ["No", "Name", "Email", "Role","Counts","Action"]
     return (
         <>
             <Typography variant="h6" gutterBottom>
@@ -154,6 +153,7 @@ function UsersTable() {
                                     <TableCell>{usr.firstName + ' ' + usr.lastName}</TableCell>
                                     <TableCell>{usr.email}</TableCell>
                                     <TableCell>{usr.isMerchant?'Merchant':'Customer'}</TableCell>
+                                    <TableCell>{`P - ${usr.myProducts && usr.myProducts.length} , R - ${usr.myRentals && usr.myRentals.length} , S - ${usr.myServices && usr.myServices.length}`}</TableCell>
                                     <TableCell><Button disabled={!user?.approved} variant='primary' >Assign</Button></TableCell>
                                 </TableRow>
                             ))}
@@ -173,7 +173,7 @@ function ContactResponsesTable() {
     React.useEffect(() => {
         async function fetchData() {
             try {
-                const q = await getDocs(collection(db,'contactus'))
+                const q = await getDocs(query(collection(db,'contactus'),where("status","==","new"),orderBy('timestamp','asc'),limit(5)))
                 const responses = q.docs.map((doc)=>doc.data())
                 setResponses(responses);
             } catch (err) {
@@ -232,16 +232,17 @@ function ContactResponsesTable() {
 }
 
 function ProductsTable() {
-    const [products, setServices] = React.useState([]);
+    const [products, setProducts] = React.useState([]);
 
     React.useEffect(() => {
         async function fetchData() {
-            const data = await fetchProducts();
-            setServices(data);
+            const q = await getDocs(query(collection(db,'products'),orderBy('timestamp','asc'),limit(5)))
+            const data = q.docs.map((doc)=>doc.data())
+            setProducts(data);
         }
         fetchData();
     }, []);
-    const cols = ["No", "Name", "Category", "Price"]
+    const cols = ["No", "Name", "Quantity", "Price"]
     return (
         <>
             <Typography variant="h6" gutterBottom>
@@ -259,12 +260,12 @@ function ProductsTable() {
                         </TableHead>
                         <TableBody>
                             {products.length>0?(
-                            products.slice(0,5).map((pro, index) => (
+                            products.slice(0,5).map((product, index) => (
                                 <TableRow>
                                     <TableCell>{index + 1}</TableCell>
-                                    <TableCell>{pro.name}</TableCell>
-                                    <TableCell>{pro.type}</TableCell>
-                                    <TableCell>{pro.price}</TableCell>
+                                    <TableCell>{product.title}</TableCell>
+                                    <TableCell>{product.quantity}</TableCell>
+                                    <TableCell>{product.price}</TableCell>
 
                                 </TableRow>
                             ))):(                                
@@ -285,12 +286,13 @@ function RentalsTable() {
 
     React.useEffect(() => {
         async function fetchData() {
-            const data = await fetchProducts();
+            const q = await getDocs(query(collection(db,'rentals'),orderBy('timestamp','asc'),limit(5)))
+            const data = q.docs.map((doc)=>doc.data())
             setRentals(data);
         }
         fetchData();
     }, []);
-    const cols = ["No", "Name", "Category", "Price"]
+    const cols = ["No", "Name", "Quntity", "Price"]
     return (
         <>
             <Typography variant="h6" gutterBottom>
@@ -311,8 +313,8 @@ function RentalsTable() {
                             rentals.slice(0,5).map((rental, index) => (
                                 <TableRow>
                                     <TableCell>{index + 1}</TableCell>
-                                    <TableCell>{rental.name}</TableCell>
-                                    <TableCell>{rental.type}</TableCell>
+                                    <TableCell>{rental.title}</TableCell>
+                                    <TableCell>{rental.quantity}</TableCell>
                                     <TableCell>{rental.price}</TableCell>
 
                                 </TableRow>
@@ -334,7 +336,8 @@ function ServicesTable() {
 
     React.useEffect(() => {
         async function fetchData() {
-            const data = await fetchServices();
+            const q = await getDocs(query(collection(db,'services'),orderBy('timestamp','asc'),limit(5)))
+            const data = q.docs.map((doc)=>doc.data())
             setServices(data);
         }
         fetchData();
@@ -360,8 +363,8 @@ function ServicesTable() {
                             services.slice(0,5).map((service, index) => (
                                 <TableRow>
                                     <TableCell>{index + 1}</TableCell>
-                                    <TableCell>{service.name}</TableCell>
-                                    <TableCell>{service.type}</TableCell>
+                                    <TableCell>{service.serviceName}</TableCell>
+                                    <TableCell>{service.serviceLocation}</TableCell>
                                     <TableCell>{service.price}</TableCell>
 
                                 </TableRow>

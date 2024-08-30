@@ -1,6 +1,6 @@
 import "firebase/firestore";
 import { db } from "../firebase";
-import { doc, setDoc, collection, getDocs, query, where, addDoc, updateDoc,  arrayUnion } from "firebase/firestore";
+import { doc, setDoc, collection, getDocs, query, where, addDoc, updateDoc,  arrayUnion, serverTimestamp } from "firebase/firestore";
 
 // Reference
 const serviceRef = collection(db, "services");
@@ -14,6 +14,7 @@ export const addService= async ({ merchantId,serviceName, serviceDescription, se
             serviceDescription,
             serviceLocation,
             images,
+            timestamp: serverTimestamp()
         });
         await setDoc(docRef, { sid: docRef.id }, { merge: true });
         await updateDoc(doc(db,'systemusers',merchantId),{myServices:arrayUnion(docRef.id)})

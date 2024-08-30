@@ -1,6 +1,6 @@
 import "firebase/firestore";
 import { db } from "../firebase";
-import { collection, getDocs, addDoc, setDoc, query, where } from "firebase/firestore";
+import { collection, getDocs, addDoc, setDoc, query, where, serverTimestamp } from "firebase/firestore";
 
 //reference
 const contactRef = collection(db, "contactus");
@@ -15,6 +15,7 @@ export const sendMessage = async (fname, lname, email, message) => {
       email,
       message,
       status: "new",
+      timestamp: serverTimestamp()
     });
     await setDoc(docRef, { id: docRef.id }, { merge: true });
   } catch (error) {
