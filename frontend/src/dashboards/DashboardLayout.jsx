@@ -22,6 +22,7 @@ import MerchantRentals from './Merchant/MerchantRentals';
 import MerchantServices from './Merchant/MerchantServices';
 import MerchantOrders from './Merchant/MerchantOrders';
 import MerchantOverview from './Merchant/MerchantOverview';
+import AdminRentals from './Admin/AdminRentals';
 
 const drawerWidth = 240;
 
@@ -228,6 +229,7 @@ export default function DashboardLayout({ handleMode }) {
                         <Route path='adminlist' element={<Admins/>}/>
                         <Route path='userlist' element={<AdminUsers/>} />
                         <Route path='productlist' element={<AdminProducts/>} />
+                        <Route path='rentallist' element={<AdminRentals/>} />
                         <Route path='servicelist' element={<AdminServices />} />
                         <Route path='contactreqs' element={<ContactusRequests />} />
                         {/* Merch */}

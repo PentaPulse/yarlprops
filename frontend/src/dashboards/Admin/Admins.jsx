@@ -1,9 +1,11 @@
 import { collection, getDocs, query, where } from 'firebase/firestore'
 import * as React from 'react'
 import { db } from '../../api/firebase'
-import { Box, Button, Grid, Modal, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material';
+import { Box, Button, ButtonGroup, Grid, Modal, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material';
+import { useAuth } from '../../api/AuthContext';
 
 function Admins() {
+    const {user} = useAuth()
     const [admins, setAdmins] = React.useState([])
     const [open, setOpen] = React.useState(false)
     const [newAdmin, setNewAdmin] = React.useState({})
@@ -11,7 +13,7 @@ function Admins() {
     React.useEffect(() => {
         const fetchAdmins = async () => {
             try {
-                const q = query(collection(db, 'systemusers'), where('role', '==', 'admin'));
+                const q = query(collection(db, 'admins'));
                 const querySnapshot = await getDocs(q);
                 if (!querySnapshot.empty) {
                     const adminsData = querySnapshot.docs.map(doc => doc.data());
@@ -27,9 +29,12 @@ function Admins() {
         fetchAdmins();
     }, []);
 
-    const columns = ["index", "Display Name", "First name", "Last name", "Email", "Gender"]
+    const columns = ["index", "Display Name", "First name", "Last name", "Email", "Gender","Approved"]
 
-    const handleAssignAdimns = () => {
+    const handleApproveAdimns=()=>{
+        setOpen(!open)
+    }
+    const handleRemoveAdimns=()=>{
         setOpen(!open)
     }
 
@@ -53,14 +58,26 @@ function Admins() {
                         <h1>Adminstrators</h1>
                     </Grid>
                     <Grid item sx={{ ml: 50, mt: 5 }}>
+                        <ButtonGroup>
                         <Button
+                        disabled={!user.approved}
                             variant="contained"
                             sx={{ backgroundColor: 'green', color: 'white' }}
                             //startIcon={<AddIcon />}
-                            onClick={handleAssignAdimns}
+                            onClick={handleApproveAdimns}
                         >
-                            Assign admins
+                            Approve admins
                         </Button>
+                        <Button
+                        disabled={!user.approved}
+                            variant="contained"
+                            sx={{ backgroundColor: 'green', color: 'white' }}
+                            //startIcon={<AddIcon />}
+                            onClick={handleRemoveAdimns}
+                        >
+                            Remove admins
+                        </Button>
+                        </ButtonGroup>
                     </Grid>
                 </Grid>
                 <Paper sx={{ width: '100%', mb: 4 }}>
@@ -82,6 +99,7 @@ function Admins() {
                                         <TableCell>{admin.lastName}</TableCell>
                                         <TableCell>{admin.email}</TableCell>
                                         <TableCell>{admin.gender}</TableCell>
+                                        <TableCell>{admin.approved?"yes":"no"}</TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>

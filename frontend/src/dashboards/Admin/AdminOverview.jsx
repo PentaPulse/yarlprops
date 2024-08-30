@@ -3,11 +3,10 @@ import { Box, Grid, Paper, Typography, Table, TableHead, TableRow, TableCell, Ta
 import { countAdmins, countUsers, fetchUserList} from '../../api/db/users';
 import { countProducts ,fetchProducts} from '../../api/db/products';
 import { countservices ,fetchServices} from '../../api/db/services';
-//import axios from 'axios';
-import { fetchContactUsResponsesList } from '../../api/db/contactus';
 import { countRentals } from '../../api/db/rentals';
-import { collection, doc, getDocs, query } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../../api/firebase';
+import { useAuth } from '../../api/AuthContext';
 
 export default function AdminOverview() {
     const [adminCount, setadminCount] = React.useState(0);
@@ -121,6 +120,7 @@ export default function AdminOverview() {
 }
 
 function UsersTable() {
+    const {user}=useAuth();
     const[users, setUsers] = React.useState([]);
 
     React.useEffect(() => {
@@ -154,7 +154,7 @@ function UsersTable() {
                                     <TableCell>{usr.firstName + ' ' + usr.lastName}</TableCell>
                                     <TableCell>{usr.email}</TableCell>
                                     <TableCell>{usr.isMerchant?'Merchant':'Customer'}</TableCell>
-                                    <TableCell><Button variant='primary' >Assign</Button></TableCell>
+                                    <TableCell><Button disabled={!user?.approved} variant='primary' >Assign</Button></TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

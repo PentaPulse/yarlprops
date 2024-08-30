@@ -14,6 +14,7 @@ import { fetchSelectedRequest } from '../../api/db/contactus';
 import Swal from 'sweetalert2';
 import { db } from '../../api/firebase';
 import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
+import { useAuth } from '../../api/AuthContext';
 
 export default function ContactusRequests() {
   const [editingresponseId, setEditingresponseId] = React.useState(null);
@@ -52,6 +53,7 @@ export default function ContactusRequests() {
 };
 
 function ContactusRequestsList({ onViewresponse }) {
+  const {user} =useAuth()
   const [responses, setResponses] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -149,8 +151,8 @@ function ContactusRequestsList({ onViewresponse }) {
                 <StyledTableCell align="center">{response.status}</StyledTableCell>
                 <StyledTableCell align="center">
                   {response.status === 'new' ?
-                    <Button onClick={() => onViewresponse(response.id)} variant="outlined" color="secondary" style={{ margin: '5px', width: '100%' }}>Reply</Button> :
-                    <Button onClick={() => handleDelete(response.id)} variant="outlined" color="error" style={{ margin: '5px', width: '100%' }}>Delete</Button>}
+                    <Button disabled={!user.approved} onClick={() => onViewresponse(response.id)} variant="outlined" color="secondary" style={{ margin: '5px', width: '100%' }}>Reply</Button> :
+                    <Button disabled={!user.approved} onClick={() => handleDelete(response.id)} variant="outlined" color="error" style={{ margin: '5px', width: '100%' }}>Delete</Button>}
                 </StyledTableCell>
               </StyledTableRow>
             ))}

@@ -66,7 +66,7 @@ const AdminUsers = () => {
 
     const fetchUsers = async () => {
         try {
-            const q = query(collection(db, "systemusers"),where('role','!=','admin'),where())
+            const q = query(collection(db, "systemusers"))
             const qSnapshot = await getDocs(q)
             if (!qSnapshot.empty) {
                 const userList = qSnapshot.docs.map(doc => doc.data());
@@ -124,9 +124,9 @@ const AdminUsers = () => {
                                     </TableCell>
                                     <TableCell>
                                         <Box display="flex" gap={1}>
-                                            <Button variant="outlined" color="primary" size="small" onClick={handleAssign}>Assign</Button>
-                                            <Button variant="outlined" color="secondary" size="small" onClick={handleView}>View</Button>
-                                            <Button variant="outlined" color="error" size="small" >Delete</Button>
+                                            <Button disabled={!user.approved} variant="outlined" color="primary" size="small" onClick={handleAssign}>Assign</Button>
+                                            <Button disabled={!user.approved} variant="outlined" color="secondary" size="small" onClick={handleView}>View</Button>
+                                            <Button disabled={!user.approved} variant="outlined" color="error" size="small" >Delete</Button>
                                         </Box>
                                     </TableCell>
                                 </TableRow>

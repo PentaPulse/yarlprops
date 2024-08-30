@@ -14,6 +14,7 @@ export const adminMenu = [
     ['Admins', <AdminPanelSettingsIcon />,'adminlist'],
     ['Users', <GroupIcon />,'userlist'],
     ['Products', <InventoryIcon />,'productlist'],
+    ['Rentals', <CarRentalIcon />,'rentallist'],
     ['Services', <MiscellaneousServicesIcon />,'servicelist'],
     ['Contact us requests', <CommentIcon />,'contactreqs'],
     ['My Profile', <BadgeIcon />,'profile'],
