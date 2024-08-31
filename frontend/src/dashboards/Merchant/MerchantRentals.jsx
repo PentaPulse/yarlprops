@@ -363,7 +363,7 @@ const RentalList = ({ onEditProduct, onViewProduct }) => {
           setRentals(fetchedRentals);
       };
       fetchRentalList();
-  }, []);
+  }, [user.uid]);
 
   const handleDelete = async (id) => {
       try {

@@ -1,6 +1,6 @@
 import "firebase/firestore";
 import { db } from "../firebase";
-import { doc, setDoc, collection, getDocs, query, where, addDoc, updateDoc,  orderBy, limit, serverTimestamp, arrayUnion } from "firebase/firestore";
+import { doc, setDoc, collection, getDocs, query, where, addDoc, updateDoc,   serverTimestamp, arrayUnion } from "firebase/firestore";
 
 // Reference
 const productRef = collection(db, "products");

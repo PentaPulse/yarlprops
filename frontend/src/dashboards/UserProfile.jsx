@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../api/AuthContext';
 import { Box, Button, Container, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Avatar, Paper, Typography, CircularProgress } from '@mui/material';
-import { doc, setDoc, updateDoc } from 'firebase/firestore';
+import { doc,  updateDoc } from 'firebase/firestore';
 import { db, storage, auth } from '../api/firebase';
 import { updateEmail, updatePassword, updateProfile } from 'firebase/auth';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';

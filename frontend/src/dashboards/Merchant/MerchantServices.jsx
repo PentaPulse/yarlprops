@@ -294,7 +294,7 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
         <Grid container spacing={1}>
           {existingImages.map((url, index) => (
             <Grid item key={index}>
-              <img src={url} alt={`Service Image ${index + 1}`} style={{ height: 100, margin: 5 }} />
+              <img src={url} alt={`Service  ${index + 1}`} style={{ height: 100, margin: 5 }} />
               <Button onClick={() => handleRemoveImage(index, 'existing')} color="secondary">
                 Remove
               </Button>
@@ -302,7 +302,7 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
           ))}
           {newImages.map((image, index) => (
             <Grid item key={index}>
-              <img src={URL.createObjectURL(image)} alt={`New Image ${index + 1}`} style={{ height: 100, margin: 5 }} />
+              <img src={URL.createObjectURL(image)} alt={`New  ${index + 1}`} style={{ height: 100, margin: 5 }} />
               <Button onClick={() => handleRemoveImage(index, 'new')} color="secondary">
                 Remove
               </Button>
@@ -370,7 +370,7 @@ const ServiceDetail = ({ sid, onBack }) => {
       <Grid container spacing={1} style={{ marginTop: 16 }}>
         {service.images.map((url, index) => (
           <Grid item key={index}>
-            <img src={url} alt={`Service Image ${index + 1}`} style={{ height: 100 }} />
+            <img src={url} alt={`Service  ${index + 1}`} style={{ height: 100 }} />
           </Grid>
         ))}
       </Grid>

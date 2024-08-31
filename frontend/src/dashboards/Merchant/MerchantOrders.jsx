@@ -28,7 +28,7 @@ const ProductList = ({ onEditProduct, onViewProduct }) => {
       setProducts(fetchedProducts);
     };
     fetchProductList();
-  }, []);
+  }, [user.uid]);
 
   const handleDelete = async (id) => {
     try {
