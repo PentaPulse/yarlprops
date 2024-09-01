@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Button, styled, Paper, Typography, TextField, FormControl, FormLabel, RadioGroup, Radio, FormControlLabel, Grid, TableCell, tableCellClasses, TableRow, TableContainer, Table, TableHead, TableBody, TablePagination, CircularProgress } from '@mui/material';
+import { Container, Button, styled, Paper, Typography, TextField, FormControl, FormLabel, RadioGroup, Radio, FormControlLabel, Grid, TableCell, tableCellClasses, TableRow, TableContainer, Table, TableHead, TableBody, TablePagination, CircularProgress, Select, InputLabel, MenuItem } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { db, storage } from '../../api/firebase';
@@ -62,7 +62,7 @@ export default function MerchantRentals() {
           ) : viewingRentalId ? (
             <RentalDetail rid={viewingRentalId} onBack={handleCancel} />
           ) : (
-            <RentalList onEditProduct={handleEditRental} onViewProduct={handleViewRental} />
+            <RentalList onEditrental={handleEditRental} onViewrental={handleViewRental} />
           )
         }
       </Container>
@@ -76,7 +76,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
     merchantId: user.uid,
     title: '',
     category: '',
-    type: '',
+    subCategory: '',
     description: '',
     quantity: '',
     location: '',
@@ -176,7 +176,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
       setRental({
         title: '',
         category: '',
-        type: '',
+        subCategory: '',
         description: '',
         quantity: '',
         location: '',
@@ -207,7 +207,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
     whiteSpace: 'nowrap',
     width: 1,
   });
-
+  const categories = { "Vehicals": ["Bicycle", "Bike"], "Home Accessories": ["Table", "Chair", "Bed"] }
   return (
     <Paper style={{ padding: 16 }}>
       <Typography variant="h6">{rid ? 'Edit Rental' : 'Add Rental'}</Typography>
@@ -221,24 +221,38 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
           margin="normal"
           required
         />
-        <TextField
-          label="Category"
-          name="category"
-          value={rental.category}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          required
-        />
-        <TextField
-          label="Type"
-          name="type"
-          value={rental.type}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          required
-        />
+        <FormControl fullWidth margin='normal'>
+          <InputLabel>Category</InputLabel>
+          <Select
+            name="category"
+            value={rental.category}
+            onChange={handleChange}
+            required
+          >
+            {Object.keys(categories).map((category) => (
+              <MenuItem key={category} value={category}>
+                {category}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl fullWidth margin='normal'>
+          <InputLabel>SubCategory</InputLabel>
+          <Select
+            name="subCategory"
+            value={rental.subCategory}
+            onChange={handleChange}
+            required
+            disabled={!rental.category}
+          >
+            {rental.category &&
+              categories[rental.category].map((subCategory) => (
+                <MenuItem key={subCategory} value={subCategory}>
+                  {subCategory}
+                </MenuItem>
+              ))}
+          </Select>
+        </FormControl>
         <TextField
           label="Description"
           name="description"
@@ -278,8 +292,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
             onChange={handleStatusChange}
             required
           >
-            <FormControlLabel value="For Rent" control={<Radio />} label="For Rent" />
-            <FormControlLabel value="For Sale" control={<Radio />} label="For Sale" />
+            <FormControlLabel value="For Rent" control={<Radio checked/>} label="For Rent" />
             <FormControlLabel
               value="Sold Out"
 
@@ -350,7 +363,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
   );
 };
 
-const RentalList = ({ onEditProduct, onViewProduct }) => {
+const RentalList = ({ onEditrental, onViewrental }) => {
   const [rentals, setRentals] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -383,13 +396,13 @@ const RentalList = ({ onEditProduct, onViewProduct }) => {
               Swal.fire({
                   icon: 'success',
                   title: 'Deleted!',
-                  text: `The product has been deleted.`,
+                  text: `The rental has been deleted.`,
                   showConfirmButton: false,
                   timer: 1500,
               });
           }
       } catch (error) {
-          console.error("Error deleting product: ", error);
+          console.error("Error deleting rental: ", error);
           Swal.fire({
               icon: 'error',
               title: 'Error!',
@@ -435,7 +448,7 @@ const RentalList = ({ onEditProduct, onViewProduct }) => {
                       {/* <TableCell>ID</TableCell> */}
                       <StyledTableCell align="center">Title</StyledTableCell>
                       <StyledTableCell align="center">Category</StyledTableCell>
-                      <StyledTableCell align="center">Type</StyledTableCell>
+                      <StyledTableCell align="center">Sub category</StyledTableCell>
                       <StyledTableCell align="center">Description</StyledTableCell>
                       <StyledTableCell align="center">Quantity</StyledTableCell>
                       <StyledTableCell align="center">Location</StyledTableCell>
@@ -449,15 +462,15 @@ const RentalList = ({ onEditProduct, onViewProduct }) => {
                       {/* <TableCell>{rental.id}</TableCell> */}
                       <StyledTableCell align="center">{rental.title}</StyledTableCell>
                       <StyledTableCell align="center">{rental.category}</StyledTableCell>
-                      <StyledTableCell align="center">{rental.type}</StyledTableCell>
+                      <StyledTableCell align="center">{rental.subCategory}</StyledTableCell>
                       <StyledTableCell align="justify">{rental.description}</StyledTableCell>
                       <StyledTableCell align="center">{rental.quantity}</StyledTableCell>
                       <StyledTableCell align="center">{rental.location}</StyledTableCell>
                       <StyledTableCell align="center">{rental.status}</StyledTableCell>
                       
                       <StyledTableCell align="center">
-                          <Button onClick={() => onViewProduct(rental.rid)} variant="outlined" color="secondary" style={{ margin: '5px', width: '100%' }}>View</Button>
-                          <Button onClick={() => onEditProduct(rental.rid)} variant="outlined" color="success" style={{ margin: '5px', width: '100%' }}>Edit</Button>
+                          <Button onClick={() => onViewrental(rental.rid)} variant="outlined" color="secondary" style={{ margin: '5px', width: '100%' }}>View</Button>
+                          <Button onClick={() => onEditrental(rental.rid)} variant="outlined" color="success" style={{ margin: '5px', width: '100%' }}>Edit</Button>
                           <Button onClick={() => handleDelete(rental.rid)} variant="outlined" color="error" style={{ margin: '5px', width: '100%' }}>Delete</Button>
                       </StyledTableCell>
                   </StyledTableRow>
@@ -485,20 +498,20 @@ const Image = styled('img')({
 });
 
 const RentalDetail = ({ rid, onBack }) => {
-  const [product, setProduct] = React.useState(null);
+  const [rental, setrental] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    const fetchProduct = async () => {
-      const fetchedProduct = await fetchSelectedRental(rid);
-      if (fetchedProduct) {
-        setProduct(fetchedProduct);
+    const fetchrental = async () => {
+      const fetchedrental = await fetchSelectedRental(rid);
+      if (fetchedrental) {
+        setrental(fetchedrental);
       } else {
         console.log('No such document!');
       }
       setLoading(false);
     };
-    fetchProduct();
+    fetchrental();
   }, [rid]);
 
   if (loading) return <CircularProgress />;
@@ -506,19 +519,19 @@ const RentalDetail = ({ rid, onBack }) => {
   return (
     <Paper style={{ padding: 16 }}>
       <Button variant="contained" color="primary" onClick={onBack} style={{ marginBottom: 16 }}>
-        Back to Product List
+        Back to rental List
       </Button>
-      <Typography variant="h4">{product.title}</Typography>
-      <Typography variant="subtitle1">Category: {product.category}</Typography>
-      <Typography variant="subtitle1">Type: {product.type}</Typography>
-      <Typography variant="body1">Description: {product.description}</Typography>
-      <Typography variant="body1">Quantity: {product.quantity}</Typography>
-      <Typography variant="body1">Location: {product.location}</Typography>
-      <Typography variant="body1">Status: {product.status}</Typography>
+      <Typography variant="h4">{rental.title}</Typography>
+      <Typography variant="subtitle1">Category: {rental.category}</Typography>
+      <Typography variant="subtitle1">Sub category: {rental.subCategory}</Typography>
+      <Typography variant="body1">Description: {rental.description}</Typography>
+      <Typography variant="body1">Quantity: {rental.quantity}</Typography>
+      <Typography variant="body1">Location: {rental.location}</Typography>
+      <Typography variant="body1">Status: {rental.status}</Typography>
       <Grid container spacing={2} style={{ marginTop: 16 }}>
-        {product.images && product.images.map((src, index) => (
+        {rental.images && rental.images.map((src, index) => (
           <Grid item key={index}>
-            <Image src={src} alt={`Product ${index}`} />
+            <Image src={src} alt={`rental ${index}`} />
           </Grid>
         ))}
       </Grid>

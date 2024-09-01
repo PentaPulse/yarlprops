@@ -109,7 +109,7 @@ function PageLayout({handleMode}) {
           <Route path="products" element={<Products />} />
           <Route path="product/:id" element={<ProductPage />} />
           <Route path="rentals" element={<Rentals />} />
-          <Route path="rentals/:id" element={<RentalsPage />} />
+          <Route path="rental/:id" element={<RentalsPage />} />
           <Route path="services" element={<Services />} />
           <Route path="service/:id" element={<ServicesPage />} />
           <Route path="contact" element={<Contact />} />

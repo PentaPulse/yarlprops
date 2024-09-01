@@ -2,9 +2,13 @@ import {
   Button,
   CircularProgress,
   Container,
+  FormControl,
   Grid,
   IconButton,
+  InputLabel,
+  MenuItem,
   Paper,
+  Select,
   styled,
   Table,
   TableBody,
@@ -92,6 +96,8 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
   const [service, setService] = React.useState({
     merchantId: user.uid,
     serviceName: '',
+    category:'',
+    subCategory:'',
     serviceDescription: [''],
     serviceLocation: '',
     images: [],
@@ -188,6 +194,8 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
       setService({
         merchantId: user.uid,
         serviceName: '',
+        category:'',
+        subCategory:'',
         serviceDescription: [''],
         serviceLocation: '',
         images: [],
@@ -216,6 +224,7 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
     whiteSpace: 'nowrap',
     width: 1,
   });
+  const categories = { "Food": ["Cake", "Meals"], "Saloon": ["Boys","Girls","Both"] }
 
   return (
     <Paper style={{ padding: 16 }}>
@@ -230,6 +239,38 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
           margin="normal"
           required
         />
+        <FormControl fullWidth margin='normal'>
+          <InputLabel>Category</InputLabel>
+          <Select
+            name="category"
+            value={service.category}
+            onChange={handleChange}
+            required
+          >
+            {Object.keys(categories).map((category) => (
+              <MenuItem key={category} value={category}>
+                {category}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl fullWidth margin='normal'>
+          <InputLabel>SubCategory</InputLabel>
+          <Select
+            name="subCategory"
+            value={service.subCategory}
+            onChange={handleChange}
+            required
+            disabled={!service.category}
+          >
+            {service.category &&
+              categories[service.category].map((subCategory) => (
+                <MenuItem key={subCategory} value={subCategory}>
+                  {subCategory}
+                </MenuItem>
+              ))}
+          </Select>
+        </FormControl>
 
         {service.serviceDescription.map((description, index) => (
           <Grid container key={index} spacing={1} alignItems="center">
@@ -355,6 +396,12 @@ const ServiceDetail = ({ sid, onBack }) => {
       <Typography variant="h6">Service Details</Typography>
       <Typography variant="body1">
         <strong>Name:</strong> {service.serviceName}
+      </Typography>
+      <Typography variant="body1">
+        <strong>Category:</strong> {service.category}
+      </Typography>
+      <Typography variant="body1">
+        <strong>Sub category:</strong> {service.subCategory}
       </Typography>
       <Typography variant="body1">
         <strong>Description:</strong>

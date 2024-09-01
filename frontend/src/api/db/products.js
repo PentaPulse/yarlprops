@@ -1,17 +1,17 @@
 import "firebase/firestore";
 import { db } from "../firebase";
-import { doc, setDoc, collection, getDocs, query, where, addDoc, updateDoc,   serverTimestamp, arrayUnion } from "firebase/firestore";
+import { doc, setDoc, collection, getDocs, query, where, addDoc, updateDoc, serverTimestamp, arrayUnion, getDoc } from "firebase/firestore";
 
 // Reference
 const productRef = collection(db, "products");
 
 // Adding products
-const addProduct = async ({merchantId, title, category, type, description, quantity, location, status, images }) => {
+const addProduct = async ({ merchantId, title, category, subCategory, description, quantity, location, status, images }) => {
     try {
         const docRef = await addDoc(productRef, {
             title,
             category,
-            type,
+            subCategory,
             description,
             quantity,
             location,
@@ -21,7 +21,7 @@ const addProduct = async ({merchantId, title, category, type, description, quant
             timestamp: serverTimestamp()
         });
         await setDoc(docRef, { pid: docRef.id }, { merge: true });
-        await updateDoc(doc(db,'systemusers',merchantId),{myProducts:arrayUnion(docRef.id)})
+        await updateDoc(doc(db, 'systemusers', merchantId), { myProducts: arrayUnion(docRef.id) })
         return docRef.id;
     } catch (e) {
         console.error("Error adding product:", e);

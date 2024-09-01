@@ -3,12 +3,12 @@ import { db } from "../firebase";
 
 const rentalRef = collection(db,'rentals')
 
-export const addRental = async ({merchantId, title, category, type, description, quantity, location, status, images }) => {
+export const addRental = async ({merchantId, title, category, subCategory, description, quantity, location, status, images }) => {
     try {
         const docRef = await addDoc(rentalRef, {
             title,
             category,
-            type,
+            subCategory,
             description,
             quantity,
             location,

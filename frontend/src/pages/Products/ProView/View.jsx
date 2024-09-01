@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Container, Grid, Card, CardMedia, CardContent, Typography, Button, CircularProgress, useTheme, Box, IconButton } from '@mui/material';
+import { fetchMerchantProductDetails } from '../../../api/db/users';
 import { fetchSelectedProduct } from '../../../api/db/products';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
@@ -8,6 +9,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 function ProductPage() {
   const [product, setProduct] = useState(null);
+  const [merchant, setMerchant] = useState(null)
   const [selectedImageIndex, setSelectedImageIndex] = useState(0); // Track the index of the selected image
   const { id } = useParams();
   const theme = useTheme();
@@ -22,8 +24,18 @@ function ProductPage() {
         console.error("Error fetching product:", error);
       }
     };
-
     fetchProduct();
+    
+    const fetchMerchant = async ()=>{
+      try{
+        const merchantData = await fetchMerchantProductDetails(id);
+        setMerchant(merchantData)
+      }catch(error){
+        console.error("Error fetching merchant:", error);
+      }
+    }
+
+    fetchMerchant();
   }, [id]);
 
   if (!product) {
@@ -66,11 +78,11 @@ function ProductPage() {
                   component="img"
                   image={image}
                   alt={`image ${index}`}
-                  sx={{ 
-                    width: '100%', 
-                    height: '100px', 
-                    borderRadius: '8px', 
-                    objectFit: 'cover', 
+                  sx={{
+                    width: '100%',
+                    height: '100px',
+                    borderRadius: '8px',
+                    objectFit: 'cover',
                     boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
                     cursor: 'pointer',
                     transition: 'transform 0.3s',
@@ -91,7 +103,7 @@ function ProductPage() {
             </Grid>
           </Grid>
         </Grid>
-        
+
         <Grid item xs={12} md={6}>
           <Card sx={{ height: '100%', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }}>
             <CardContent sx={{ marginTop: '30px', marginBottom: '30px' }}>
@@ -101,16 +113,16 @@ function ProductPage() {
                 Category: {product.category}
               </Typography>
               <Typography variant="h6" component="h4" sx={{ fontWeight: 'bold', textAlign: 'center', fontStyle: 'italic' }}>
-                Type: {product.type}
+                Sub category: {product.subCategory}
               </Typography>
               <Typography variant="h6" component="h4" sx={{ fontWeight: 'bold', textAlign: 'center', fontStyle: 'italic' }}>
-                {(product.status === "For Sale") ? 
+                {(product.status === "For Sale") ?
                   (<Box sx={{ backgroundColor: "green", color: 'white', fontWeight: 'bold', mx: '11rem', borderRadius: '20px' }}>For Sale</Box>)
-                  : ((product.status === "For Rent") ? 
-                  (<Box sx={{ backgroundColor: "darkorange", color: 'white', fontWeight: 'bold', mx: '11rem', borderRadius: '20px' }}>For Rent</Box>)
-                  : (<Box sx={{ backgroundColor: "red", color: 'white', fontWeight: 'bold', mx: '11rem', borderRadius: '20px' }}>Sold Out!</Box>))}
+                  : ((product.status === "For Rent") ?
+                    (<Box sx={{ backgroundColor: "darkorange", color: 'white', fontWeight: 'bold', mx: '11rem', borderRadius: '20px' }}>For Rent</Box>)
+                    : (<Box sx={{ backgroundColor: "red", color: 'white', fontWeight: 'bold', mx: '11rem', borderRadius: '20px' }}>Sold Out!</Box>))}
               </Typography>
-              
+
               <Box sx={{ mx: '1.9rem', mt: '1rem' }}>
                 <Typography variant="h6" component="h4" sx={{ fontWeight: 'bold' }}>Description</Typography>
                 <ul style={{ textAlign: 'justify', fontSize: '18px' }}>
@@ -123,11 +135,11 @@ function ProductPage() {
                 {/* Seller Details */}
                 <Typography variant="h5" component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
                 <Typography variant="h6" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-user"></i> Name</Typography>
-                <Typography>{product.sellerName}</Typography>
+                <Typography>{merchant.firstName + ' ' + merchant.lastName}</Typography>
                 <Typography variant="h6" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-location-dot"></i> Location</Typography>
-                <Typography>{product.Location}</Typography>
+                <Typography>{product.location}</Typography>
                 <Typography variant="h6" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-phone"></i> Contact No</Typography>
-                <Typography>{product.telephone}</Typography>
+                <Typography>{merchant.phoneNumber}</Typography>
               </Box>
             </CardContent>
           </Card>
@@ -202,7 +214,7 @@ export default ProductPage;
 //                     />
 //                   </Box>
 //                 ))}
-//               </Carousel> 
+//               </Carousel>
 //             </Card>
 //           </Grid>
 //           <Grid item xs={12} md={6}>

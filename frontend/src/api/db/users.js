@@ -124,3 +124,69 @@ export const countRenters = async () => {
     const userRef = query(collection(db, 'systemusers'), where('role', '==', 'renter'));
     return await countUsersFromRef(userRef);
 };
+
+export const fetchMerchantProductDetails = async (pid) => {
+    const q = query(
+        collection(db, 'systemusers'),
+        where('isMerchant', '==', true),
+        where('myProducts', 'array-contains', pid)
+    );
+
+    try {
+        const merchantSnapshot = await getDocs(q);
+        if (!merchantSnapshot.empty) {
+            const merchantData = merchantSnapshot.docs[0].data();
+            return merchantData;
+        } else {
+            console.log("No merchant found for the given product ID");
+            return [];
+        }
+    } catch (e) {
+        console.error("Error fetching merchant details:", e);
+        return null;
+    }
+};
+
+export const fetchMerchantRentalDetails = async (pid) => {
+    const q = query(
+        collection(db, 'systemusers'),
+        where('isMerchant', '==', true),
+        where('myRentals', 'array-contains', pid)
+    );
+
+    try {
+        const merchantSnapshot = await getDocs(q);
+        if (!merchantSnapshot.empty) {
+            const merchantData = merchantSnapshot.docs[0].data();
+            return merchantData;
+        } else {
+            console.log("No merchant found for the given rental ID");
+            return [];
+        }
+    } catch (e) {
+        console.error("Error fetching merchant details:", e);
+        return null;
+    }
+};
+
+export const fetchMerchantServiceDetails = async (pid) => {
+    const q = query(
+        collection(db, 'systemusers'),
+        where('isMerchant', '==', true),
+        where('myServices', 'array-contains', pid)
+    );
+
+    try {
+        const merchantSnapshot = await getDocs(q);
+        if (!merchantSnapshot.empty) {
+            const merchantData = merchantSnapshot.docs[0].data();
+            return merchantData;
+        } else {
+            console.log("No merchant found for the given service ID");
+            return [];
+        }
+    } catch (e) {
+        console.error("Error fetching merchant details:", e);
+        return null;
+    }
+};
