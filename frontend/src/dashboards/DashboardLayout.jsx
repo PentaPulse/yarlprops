@@ -23,6 +23,8 @@ import MerchantServices from './Merchant/MerchantServices';
 import MerchantOrders from './Merchant/MerchantOrders';
 import MerchantOverview from './Merchant/MerchantOverview';
 import AdminRentals from './Admin/AdminRentals';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '../api/firebase';
 
 const drawerWidth = 240;
 
@@ -92,6 +94,8 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 export default function DashboardLayout({ handleMode }) {
     const [open, setOpen] = React.useState(false);
+    const [adminList,setAdminList]=React.useState([]);
+    const [merchantList,setMerchantList]=React.useState([]);
     const { user } = useAuth()
     const theme = useTheme();
     const navigate = useNavigate();
@@ -110,6 +114,28 @@ export default function DashboardLayout({ handleMode }) {
     const back = () => {
         navigate('/')
     }
+    React.useEffect(()=>{
+        const fetchAdminList=async()=>{
+            try{
+                const q = await getDocs(query(collection(db,'admins'),where('approved','==',true)))
+                const list=q.docs.map((doc)=>doc.data().uid)
+                setAdminList(list);
+            }catch(e){
+
+            }
+        }
+        const fetchMerchantList=async()=>{
+            try{
+                const q = await getDocs(query(collection(db,'systemusers'),where('isMerchant','==',true)))
+                const list=q.docs.map((doc)=>doc.data().uid)
+                setMerchantList(list)
+            }catch(e){
+
+            }
+        }
+        fetchAdminList()
+        fetchMerchantList()
+    },[])
     return (
         <>
             <Box mt={5}>
@@ -155,7 +181,7 @@ export default function DashboardLayout({ handleMode }) {
                     </DrawerHeader>
                     <Divider />
                     <List>
-                        {(user.adminid ? adminMenu : (user.isMerchant ? merchMenu : userMenu)).map((text, index) => (
+                        {(adminList.includes(user.uid) ? adminMenu : (merchantList.includes(user.uid) ? merchMenu : userMenu)).map((text, index) => (
                             <ListItem key={text} disablePadding sx={{ display: 'block' }}>
                                 <ListItemButton
                                     sx={{
@@ -222,7 +248,7 @@ export default function DashboardLayout({ handleMode }) {
                 <Grid item m='5vh 2vw 0 8vw'>
                     <Routes>
                         {/* Common */}
-                        <Route path='overview' element={user.adminid && user.approved?<AdminOverview />:(user.isMerchant?<MerchantOverview/>:<UserOverview/>)} />
+                        <Route path='overview' element={adminList.includes(user.uid)?<AdminOverview />:(merchantList.includes(user.uid)?<MerchantOverview/>:<UserOverview/>)} />
                         <Route path='profile' element={<Profile/>}/>
 
                         {/* Admin */}

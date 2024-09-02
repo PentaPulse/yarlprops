@@ -1,14 +1,13 @@
 import { collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore'
 import * as React from 'react'
 import { db } from '../../api/firebase'
-import { Box, Button, ButtonGroup, Grid, Modal, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material';
+import { Box, Button, ButtonGroup, FormControl, Grid, InputLabel, MenuItem, Modal, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material';
 import { useAuth } from '../../api/AuthContext';
 
 export default function Admins() {
     const { user } = useAuth()
     const [admins, setAdmins] = React.useState([])
     const [open, setOpen] = React.useState(false)
-    const [newAdmin, setNewAdmin] = React.useState({})
 
     React.useEffect(() => {
         const fetchAdmins = async () => {
@@ -41,7 +40,7 @@ export default function Admins() {
     const handleOpen = () => {
         setOpen(!open)
     }
-    
+
     return (
         <>
             <Box sx={{ textAlign: 'center', margin: 'auto' }}>
@@ -104,7 +103,7 @@ export default function Admins() {
                     aria-labelledby="add-user-modal-title"
                     aria-describedby="add-user-modal-description"
                 >
-                    <ApproveAdmin/>
+                    <ApproveAdmin />
                 </Modal>
             </Box>
         </>
@@ -113,21 +112,25 @@ export default function Admins() {
 
 function ApproveAdmin() {
     const [adminDetails, setAdminDetails] = React.useState({
-        name: '',
+        adminId: '',
+        firstName: '',
+        lastName: '',
         email: '',
-        phone: '',
+        phoneNumber: '',
         address: '',
         status: ''
     });
 
     const [unapprovedList, setUnapprovedList] = React.useState([]);
-    const [user] = useAuth();
+    //const [user] = useAuth();
 
     React.useEffect(() => {
         const fetchUnapprovedAdmins = async () => {
             try {
                 const data = await getDocs(query(collection(db, 'admins'), where('approved', '==', false)));
-                const fetchedList = data.docs.map((doc) => (doc.data() ));
+                const fetchedList = data.docs.map((doc) => (
+                    doc.data()
+                ));
                 setUnapprovedList(fetchedList);
                 console.log(fetchedList);
             } catch (e) {
@@ -142,19 +145,31 @@ function ApproveAdmin() {
         setAdminDetails({ ...adminDetails, [name]: value });
     };
 
+    const handleChange = (event) => {
+        const selectedAdmin = unapprovedList.find(admin => admin.adminId === event.target.value);
+        setAdminDetails({
+            adminId: selectedAdmin.id,
+            firstName: selectedAdmin.firstName,
+            lastName: selectedAdmin.lastName,
+            email: selectedAdmin.email,
+            phoneNumber: selectedAdmin.phoneNumber,
+            address: selectedAdmin.address,
+            status: selectedAdmin.status
+        });
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            // Assume adminDetails has an ID field for the selected admin
             const adminRef = doc(db, 'admins', adminDetails.adminId);
             await updateDoc(adminRef, { approved: true });
-            // Remove the approved admin from the unapproved list
-            setUnapprovedList(unapprovedList.filter(admin => admin.id !== adminDetails.id));
-            // Clear the form
+            setUnapprovedList(unapprovedList.filter(admin => admin.adminId !== adminDetails.adminId));
             setAdminDetails({
-                name: '',
+                adminId: '',
+                firstName: '',
+                lastName: '',
                 email: '',
-                phone: '',
+                phoneNumber: '',
                 address: '',
                 status: ''
             });
@@ -183,12 +198,35 @@ function ApproveAdmin() {
                 <Typography id="add-user-modal-title" variant="h6" component="h2">
                     Approve Admin
                 </Typography>
+                <FormControl fullWidth margin="normal">
+                    <InputLabel>Select Admin</InputLabel>
+                    <Select
+                        name="adminId"
+                        value={adminDetails.adminId}
+                        onChange={handleChange}
+                        required
+                    >
+                        {unapprovedList.map((admin) => (
+                            <MenuItem key={admin.adminId} value={admin.adminId}>
+                                {admin.firstName} {admin.lastName} ({admin.email})
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
                 <TextField
                     fullWidth
                     margin="normal"
-                    name="name"
-                    label="Name"
-                    value={adminDetails.name}
+                    name="firstName"
+                    label="First Name"
+                    value={adminDetails.firstName}
+                    onChange={handleInputChange}
+                />
+                <TextField
+                    fullWidth
+                    margin="normal"
+                    name="lastName"
+                    label="Last Name"
+                    value={adminDetails.lastName}
                     onChange={handleInputChange}
                 />
                 <TextField
@@ -202,9 +240,9 @@ function ApproveAdmin() {
                 <TextField
                     fullWidth
                     margin="normal"
-                    name="phone"
-                    label="Phone"
-                    value={adminDetails.phone}
+                    name="phoneNumber"
+                    label="Phone Number"
+                    value={adminDetails.phoneNumber}
                     onChange={handleInputChange}
                 />
                 <TextField
@@ -219,8 +257,8 @@ function ApproveAdmin() {
                     fullWidth
                     margin="normal"
                     name="status"
-                    label="Status"
-                    value={adminDetails.status}
+                    label="Approved"
+                    value={adminDetails.approved}
                     onChange={handleInputChange}
                 />
                 <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
@@ -230,6 +268,7 @@ function ApproveAdmin() {
         </>
     );
 }
+
 
 function RemoveAdmin() {
     return (

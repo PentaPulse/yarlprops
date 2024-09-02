@@ -58,7 +58,7 @@ export const registerAdmin = async (uid, fname, lname, dname, email) => {
 
         if (!userSnap.exists()) {
             await setDoc(newUserRef, {
-                adminid:uid,
+                uid,
                 firstName: fname || '',
                 lastName: lname || '',
                 email:email,
