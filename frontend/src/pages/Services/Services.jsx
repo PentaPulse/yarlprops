@@ -8,6 +8,7 @@ import { useTheme } from '@emotion/react';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { fetchSelectedService, fetchServices } from '../../api/db/services';
 import Carousel from 'react-material-ui-carousel';
+import { fetchMerchantServiceDetails } from '../../api/db/users';
 
 export default function Services() {
     const [searchTerm, setSearchTerm] = React.useState('');
@@ -223,8 +224,9 @@ function ServicesContents({ searchTerm, category, subCategory, price, quantity }
     );
 };
 
-export function ServicesPage() {
+export function ServicePage() {
     const [service, setService] = React.useState(null);
+    const [merchant,setMerchant]=React.useState(null)
     const { id } = useParams();
     const theme = useTheme();
 
@@ -239,6 +241,16 @@ export function ServicesPage() {
         };
 
         fetchService();
+        const fetchMerchant = async ()=>{
+            try{
+              const merchantData = await fetchMerchantServiceDetails(id);
+              setMerchant(merchantData)
+            }catch(error){
+              console.error("Error fetching merchant:", error);
+            }
+          }
+      
+          fetchMerchant();
     }, [id]);
 
     if (!service) {
@@ -290,11 +302,11 @@ export function ServicesPage() {
                                 {/* Seller Details */}
                                 <Typography variant="h5" component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Service Provider's Details</Typography>
                                 <Typography variant="h6" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-user"></i> Name</Typography>
-                                <Typography>{service.spName}</Typography>
+                                <Typography>{merchant && merchant.firstName+' '+merchant.lastName}</Typography>
                                 <Typography variant="h6" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-location-dot"></i> Location</Typography>
-                                <Typography>{service.Location}</Typography>
+                                <Typography>{service.serviceLocation}</Typography>
                                 <Typography variant="h6" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-phone"></i> Contact No</Typography>
-                                <Typography>{service.telephone}</Typography>
+                                <Typography>{merchant && merchant.phoneNumber}</Typography>
                             </Box>
                         </CardContent>
                     </Card>

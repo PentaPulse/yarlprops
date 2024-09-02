@@ -11,13 +11,13 @@ import Home from "./pages/Home/Home";
 import Contact from "./pages/Contact/Contact";
 import Products from "./pages/Products/Products";
 import ProductPage from "./pages/Products/ProView/View";
-import Services, { ServicesPage } from "./pages/Services/Services";
+import Services, { ServicePage } from "./pages/Services/Services";
 import NavigationBar from "./components/NavigationBar/NavigationBar";
 import Footer from "./components/Footer/Footer";
 import { Box } from "@mui/material";
 import AdminLogin from "./dashboards/Admin/AdminLogin";
-import RentalsPage from "./pages/Rentals/Rental.pages";
-import Rentals from "./pages/Rentals/Rental.pages";
+import RentalPage from "./pages/Rentals/Rentals";
+import Rentals from "./pages/Rentals/Rentals";
 
 const lightTheme = createTheme({
   palette: {
@@ -89,7 +89,7 @@ function Routings({ handleMode }) {
     <>
       <AuthProvider>
         <Routes>
-          <Route path="/" element={<PageLayout handleMode={handleMode} />} />
+          <Route path="*" element={<PageLayout handleMode={handleMode} />} />
           <Route path="/p/*" element={<PageLayout handleMode={handleMode} />} />
           <Route path="/d/*" element={<PrivateRoute><DashboardLayout handleMode={handleMode} /></PrivateRoute>} />
           <Route path="/adminLogin" element={<AdminLogin handleMode={handleMode}/>}/>
@@ -105,13 +105,13 @@ function PageLayout({handleMode}) {
       <Box sx={{ marginTop: '12vh' }}>
         <NavigationBar handleMode={handleMode} />
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="*" element={<Home />} />
           <Route path="products" element={<Products />} />
           <Route path="product/:id" element={<ProductPage />} />
           <Route path="rentals" element={<Rentals />} />
-          <Route path="rental/:id" element={<RentalsPage />} />
+          <Route path="rental/:id" element={<RentalPage />} />
           <Route path="services" element={<Services />} />
-          <Route path="service/:id" element={<ServicesPage />} />
+          <Route path="service/:id" element={<ServicePage />} />
           <Route path="contact" element={<Contact />} />
         </Routes>
         <Footer />

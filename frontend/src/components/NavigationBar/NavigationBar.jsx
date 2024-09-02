@@ -5,8 +5,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../api/AuthContext';
 import { Login, Register } from '../Signup/Signup';
+import { auth } from '../../api/firebase';
 
-const pages = [['Home', '/'], ['Products', '/p/products'],['Rentals','/p/rentals'], ['Services', '/p/services'], ['Contact', '/p/contact']];
+const pages = [['Home', '/'], ['Products', '/p/products'], ['Rentals', '/p/rentals'], ['Services', '/p/services'], ['Contact', '/p/contact']];
 const style = {
     position: 'absolute',
     top: '50%',
@@ -24,7 +25,7 @@ const style = {
 };
 
 
-export default function NavigationBar({ handleMode }) {
+export default function NavigationBar({ handleMode,ok }) {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [isLogged, setIsLogged] = React.useState(false);
     const { user } = useAuth()
@@ -43,8 +44,6 @@ export default function NavigationBar({ handleMode }) {
     React.useEffect(() => {
         if (user) {
             setIsLogged(true);
-            sessionStorage.setItem('pp', user.photoURL);
-            sessionStorage.setItem('displayName', user.displayName);
         } else {
             setIsLogged(false);
         }
@@ -215,7 +214,7 @@ export default function NavigationBar({ handleMode }) {
                 }}>
                 <Fade in={signup}>
                     <Box sx={style}>
-                        {signup ? <Register /> : ''}
+                        {signup ? <Register closeBox={() => setSignup(false)} /> : ''}
                     </Box>
                 </Fade>
             </Modal>

@@ -135,11 +135,11 @@ function ProductPage() {
                 {/* Seller Details */}
                 <Typography variant="h5" component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
                 <Typography variant="h6" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-user"></i> Name</Typography>
-                <Typography>{merchant.firstName + ' ' + merchant.lastName}</Typography>
+                <Typography>{merchant && merchant.firstName + ' ' + merchant.lastName}</Typography>
                 <Typography variant="h6" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-location-dot"></i> Location</Typography>
                 <Typography>{product.location}</Typography>
                 <Typography variant="h6" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-phone"></i> Contact No</Typography>
-                <Typography>{merchant.phoneNumber}</Typography>
+                <Typography>{merchant && merchant.phoneNumber}</Typography>
               </Box>
             </CardContent>
           </Card>

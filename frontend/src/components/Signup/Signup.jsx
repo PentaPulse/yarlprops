@@ -3,6 +3,7 @@ import { Button, ButtonGroup, FormControl, IconButton, InputAdornment, InputLabe
 import { useAuth } from "../../api/AuthContext";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { useAlerts } from "../../api/AlertService";
 
 export function Login({ closeBox }) {
     const theme = useTheme();
@@ -21,7 +22,7 @@ export function Login({ closeBox }) {
         e.preventDefault();
         try {
             await google();
-            window.location.reload()
+            closeBox();
         } catch (error) {
             console.error(error);
         }
@@ -31,7 +32,7 @@ export function Login({ closeBox }) {
         e.preventDefault();
         try {
             await login(email, password);
-            window.location.reload();
+            closeBox()
         } catch (error) {
             console.error(error);
         }
@@ -100,7 +101,6 @@ export function Login({ closeBox }) {
                             </InputAdornment>
                         }
                         label="Password"
-                        onKeyDown={(event) => handleKeyDown(event)}
                     />
                 </FormControl>
                 <Typography
@@ -121,7 +121,7 @@ export function Login({ closeBox }) {
     );
 }
 
-export function Register() {
+export function Register({closeBox}) {
     const [firstName, setFirstName] = React.useState('');
     const [lastName, setLastName] = React.useState('');
     const [displayName, setDisplayName] = React.useState('');
@@ -140,7 +140,7 @@ export function Register() {
         e.preventDefault();
         try {
             await register(firstName, lastName, displayName, email, password);
-            window.location.reload()
+            closeBox()
         } catch (error) {
             console.error(error);
             throw error

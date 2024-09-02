@@ -1,6 +1,7 @@
 import {
   Button,
   CircularProgress,
+  collapseClasses,
   Container,
   FormControl,
   Grid,
@@ -29,7 +30,7 @@ import Swal from 'sweetalert2';
 import { addService, fetchSelectedService, fetchServices, updateService } from '../../api/db/services';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { db, storage } from '../../api/firebase';
-import { deleteDoc, doc } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
 import { useAuth } from '../../api/AuthContext';
 
 export default function MerchantServices() {
@@ -433,11 +434,13 @@ const ServiceList = ({ onEditService, onViewService }) => {
   const [loading, setLoading] = React.useState(true);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const {user}=useAuth()
 
   React.useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const fetchedServices = await fetchServices();
+      const q = await getDocs(query(collection(db,'services'),where('merchantId','==',user.uid)))
+      const fetchedServices = q.docs.map((doc)=>doc.data())
       setServices(fetchedServices);
       setLoading(false);
     };
@@ -459,7 +462,7 @@ const ServiceList = ({ onEditService, onViewService }) => {
     if (result.isConfirmed) {
       try {
         await deleteDoc(doc(db, 'services', serviceId));
-        setServices(services.filter(service => service.id !== serviceId));
+        setServices(services.filter(service => service.sid !== serviceId));
 
         Swal.fire(
           'Deleted!',
@@ -525,14 +528,14 @@ const ServiceList = ({ onEditService, onViewService }) => {
               </TableRow>
             ) : services.length > 0 ? (
               services.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(service => (
-                <StyledTableRow key={service.id}>
+                <StyledTableRow key={service.sid}>
                   <StyledTableCell>{service.serviceName}</StyledTableCell>
                   <StyledTableCell>{service.serviceDescription.join(', ')}</StyledTableCell>
                   <StyledTableCell>{service.serviceLocation}</StyledTableCell>
                   <StyledTableCell>
-                    <Button onClick={() => onViewService(service.id)} variant="outlined" color="secondary" style={{ margin: '5px', width: '100%' }}>View</Button>
-                    <Button onClick={() => onEditService(service.id)} variant="outlined" color="success" style={{ margin: '5px', width: '100%' }}>Edit</Button>
-                    <Button onClick={() => handleDeleteService(service.id)} variant="outlined" color="error" style={{ margin: '5px', width: '100%' }}>Delete</Button>
+                    <Button onClick={() => onViewService(service.sid)} variant="outlined" color="secondary" style={{ margin: '5px', width: '100%' }}>View</Button>
+                    <Button onClick={() => onEditService(service.sid)} variant="outlined" color="success" style={{ margin: '5px', width: '100%' }}>Edit</Button>
+                    <Button onClick={() => handleDeleteService(service.sid)} variant="outlined" color="error" style={{ margin: '5px', width: '100%' }}>Delete</Button>
                   </StyledTableCell>
                 </StyledTableRow>
               ))

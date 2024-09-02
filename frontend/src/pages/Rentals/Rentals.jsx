@@ -209,8 +209,8 @@ function RentalsContents({ searchTerm, category, subCategory, price, quantity })
         fetchData()
     }, [searchTerm, category, subCategory, price, quantity]);
 
-    const handleCardClick = (pid) => {
-        navigate(`/p/rental/${pid}`);
+    const handleCardClick = (rid) => {
+        navigate(`/p/rental/${rid}`);
     };
     return (
         <Container fixed>

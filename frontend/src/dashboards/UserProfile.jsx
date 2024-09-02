@@ -159,10 +159,9 @@ const ProfileSettings = () => {
         }
       );
     } catch (e) {
-      console.log("upload error pp :" + e)
+      //console.log("upload error pp :" + e)
     }
   }
-  console.log(user.photoUrl)
   const width = '17.5vw';
 
   return (

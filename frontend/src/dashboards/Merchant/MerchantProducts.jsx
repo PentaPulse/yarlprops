@@ -209,7 +209,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
     whiteSpace: 'nowrap',
     width: 1,
   });
-  const categories = { "Vehicals": ["Bicycle", "Bike"], "Home Accessories": ["Table", "Chair", "Bed"] }
+  const categories = { "Vehicals": ["Bicycle", "Bike"], "Furnitures": ["Table", "Chair", "Bed"] }
 
   return (
     <Paper style={{ padding: 16 }}>

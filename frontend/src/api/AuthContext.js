@@ -3,7 +3,7 @@ import { GoogleAuthProvider, createUserWithEmailAndPassword, onAuthStateChanged,
 import { db, auth } from './firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import {  registerUser } from './db/users';
-import { useLocation, useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 import { useAlerts } from './AlertService';
 
 const AuthContext = React.createContext();
@@ -11,9 +11,8 @@ const AuthContext = React.createContext();
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = React.useState(null);
     const [loading, setLoading] = React.useState(true);
-    const [dash, setDash] = React.useState(false)
+    const [ok,setOk]=React.useState(false)
     const navigate = useNavigate()
-    const location = useLocation()
     const showAlerts = useAlerts();
 
     React.useEffect(() => {
@@ -29,8 +28,6 @@ export const AuthProvider = ({ children }) => {
                     }
                     else if (userDoc.exists()) {
                         setUser({ ...userDoc.data(), ...currentUser });
-                    } else {
-                        console.error('No such user document!');
                     }
                 } catch (error) {
                     
@@ -43,25 +40,31 @@ export const AuthProvider = ({ children }) => {
         });
 
         return () => unsubscribe();
-    },[]);
+    },[ok]);
 
     //registering
-    const register = (fname, lname, dname, email, password) => {
-        createUserWithEmailAndPassword(auth, email, password)
+    const register = async(fname, lname, dname, email, password) => {
+        await createUserWithEmailAndPassword(auth, email, password)
             .then((result) => {
                 const user = result.user;
                 const userid = user.uid;
                 updateProfile(user, { displayName: dname })
                     .then(() => {
-                        registerUser(userid, fname, lname, dname, email);
-                    })
+                        registerUser(userid, fname, lname, dname, email).then((result)=>{
+                            if(result.success){
+                                sessionStorage.setItem('pp', user.photoURL);
+                                sessionStorage.setItem('displayName', user.displayName);
+                                setOk(true)
+                            }
+                        })
+                    })/*
                     .catch((error) => {
                         console.error("Error updating profile:", error);
-                    });
-                showAlerts('Account created', 'success', 'top-center')
+                    });*/
+                showAlerts('Account created , wait a little ', 'success', 'top-center')
             })
             .catch((error) => {
-                showAlerts('ww' + error, 'error')
+                //showAlerts('ww' + error, 'error')
                 if (email === '' || password === '' || fname === '' || lname === '' ) {
                     if (error.code === 'auth/invalid-email' || error.code === 'auth/missing-password') {
                         showAlerts('Enter details', 'warning')
@@ -83,14 +86,23 @@ export const AuthProvider = ({ children }) => {
     const google = () => signInWithPopup(auth, provider)
         .then((result) => {
             const user = result.user;
-            registerUser(user.uid, '', '', user.displayName, user.email);
+            sessionStorage.setItem('pp', user.photoURL);
+            sessionStorage.setItem('displayName', user.displayName);
+            registerUser(user.uid, '', '', user.displayName, user.email).then((result)=>{
+                if(result.success){
+                    setOk(true)
+                }
+            })
         })
         .catch(() => {
             showAlerts('Error occured , Try again with different gmail', 'error')
         })
 
     const login = (email, password) => signInWithEmailAndPassword(auth, email, password)
-        .then(() => {
+        .then((result) => {
+            const user = result.user
+            sessionStorage.setItem('pp', user.photoURL);
+            sessionStorage.setItem('displayName', user.displayName);
             showAlerts('Successfully logged', 'success')
         })
         .catch((error) => {
@@ -119,24 +131,16 @@ export const AuthProvider = ({ children }) => {
     //logout
     const logout = () => signOut(auth)
         .then(() => {
-            sessionStorage.clear()
+            const the = sessionStorage.getItem('isLight');
+            sessionStorage.clear();
+            sessionStorage.setItem('isLight',the)
         })
 
     //back to home
     const home = () => {
         navigate('/')
     }
-
-    // dash on off
-    React.useEffect(() => {
-        // Update the state when the URL changes
-        if (location.pathname === "/dashboard") {
-            setDash(false)
-        }
-        else {
-            setDash(true)
-        }
-    }, [location]);
+    
 /*
     React.useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -171,7 +175,7 @@ export const AuthProvider = ({ children }) => {
     }
 */
     return (
-        <AuthContext.Provider value={{ user, register, login, logout, reset, google, home, dash }}>
+        <AuthContext.Provider value={{ user, register, login, logout, reset, google, home }}>
             {loading ? '': children}
         </AuthContext.Provider>
     );

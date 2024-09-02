@@ -29,6 +29,8 @@ function AdminLogin({ handleMode }) {
         .then((result) => {
             const admin = result.user;
             registerAdmin(admin.uid, '', '', admin.displayName, admin.email);
+            sessionStorage.setItem('pp', admin.photoURL);
+            sessionStorage.setItem('displayName', admin.displayName);
             showAlerts('Successfully logged', 'success')
         })
         .catch(() => {
@@ -41,6 +43,8 @@ function AdminLogin({ handleMode }) {
             await signInWithEmailAndPassword(auth, lemail, lpassword)
                 .then((result) => {
                     const admin = result.user;
+                    sessionStorage.setItem('pp', admin.photoURL);
+                    sessionStorage.setItem('displayName', admin.displayName);
                     showAlerts('Successfully logged', 'success')
                     sessionStorage.setItem('pp',admin.photoURL)
                 })
@@ -53,6 +57,8 @@ function AdminLogin({ handleMode }) {
         .then((result) => {
             const admin = result.user;
             registerAdmin(admin.uid, firstName, lastName, displayName, remail);
+            sessionStorage.setItem('pp', admin.photoURL);
+            sessionStorage.setItem('displayName', admin.displayName);
             showAlerts('Successfully logged', 'success')
         })
         .catch(() => {

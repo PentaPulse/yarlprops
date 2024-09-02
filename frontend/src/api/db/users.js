@@ -29,6 +29,7 @@ export const registerUser = async (uid, fname, lname, dname, email) => {
                 address: '',
                 isMerchant:false
             });
+            await updateProfile(auth.currentUser,{displayName:dname})
             console.log("User registered successfully");
             return { success: true, message: 'User registered successfully' };
         } else {
