@@ -22,7 +22,7 @@ const ProductsContents = ({ searchTerm, category, subCategory, price, quantity }
                     q = query(productRef, where('category', '==', category))
                 }
                 if (subCategory !== null) {
-                    q = query(productRef, where('type', '==', subCategory))
+                    q = query(productRef, where('subCategory', '==', subCategory))
                 }/*
                 if (price) {
                     q = query(productRef, where('category', '==', price))

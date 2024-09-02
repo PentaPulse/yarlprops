@@ -1,27 +1,4 @@
-import {
-  Button,
-  CircularProgress,
-  collapseClasses,
-  Container,
-  FormControl,
-  Grid,
-  IconButton,
-  InputLabel,
-  MenuItem,
-  Paper,
-  Select,
-  styled,
-  Table,
-  TableBody,
-  TableCell,
-  tableCellClasses,
-  TableContainer,
-  TableHead,
-  TablePagination,
-  TableRow,
-  TextField,
-  Typography
-} from '@mui/material';
+import { Button, CircularProgress, Container, FormControl, Grid, IconButton, InputLabel, MenuItem, Paper, Select, styled, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TablePagination, TableRow, TextField, Typography } from '@mui/material';
 import React from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -32,6 +9,7 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { db, storage } from '../../api/firebase';
 import { collection, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
 import { useAuth } from '../../api/AuthContext';
+import {  serviceFilters } from '../../components/menuLists';
 
 export default function MerchantServices() {
   const [showAddService, setShowAddService] = React.useState(false);
@@ -97,8 +75,8 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
   const [service, setService] = React.useState({
     merchantId: user.uid,
     serviceName: '',
-    category:'',
-    subCategory:'',
+    category: '',
+    subCategory: '',
     serviceDescription: [''],
     serviceLocation: '',
     images: [],
@@ -195,8 +173,8 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
       setService({
         merchantId: user.uid,
         serviceName: '',
-        category:'',
-        subCategory:'',
+        category: '',
+        subCategory: '',
         serviceDescription: [''],
         serviceLocation: '',
         images: [],
@@ -225,7 +203,6 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
     whiteSpace: 'nowrap',
     width: 1,
   });
-  const categories = { "Food": ["Cake", "Meals"], "Saloon": ["Boys","Girls","Both"] }
 
   return (
     <Paper style={{ padding: 16 }}>
@@ -248,7 +225,7 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
             onChange={handleChange}
             required
           >
-            {Object.keys(categories).map((category) => (
+            {Object.keys(serviceFilters["categories"]).map((category) => (
               <MenuItem key={category} value={category}>
                 {category}
               </MenuItem>
@@ -265,7 +242,7 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
             disabled={!service.category}
           >
             {service.category &&
-              categories[service.category].map((subCategory) => (
+              serviceFilters["categories"][service.category].map((subCategory) => (
                 <MenuItem key={subCategory} value={subCategory}>
                   {subCategory}
                 </MenuItem>
@@ -434,13 +411,13 @@ const ServiceList = ({ onEditService, onViewService }) => {
   const [loading, setLoading] = React.useState(true);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const {user}=useAuth()
+  const { user } = useAuth()
 
   React.useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const q = await getDocs(query(collection(db,'services'),where('merchantId','==',user.uid)))
-      const fetchedServices = q.docs.map((doc)=>doc.data())
+      const q = await getDocs(query(collection(db, 'services'), where('merchantId', '==', user.uid)))
+      const fetchedServices = q.docs.map((doc) => doc.data())
       setServices(fetchedServices);
       setLoading(false);
     };

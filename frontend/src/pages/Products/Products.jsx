@@ -1,17 +1,19 @@
-import { Radio, FormControlLabel,  Grid, TextField, Typography, Slider, Paper, Divider, FormControl, FormLabel, RadioGroup, Button } from '@mui/material';
+import { Radio, FormControlLabel, Grid, TextField, Typography, Slider, Paper, Divider, FormControl, FormLabel, RadioGroup, Button } from '@mui/material';
 import * as React from 'react';
 import ProductsContents from './ProductsContents';
+import { productFilters } from '../../components/menuLists';
 
 function Products() {
     const [searchTerm, setSearchTerm] = React.useState('');
-    const [cat,setCat]=React.useState(null)
-    const [subCat,setSubCat]=React.useState(null)
+    const [cat, setCat] = React.useState(null)
+    const [subCat, setSubCat] = React.useState(null)
     const [priceRange, setPriceRange] = React.useState([0, 10000]);
     const [quantity, setQuantity] = React.useState(1);
 
     const handleCategoryChange = (event) => {
         const value = event.target.value;
         setCat(value);
+        setSubCat(null)
     };
     const handleSubCategoryChange = (event) => {
         const value = event.target.value;
@@ -25,6 +27,13 @@ function Products() {
     const handleQuantityChange = (event) => {
         setQuantity(event.target.value);
     };
+    const handleClearCategories=()=>{
+        setCat(null)
+        setSubCat(null)
+    }
+    const handleClearSubCategories=()=>{
+        setSubCat(null)
+    }
 
     return (
         <Grid container spacing={3} justifyContent="center">
@@ -52,76 +61,33 @@ function Products() {
                     <FormControl>
                         <FormLabel>Categories</FormLabel>
                         <RadioGroup name='categories' value={cat} onChange={handleCategoryChange}>
-                            <FormControlLabel
-                                control={<Radio value="Vehicals" onChange={handleCategoryChange} />}
-                                label="Vehicles"
-                            />
-                            <FormControlLabel
-                                control={<Radio value="Furniture" onChange={handleCategoryChange} />}
-                                label="Furniture"
-                            />
-                            <FormControlLabel
-                                control={<Radio value="tools" onChange={handleCategoryChange} />}
-                                label="Tools"
-                            />
-                            <FormControlLabel
-                                control={<Radio value="accessories" onChange={handleCategoryChange} />}
-                                label="Accessories"
-                            />
+                            {Object.keys(productFilters["categories"]).map((category) => (
+                                <FormControlLabel
+                                    key={category}
+                                    control={<Radio value={category} />}
+                                    label={category}
+                                />
+                            ))}
                         </RadioGroup>
-                        {cat && <Button onClick={()=>setCat(null)}>Clear</Button>}
+                        {cat && <Button onClick={handleClearCategories}>Clear</Button>}
                     </FormControl>
 
                     <Divider sx={{ my: 2 }} />
 
                     <FormControl>
                         <FormLabel>Sub Categories</FormLabel>
-
-                        {cat==='Vehicals' &&
+                        {cat && (
                             <RadioGroup value={subCat} onChange={handleSubCategoryChange}>
-                                <FormControlLabel
-                                    control={<Radio value="3wheels" onChange={handleSubCategoryChange} />}
-                                    label="Three Wheels"
-                                />
-                                <FormControlLabel
-                                    control={<Radio value="cycle" onChange={handleSubCategoryChange} />}
-                                    label="Cycle"
-                                />
-                                <FormControlLabel
-                                    control={<Radio value="bike" onChange={handleSubCategoryChange} />}
-                                    label="Bike"
-                                />
+                                {productFilters["categories"][cat]?.map((subCategory) => (
+                                    <FormControlLabel
+                                        key={subCategory}
+                                        control={<Radio value={subCategory} />}
+                                        label={subCategory}
+                                    />
+                                ))}
                             </RadioGroup>
-                        }
-                        {cat==='Tools' &&
-                            <RadioGroup value={subCat} onChange={handleSubCategoryChange}>
-                                <FormControlLabel
-                                    control={<Radio value="kitchen" onChange={handleSubCategoryChange} />}
-                                    label="Kitchen Items"
-                                />
-                                <FormControlLabel
-                                    control={<Radio value="Mattress" onChange={handleSubCategoryChange} />}
-                                    label="Mettress"
-                                />
-                            </RadioGroup>
-                        }
-                        {cat==='Furniture' &&
-                            <RadioGroup value={subCat} onChange={handleSubCategoryChange}>
-                                <FormControlLabel
-                                    control={<Radio value="Table" onChange={handleSubCategoryChange} />}
-                                    label="Table"
-                                />
-                                <FormControlLabel
-                                    control={<Radio value="Bed" onChange={handleSubCategoryChange} />}
-                                    label="Bed"
-                                />
-                                <FormControlLabel
-                                    control={<Radio value="Chair" onChange={handleSubCategoryChange} />}
-                                    label="Chair"
-                                />
-                            </RadioGroup>
-                        }
-                        {subCat && <Button onClick={()=>setSubCat(null)}>Clear</Button>}
+                        )}
+                        {subCat && <Button onClick={handleClearSubCategories}>Clear</Button>}
                     </FormControl>
 
                     <Divider sx={{ my: 2 }} />

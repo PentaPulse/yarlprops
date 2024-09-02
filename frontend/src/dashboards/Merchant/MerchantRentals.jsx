@@ -8,6 +8,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useAuth } from '../../api/AuthContext';
 import {  collection, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
 import { addRental, fetchSelectedRental, updateRental } from '../../api/db/rentals';
+import {  rentalFilters } from '../../components/menuLists';
 
 export default function MerchantRentals() {
   const [showAddRental, setShowAddRental] = React.useState(false);
@@ -207,7 +208,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
     whiteSpace: 'nowrap',
     width: 1,
   });
-  const categories = { "Vehicals": ["Bicycle", "Bike"], "Furnitures": ["Table", "Chair", "Bed"] }
+  
   return (
     <Paper style={{ padding: 16 }}>
       <Typography variant="h6">{rid ? 'Edit Rental' : 'Add Rental'}</Typography>
@@ -229,7 +230,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
             onChange={handleChange}
             required
           >
-            {Object.keys(categories).map((category) => (
+            {Object.keys(rentalFilters["categories"]).map((category) => (
               <MenuItem key={category} value={category}>
                 {category}
               </MenuItem>
@@ -246,7 +247,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
             disabled={!rental.category}
           >
             {rental.category &&
-              categories[rental.category].map((subCategory) => (
+              rentalFilters["categories"][rental.category].map((subCategory) => (
                 <MenuItem key={subCategory} value={subCategory}>
                   {subCategory}
                 </MenuItem>

@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useAuth } from '../../api/AuthContext';
 import { collection, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
+import {  productFilters } from '../../components/menuLists';
 
 export default function MerchantProducts() {
   const [showAddProduct, setShowAddProduct] = useState(false);
@@ -208,8 +209,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
     left: 0,
     whiteSpace: 'nowrap',
     width: 1,
-  });
-  const categories = { "Vehicals": ["Bicycle", "Bike"], "Furnitures": ["Table", "Chair", "Bed"] }
+  });  
 
   return (
     <Paper style={{ padding: 16 }}>
@@ -232,7 +232,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
             onChange={handleChange}
             required
           >
-            {Object.keys(categories).map((category) => (
+            {Object.keys(productFilters["categories"]).map((category) => (
               <MenuItem key={category} value={category}>
                 {category}
               </MenuItem>
@@ -249,7 +249,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
             disabled={!product.category}
           >
             {product.category &&
-              categories[product.category].map((subCategory) => (
+              productFilters["categories"][product.category].map((subCategory) => (
                 <MenuItem key={subCategory} value={subCategory}>
                   {subCategory}
                 </MenuItem>

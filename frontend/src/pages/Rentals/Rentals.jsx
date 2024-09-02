@@ -8,6 +8,7 @@ import { useTheme } from '@emotion/react';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { rentalFilters } from '../../components/menuLists';
 
 export default function Rentals() {
     const [searchTerm, setSearchTerm] = React.useState('');
@@ -32,6 +33,14 @@ export default function Rentals() {
     const handleQuantityChange = (event) => {
         setQuantity(event.target.value);
     };
+    
+    const handleClearCategories=()=>{
+        setCat(null)
+        setSubCat(null)
+    }
+    const handleClearSubCategories=()=>{
+        setSubCat(null)
+    }
 
     return (
         <Grid container spacing={3} justifyContent="center">
@@ -59,75 +68,33 @@ export default function Rentals() {
                     <FormControl>
                         <FormLabel>Categories</FormLabel>
                         <RadioGroup name='categories' value={cat} onChange={handleCategoryChange}>
-                            <FormControlLabel
-                                control={<Radio value="Vehicals" onChange={handleCategoryChange} />}
-                                label="Vehicles"
-                            />
-                            <FormControlLabel
-                                control={<Radio value="Furniture" onChange={handleCategoryChange} />}
-                                label="Furniture"
-                            />
-                            <FormControlLabel
-                                control={<Radio value="tools" onChange={handleCategoryChange} />}
-                                label="Tools"
-                            />
-                            <FormControlLabel
-                                control={<Radio value="accessories" onChange={handleCategoryChange} />}
-                                label="Accessories"
-                            />
+                            {Object.keys(rentalFilters["categories"]).map((category) => (
+                                <FormControlLabel
+                                    key={category}
+                                    control={<Radio value={category} />}
+                                    label={category}
+                                />
+                            ))}
                         </RadioGroup>
-                        {cat && <Button onClick={() => setCat(null)}>Clear</Button>}
+                        {cat && <Button onClick={handleClearCategories}>Clear</Button>}
                     </FormControl>
 
                     <Divider sx={{ my: 2 }} />
 
                     <FormControl>
                         <FormLabel>Sub Categories</FormLabel>
-                        {cat === 'Vehicals' &&
+                        {cat && (
                             <RadioGroup value={subCat} onChange={handleSubCategoryChange}>
-                                <FormControlLabel
-                                    control={<Radio value="3wheels" onChange={handleSubCategoryChange} />}
-                                    label="Three Wheels"
-                                />
-                                <FormControlLabel
-                                    control={<Radio value="cycle" onChange={handleSubCategoryChange} />}
-                                    label="Cycle"
-                                />
-                                <FormControlLabel
-                                    control={<Radio value="bike" onChange={handleSubCategoryChange} />}
-                                    label="Bike"
-                                />
+                                {rentalFilters["categories"][cat]?.map((subCategory) => (
+                                    <FormControlLabel
+                                        key={subCategory}
+                                        control={<Radio value={subCategory} />}
+                                        label={subCategory}
+                                    />
+                                ))}
                             </RadioGroup>
-                        }
-                        {cat === 'Tools' &&
-                            <RadioGroup value={subCat} onChange={handleSubCategoryChange}>
-                                <FormControlLabel
-                                    control={<Radio value="Kitchen" onChange={handleSubCategoryChange} />}
-                                    label="Kitchen Items"
-                                />
-                                <FormControlLabel
-                                    control={<Radio value="Mattress" onChange={handleSubCategoryChange} />}
-                                    label="Mettress"
-                                />
-                            </RadioGroup>
-                        }
-                        {cat === 'Furniture' &&
-                            <RadioGroup value={subCat} onChange={handleSubCategoryChange}>
-                                <FormControlLabel
-                                    control={<Radio value="Table" onChange={handleSubCategoryChange} />}
-                                    label="Table"
-                                />
-                                <FormControlLabel
-                                    control={<Radio value="Bed" onChange={handleSubCategoryChange} />}
-                                    label="Bed"
-                                />
-                                <FormControlLabel
-                                    control={<Radio value="Chair" onChange={handleSubCategoryChange} />}
-                                    label="Chair"
-                                />
-                            </RadioGroup>
-                        }
-                        {subCat && <Button onClick={() => setSubCat(null)}>Clear</Button>}
+                        )}
+                        {subCat && <Button onClick={handleClearSubCategories}>Clear</Button>}
                     </FormControl>
 
                     <Divider sx={{ my: 2 }} />
@@ -187,7 +154,7 @@ function RentalsContents({ searchTerm, category, subCategory, price, quantity })
                     q = query(rentalRef, where('category', '==', category))
                 }
                 if (subCategory !== null) {
-                    q = query(rentalRef, where('type', '==', subCategory))
+                    q = query(rentalRef, where('subCategory', '==', subCategory))
                 }/*
                 if (price) {
                     q = query(rentalRef, where('category', '==', price))
