@@ -222,7 +222,7 @@ export default function DashboardLayout({ handleMode }) {
                 <Grid item m='5vh 2vw 0 8vw'>
                     <Routes>
                         {/* Common */}
-                        <Route path='overview' element={user.adminid?<AdminOverview />:(user.isMerchant?<MerchantOverview/>:<UserOverview/>)} />
+                        <Route path='overview' element={user.adminid && user.approved?<AdminOverview />:(user.isMerchant?<MerchantOverview/>:<UserOverview/>)} />
                         <Route path='profile' element={<Profile/>}/>
 
                         {/* Admin */}

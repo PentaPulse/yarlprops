@@ -14,6 +14,7 @@ const AdminServices = () => {
   const [showAddService, setShowAddService] = useState(false);
   const [editingServiceId, setEditingServiceId] = useState(null);
   const [viewingServiceId, setViewingServiceId] = useState(null);
+  const {user}=useAuth()
 
   const handleEditService = (sId) => {
     setEditingServiceId(sId);
@@ -41,13 +42,13 @@ const AdminServices = () => {
       <h2>SERVICES</h2>
       
       <Container>
-        {showAddService ? (
+        {user.approved?(showAddService ? (
           <ServicesForm sid={editingServiceId} onSuccess={handleSuccess} onCancel={handleCancel} />
         ) : viewingServiceId? (
           <ServiceDetails sid={viewingServiceId} onBack={handleCancel} />
         ):(
           <ServicesList onEditService={handleEditService} onViewService={handleViewService}/>
-        )}
+        )):'wait for admin approval'}
       </Container>
     </>
   );

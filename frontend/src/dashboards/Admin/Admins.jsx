@@ -1,11 +1,11 @@
-import { collection, getDocs, query } from 'firebase/firestore'
+import { collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore'
 import * as React from 'react'
 import { db } from '../../api/firebase'
 import { Box, Button, ButtonGroup, Grid, Modal, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material';
 import { useAuth } from '../../api/AuthContext';
 
-function Admins() {
-    const {user} = useAuth()
+export default function Admins() {
+    const { user } = useAuth()
     const [admins, setAdmins] = React.useState([])
     const [open, setOpen] = React.useState(false)
     const [newAdmin, setNewAdmin] = React.useState({})
@@ -29,27 +29,19 @@ function Admins() {
         fetchAdmins();
     }, []);
 
-    const columns = ["index", "Display Name", "First name", "Last name", "Email", "Gender","Approved"]
+    const columns = ["index", "Display Name", "First name", "Last name", "Email", "Gender", "Approved"]
 
-    const handleApproveAdimns=()=>{
+    const handleApproveAdimns = () => {
         setOpen(!open)
     }
-    const handleRemoveAdimns=()=>{
+    const handleRemoveAdimns = () => {
         setOpen(!open)
     }
 
     const handleOpen = () => {
         setOpen(!open)
     }
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setNewAdmin({ ...newAdmin, [name]: value });
-    };
-
-    const handleSubmit = () => {
-
-    }
+    
     return (
         <>
             <Box sx={{ textAlign: 'center', margin: 'auto' }}>
@@ -59,24 +51,24 @@ function Admins() {
                     </Grid>
                     <Grid item sx={{ ml: 50, mt: 5 }}>
                         <ButtonGroup>
-                        <Button
-                        disabled={!user.approved}
-                            variant="contained"
-                            sx={{ backgroundColor: 'green', color: 'white' }}
-                            //startIcon={<AddIcon />}
-                            onClick={handleApproveAdimns}
-                        >
-                            Approve admins
-                        </Button>
-                        <Button
-                        disabled={!user.approved}
-                            variant="contained"
-                            sx={{ backgroundColor: 'green', color: 'white' }}
-                            //startIcon={<AddIcon />}
-                            onClick={handleRemoveAdimns}
-                        >
-                            Remove admins
-                        </Button>
+                            <Button
+                                disabled={!user.approved}
+                                variant="contained"
+                                sx={{ backgroundColor: 'green', color: 'white' }}
+                                //startIcon={<AddIcon />}
+                                onClick={handleApproveAdimns}
+                            >
+                                Approve admins
+                            </Button>
+                            <Button
+                                disabled={!user.approved}
+                                variant="contained"
+                                sx={{ backgroundColor: 'green', color: 'white' }}
+                                //startIcon={<AddIcon />}
+                                onClick={handleRemoveAdimns}
+                            >
+                                Remove admins
+                            </Button>
                         </ButtonGroup>
                     </Grid>
                 </Grid>
@@ -91,7 +83,7 @@ function Admins() {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {admins.map((admin, index) => (
+                                {user.approved ? admins.map((admin, index) => (
                                     <TableRow>
                                         <TableCell>{index + 1}</TableCell>
                                         <TableCell>{admin.displayName}</TableCell>
@@ -99,9 +91,9 @@ function Admins() {
                                         <TableCell>{admin.lastName}</TableCell>
                                         <TableCell>{admin.email}</TableCell>
                                         <TableCell>{admin.gender}</TableCell>
-                                        <TableCell>{admin.approved?"yes":"no"}</TableCell>
+                                        <TableCell>{admin.approved ? "yes" : "no"}</TableCell>
                                     </TableRow>
-                                ))}
+                                )) : 'wait for admin approval'}
                             </TableBody>
                         </Table>
                     </TableContainer>
@@ -112,72 +104,137 @@ function Admins() {
                     aria-labelledby="add-user-modal-title"
                     aria-describedby="add-user-modal-description"
                 >
-                    <Box
-                        component="form"
-                        onSubmit={handleSubmit}
-                        sx={{
-                            position: 'absolute',
-                            top: '50%',
-                            left: '50%',
-                            transform: 'translate(-50%, -50%)',
-                            width: 400,
-                            bgcolor: 'background.paper',
-                            border: '2px solid #000',
-                            boxShadow: 24,
-                            p: 4
-                        }}
-                    >
-                        <Typography id="add-user-modal-title" variant="h6" component="h2">
-                            Add New User
-                        </Typography>
-                        <TextField
-                            fullWidth
-                            margin="normal"
-                            name="name"
-                            label="Name"
-                            value={newAdmin.name}
-                            onChange={handleInputChange}
-                        />
-                        <TextField
-                            fullWidth
-                            margin="normal"
-                            name="email"
-                            label="Email"
-                            value={newAdmin.email}
-                            onChange={handleInputChange}
-                        />
-                        <TextField
-                            fullWidth
-                            margin="normal"
-                            name="phone"
-                            label="Phone"
-                            value={newAdmin.phone}
-                            onChange={handleInputChange}
-                        />
-                        <TextField
-                            fullWidth
-                            margin="normal"
-                            name="address"
-                            label="Address"
-                            value={newAdmin.address}
-                            onChange={handleInputChange}
-                        />
-                        <TextField
-                            fullWidth
-                            margin="normal"
-                            name="status"
-                            label="Status"
-                            value={newAdmin.status}
-                            onChange={handleInputChange}
-                        />
-                        <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
-                            Add User
-                        </Button>
-                    </Box>
+                    <ApproveAdmin/>
                 </Modal>
             </Box>
         </>
     )
 }
 
-export default Admins
+function ApproveAdmin() {
+    const [adminDetails, setAdminDetails] = React.useState({
+        name: '',
+        email: '',
+        phone: '',
+        address: '',
+        status: ''
+    });
+
+    const [unapprovedList, setUnapprovedList] = React.useState([]);
+    const [user] = useAuth();
+
+    React.useEffect(() => {
+        const fetchUnapprovedAdmins = async () => {
+            try {
+                const data = await getDocs(query(collection(db, 'admins'), where('approved', '==', false)));
+                const fetchedList = data.docs.map((doc) => (doc.data() ));
+                setUnapprovedList(fetchedList);
+                console.log(fetchedList);
+            } catch (e) {
+                console.error('Error fetching unapproved admins:', e);
+            }
+        };
+        fetchUnapprovedAdmins();
+    }, []);
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setAdminDetails({ ...adminDetails, [name]: value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            // Assume adminDetails has an ID field for the selected admin
+            const adminRef = doc(db, 'admins', adminDetails.adminId);
+            await updateDoc(adminRef, { approved: true });
+            // Remove the approved admin from the unapproved list
+            setUnapprovedList(unapprovedList.filter(admin => admin.id !== adminDetails.id));
+            // Clear the form
+            setAdminDetails({
+                name: '',
+                email: '',
+                phone: '',
+                address: '',
+                status: ''
+            });
+        } catch (e) {
+            console.error('Error approving admin:', e);
+        }
+    };
+
+    return (
+        <>
+            <Box
+                component="form"
+                onSubmit={handleSubmit}
+                sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: 400,
+                    bgcolor: 'background.paper',
+                    border: '2px solid #000',
+                    boxShadow: 24,
+                    p: 4
+                }}
+            >
+                <Typography id="add-user-modal-title" variant="h6" component="h2">
+                    Approve Admin
+                </Typography>
+                <TextField
+                    fullWidth
+                    margin="normal"
+                    name="name"
+                    label="Name"
+                    value={adminDetails.name}
+                    onChange={handleInputChange}
+                />
+                <TextField
+                    fullWidth
+                    margin="normal"
+                    name="email"
+                    label="Email"
+                    value={adminDetails.email}
+                    onChange={handleInputChange}
+                />
+                <TextField
+                    fullWidth
+                    margin="normal"
+                    name="phone"
+                    label="Phone"
+                    value={adminDetails.phone}
+                    onChange={handleInputChange}
+                />
+                <TextField
+                    fullWidth
+                    margin="normal"
+                    name="address"
+                    label="Address"
+                    value={adminDetails.address}
+                    onChange={handleInputChange}
+                />
+                <TextField
+                    fullWidth
+                    margin="normal"
+                    name="status"
+                    label="Status"
+                    value={adminDetails.status}
+                    onChange={handleInputChange}
+                />
+                <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
+                    Approve
+                </Button>
+            </Box>
+        </>
+    );
+}
+
+function RemoveAdmin() {
+    return (
+        <>
+
+        </>
+    )
+}

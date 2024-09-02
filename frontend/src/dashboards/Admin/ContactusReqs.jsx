@@ -17,6 +17,7 @@ import { useAuth } from '../../api/AuthContext';
 
 export default function ContactusRequests() {
   const [viewingResponseId, setViewingResponseId] = React.useState(null);
+  const {user}=useAuth()
 
   const handleViewresponse = (responseId) => {
     setViewingResponseId(responseId);
@@ -31,11 +32,11 @@ export default function ContactusRequests() {
       <Typography variant='h4'>Contact us Requests</Typography>
 
       <Container>
-        {viewingResponseId ? (
+        {user.approved?(viewingResponseId ? (
           <ContactusResponseDetail id={viewingResponseId} onBack={handleCancel} />
         ) : (
           <ContactusRequestsList onViewresponse={handleViewresponse} />
-        )}
+        )):'wait for admin approval'}
       </Container>
     </>
   );

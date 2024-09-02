@@ -12,6 +12,7 @@ export default function AdminRentals() {
   const [showAddRental, setShowAddRental] = React.useState(false);
   const [editingRentalId, setEditingRentalId] = React.useState(null);
   const [viewingRentalId, setViewingRentalId] = React.useState(null);
+  const {user}=useAuth()
 
   const handleEditRental = (rentalId) => {
     setEditingRentalId(rentalId);
@@ -39,7 +40,7 @@ export default function AdminRentals() {
       <h2>RENTALS</h2>
 
       <Container>
-        {
+        {user.approved?(
           showAddRental ? (
             <RentalForm rid={editingRentalId} onSuccess={handleSuccess} onCancel={handleCancel} />
           ) : viewingRentalId ? (
@@ -47,6 +48,7 @@ export default function AdminRentals() {
           ) : (
             <RentalList onEditProduct={handleEditRental} onViewProduct={handleViewRental} />
           )
+        ):'wait for admin approval'
         }
       </Container>
     </>

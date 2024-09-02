@@ -2,6 +2,7 @@ import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableH
 import React, { useEffect, useState } from "react";
 import { collection, getDocs, query } from "firebase/firestore";
 import { db } from "../../api/firebase";
+import { useAuth } from "../../api/AuthContext";
 
 const AdminUsers = () => {
     const columns = [
@@ -23,6 +24,7 @@ const AdminUsers = () => {
         setPage(0);
     };
     const [users, setUsers] = useState([])
+    const {user}=useAuth()
     const [rows, setRows] = useState([]);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -96,7 +98,7 @@ const AdminUsers = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {users.map((user, index) => (
+                            {user.approved?users.map((user, index) => (
                                 <TableRow>
                                     <TableCell>
                                         {index + 1}
@@ -124,7 +126,7 @@ const AdminUsers = () => {
                                         </Box>
                                     </TableCell>
                                 </TableRow>
-                            ))}
+                            )):'wait for admin approval'}
                             {rows && rows
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row) => (

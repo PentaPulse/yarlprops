@@ -12,6 +12,7 @@ const AdminProducts = () => {
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [editingProductId, setEditingProductId] = useState(null);
   const [viewingProductId, setViewingProductId] = useState(null);
+  const {user}=useAuth()
 
   const handleEditProduct = (productId) => {
     setEditingProductId(productId);
@@ -39,13 +40,13 @@ const AdminProducts = () => {
       <h2>PRODUCTS</h2>
       
       <Container>
-        {showAddProduct ? (
+        {user.approved?(showAddProduct ? (
           <ProductForm pid={editingProductId} onSuccess={handleSuccess} onCancel={handleCancel} />
         ) : viewingProductId? (
           <ProductDetail pid={viewingProductId} onBack={handleCancel} />
         ):(
           <ProductList onEditProduct={handleEditProduct} onViewProduct={handleViewProduct}/>
-        )}
+        )):'wait for admin approval'}
       </Container>
     </>
   );
