@@ -322,14 +322,6 @@ const ProfileSettings = () => {
             }}
           />
           <TextField
-            label="Phone number"
-            name="phoneNumber"
-            value={profile.phoneNumber}
-            InputProps={{
-              readOnly: true,
-            }}
-          />
-          <TextField
             label="Address"
             name="address"
             value={profile.address}

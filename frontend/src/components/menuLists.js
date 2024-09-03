@@ -49,7 +49,9 @@ export const rentalFilters = {
         "Vehicals":
             ["Bicycle", "Bike"],
         "Furnitures":
-            ["Table", "Chair", "Bed"]
+            ["Table", "Chair", "Bed"],
+        'Bordims':
+            ["Boys", "Girls"]
     }
 }
 export const serviceFilters = {
