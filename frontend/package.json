@@ -38,8 +38,15 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "emulator:start": "firebase emulators:start --import=./data",
-    "emulator:stop": "firebase emulators:export ./data"
+    "start-emulators": "firebase emulators:exec ./run_emulators.sh",
+    "emu-charith":"firebase emulators:start --import=./datacharith",
+    "export-charith":"firebase emulators:export ./datacharith",
+    "emu-janani":"firebase emulators:start --import=./datajanani",
+    "export-janani":"firebase emulators:export ./datajanani",
+    "emu-priya":"firebase emulators:start --import=./datapriya",
+    "export-priya":"firebase emulators:export ./datapriya",
+    "emu-mith":"firebase emulators:start --import=./datamith",
+    "export-mith":"firebase emulators:export ./datamith"
   },
   "eslintConfig": {
     "extends": [
