@@ -11,7 +11,7 @@ const Profile = () => {
   const [file, setFile] = useState(null)
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
-  
+
   const uploadPP = async () => {
     if (!file) return;
     try {
@@ -56,9 +56,9 @@ const Profile = () => {
   };
 
   return (
-    <Grid container spacing={2} mt={2}>
+    <>
       {/* Profile Information Section */}
-      <Grid item xs={12} sm={4} md={3}>
+      <Grid item xs={4} sm={4} md={15} lg={4} >
         <Paper
           elevation={3}
           sx={{
@@ -79,46 +79,47 @@ const Profile = () => {
             src={user.photoUrl || sessionStorage.getItem('pp') || ''}
             sx={{ width: 150, height: 150, mb: 2 }}
           />
-<Box>
-            {!file ? <>
-              <input
-                accept="file/*"
-                style={{ display: 'none' }}
-                id="contained-button-file"
-                type="file"
-                onChange={handleChange}
-              />
-              <label htmlFor="contained-button-file">
-                <Button variant="contained" component="span">
-                  Upload Profile Picture
+          <Box>
+            {!file ? (
+              <>
+                <input
+                  accept="file/*"
+                  style={{ display: 'none' }}
+                  id="contained-button-file"
+                  type="file"
+                  onChange={handleChange}
+                />
+                <label htmlFor="contained-button-file">
+                  <Button variant="contained" component="span">
+                    Upload Profile Picture
+                  </Button>
+                </label>
+              </>
+            ) : (
+              <>
+                <TextField
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                  disabled
+                  value={file.name}
+                />
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={uploadPP}
+                  disabled={loading}
+                >
+                  {loading ? <CircularProgress size={24} /> : 'Upload'}
                 </Button>
-              </label></> : <>
-              <TextField
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                disabled
-                value={file.name}
-              />
-
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={uploadPP}
-                disabled={loading}
-              >
-
-                {loading ? <CircularProgress size={24} /> : 'Upload'}
-              </Button>
-
-              {loading && <p>Uploading: {progress}%</p>}
-
-              {progress === 100 && (
-                <div>
-                  <p>Profile Picture Uploaded Successfully</p>
-                </div>
-              )}</>
-            }
+                {loading && <p>Uploading: {progress}%</p>}
+                {progress === 100 && (
+                  <div>
+                    <p>Profile Picture Uploaded Successfully</p>
+                  </div>
+                )}
+              </>
+            )}
           </Box>
           {/* User Details */}
           <TextField
@@ -151,37 +152,32 @@ const Profile = () => {
         </Paper>
       </Grid>
 
-      {/* Settings Sections */}
-      <Grid item xs={12} sm={8} md={9}>
-        <Grid container spacing={2}>
-          {/* Profile Settings */}
-          <Grid item xs={12}>
-            <Paper
-              elevation={3}
-              sx={{
-                padding: 3,
-                height: '100%',
-              }}
-            >
-              <ProfileSettings />
-            </Paper>
-          </Grid>
-
-          {/* Account Settings */}
-          <Grid item xs={12}>
-            <Paper
-              elevation={3}
-              sx={{
-                padding: 3,
-                height: '100%',
-              }}
-            >
-              <AccountSettings />
-            </Paper>
-          </Grid>
-        </Grid>
+      {/* Profile Settings */}
+      <Grid item xs={4} sm={4} md={15} lg={11}>
+        <Paper
+          elevation={3}
+          sx={{
+            padding: 3,
+            height: '100%',
+          }}
+        >
+          <ProfileSettings />
+        </Paper>
       </Grid>
-    </Grid>
+
+      {/* Account Settings */}
+      <Grid item xs={4} sm={4} md={15} lg={11}>
+        <Paper
+          elevation={3}
+          sx={{
+            padding: 3,
+            height: '100%',
+          }}
+        >
+          <AccountSettings />
+        </Paper>
+      </Grid>
+    </>
   );
 };
 
@@ -243,8 +239,6 @@ const ProfileSettings = () => {
     setEdit(false);
   };
 
-  const width = '17.5vw';
-
   return (
     <>
       <Box display='flex' justifyContent='center'>
@@ -253,7 +247,7 @@ const ProfileSettings = () => {
       <Box
         component="form"
         sx={{
-          '& .MuiTextField-root': { m: 1, width: width },
+          '& .MuiTextField-root': { m: 1 },
         }}
       >
         <Box>
@@ -266,6 +260,7 @@ const ProfileSettings = () => {
             InputProps={{
               readOnly: !edit,
             }}
+            fullWidth
           />
           <TextField
             label="Last name"
@@ -275,6 +270,7 @@ const ProfileSettings = () => {
             InputProps={{
               readOnly: !edit,
             }}
+            fullWidth
           />
           <TextField
             label="Display name"
@@ -284,6 +280,7 @@ const ProfileSettings = () => {
             InputProps={{
               readOnly: !edit,
             }}
+            fullWidth
           />
           <TextField
             label="Date of Birth"
@@ -297,8 +294,9 @@ const ProfileSettings = () => {
             InputProps={{
               readOnly: !edit,
             }}
+            fullWidth
           />
-          <FormControl sx={{ m: 1, width: width }} disabled={!edit}>
+          <FormControl sx={{ m: 1 }} disabled={!edit} fullWidth>
             <InputLabel>Gender</InputLabel>
             <Select
               value={profile.gender}
@@ -311,7 +309,7 @@ const ProfileSettings = () => {
             </Select>
           </FormControl>
         </Box>
-        <Box>          
+        <Box>
           <Typography>Contact details</Typography>
           <TextField
             label="Email"
@@ -320,6 +318,7 @@ const ProfileSettings = () => {
             InputProps={{
               readOnly: true,
             }}
+            fullWidth
           />
           <TextField
             label="Address"
@@ -329,6 +328,7 @@ const ProfileSettings = () => {
             InputProps={{
               readOnly: !edit,
             }}
+            fullWidth
           />
         </Box>
         <Container sx={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
@@ -354,7 +354,6 @@ const ProfileSettings = () => {
 
 const AccountSettings = () => {
   const { user } = useAuth();
-  const width = '25vw';
 
   const [email, setEmail] = useState({ old: '', new: '', confirm: '' });
   const [phoneNumber, setPhoneNumber] = useState({ old: '', new: '', confirm: '' });
@@ -434,14 +433,14 @@ const AccountSettings = () => {
       <Box
         component="form"
         sx={{
-          '& .MuiTextField-root': { m: 1, width: width },
+          '& .MuiTextField-root': { m: 1,width:'100%' },
         }}
         noValidate
         autoComplete="off"
       >
         <Box>
           <Typography variant='h6'>Change role</Typography>
-          <FormControl sx={{ m: 1, width: width }} >
+          <FormControl sx={{ m: 1 }} fullWidth>
             <InputLabel>Role</InputLabel>
             <Select
               disabled={user.adminid && true}
@@ -465,6 +464,7 @@ const AccountSettings = () => {
             name="old"
             value={email.old}
             onChange={handleInputChange(setEmail)}
+            fullWidth
           />
           <TextField
             label="New Email"
