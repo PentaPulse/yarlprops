@@ -22,7 +22,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
     location: '',
     status: '', 
     images: [
-
+      
     ], 
   });
   
@@ -221,9 +221,9 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
           <FormControlLabel value="For Sale" control={<Radio />} label="For Sale" />
           <FormControlLabel
             value="Sold Out"
-            
             control={<Radio />}
             label="Sold Out!"
+            disabled={!pid}
           />
         </RadioGroup>
         </FormControl><br/>
