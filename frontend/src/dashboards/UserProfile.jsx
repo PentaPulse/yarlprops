@@ -1,131 +1,17 @@
 import React, { useState } from 'react';
 import { useAuth } from '../api/AuthContext';
 import { Box, Button, Container, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Avatar, Paper, Typography, CircularProgress } from '@mui/material';
-import { doc,  updateDoc } from 'firebase/firestore';
+import { doc, updateDoc } from 'firebase/firestore';
 import { db, storage, auth } from '../api/firebase';
 import { updateEmail, updatePassword, updateProfile } from 'firebase/auth';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 
 const Profile = () => {
   const { user } = useAuth();
-
-  return (
-    <Grid container spacing={2} mt={2}>
-      <Grid container justifyContent="center" alignItems="center">
-        <Grid item>
-          <Avatar alt="Profile Picture" src={user.photoUrl || sessionStorage.getItem('pp')} sx={{ width: 200, height: 200, marginRight: 10 }} />
-        </Grid>
-        <Grid item>
-          <TextField
-            label="Name"
-            defaultValue={user.displayName}
-            fullWidth
-            margin="normal"
-            InputProps={{
-              readOnly: true,
-            }}
-          />
-          <TextField
-            label="Email"
-            defaultValue={user.email || 'example@p5p.lk'}
-            fullWidth
-            margin="normal"
-            InputProps={{
-              readOnly: true,
-            }}
-          />
-          <TextField
-            label="Phone Number"
-            defaultValue={user.phone || '+94 12 345 6789'}
-            fullWidth
-            margin="normal"
-            InputProps={{
-              readOnly: true,
-            }}
-          />
-        </Grid>
-      </Grid>
-      <Grid item xs={12}>
-        <Paper sx={{ mt: 1, padding: '20px' }}>
-          <ProfileSettings />
-        </Paper>
-      </Grid>
-      <Grid item xs={12}>
-        <Paper sx={{ mt: 1, padding: '20px' }}>
-          <AccountSettings />
-        </Paper>
-      </Grid>
-    </Grid>
-  );
-};
-
-const ProfileSettings = () => {
-  const { user } = useAuth();
-  const [profile, setProfile] = useState({
-    firstName: user?.firstName || '',
-    lastName: user?.lastName || '',
-    displayName: user?.displayName || '',
-    email: user?.email || '',
-    phoneNumber: user?.phoneNumber || '',
-    dateOfBirth: user?.dateOfBirth || '',
-    role: user?.role || '',
-    address: user?.address || '',
-    gender: user?.gender || '',
-  });
   const [file, setFile] = useState(null)
-  const [edit, setEdit] = useState(false);
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setProfile((prevProfile) => ({
-      ...prevProfile,
-      [name]: value,
-    }));
-  };
-
-  const handleSelectChange = (e) => {
-    const { value } = e.target;
-    setProfile((prevProfile) => ({
-      ...prevProfile,
-      gender: value,
-    }));
-  };
-
-  const handleChange = (e) => {
-    if (e.target.files[0]) {
-      setFile(e.target.files[0]);
-    }
-  };
-
-  const handleEditProfile = () => {
-    setEdit(true);
-  };
-
-  const handleSubmit = async () => {
-    try {
-      if (user.adminid) {
-        await updateDoc(doc(db, 'admins', user.adminid), profile)
-      }
-      else {
-        await updateDoc(doc(db, 'systemusers', user.uid), profile);
-      }
-      await updateProfile(auth.currentUser, {
-        displayName: profile.displayName
-      })
-      setEdit(false);
-    } catch (error) {
-      console.error("Error updating profile: ", error);
-    } finally {
-      setEdit(false)
-    }
-  };
-
-  const handleCancel = () => {
-    setEdit(false);
-  };
-
+  
   const uploadPP = async () => {
     if (!file) return;
     try {
@@ -162,6 +48,201 @@ const ProfileSettings = () => {
       //console.log("upload error pp :" + e)
     }
   }
+
+  const handleChange = (e) => {
+    if (e.target.files[0]) {
+      setFile(e.target.files[0]);
+    }
+  };
+
+  return (
+    <Grid container spacing={2} mt={2}>
+      {/* Profile Information Section */}
+      <Grid item xs={12} sm={4} md={3}>
+        <Paper
+          elevation={3}
+          sx={{
+            padding: 3,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          {/* User Name */}
+          <Typography variant="h5" textAlign="center" gutterBottom>
+            {user.displayName || 'User Name'}
+          </Typography>
+
+          {/* User Avatar */}
+          <Avatar
+            alt="Profile Picture"
+            src={user.photoUrl || sessionStorage.getItem('pp') || ''}
+            sx={{ width: 150, height: 150, mb: 2 }}
+          />
+<Box>
+            {!file ? <>
+              <input
+                accept="file/*"
+                style={{ display: 'none' }}
+                id="contained-button-file"
+                type="file"
+                onChange={handleChange}
+              />
+              <label htmlFor="contained-button-file">
+                <Button variant="contained" component="span">
+                  Upload Profile Picture
+                </Button>
+              </label></> : <>
+              <TextField
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                disabled
+                value={file.name}
+              />
+
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={uploadPP}
+                disabled={loading}
+              >
+
+                {loading ? <CircularProgress size={24} /> : 'Upload'}
+              </Button>
+
+              {loading && <p>Uploading: {progress}%</p>}
+
+              {progress === 100 && (
+                <div>
+                  <p>Profile Picture Uploaded Successfully</p>
+                </div>
+              )}</>
+            }
+          </Box>
+          {/* User Details */}
+          <TextField
+            label="Name"
+            value={user.displayName || 'N/A'}
+            margin="normal"
+            fullWidth
+            InputProps={{
+              readOnly: true,
+            }}
+          />
+          <TextField
+            label="Email"
+            value={user.email || 'example@p5p.lk'}
+            margin="normal"
+            fullWidth
+            InputProps={{
+              readOnly: true,
+            }}
+          />
+          <TextField
+            label="Phone Number"
+            value={user.phone || '+94 12 345 6789'}
+            margin="normal"
+            fullWidth
+            InputProps={{
+              readOnly: true,
+            }}
+          />
+        </Paper>
+      </Grid>
+
+      {/* Settings Sections */}
+      <Grid item xs={12} sm={8} md={9}>
+        <Grid container spacing={2}>
+          {/* Profile Settings */}
+          <Grid item xs={12}>
+            <Paper
+              elevation={3}
+              sx={{
+                padding: 3,
+                height: '100%',
+              }}
+            >
+              <ProfileSettings />
+            </Paper>
+          </Grid>
+
+          {/* Account Settings */}
+          <Grid item xs={12}>
+            <Paper
+              elevation={3}
+              sx={{
+                padding: 3,
+                height: '100%',
+              }}
+            >
+              <AccountSettings />
+            </Paper>
+          </Grid>
+        </Grid>
+      </Grid>
+    </Grid>
+  );
+};
+
+const ProfileSettings = () => {
+  const { user } = useAuth();
+  const [profile, setProfile] = useState({
+    firstName: user?.firstName || '',
+    lastName: user?.lastName || '',
+    displayName: user?.displayName || '',
+    email: user?.email || '',
+    phoneNumber: user?.phoneNumber || '',
+    dateOfBirth: user?.dateOfBirth || '',
+    role: user?.role || '',
+    address: user?.address || '',
+    gender: user?.gender || '',
+  });
+  const [edit, setEdit] = useState(false);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setProfile((prevProfile) => ({
+      ...prevProfile,
+      [name]: value,
+    }));
+  };
+
+  const handleSelectChange = (e) => {
+    const { value } = e.target;
+    setProfile((prevProfile) => ({
+      ...prevProfile,
+      gender: value,
+    }));
+  };
+
+  const handleEditProfile = () => {
+    setEdit(true);
+  };
+
+  const handleSubmit = async () => {
+    try {
+      if (user.adminid) {
+        await updateDoc(doc(db, 'admins', user.adminid), profile)
+      }
+      else {
+        await updateDoc(doc(db, 'systemusers', user.uid), profile);
+      }
+      await updateProfile(auth.currentUser, {
+        displayName: profile.displayName
+      })
+      setEdit(false);
+    } catch (error) {
+      console.error("Error updating profile: ", error);
+    } finally {
+      setEdit(false)
+    }
+  };
+
+  const handleCancel = () => {
+    setEdit(false);
+  };
+
   const width = '17.5vw';
 
   return (
@@ -230,49 +311,7 @@ const ProfileSettings = () => {
             </Select>
           </FormControl>
         </Box>
-        <Box>
-          <Typography>Profile picture</Typography>
-          <Box>
-            {!file ? <>
-              <input
-                accept="file/*"
-                style={{ display: 'none' }}
-                id="contained-button-file"
-                type="file"
-                onChange={handleChange}
-              />
-              <label htmlFor="contained-button-file">
-                <Button variant="contained" component="span">
-                  Upload Profile Picture
-                </Button>
-              </label></> : <>
-              <TextField
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                disabled
-                value={file.name}
-              />
-
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={uploadPP}
-                disabled={loading}
-              >
-
-                {loading ? <CircularProgress size={24} /> : 'Upload'}
-              </Button>
-
-              {loading && <p>Uploading: {progress}%</p>}
-
-              {progress === 100 && (
-                <div>
-                  <p>Profile Picture Uploaded Successfully</p>
-                </div>
-              )}</>
-            }
-          </Box>
+        <Box>          
           <Typography>Contact details</Typography>
           <TextField
             label="Email"

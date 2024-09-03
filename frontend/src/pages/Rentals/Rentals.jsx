@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardActionArea, CardActions, CardContent, CardMedia, CircularProgress, Container, Divider, FormControl, FormControlLabel, FormLabel, Grid, IconButton, Paper, Radio, RadioGroup, Slider, TextField, Typography } from '@mui/material';
+import { Box, Button, capitalize, Card, CardActionArea, CardActions, CardContent, CardMedia, CircularProgress, Container, Divider, FormControl, FormControlLabel, FormLabel, Grid, IconButton, Paper, Radio, RadioGroup, Slider, TextField, Typography } from '@mui/material';
 import { collection, getDoc, getDocs, query, where } from 'firebase/firestore';
 import * as React from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -148,7 +148,7 @@ function RentalsContents({ searchTerm, category, subCategory, price, quantity })
                 let q;
                 const rentalRef = collection(db, 'rentals')
                 if (searchTerm !== null) {
-                    q = query(rentalRef, where('title', '>=', searchTerm), where('title', '<=', searchTerm + '\uf8ff'));
+                    q = query(rentalRef, where('title', '>=',capitalize(searchTerm)), where('title', '<=', capitalize(searchTerm) + '\uf8ff'));
                 }
                 if (category !== null) {
                     q = query(rentalRef, where('category', '==', category))

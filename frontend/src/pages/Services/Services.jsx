@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardActionArea,  CardContent, CardMedia, CircularProgress, Container, Divider, FormControl, FormControlLabel, FormLabel, Grid,  Paper, Radio, RadioGroup, Slider, TextField, Typography } from '@mui/material';
+import { Box, Button, capitalize, Card, CardActionArea,  CardContent, CardMedia, CircularProgress, Container, Divider, FormControl, FormControlLabel, FormLabel, Grid,  Paper, Radio, RadioGroup, Slider, TextField, Typography } from '@mui/material';
 import { collection,  getDocs, query, where } from 'firebase/firestore';
 import * as React from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -131,7 +131,7 @@ function ServicesContents({ searchTerm, category, subCategory, price, quantity }
                 let q;
                 const serviceRef = collection(db, 'services')
                 if (searchTerm !== null) {
-                    q = query(serviceRef, where('title', '>=', searchTerm), where('title', '<=', searchTerm + '\uf8ff'));
+                    q = query(serviceRef, where('title', '>=', capitalize(searchTerm)), where('title', '<=', capitalize(searchTerm) + '\uf8ff'));
                 }
                 if (category !== null) {
                     q = query(serviceRef, where('category', '==', category))

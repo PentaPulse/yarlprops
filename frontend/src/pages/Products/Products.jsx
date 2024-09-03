@@ -121,7 +121,7 @@ function Products() {
             </Grid>
             <Grid item md={9}>
                 <ProductsContents
-                    searchTerm={searchTerm}
+                    searchTerm={searchTerm.toLowerCase()}
                     category={cat}
                     subCategory={subCat}
                     priceRange={priceRange}

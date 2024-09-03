@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Card, CardActionArea, CardContent, CardMedia, CardActions, Container, Grid, Typography } from '@mui/material';
+import { Button, Card, CardActionArea, CardContent, CardMedia, CardActions, Container, Grid, Typography, capitalize } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../../api/firebase';
@@ -16,7 +16,7 @@ const ProductsContents = ({ searchTerm, category, subCategory, price, quantity }
                 let q;
                 const productRef = collection(db, 'products')
                 if (searchTerm !== null) {
-                    q = query(productRef, where('title', '>=', searchTerm), where('title', '<=', searchTerm + '\uf8ff'));
+                    q = query(productRef, where('title', '>=', capitalize(searchTerm)), where('title', '<=', capitalize(searchTerm) + '\uf8ff'));
                 }
                 if (category !== null) {
                     q = query(productRef, where('category', '==', category))
@@ -61,6 +61,7 @@ const ProductsContents = ({ searchTerm, category, subCategory, price, quantity }
                                         sx={{ height: '20rem' }}
                                         image={product.images[0] || 'https://picsum.photos/id/11/200/300'}
                                         title={product.name}
+                                        
                                     />
                                     <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                         <Typography gutterBottom variant='h6' component='div' color='inherit'>
