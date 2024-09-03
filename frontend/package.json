@@ -38,7 +38,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start-emulators": "firebase emulators:exec ./run_emulators.sh",
+    "start-emulators": "bash ./run_emulators.sh start",
     "emu-charith":"firebase emulators:start --import=./datacharith",
     "export-charith":"firebase emulators:export ./datacharith",
     "emu-janani":"firebase emulators:start --import=./datajanani",
