@@ -6,8 +6,6 @@ import HomeIcon from '@mui/icons-material/Home';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import WeekendIcon from '@mui/icons-material/Weekend';
 import WatchIcon from '@mui/icons-material/Watch';
-import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
-import LaptopIcon from '@mui/icons-material/Laptop';
 import FastfoodIcon from '@mui/icons-material/Fastfood';
 import SpaIcon from '@mui/icons-material/Spa'; // 
 import { collection, getDocs, limit, query } from 'firebase/firestore';
@@ -17,14 +15,12 @@ import DbError from '../../components/DbError/DbError';
 export default function Home() {
   const navigate = useNavigate();
   const categories = [
-    { name: 'Boarding', link: '/rentals/bordim', icon: <HomeIcon fontSize="large" /> },
-    { name: 'Vehicles', link: '/rentals/vehicles', icon: <DirectionsCarIcon fontSize="large" /> },
-    { name: 'Furniture', link: '/category/furniture', icon: <WeekendIcon fontSize="large" /> },
-    { name: 'Accessories', link: '/category/accessories', icon: <WatchIcon fontSize="large" /> },
-    { name: 'Electronics', link: '/category/electronics', icon: <LaptopIcon fontSize="large" /> },
-    { name: 'Mobile Phones', link: '/category/mobile-phones', icon: <PhoneIphoneIcon fontSize="large" /> },
-    { name: 'Foods', link: '/category/foods', icon: <FastfoodIcon fontSize="large" /> },
-    { name: 'Salon', link: '/category/salon', icon: <SpaIcon fontSize="large" /> },
+    { name: 'Boarding', link: '/p/rentals/Bordim', icon: <HomeIcon fontSize="large" /> },
+    { name: 'Furniture', link: '/products/Furnitures', icon: <WeekendIcon fontSize="large" /> },
+    { name: 'Foods', link: '/services/Food', icon: <FastfoodIcon fontSize="large" /> },
+    { name: 'Accessories', link: '/products/accessories', icon: <WatchIcon fontSize="large" /> },
+    { name: 'Vehicles', link: '/rentals/Vehicles', icon: <DirectionsCarIcon fontSize="large" /> },
+    { name: 'Salon', link: '/services/Saloon', icon: <SpaIcon fontSize="large" /> },
   ];
 
   const handleSeeAll = (page) => {
@@ -44,7 +40,7 @@ export default function Home() {
             </Typography>
             <Grid container spacing={3}>
               {categories.map((category, index) => (
-                <Grid item key={index} xs={12} sm={6} md={3}>
+                <Grid item key={index} xs={12} sm={6} md={4}>
                   <Card
                     sx={{
                       borderRadius: '16px',

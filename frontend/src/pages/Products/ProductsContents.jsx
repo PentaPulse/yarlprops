@@ -12,31 +12,35 @@ const ProductsContents = ({ searchTerm, category, subCategory, price, quantity }
 
     React.useEffect(() => {
         const fetchData = async () => {
-            if (searchTerm || category || subCategory || price || quantity) {
-                let q;
-                const productRef = collection(db, 'products')
-                if (searchTerm !== null) {
-                    q = query(productRef, where('title', '>=', capitalize(searchTerm)), where('title', '<=', capitalize(searchTerm) + '\uf8ff'));
-                }
-                if (category !== null) {
-                    q = query(productRef, where('category', '==', category))
-                }
-                if (subCategory !== null) {
-                    q = query(productRef, where('subCategory', '==', subCategory))
-                }/*
+            try {
+                if (searchTerm || category || subCategory || price || quantity) {
+                    let q;
+                    const productRef = collection(db, 'products')
+                    if (searchTerm !== null) {
+                        q = query(productRef, where('title', '>=', capitalize(searchTerm)), where('title', '<=', capitalize(searchTerm) + '\uf8ff'));
+                    }
+                    if (category !== null) {
+                        q = query(productRef, where('category', '==', category))
+                    }
+                    if (subCategory !== null) {
+                        q = query(productRef, where('subCategory', '==', subCategory))
+                    }/*
                 if (price) {
                     q = query(productRef, where('category', '==', price))
                 }
                 if (quantity) {
                     q = query(productRef, where('category', '==', quantity))
                 }*/
-                const querySnapshot = await getDocs(q);
-                const items = querySnapshot.docs.map(doc => doc.data());
-                setProducts(items);
+                    const querySnapshot = await getDocs(q);
+                    const items = querySnapshot.docs.map(doc => doc.data());
+                    setProducts(items);
 
-            } else {
-                const productList = await fetchProducts();
-                setProducts(productList);
+                } else {
+                    const productList = await fetchProducts();
+                    setProducts(productList);
+                }
+            } catch (e) {
+                setProducts([])
             }
         };
 
@@ -61,7 +65,7 @@ const ProductsContents = ({ searchTerm, category, subCategory, price, quantity }
                                         sx={{ height: '20rem' }}
                                         image={product.images[0] || 'https://picsum.photos/id/11/200/300'}
                                         title={product.name}
-                                        
+
                                     />
                                     <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                         <Typography gutterBottom variant='h6' component='div' color='inherit'>

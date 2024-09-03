@@ -12,18 +12,24 @@ import { rentalFilters } from '../../components/menuLists';
 
 export default function Rentals() {
     const [searchTerm, setSearchTerm] = React.useState('');
-    const [cat, setCat] = React.useState(null)
-    const [subCat, setSubCat] = React.useState(null)
+    const [category, setCategory] = React.useState(null)
+    const [subCategory, setSubCategory] = React.useState(null)
     const [priceRange, setPriceRange] = React.useState([0, 10000]);
     const [quantity, setQuantity] = React.useState(1);
+    const { cat } = useParams()
+    React.useEffect(() => {
+        if (cat) {
+            setCategory(cat)
+        }
+    }, [])
 
     const handleCategoryChange = (event) => {
         const value = event.target.value;
-        setCat(value);
+        setCategory(value);
     };
-    const handleSubCategoryChange = (event) => {
+    const handleSubCategoryegoryChange = (event) => {
         const value = event.target.value;
-        setSubCat(value)
+        setSubCategory(value)
     };
 
     const handlePriceRangeChange = (event, newValue) => {
@@ -33,13 +39,13 @@ export default function Rentals() {
     const handleQuantityChange = (event) => {
         setQuantity(event.target.value);
     };
-    
-    const handleClearCategories=()=>{
-        setCat(null)
-        setSubCat(null)
+
+    const handleClearCategories = () => {
+        setCategory(null)
+        setSubCategory(null)
     }
-    const handleClearSubCategories=()=>{
-        setSubCat(null)
+    const handleClearSubCategoryegories = () => {
+        setSubCategory(null)
     }
 
     return (
@@ -57,6 +63,7 @@ export default function Rentals() {
                         Search
                     </Typography>
                     <TextField
+                    autoFocus
                         label="Search"
                         variant="outlined"
                         fullWidth
@@ -67,7 +74,7 @@ export default function Rentals() {
                     <Divider sx={{ my: 2 }} />
                     <FormControl>
                         <FormLabel>Categories</FormLabel>
-                        <RadioGroup name='categories' value={cat} onChange={handleCategoryChange}>
+                        <RadioGroup name='categories' value={category} onChange={handleCategoryChange}>
                             {Object.keys(rentalFilters["categories"]).map((category) => (
                                 <FormControlLabel
                                     key={category}
@@ -76,25 +83,25 @@ export default function Rentals() {
                                 />
                             ))}
                         </RadioGroup>
-                        {cat && <Button onClick={handleClearCategories}>Clear</Button>}
+                        {category && <Button onClick={handleClearCategories}>Clear</Button>}
                     </FormControl>
 
                     <Divider sx={{ my: 2 }} />
 
                     <FormControl>
                         <FormLabel>Sub Categories</FormLabel>
-                        {cat && (
-                            <RadioGroup value={subCat} onChange={handleSubCategoryChange}>
-                                {rentalFilters["categories"][cat]?.map((subCategory) => (
+                        {category && (
+                            <RadioGroup value={subCategory} onChange={handleSubCategoryegoryChange}>
+                                {rentalFilters["categories"][category]?.map((subCategoryegory) => (
                                     <FormControlLabel
-                                        key={subCategory}
-                                        control={<Radio value={subCategory} />}
-                                        label={subCategory}
+                                        key={subCategoryegory}
+                                        control={<Radio value={subCategoryegory} />}
+                                        label={subCategoryegory}
                                     />
                                 ))}
                             </RadioGroup>
                         )}
-                        {subCat && <Button onClick={handleClearSubCategories}>Clear</Button>}
+                        {subCategory && <Button onClick={handleClearSubCategoryegories}>Clear</Button>}
                     </FormControl>
 
                     <Divider sx={{ my: 2 }} />
@@ -128,8 +135,8 @@ export default function Rentals() {
             <Grid item md={9}>
                 <RentalsContents
                     searchTerm={searchTerm}
-                    category={cat}
-                    subCategory={subCat}
+                    category={category}
+                    subCategory={subCategory}
                     priceRange={priceRange}
                     quantity={quantity}
                 />
@@ -138,43 +145,47 @@ export default function Rentals() {
     );
 }
 
-function RentalsContents({ searchTerm, category, subCategory, price, quantity }) {
+function RentalsContents({ searchTerm, category, subCategoryegory, price, quantity }) {
     const [rentals, setRentals] = React.useState([]);
     const navigate = useNavigate();
 
     React.useEffect(() => {
         const fetchData = async () => {
-            if (searchTerm || category || subCategory || price || quantity) {
-                let q;
-                const rentalRef = collection(db, 'rentals')
-                if (searchTerm !== null) {
-                    q = query(rentalRef, where('title', '>=',capitalize(searchTerm)), where('title', '<=', capitalize(searchTerm) + '\uf8ff'));
-                }
-                if (category !== null) {
-                    q = query(rentalRef, where('category', '==', category))
-                }
-                if (subCategory !== null) {
-                    q = query(rentalRef, where('subCategory', '==', subCategory))
-                }/*
+            try {
+                if (searchTerm || category || subCategoryegory || price || quantity) {
+                    let q;
+                    const rentalRef = collection(db, 'rentals')
+                    if (searchTerm !== null) {
+                        q = query(rentalRef, where('title', '>=', capitalize(searchTerm)), where('title', '<=', capitalize(searchTerm) + '\uf8ff'));
+                    }
+                    if (category !== null) {
+                        q = query(rentalRef, where('category', '==', category))
+                    }
+                    if (subCategoryegory !== null) {
+                        q = query(rentalRef, where('subCategoryegory', '==', subCategoryegory))
+                    }/*
                 if (price) {
                     q = query(rentalRef, where('category', '==', price))
                 }
                 if (quantity) {
                     q = query(rentalRef, where('category', '==', quantity))
                 }*/
-                const querySnapshot = await getDocs(q);
-                const items = querySnapshot.docs.map(doc => doc.data());
-                setRentals(items);
+                    const querySnapshot = await getDocs(q);
+                    const items = querySnapshot.docs.map(doc => doc.data());
+                    setRentals(items);
 
-            } else {
-                const q = await getDocs(query(collection(db, 'rentals')));
-                const rentalList = q.docs.map(doc => doc.data())
-                setRentals(rentalList);
+                } else {
+                    const q = await getDocs(query(collection(db, 'rentals')));
+                    const rentalList = q.docs.map(doc => doc.data())
+                    setRentals(rentalList);
+                }
+            } catch (e) {
+                setRentals([])
             }
         };
 
         fetchData()
-    }, [searchTerm, category, subCategory, price, quantity]);
+    }, [searchTerm, category, subCategoryegory, price, quantity]);
 
     const handleCardClick = (rid) => {
         navigate(`/p/rental/${rid}`);
@@ -221,7 +232,7 @@ export function RentalsPage() {
     React.useEffect(() => {
         const fetchrental = async () => {
             try {
-                const q = await getDoc(query(collection(db,'rentals'),where('rid','==',id)))
+                const q = await getDoc(query(collection(db, 'rentals'), where('rid', '==', id)))
                 const rentalData = q.docs.map(doc => doc.data())
                 setRental(rentalData);
                 setSelectedImageIndex(0);

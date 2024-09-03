@@ -2,22 +2,28 @@ import { Radio, FormControlLabel, Grid, TextField, Typography, Slider, Paper, Di
 import * as React from 'react';
 import ProductsContents from './ProductsContents';
 import { productFilters } from '../../components/menuLists';
+import { useParams } from 'react-router-dom';
 
 function Products() {
     const [searchTerm, setSearchTerm] = React.useState('');
-    const [cat, setCat] = React.useState(null)
-    const [subCat, setSubCat] = React.useState(null)
+    const [category, setCategory] = React.useState(null)
+    const [subCategory, setSubCategory] = React.useState(null)
     const [priceRange, setPriceRange] = React.useState([0, 10000]);
     const [quantity, setQuantity] = React.useState(1);
-
+    const {cat}=useParams()
+    React.useEffect(()=>{
+        if(cat){
+            setCategory(cat)
+        }
+    },[])
     const handleCategoryChange = (event) => {
         const value = event.target.value;
-        setCat(value);
-        setSubCat(null)
+        setCategory(value);
+        setSubCategory(null)
     };
-    const handleSubCategoryChange = (event) => {
+    const handleSubCategoryegoryChange = (event) => {
         const value = event.target.value;
-        setSubCat(value)
+        setSubCategory(value)
     };
 
     const handlePriceRangeChange = (event, newValue) => {
@@ -27,12 +33,12 @@ function Products() {
     const handleQuantityChange = (event) => {
         setQuantity(event.target.value);
     };
-    const handleClearCategories=()=>{
-        setCat(null)
-        setSubCat(null)
+    const handleClearCategories = () => {
+        setCategory(null)
+        setSubCategory(null)
     }
-    const handleClearSubCategories=()=>{
-        setSubCat(null)
+    const handleClearSubCategoryegories = () => {
+        setSubCategory(null)
     }
 
     return (
@@ -50,6 +56,7 @@ function Products() {
                         Search
                     </Typography>
                     <TextField
+                    autoFocus
                         label="Search"
                         variant="outlined"
                         fullWidth
@@ -60,7 +67,7 @@ function Products() {
                     <Divider sx={{ my: 2 }} />
                     <FormControl>
                         <FormLabel>Categories</FormLabel>
-                        <RadioGroup name='categories' value={cat} onChange={handleCategoryChange}>
+                        <RadioGroup name='categories' value={category} onChange={handleCategoryChange}>
                             {Object.keys(productFilters["categories"]).map((category) => (
                                 <FormControlLabel
                                     key={category}
@@ -69,25 +76,25 @@ function Products() {
                                 />
                             ))}
                         </RadioGroup>
-                        {cat && <Button onClick={handleClearCategories}>Clear</Button>}
+                        {category && <Button onClick={handleClearCategories}>Clear</Button>}
                     </FormControl>
 
                     <Divider sx={{ my: 2 }} />
 
                     <FormControl>
                         <FormLabel>Sub Categories</FormLabel>
-                        {cat && (
-                            <RadioGroup value={subCat} onChange={handleSubCategoryChange}>
-                                {productFilters["categories"][cat]?.map((subCategory) => (
+                        {category && (
+                            <RadioGroup value={subCategory} onChange={handleSubCategoryegoryChange}>
+                                {productFilters["categories"][category]?.map((subCategoryegory) => (
                                     <FormControlLabel
-                                        key={subCategory}
-                                        control={<Radio value={subCategory} />}
-                                        label={subCategory}
+                                        key={subCategoryegory}
+                                        control={<Radio value={subCategoryegory} />}
+                                        label={subCategoryegory}
                                     />
                                 ))}
                             </RadioGroup>
                         )}
-                        {subCat && <Button onClick={handleClearSubCategories}>Clear</Button>}
+                        {subCategory && <Button onClick={handleClearSubCategoryegories}>Clear</Button>}
                     </FormControl>
 
                     <Divider sx={{ my: 2 }} />
@@ -122,8 +129,8 @@ function Products() {
             <Grid item md={9}>
                 <ProductsContents
                     searchTerm={searchTerm.toLowerCase()}
-                    category={cat}
-                    subCategory={subCat}
+                    category={category}
+                    subCategory={subCategory}
                     priceRange={priceRange}
                     quantity={quantity}
                 />

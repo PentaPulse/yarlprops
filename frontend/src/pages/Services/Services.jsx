@@ -1,5 +1,5 @@
-import { Box, Button, capitalize, Card, CardActionArea,  CardContent, CardMedia, CircularProgress, Container, Divider, FormControl, FormControlLabel, FormLabel, Grid,  Paper, Radio, RadioGroup, Slider, TextField, Typography } from '@mui/material';
-import { collection,  getDocs, query, where } from 'firebase/firestore';
+import { Box, Button, capitalize, Card, CardActionArea, CardContent, CardMedia, CircularProgress, Container, Divider, FormControl, FormControlLabel, FormLabel, Grid, Paper, Radio, RadioGroup, Slider, TextField, Typography } from '@mui/material';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 import * as React from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { db } from '../../api/firebase';
@@ -13,28 +13,34 @@ import { serviceFilters } from '../../components/menuLists';
 
 export default function Services() {
     const [searchTerm, setSearchTerm] = React.useState('');
-    const [cat, setCat] = React.useState(null)
-    const [subCat, setSubCat] = React.useState(null)
+    const [category, setCategory] = React.useState(null)
+    const [subCategory, setSubCategory] = React.useState(null)
     const [priceRange, setPriceRange] = React.useState([0, 10000]);
+    const { cat } = useParams()
+    React.useEffect(() => {
+        if (cat) {
+            setCategory(cat)
+        }
+    }, [])
 
     const handleCategoryChange = (event) => {
         const value = event.target.value;
-        setCat(value);
+        setCategory(value);
     };
-    const handleSubCategoryChange = (event) => {
+    const handleSubCategoryegoryChange = (event) => {
         const value = event.target.value;
-        setSubCat(value)
+        setSubCategory(value)
     };
 
     const handlePriceRangeChange = (event, newValue) => {
         setPriceRange(newValue);
     };
-    const handleClearCategories=()=>{
-        setCat(null)
-        setSubCat(null)
+    const handleClearCategories = () => {
+        setCategory(null)
+        setSubCategory(null)
     }
-    const handleClearSubCategories=()=>{
-        setSubCat(null)
+    const handleClearSubCategoryegories = () => {
+        setSubCategory(null)
     }
 
     return (
@@ -52,6 +58,7 @@ export default function Services() {
                         Search
                     </Typography>
                     <TextField
+                    autoFocus
                         label="Search"
                         variant="outlined"
                         fullWidth
@@ -62,7 +69,7 @@ export default function Services() {
                     <Divider sx={{ my: 2 }} />
                     <FormControl>
                         <FormLabel>Categories</FormLabel>
-                        <RadioGroup name='categories' value={cat} onChange={handleCategoryChange}>
+                        <RadioGroup name='categories' value={category} onChange={handleCategoryChange}>
                             {Object.keys(serviceFilters["categories"]).map((category) => (
                                 <FormControlLabel
                                     key={category}
@@ -71,25 +78,25 @@ export default function Services() {
                                 />
                             ))}
                         </RadioGroup>
-                        {cat && <Button onClick={handleClearCategories}>Clear</Button>}
+                        {category && <Button onClick={handleClearCategories}>Clear</Button>}
                     </FormControl>
 
                     <Divider sx={{ my: 2 }} />
 
                     <FormControl>
                         <FormLabel>Sub Categories</FormLabel>
-                        {cat && (
-                            <RadioGroup value={subCat} onChange={handleSubCategoryChange}>
-                                {serviceFilters["categories"][cat]?.map((subCategory) => (
+                        {category && (
+                            <RadioGroup value={subCategory} onChange={handleSubCategoryegoryChange}>
+                                {serviceFilters["categories"][category]?.map((subCategoryegory) => (
                                     <FormControlLabel
-                                        key={subCategory}
-                                        control={<Radio value={subCategory} />}
-                                        label={subCategory}
+                                        key={subCategoryegory}
+                                        control={<Radio value={subCategoryegory} />}
+                                        label={subCategoryegory}
                                     />
                                 ))}
                             </RadioGroup>
                         )}
-                        {subCat && <Button onClick={handleClearSubCategories}>Clear</Button>}
+                        {subCategory && <Button onClick={handleClearSubCategoryegories}>Clear</Button>}
                     </FormControl>
 
                     <Divider sx={{ my: 2 }} />
@@ -112,8 +119,8 @@ export default function Services() {
             <Grid item md={9}>
                 <ServicesContents
                     searchTerm={searchTerm}
-                    category={cat}
-                    subCategory={subCat}
+                    category={category}
+                    subCategory={subCategory}
                     priceRange={priceRange}
                 />
             </Grid>
@@ -121,42 +128,46 @@ export default function Services() {
     );
 }
 
-function ServicesContents({ searchTerm, category, subCategory, price, quantity }) {
+function ServicesContents({ searchTerm, category, subCategoryegory, price, quantity }) {
     const [services, setServices] = React.useState([]);
     const navigate = useNavigate();
 
     React.useEffect(() => {
         const fetchData = async () => {
-            if (searchTerm || category || subCategory || price ) {
-                let q;
-                const serviceRef = collection(db, 'services')
-                if (searchTerm !== null) {
-                    q = query(serviceRef, where('title', '>=', capitalize(searchTerm)), where('title', '<=', capitalize(searchTerm) + '\uf8ff'));
-                }
-                if (category !== null) {
-                    q = query(serviceRef, where('category', '==', category))
-                }
-                if (subCategory !== null) {
-                    q = query(serviceRef, where('subCategory', '==', subCategory))
-                }/*
+            try {
+                if (searchTerm || category || subCategoryegory || price) {
+                    let q;
+                    const serviceRef = collection(db, 'services')
+                    if (searchTerm !== null) {
+                        q = query(serviceRef, where('title', '>=', capitalize(searchTerm)), where('title', '<=', capitalize(searchTerm) + '\uf8ff'));
+                    }
+                    if (category !== null) {
+                        q = query(serviceRef, where('category', '==', category))
+                    }
+                    if (subCategoryegory !== null) {
+                        q = query(serviceRef, where('subCategoryegory', '==', subCategoryegory))
+                    }/*
                 if (price) {
                     q = query(serviceRef, where('category', '==', price))
                 }
                 if (quantity) {
                     q = query(serviceRef, where('category', '==', quantity))
                 }*/
-                const querySnapshot = await getDocs(q);
-                const items = querySnapshot.docs.map(doc => doc.data());
-                setServices(items);
+                    const querySnapshot = await getDocs(q);
+                    const items = querySnapshot.docs.map(doc => doc.data());
+                    setServices(items);
 
-            } else {
-                const serviceList = await fetchServices();
-                setServices(serviceList );
+                } else {
+                    const serviceList = await fetchServices();
+                    setServices(serviceList);
+                }
+            } catch (e) {
+                setServices([])
             }
         };
 
         fetchData()
-    }, [searchTerm, category, subCategory, price, quantity]);
+    }, [searchTerm, category, subCategoryegory, price, quantity]);
 
     const handleCardClick = (sid) => {
         navigate(`/p/service/${sid}`);
@@ -192,7 +203,7 @@ function ServicesContents({ searchTerm, category, subCategory, price, quantity }
 
 export function ServicePage() {
     const [service, setService] = React.useState(null);
-    const [merchant,setMerchant]=React.useState(null)
+    const [merchant, setMerchant] = React.useState(null)
     const { id } = useParams();
     const theme = useTheme();
 
@@ -207,16 +218,16 @@ export function ServicePage() {
         };
 
         fetchService();
-        const fetchMerchant = async ()=>{
-            try{
-              const merchantData = await fetchMerchantServiceDetails(id);
-              setMerchant(merchantData)
-            }catch(error){
-              console.error("Error fetching merchant:", error);
+        const fetchMerchant = async () => {
+            try {
+                const merchantData = await fetchMerchantServiceDetails(id);
+                setMerchant(merchantData)
+            } catch (error) {
+                console.error("Error fetching merchant:", error);
             }
-          }
-      
-          fetchMerchant();
+        }
+
+        fetchMerchant();
     }, [id]);
 
     if (!service) {
@@ -268,7 +279,7 @@ export function ServicePage() {
                                 {/* Seller Details */}
                                 <Typography variant="h5" component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Service Provider's Details</Typography>
                                 <Typography variant="h6" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-user"></i> Name</Typography>
-                                <Typography>{merchant && merchant.firstName+' '+merchant.lastName}</Typography>
+                                <Typography>{merchant && merchant.firstName + ' ' + merchant.lastName}</Typography>
                                 <Typography variant="h6" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-location-dot"></i> Location</Typography>
                                 <Typography>{service.serviceLocation}</Typography>
                                 <Typography variant="h6" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-phone"></i> Contact No</Typography>
