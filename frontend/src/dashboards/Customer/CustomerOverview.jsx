@@ -1,12 +1,15 @@
 import React from 'react';
 import { Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { useAuth } from '../../api/AuthContext';
 
-const UserOverview = ({ userName, orders }) => {
+export default function UserOverview  ()  {
+    const {user} = useAuth()
+    console.log(user)
     return (
         <Container>
             {/* Welcome Message */}
             <Typography variant="h4" gutterBottom>
-                Welcome, <b>{userName}!</b>
+                Welcome, <b>{user.displayName}!</b>
             </Typography>
             
             {/* Orders Table */}
@@ -46,7 +49,3 @@ const orders = [
     { id: 2, product: 'Furniture Rental', quantity: 2, price: 50.00, status: 'Pending' },
     { id: 3, product: 'Food Service', quantity: 3, price: 30.00, status: 'Completed' },
 ];
-
-export default function App() {
-    return <UserOverview userName="Sachintha" orders={orders} />;
-}

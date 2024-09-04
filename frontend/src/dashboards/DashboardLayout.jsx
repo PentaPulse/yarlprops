@@ -10,7 +10,7 @@ import { MaterialUISwitch, ProfileBox } from '../components/NavigationBar/Naviga
 import { adminMenu, backToHome, merchMenu, userMenu } from '../components/menuLists';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import AdminOverview from './Admin/AdminOverview';
-import UserOverview from './User/UserOverview';
+import UserOverview from './Customer/CustomerOverview';
 import Profile from './UserProfile';
 import Admins from './Admin/Admins';
 import AdminUsers from './Admin/AdminUsers';
@@ -266,6 +266,7 @@ export default function DashboardLayout({ handleMode }) {
                         <Route path='myservices' element={<MerchantServices />} />
                         <Route path='myorders' element={<MerchantOrders />} />
                         {/* Cust */}
+
                     </Routes>
                 </Grid>
             </Box >
