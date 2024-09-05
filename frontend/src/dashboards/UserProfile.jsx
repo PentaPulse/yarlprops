@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import { useAuth } from '../api/AuthContext';
-import { Box, Button, Container, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Avatar, Paper, Typography, CircularProgress } from '@mui/material';
+import { Box, Button, Container, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Avatar, Paper, Typography, CircularProgress, Tab, Tabs } from '@mui/material';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db, storage, auth } from '../api/firebase';
 import { updateEmail, updatePassword, updateProfile } from 'firebase/auth';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import PropTypes from 'prop-types';
 
 const Profile = () => {
   const { user } = useAuth();
   const [file, setFile] = useState(null)
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [value, setValue] = React.useState(0)
 
   const uploadPP = async () => {
     if (!file) return;
@@ -49,10 +51,14 @@ const Profile = () => {
     }
   }
 
-  const handleChange = (e) => {
+  const handleChangeFile = (e) => {
     if (e.target.files[0]) {
       setFile(e.target.files[0]);
     }
+  };
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
   };
 
   return (
@@ -87,7 +93,7 @@ const Profile = () => {
                   style={{ display: 'none' }}
                   id="contained-button-file"
                   type="file"
-                  onChange={handleChange}
+                  onChange={handleChangeFile}
                 />
                 <label htmlFor="contained-button-file">
                   <Button variant="contained" component="span">
@@ -152,29 +158,20 @@ const Profile = () => {
         </Paper>
       </Grid>
 
-      {/* Profile Settings */}
       <Grid item xs={4} sm={4} md={15} lg={11}>
-        <Paper
-          elevation={3}
-          sx={{
-            padding: 3,
-            height: '100%',
-          }}
-        >
-          <ProfileSettings />
-        </Paper>
-      </Grid>
-
-      {/* Account Settings */}
-      <Grid item xs={4} sm={4} md={15} lg={11}>
-        <Paper
-          elevation={3}
-          sx={{
-            padding: 3,
-            height: '100%',
-          }}
-        >
-          <AccountSettings />
+        <Paper sx={{ width: '100%' }}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Tabs variant='fullWidth' value={value} onChange={handleChange} aria-label="basic tabs example">
+              <Tab label="PROFILE SETTINGS" {...a11yProps(0)} />
+              <Tab label="ACCOUNT SETTINGS" {...a11yProps(1)} />
+            </Tabs>
+          </Box>
+          <CustomTabPanel value={value} index={0}>
+            <ProfileSettings />
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={1}>
+            <AccountSettings />
+          </CustomTabPanel>
         </Paper>
       </Grid>
     </>
@@ -241,74 +238,80 @@ const ProfileSettings = () => {
 
   return (
     <>
-      <Box display='flex' justifyContent='center'>
-        <Typography variant="h5">Profile Settings</Typography>
-      </Box>
       <Box
         component="form"
         sx={{
           '& .MuiTextField-root': { m: 1 },
         }}
       >
-        <Box>
-          <Typography>Personal details</Typography>
-          <TextField
-            label="First name"
-            name="firstName"
-            value={profile.firstName}
-            onChange={handleInputChange}
-            InputProps={{
-              readOnly: !edit,
-            }}
-            fullWidth
-          />
-          <TextField
-            label="Last name"
-            name="lastName"
-            value={profile.lastName}
-            onChange={handleInputChange}
-            InputProps={{
-              readOnly: !edit,
-            }}
-            fullWidth
-          />
-          <TextField
-            label="Display name"
-            name="displayname"
-            value={profile.displayName}
-            onChange={handleInputChange}
-            InputProps={{
-              readOnly: !edit,
-            }}
-            fullWidth
-          />
-          <TextField
-            label="Date of Birth"
-            name="dateOfBirth"
-            type="date"
-            value={profile.dateOfBirth}
-            onChange={handleInputChange}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            InputProps={{
-              readOnly: !edit,
-            }}
-            fullWidth
-          />
-          <FormControl sx={{ m: 1 }} disabled={!edit} fullWidth>
-            <InputLabel>Gender</InputLabel>
-            <Select
-              value={profile.gender}
-              onChange={handleSelectChange}
-              label="Gender"
-            >
-              {['Male', 'Female'].map((roleOption, index) => (
-                <MenuItem key={index} value={roleOption}>{roleOption}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Box>
+        <Grid container columns={12} columnSpacing={1}>
+          <Grid item lg={6}>
+            <TextField
+              label="First name"
+              name="firstName"
+              value={profile.firstName}
+              onChange={handleInputChange}
+              InputProps={{
+                readOnly: !edit,
+              }}
+              fullWidth
+            />
+          </Grid>
+          <Grid item lg={6}>
+            <TextField
+              label="Last name"
+              name="lastName"
+              value={profile.lastName}
+              onChange={handleInputChange}
+              InputProps={{
+                readOnly: !edit,
+              }}
+              fullWidth
+            />
+          </Grid>
+          <Grid item lg={6}>
+            <TextField
+              label="Display name"
+              name="displayname"
+              value={profile.displayName}
+              onChange={handleInputChange}
+              InputProps={{
+                readOnly: !edit,
+              }}
+              fullWidth
+            />
+          </Grid>
+          <Grid item lg={6}>
+            <TextField
+              label="Date of Birth"
+              name="dateOfBirth"
+              type="date"
+              value={profile.dateOfBirth}
+              onChange={handleInputChange}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              InputProps={{
+                readOnly: !edit,
+              }}
+              fullWidth
+            />
+          </Grid>
+          <Grid item lg={6}>
+            <FormControl sx={{ m: 1 }} disabled={!edit} fullWidth>
+              <InputLabel>Gender</InputLabel>
+              <Select
+                value={profile.gender}
+                onChange={handleSelectChange}
+                label="Gender"
+              >
+                {['Male', 'Female'].map((roleOption, index) => (
+                  <MenuItem key={index} value={roleOption}>{roleOption}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+        </Grid>
         <Box>
           <Typography>Contact details</Typography>
           <TextField
@@ -338,10 +341,10 @@ const ProfileSettings = () => {
             </Button>
           ) : (
             <>
-              <Button variant="contained" color="primary" onClick={handleSubmit}>
+              <Button variant="contained" color="info" sx={{mr:2}} onClick={handleSubmit}>
                 Submit
               </Button>
-              <Button variant="contained" color="secondary" onClick={handleCancel}>
+              <Button variant="contained" color="primary" onClick={handleCancel}>
                 Cancel
               </Button>
             </>
@@ -427,13 +430,10 @@ const AccountSettings = () => {
 
   return (
     <>
-      <Box display='flex' justifyContent='center'>
-        <Typography variant="h5">Account Settings</Typography>
-      </Box>
       <Box
         component="form"
         sx={{
-          '& .MuiTextField-root': { m: 1,width:'100%' },
+          '& .MuiTextField-root': { m: 1, width: '100%' },
         }}
         noValidate
         autoComplete="off"
@@ -539,3 +539,33 @@ const AccountSettings = () => {
 };
 
 export default Profile;
+
+
+function CustomTabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+    </div>
+  );
+}
+
+CustomTabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
