@@ -29,6 +29,9 @@ export const merchMenu = [
 ]
 export const userMenu = [
     ['Overview', <DashboardIcon />, 'overview'],
+    ['My Orders',<StoreIcon/>,'orders'],
+    ['Feedbacks',<StoreIcon/>,'feedback'],
+    ['M Centre',<StoreIcon/>,'mcentre'],
     ['My Profile', <BadgeIcon />, 'profile'],
 ]
 
@@ -46,7 +49,7 @@ export const productFilters = {
 export const rentalFilters = {
     "categories":
     {
-        "Vehicals":
+        "Vehicles":
             ["Bicycle", "Bike"],
         "Furnitures":
             ["Table", "Chair", "Bed"],

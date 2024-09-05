@@ -64,7 +64,7 @@ const Profile = () => {
   return (
     <>
       {/* Profile Information Section */}
-      <Grid item xs={4} sm={4} md={15} lg={4} >
+      <Grid item xs={24} sm={24} md={23} lg={8} >
         <Paper
           elevation={3}
           sx={{
@@ -115,6 +115,7 @@ const Profile = () => {
                   color="primary"
                   onClick={uploadPP}
                   disabled={loading}
+                  fullWidth
                 >
                   {loading ? <CircularProgress size={24} /> : 'Upload'}
                 </Button>
@@ -158,7 +159,7 @@ const Profile = () => {
         </Paper>
       </Grid>
 
-      <Grid item xs={4} sm={4} md={15} lg={11}>
+      <Grid item xs={24} sm={24} md={23} lg={16}>
         <Paper sx={{ width: '100%' }}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs variant='fullWidth' value={value} onChange={handleChange} aria-label="basic tabs example">
@@ -244,8 +245,9 @@ const ProfileSettings = () => {
           '& .MuiTextField-root': { m: 1 },
         }}
       >
-        <Grid container columns={12} columnSpacing={1}>
-          <Grid item lg={6}>
+        <Typography>Profile details</Typography>
+        <Grid container columns={12} columnSpacing={2}>
+          <Grid item lg={6} md={6} sm={12} xs={12}>
             <TextField
               label="First name"
               name="firstName"
@@ -257,7 +259,7 @@ const ProfileSettings = () => {
               fullWidth
             />
           </Grid>
-          <Grid item lg={6}>
+          <Grid item lg={6} md={6} sm={12} xs={12}>
             <TextField
               label="Last name"
               name="lastName"
@@ -269,7 +271,7 @@ const ProfileSettings = () => {
               fullWidth
             />
           </Grid>
-          <Grid item lg={6}>
+          <Grid item lg={6} md={6} sm={12} xs={12}>
             <TextField
               label="Display name"
               name="displayname"
@@ -281,7 +283,7 @@ const ProfileSettings = () => {
               fullWidth
             />
           </Grid>
-          <Grid item lg={6}>
+          <Grid item lg={6} md={6} sm={12} xs={12}>
             <TextField
               label="Date of Birth"
               name="dateOfBirth"
@@ -297,7 +299,7 @@ const ProfileSettings = () => {
               fullWidth
             />
           </Grid>
-          <Grid item lg={6}>
+          <Grid item lg={6} md={6} sm={12} xs={12}>
             <FormControl sx={{ m: 1 }} disabled={!edit} fullWidth>
               <InputLabel>Gender</InputLabel>
               <Select
@@ -311,9 +313,10 @@ const ProfileSettings = () => {
               </Select>
             </FormControl>
           </Grid>
-        </Grid>
-        <Box>
-          <Typography>Contact details</Typography>
+        </Grid>        
+        <Typography>Contact details</Typography>
+        <Grid container columns={12} columnSpacing={2}>
+          <Grid item lg={6} md={6} sm={12} xs={12}>
           <TextField
             label="Email"
             name="email"
@@ -323,6 +326,8 @@ const ProfileSettings = () => {
             }}
             fullWidth
           />
+          </Grid>
+          <Grid item lg={6} md={6} sm={12} xs={12}>
           <TextField
             label="Address"
             name="address"
@@ -333,7 +338,8 @@ const ProfileSettings = () => {
             }}
             fullWidth
           />
-        </Box>
+          </Grid>
+        </Grid>
         <Container sx={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
           {!edit ? (
             <Button variant="contained" color="primary" onClick={handleEditProfile}>

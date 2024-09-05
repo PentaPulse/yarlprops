@@ -10,7 +10,7 @@ import { MaterialUISwitch, ProfileBox } from '../components/NavigationBar/Naviga
 import { adminMenu, backToHome, merchMenu, userMenu } from '../components/menuLists';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import AdminOverview from './Admin/AdminOverview';
-import UserOverview from './Customer/CustomerOverview';
+import CustomerOverview from './Customer/CustomerOverview';
 import Profile from './UserProfile';
 import Admins from './Admin/Admins';
 import AdminUsers from './Admin/AdminUsers';
@@ -25,6 +25,9 @@ import MerchantOverview from './Merchant/MerchantOverview';
 import AdminRentals from './Admin/AdminRentals';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../api/firebase';
+import CustomerOrders from './Customer/CustomerOrders';
+import CustomerFeedback from './Customer/CustomerFeedback';
+import CustomerMsgCenter from './Customer/CustomerMsgCenter';
 
 const drawerWidth = 240;
 
@@ -183,7 +186,7 @@ export default function DashboardLayout({ handleMode }) {
                         <Divider />
                         <List >
                             {(adminList.includes(user.uid) ? adminMenu : (merchantList.includes(user.uid) ? merchMenu : userMenu)).map((text, index) => (
-                                <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+                                <ListItem key={text} disablePadding sx={{ display:  {lg:'block' ,md:'block', xs:'none',sm:'none'} }}>
                                     <ListItemButton
                                         sx={{
                                             minHeight: 48,
@@ -205,7 +208,7 @@ export default function DashboardLayout({ handleMode }) {
                                     </ListItemButton>
                                 </ListItem>
                             ))}
-                            <ListItem disablePadding sx={{ display: 'block' }}>
+                            <ListItem disablePadding sx={{ display: {lg:'block' ,md:'block', xs:'none',sm:'none'} }}>
                                 <ListItemButton
                                     sx={{
                                         minHeight: 48,
@@ -246,11 +249,12 @@ export default function DashboardLayout({ handleMode }) {
                             </ListItem>
                         </List>
                     </Drawer >
+                    
                 </Box>
-                <Grid container pl={10} pt={10} columns={{ xs: 6, sm: 6, md: 16, lg: 16 }} columnSpacing={{xs:1,sm:1,md:2,lg:3}} rowSpacing={{xs:3}}>
+                <Grid container pl={10} pt={10} columns={24} columnSpacing={{xs:1,sm:1,md:2,lg:2}} rowSpacing={{xs:3}}>
                     <Routes>
                         {/* Common */}
-                        <Route path='overview' element={adminList.includes(user.uid) ? <AdminOverview /> : (merchantList.includes(user.uid) ? <MerchantOverview /> : <UserOverview />)} />
+                        <Route path='overview' element={adminList.includes(user.uid) ? <AdminOverview /> : (merchantList.includes(user.uid) ? <MerchantOverview /> : <CustomerOverview />)} />
                         <Route path='profile' element={<Profile />} />
 
                         {/* Admin */}
@@ -266,7 +270,9 @@ export default function DashboardLayout({ handleMode }) {
                         <Route path='myservices' element={<MerchantServices />} />
                         <Route path='myorders' element={<MerchantOrders />} />
                         {/* Cust */}
-
+                         <Route path='orders' element={<CustomerOrders/>}/>
+                         <Route path='feedback' element={<CustomerFeedback/>}/>
+                         <Route path='mcentre' element={<CustomerMsgCenter/>}/>
                     </Routes>
                 </Grid>
             </Box >
