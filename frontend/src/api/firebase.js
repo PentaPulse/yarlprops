@@ -2,6 +2,7 @@ import { connectAuthEmulator, getAuth } from 'firebase/auth';
 import firebase from 'firebase/compat/app';
 import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore';
 import { connectStorageEmulator, getStorage } from 'firebase/storage';
+//import { getDatabase, connectDatabaseEmulator } from "firebase/database";
 //import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 
 const firebaseConfig = {
@@ -19,6 +20,7 @@ firebase.initializeApp(firebaseConfig);
 const db = getFirestore();
 const auth = getAuth();
 const storage = getStorage();
+//const realtimeDB = getDatabase()
 
 /*
 const appCheck = initializeAppCheck(app, {
@@ -30,6 +32,7 @@ if (window.location.hostname === "localhost" || window.location.hostname === '12
   connectFirestoreEmulator(db, '127.0.0.1', 8080);
   connectAuthEmulator(auth, "http://127.0.0.1:9099");
   connectStorageEmulator(storage, '127.0.0.1', 9199);
+  //connectDatabaseEmulator(realtimeDB, '127.0.0.1', 9000);
 }
 
 
