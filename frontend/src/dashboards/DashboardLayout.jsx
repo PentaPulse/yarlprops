@@ -1,4 +1,4 @@
-import { Avatar, Box, CssBaseline, Divider, FormControlLabel, Grid, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Tooltip, Typography, styled, useTheme } from '@mui/material'
+import { Avatar, Badge, Box, CssBaseline, Divider, FormControlLabel, Grid, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Tooltip, Typography, styled, useTheme } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
@@ -8,9 +8,12 @@ import * as React from 'react'
 import { useAuth } from '../api/AuthContext'
 import { MaterialUISwitch, ProfileBox } from '../components/NavigationBar/NavigationBar';
 import { adminMenu, backToHome, merchMenu, userMenu } from '../components/menuLists';
-import {  useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../api/firebase';
+import MailIcon from '@mui/icons-material/Mail';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+//import MoreIcon from '@mui/icons-material/MoreVert';
 
 const drawerWidth = 240;
 
@@ -78,7 +81,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
-export default function DashboardLayout({ handleMode ,children}) {
+export default function DashboardLayout({ handleMode, children }) {
     const [open, setOpen] = React.useState(false);
     const [adminList, setAdminList] = React.useState([]);
     const [merchantList, setMerchantList] = React.useState([]);
@@ -124,38 +127,16 @@ export default function DashboardLayout({ handleMode ,children}) {
     }, [])
 
     const drawer = (
-            <List >
-                {(adminList.includes(user.uid) ? adminMenu : (merchantList.includes(user.uid) ? merchMenu : userMenu)).map((text, index) => (
-                    <ListItem key={text} disablePadding >
-                        <ListItemButton
-                            sx={{
-                                minHeight: 48,
-                                justifyContent: open ? 'initial' : 'center',
-                                px: 2.5,
-                            }}
-                            onClick={() => handleMenu(text[2], text[3])}
-                        >
-                            <ListItemIcon
-                                sx={{
-                                    minWidth: 0,
-                                    mr: open ? 3 : 'auto',
-                                    justifyContent: 'center',
-                                }}
-                            >
-                                {text[1]}
-                            </ListItemIcon>
-                            <ListItemText primary={text[0]} sx={{ opacity: open ? 1 : 0 }} onClick={() => handleMenu(text[2], text[3])} />
-                        </ListItemButton>
-                    </ListItem>
-                ))}
-                <ListItem disablePadding >
+        <List >
+            {(adminList.includes(user.uid) ? adminMenu : (merchantList.includes(user.uid) ? merchMenu : userMenu)).map((text, index) => (
+                <ListItem key={text} disablePadding >
                     <ListItemButton
                         sx={{
                             minHeight: 48,
                             justifyContent: open ? 'initial' : 'center',
                             px: 2.5,
                         }}
-                        onClick={back}
+                        onClick={() => handleMenu(text[2], text[3])}
                     >
                         <ListItemIcon
                             sx={{
@@ -164,70 +145,103 @@ export default function DashboardLayout({ handleMode ,children}) {
                                 justifyContent: 'center',
                             }}
                         >
-                            <Avatar
-                                sx={{
-                                    width: 24,
-                                    height: 24,
-                                    bgcolor: 'inherit'
-                                }}
-                                alt={backToHome[0]}
-                                variant="square"
-                            >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
-                                    width="24"
-                                    height="24"
-                                    fill={theme.palette.mode === 'light' ? '#000000' : '#ffffff'}
-                                >
-                                    <path d={backToHome[1]} />
-                                </svg>
-                            </Avatar>
+                            {text[1]}
                         </ListItemIcon>
-                        <ListItemText primary={backToHome[0]} sx={{ opacity: open ? 1 : 0 }} />
+                        <ListItemText primary={text[0]} sx={{ opacity: { xs: open ? 1 : 0, sm: open ? 1 : 0, md: 1, lg: 1 } }} onClick={() => handleMenu(text[2], text[3])} />
                     </ListItemButton>
                 </ListItem>
-            </List>
+            ))}
+            <ListItem disablePadding >
+                <ListItemButton
+                    sx={{
+                        minHeight: 48,
+                        justifyContent: open ? 'initial' : 'center',
+                        px: 2.5,
+                    }}
+                    onClick={back}
+                >
+                    <ListItemIcon
+                        sx={{
+                            minWidth: 0,
+                            mr: open ? 3 : 'auto',
+                            justifyContent: 'center',
+                        }}
+                    >
+                        <Avatar
+                            sx={{
+                                width: 24,
+                                height: 24,
+                                bgcolor: 'inherit'
+                            }}
+                            alt={backToHome[0]}
+                            variant="square"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                width="24"
+                                height="24"
+                                fill={theme.palette.mode === 'light' ? '#000000' : '#ffffff'}
+                            >
+                                <path d={backToHome[1]} />
+                            </svg>
+                        </Avatar>
+                    </ListItemIcon>
+                    <ListItemText primary={backToHome[0]} sx={{ opacity: { xs: open ? 1 : 0, sm: open ? 1 : 0, md: 1, lg: 1 } }} />
+                </ListItemButton>
+            </ListItem>
+        </List>
     )
     return (
         <>
-            <Box >
+            <Grid container columns={12}>
                 <CssBaseline />
                 <AppBar position="fixed" open={open} color='inherit'>
                     <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
                         <Box display='flex'>
                             <IconButton
-                                color={"inherit"}
-                                aria-label="open drawer"
-                                onClick={handleDrawerOpen}
+                                size="large"
                                 edge="start"
-                                sx={{
-                                    marginRight: 5,
-                                    ...(open && { display: 'none' }),
-                                }}
+                                color="inherit"
+                                sx={{ mr: 2 }}
+                                onClick={handleDrawerOpen}
                             >
                                 <MenuIcon />
                             </IconButton>
-                            <Typography variant="h6" noWrap component="div">
-                                MY DASHBOARD
+                            <Typography variant="h6" noWrap component="div" sx={{ display: { xs: 'none', sm: 'none', md: 'block', lg: 'block' } }}>
+                                YarlProps{/*large screens logo + name*/}
+                            </Typography>
+                            <Typography variant="h6" noWrap component="div" sx={{ display: { xs: 'block', sm: 'block', md: 'none', lg: 'none' } }}>
+                                Yp {/*small screens logo*/}
                             </Typography>
                         </Box>
-                        <Box display={'flex'} >
-                            <Box>
-                                <Tooltip title={`${theme.palette.mode} mode`}>
-                                    <FormControlLabel
-                                        control={<MaterialUISwitch sx={{ m: 1 }} checked={theme.palette.mode === 'light' ? false : true} onClick={handleMode} />}
-                                    />
-                                </Tooltip>
-                            </Box >
-                            <Box>
-                                <ProfileBox />
-                            </Box>
+                        <Box sx={{ flexGrow: 1 }} />
+                        <Box display={'flex'} gap={1} >
+                            <Tooltip title={`${theme.palette.mode} mode`}>
+                                <FormControlLabel
+                                    control={<MaterialUISwitch checked={theme.palette.mode === 'light' ? false : true} onClick={handleMode} />}
+                                />
+                            </Tooltip>
+                            <IconButton size="large" color="inherit">
+                                <Badge badgeContent={0} color="error">
+                                    <MailIcon />
+                                </Badge>
+                            </IconButton>
+                            <IconButton
+                                size="large"
+                                color="inherit"
+                            >
+                                <Badge badgeContent={17} color="error">
+                                    <NotificationsIcon />
+                                </Badge>
+                            </IconButton>
+                            <Box sx={{ flexGrow: 1 }} />
+                            <ProfileBox />
                         </Box>
                     </Toolbar >
                 </AppBar >
-                <Box>
-                    < Drawer sx={{ display: { xs: 'block', sm: 'block', md: 'none', lg: 'none' },'& .MuiDrawer-paper': { boxSizing: 'border-box' ,color:'inherit'}, }} variant={open?"permanent":'temporary'} open={open} onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
+                <Grid item size={3}>
+                    < Drawer sx={{ display: { xs: 'block', sm: 'block', md: 'none', lg: 'none' }, '& .MuiDrawer-paper': { boxSizing: 'border-box', color: 'inherit' }, }} variant={open ? "permanent" : 'temporary'} open={open} onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
                         <DrawerHeader>
                             <IconButton onClick={handleDrawerClose} >
                                 {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
@@ -236,7 +250,11 @@ export default function DashboardLayout({ handleMode ,children}) {
                         <Divider />
                         {drawer}
                     </Drawer >
-                    < Drawer sx={{ display: { xs: 'none', sm: 'none', md: 'block', lg: 'block' } }} variant="permanent" open={open} onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
+                    < Drawer sx={{
+                        display: { xs: 'none', sm: 'none', md: 'block', lg: 'block' },
+                        flexShrink: 0,
+                        [`& .MuiDrawer-paper`]: { boxSizing: 'border-box' },
+                    }} variant="permanent" open>
                         <DrawerHeader>
                             <IconButton onClick={handleDrawerClose} >
                                 {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
@@ -246,11 +264,13 @@ export default function DashboardLayout({ handleMode ,children}) {
                         {drawer}
                     </Drawer >
 
-                </Box>
-                <Grid container sx={{ pl: { xs: 0, sm: 0, md: 10, lg: 10 }, pt: { xs: 10, sm: 10, md: 10, lg: 10 } }} pt={10} columns={24} columnSpacing={{ xs: 1, sm: 1, md: 2, lg: 2 }} rowSpacing={{ xs: 3, sm: 3, md: 2, lg: 2 }}>
-                    {children}
                 </Grid>
-            </Box >
+                <Grid item xs={12} sm={12} md={9} lg={9} sx={{ pt: { xs: 10, sm: 10, md: 10, lg: 10 } }} >
+                    <Grid container columns={24} pl={2} columnSpacing={{ xs: 1, sm: 1, md: 2, lg: 2 }} rowSpacing={{ xs: 3, sm: 3, md: 2, lg: 2 }}>
+                        {children}
+                    </Grid>
+                </Grid>
+            </Grid >
         </>
     )
 }
