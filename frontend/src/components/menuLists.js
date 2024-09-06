@@ -8,6 +8,7 @@ import BadgeIcon from '@mui/icons-material/Badge';
 import StoreIcon from '@mui/icons-material/Store';
 import MiscellaneousServicesIcon from '@mui/icons-material/MiscellaneousServices';
 import CarRentalIcon from '@mui/icons-material/CarRental';
+import UndoIcon from '@mui/icons-material/Undo';
 
 export const adminMenu = [
     ['Overview', <DashboardIcon />, 'overview'],

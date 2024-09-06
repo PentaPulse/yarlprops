@@ -8,26 +8,9 @@ import * as React from 'react'
 import { useAuth } from '../api/AuthContext'
 import { MaterialUISwitch, ProfileBox } from '../components/NavigationBar/NavigationBar';
 import { adminMenu, backToHome, merchMenu, userMenu } from '../components/menuLists';
-import { Route, Routes, useNavigate } from 'react-router-dom';
-import AdminOverview from './Admin/AdminOverview';
-import CustomerOverview from './Customer/CustomerOverview';
-import Profile from './UserProfile';
-import Admins from './Admin/Admins';
-import AdminUsers from './Admin/AdminUsers';
-import AdminProducts from './Admin/AdminProducts';
-import AdminServices from './Admin/AdminServices';
-import ContactusRequests from './Admin/ContactusReqs';
-import MerchantProducts from './Merchant/MerchantProducts';
-import MerchantRentals from './Merchant/MerchantRentals';
-import MerchantServices from './Merchant/MerchantServices';
-import MerchantOrders from './Merchant/MerchantOrders';
-import MerchantOverview from './Merchant/MerchantOverview';
-import AdminRentals from './Admin/AdminRentals';
+import {  useNavigate } from 'react-router-dom';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../api/firebase';
-import CustomerOrders from './Customer/CustomerOrders';
-import CustomerFeedback from './Customer/CustomerFeedback';
-import CustomerMsgCenter from './Customer/CustomerMsgCenter';
 
 const drawerWidth = 240;
 
@@ -95,7 +78,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
-export default function DashboardLayout({ handleMode }) {
+export default function DashboardLayout({ handleMode ,children}) {
     const [open, setOpen] = React.useState(false);
     const [adminList, setAdminList] = React.useState([]);
     const [merchantList, setMerchantList] = React.useState([]);
@@ -139,6 +122,73 @@ export default function DashboardLayout({ handleMode }) {
         fetchAdminList()
         fetchMerchantList()
     }, [])
+
+    const drawer = (
+            <List >
+                {(adminList.includes(user.uid) ? adminMenu : (merchantList.includes(user.uid) ? merchMenu : userMenu)).map((text, index) => (
+                    <ListItem key={text} disablePadding >
+                        <ListItemButton
+                            sx={{
+                                minHeight: 48,
+                                justifyContent: open ? 'initial' : 'center',
+                                px: 2.5,
+                            }}
+                            onClick={() => handleMenu(text[2], text[3])}
+                        >
+                            <ListItemIcon
+                                sx={{
+                                    minWidth: 0,
+                                    mr: open ? 3 : 'auto',
+                                    justifyContent: 'center',
+                                }}
+                            >
+                                {text[1]}
+                            </ListItemIcon>
+                            <ListItemText primary={text[0]} sx={{ opacity: open ? 1 : 0 }} onClick={() => handleMenu(text[2], text[3])} />
+                        </ListItemButton>
+                    </ListItem>
+                ))}
+                <ListItem disablePadding >
+                    <ListItemButton
+                        sx={{
+                            minHeight: 48,
+                            justifyContent: open ? 'initial' : 'center',
+                            px: 2.5,
+                        }}
+                        onClick={back}
+                    >
+                        <ListItemIcon
+                            sx={{
+                                minWidth: 0,
+                                mr: open ? 3 : 'auto',
+                                justifyContent: 'center',
+                            }}
+                        >
+                            <Avatar
+                                sx={{
+                                    width: 24,
+                                    height: 24,
+                                    bgcolor: 'inherit'
+                                }}
+                                alt={backToHome[0]}
+                                variant="square"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24"
+                                    width="24"
+                                    height="24"
+                                    fill={theme.palette.mode === 'light' ? '#000000' : '#ffffff'}
+                                >
+                                    <path d={backToHome[1]} />
+                                </svg>
+                            </Avatar>
+                        </ListItemIcon>
+                        <ListItemText primary={backToHome[0]} sx={{ opacity: open ? 1 : 0 }} />
+                    </ListItemButton>
+                </ListItem>
+            </List>
+    )
     return (
         <>
             <Box >
@@ -177,103 +227,28 @@ export default function DashboardLayout({ handleMode }) {
                     </Toolbar >
                 </AppBar >
                 <Box>
-                    < Drawer variant="permanent" open={open} onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
+                    < Drawer sx={{ display: { xs: 'block', sm: 'block', md: 'none', lg: 'none' },'& .MuiDrawer-paper': { boxSizing: 'border-box' ,color:'inherit'}, }} variant={open?"permanent":'temporary'} open={open} onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
                         <DrawerHeader>
                             <IconButton onClick={handleDrawerClose} >
                                 {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
                             </IconButton>
                         </DrawerHeader>
                         <Divider />
-                        <List >
-                            {(adminList.includes(user.uid) ? adminMenu : (merchantList.includes(user.uid) ? merchMenu : userMenu)).map((text, index) => (
-                                <ListItem key={text} disablePadding sx={{ display:  {lg:'block' ,md:'block', xs:'none',sm:'none'} }}>
-                                    <ListItemButton
-                                        sx={{
-                                            minHeight: 48,
-                                            justifyContent: open ? 'initial' : 'center',
-                                            px: 2.5,
-                                        }}
-                                        onClick={() => handleMenu(text[2], text[3])}
-                                    >
-                                        <ListItemIcon
-                                            sx={{
-                                                minWidth: 0,
-                                                mr: open ? 3 : 'auto',
-                                                justifyContent: 'center',
-                                            }}
-                                        >
-                                            {text[1]}
-                                        </ListItemIcon>
-                                        <ListItemText primary={text[0]} sx={{ opacity: open ? 1 : 0 }} onClick={() => handleMenu(text[2], text[3])} />
-                                    </ListItemButton>
-                                </ListItem>
-                            ))}
-                            <ListItem disablePadding sx={{ display: {lg:'block' ,md:'block', xs:'none',sm:'none'} }}>
-                                <ListItemButton
-                                    sx={{
-                                        minHeight: 48,
-                                        justifyContent: open ? 'initial' : 'center',
-                                        px: 2.5,
-                                    }}
-                                    onClick={back}
-                                >
-                                    <ListItemIcon
-                                        sx={{
-                                            minWidth: 0,
-                                            mr: open ? 3 : 'auto',
-                                            justifyContent: 'center',
-                                        }}
-                                    >
-                                        <Avatar
-                                            sx={{
-                                                width: 24,
-                                                height: 24,
-                                                bgcolor: 'inherit'
-                                            }}
-                                            alt={backToHome[0]}
-                                            variant="square"
-                                        >
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                viewBox="0 0 24 24"
-                                                width="24"
-                                                height="24"
-                                                fill={theme.palette.mode === 'light' ? '#000000' : '#ffffff'}
-                                            >
-                                                <path d={backToHome[1]} />
-                                            </svg>
-                                        </Avatar>
-                                    </ListItemIcon>
-                                    <ListItemText primary={backToHome[0]} sx={{ opacity: open ? 1 : 0 }} />
-                                </ListItemButton>
-                            </ListItem>
-                        </List>
+                        {drawer}
                     </Drawer >
-                    
-                </Box>
-                <Grid container pl={10} pt={10} columns={24} columnSpacing={{xs:1,sm:1,md:2,lg:2}} rowSpacing={{xs:3}}>
-                    <Routes>
-                        {/* Common */}
-                        <Route path='overview' element={adminList.includes(user.uid) ? <AdminOverview /> : (merchantList.includes(user.uid) ? <MerchantOverview /> : <CustomerOverview />)} />
-                        <Route path='profile' element={<Profile />} />
+                    < Drawer sx={{ display: { xs: 'none', sm: 'none', md: 'block', lg: 'block' } }} variant="permanent" open={open} onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
+                        <DrawerHeader>
+                            <IconButton onClick={handleDrawerClose} >
+                                {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                            </IconButton>
+                        </DrawerHeader>
+                        <Divider />
+                        {drawer}
+                    </Drawer >
 
-                        {/* Admin */}
-                        <Route path='adminlist' element={<Admins />} />
-                        <Route path='userlist' element={<AdminUsers />} />
-                        <Route path='productlist' element={<AdminProducts />} />
-                        <Route path='rentallist' element={<AdminRentals />} />
-                        <Route path='servicelist' element={<AdminServices />} />
-                        <Route path='contactreqs' element={<ContactusRequests />} />
-                        {/* Merch */}
-                        <Route path='myproducts' element={<MerchantProducts />} />
-                        <Route path='myrentals' element={<MerchantRentals />} />
-                        <Route path='myservices' element={<MerchantServices />} />
-                        <Route path='myorders' element={<MerchantOrders />} />
-                        {/* Cust */}
-                         <Route path='orders' element={<CustomerOrders/>}/>
-                         <Route path='feedback' element={<CustomerFeedback/>}/>
-                         <Route path='mcentre' element={<CustomerMsgCenter/>}/>
-                    </Routes>
+                </Box>
+                <Grid container sx={{ pl: { xs: 0, sm: 0, md: 10, lg: 10 }, pt: { xs: 10, sm: 10, md: 10, lg: 10 } }} pt={10} columns={24} columnSpacing={{ xs: 1, sm: 1, md: 2, lg: 2 }} rowSpacing={{ xs: 3, sm: 3, md: 2, lg: 2 }}>
+                    {children}
                 </Grid>
             </Box >
         </>

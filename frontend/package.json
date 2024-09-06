@@ -14,6 +14,7 @@
     "@testing-library/jest-dom": "^6.4.8",
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.5.2",
+    "@toolpad/core": "^0.5.2",
     "axios": "^1.7.4",
     "bootstrap": "^5.3.3",
     "devextreme": "^24.1.5",
@@ -39,14 +40,14 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "start-emulators": "bash ./run_emulators.sh start",
-    "emu-charith":"firebase emulators:start --import=./datacharith",
-    "export-charith":"firebase emulators:export ./datacharith",
-    "emu-janani":"firebase emulators:start --import=./datajanani",
-    "export-janani":"firebase emulators:export ./datajanani",
-    "emu-priya":"firebase emulators:start --import=./datapriya",
-    "export-priya":"firebase emulators:export ./datapriya",
-    "emu-mith":"firebase emulators:start --import=./datamith",
-    "export-mith":"firebase emulators:export ./datamith"
+    "emu-charith": "firebase emulators:start --import=./datacharith",
+    "export-charith": "firebase emulators:export ./datacharith",
+    "emu-janani": "firebase emulators:start --import=./datajanani",
+    "export-janani": "firebase emulators:export ./datajanani",
+    "emu-priya": "firebase emulators:start --import=./datapriya",
+    "export-priya": "firebase emulators:export ./datapriya",
+    "emu-mith": "firebase emulators:start --import=./datamith",
+    "export-mith": "firebase emulators:export ./datamith"
   },
   "eslintConfig": {
     "extends": [

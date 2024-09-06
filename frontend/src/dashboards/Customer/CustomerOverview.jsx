@@ -2,7 +2,7 @@ import React from 'react';
 import { Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import { useAuth } from '../../api/AuthContext';
 
-export default function UserOverview  ()  {
+export default function CustomerOverview  ()  {
     const {user} = useAuth()
     console.log(user)
     return (
