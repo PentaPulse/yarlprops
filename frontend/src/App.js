@@ -39,7 +39,15 @@ import Profile from "./dashboards/UserProfile";
 import CustomerOverview from './dashboards/Customer/CustomerOverview'
 
 const lightTheme = createTheme({
-  cssVariables: { colorSchemeSelector: 'data-toolpad-color-scheme', },
+  breakpoints:{
+    values:{
+      xs:375,
+      sm:420,
+      md:600,
+      lg:1024,
+      xl:1920
+    }
+  },
   palette: {
     mode: "light",
     primary: {
@@ -52,7 +60,15 @@ const lightTheme = createTheme({
 });
 
 const darkTheme = createTheme({
-  cssVariables: { colorSchemeSelector: 'data-toolpad-color-scheme', },
+  breakpoints:{
+    values:{
+      xs:375,
+      sm:420,
+      md:600,
+      lg:1024,
+      xl:1920
+    }
+  },
   palette: {
     mode: "dark",
     primary: {
