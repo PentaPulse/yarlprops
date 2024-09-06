@@ -5,7 +5,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../api/AuthContext';
 import { Login, Register } from '../Signup/Signup';
-import { auth } from '../../api/firebase';
+//import { auth } from '../../api/firebase';
 
 const pages = [['Home', '/'], ['Products', '/p/products'], ['Rentals', '/p/rentals'], ['Services', '/p/services'], ['Contact', '/p/contact']];
 const style = {
@@ -25,7 +25,7 @@ const style = {
 };
 
 
-export default function NavigationBar({ handleMode,ok }) {
+export default function NavigationBar({ handleMode, ok }) {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [isLogged, setIsLogged] = React.useState(false);
     const { user } = useAuth()
@@ -240,19 +240,28 @@ export function ProfileBox() {
     }
 
     return (
-        <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center', borderWidth: '1px', borderStyle: 'solid', borderColor: theme.palette.mode === 'light' ? 'black' : 'white', borderRadius: '5px 25px', padding: '0 10px' }}>
-            <Tooltip title="Open dashboard">
-                <IconButton onClick={handleDashboards} sx={{ p: 0 }}>
-                    <Avatar alt="User Profile" src={sessionStorage.getItem('pp')} />
-                </IconButton>
-            </Tooltip>
-            <Box sx={{ textAlign: 'center', ml: 1 }}>
-                <Typography color={theme.palette.mode === 'light' ? 'black' : 'white'}>
-                    {sessionStorage.getItem('displayName')}
-                </Typography>
-                <Button variant="contained" onClick={handleSignout}>Sign Out</Button>
+        <>
+            <Box sx={{ flexGrow: 0, display: {xs:'none',sm:'none',md:'flex',lg:'flex'}, alignItems: 'center', borderWidth: '1px', borderStyle: 'solid', borderColor: theme.palette.mode === 'light' ? 'black' : 'white', borderRadius: '5px 25px', padding: '0 10px' }}>
+                <Tooltip title="Open dashboard">
+                    <IconButton onClick={handleDashboards} sx={{ p: 0 }}>
+                        <Avatar alt="User Profile" src={sessionStorage.getItem('pp')} />
+                    </IconButton>
+                </Tooltip>
+                <Box sx={{ textAlign: 'center', ml: 1 }}>
+                    <Typography color={theme.palette.mode === 'light' ? 'black' : 'white'}>
+                        {sessionStorage.getItem('displayName')}
+                    </Typography>
+                    <Button variant="contained" onClick={handleSignout}>Sign Out</Button>
+                </Box>
             </Box>
-        </Box>
+            <Box sx={{flexGrow:0,display:{xs:'block',sm:'block',md:'none',lg:'none'}}}>
+            <Tooltip title="Open dashboard">
+                    <IconButton onClick={handleDashboards} sx={{ p: 0 }}>
+                        <Avatar alt="User Profile" src={sessionStorage.getItem('pp')} />
+                    </IconButton>
+                </Tooltip>
+            </Box>
+        </>
     );
 }
 
