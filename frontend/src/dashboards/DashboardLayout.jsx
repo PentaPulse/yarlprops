@@ -203,16 +203,16 @@ export default function DashboardLayout({ handleMode, children }) {
                                 size="large"
                                 edge="start"
                                 color="inherit"
-                                sx={{ mr: 2 }}
+                                sx={{ mr: 2, display: { lg: 'none' } }}
                                 onClick={handleDrawerOpen}
                             >
                                 <MenuIcon />
                             </IconButton>
-                            <Typography variant="h6" noWrap component="div" sx={{ display: { xs: 'none', sm: 'none', md: 'block', lg: 'block' } }}>
-                                YarlProps{/*large screens logo + name*/}
+                            <Typography variant="h6" noWrap component="div" >
+                                logo {/*large screens logo + name*/}
                             </Typography>
-                            <Typography variant="h6" noWrap component="div" sx={{ display: { xs: 'block', sm: 'block', md: 'none', lg: 'none' } }}>
-                                Yp {/*small screens logo*/}
+                            <Typography variant="h6" noWrap component="div" sx={{ display: { xs: 'none', sm: 'none', md: 'block', lg: 'block' } }}>
+                                YarlProps {/*small screens logo*/}
                             </Typography>
                         </Box>
                         <Box sx={{ flexGrow: 1 }} />
@@ -241,7 +241,10 @@ export default function DashboardLayout({ handleMode, children }) {
                     </Toolbar >
                 </AppBar >
                 <Grid item size={3}>
-                    < Drawer sx={{ display: { xs: 'block', sm: 'block', md: 'none', lg: 'none' }, '& .MuiDrawer-paper': { boxSizing: 'border-box', color: 'inherit' }, }} variant={open ? "permanent" : 'temporary'} open={open} onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
+                    < Drawer sx={{
+                        display: { xs: 'block', sm: 'block', md: 'block', lg: 'none' }
+                        , '& .MuiDrawer-paper': { boxSizing: 'border-box', color: 'inherit' },
+                    }} variant={open ? "permanent" : 'temporary'} open={open} >
                         <DrawerHeader>
                             <IconButton onClick={handleDrawerClose} >
                                 {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
@@ -251,7 +254,7 @@ export default function DashboardLayout({ handleMode, children }) {
                         {drawer}
                     </Drawer >
                     < Drawer sx={{
-                        display: { xs: 'none', sm: 'none', md: 'block', lg: 'block' },
+                        display: { xs: 'none', sm: 'none', md: 'none', lg: 'block' },
                         flexShrink: 0,
                         [`& .MuiDrawer-paper`]: { boxSizing: 'border-box' },
                     }} variant="permanent" open>
@@ -265,8 +268,8 @@ export default function DashboardLayout({ handleMode, children }) {
                     </Drawer >
 
                 </Grid>
-                <Grid item xs={12} sm={12} md={9} lg={9} sx={{ pt: { xs: 10, sm: 10, md: 10, lg: 10 } }} >
-                    <Grid container columns={24} pl={2} columnSpacing={{ xs: 1, sm: 1, md: 2, lg: 2 }} rowSpacing={{ xs: 3, sm: 3, md: 2, lg: 2 }}>
+                <Grid item xs={12} sm={12} md={12} lg={9} sx={{ pt: { xs: 10, sm: 10, md: 10, lg: 10 } }} >
+                    <Grid container columns={12} pl={2} columnSpacing={{ xs: 1, sm: 1, md: 2, lg: 2 }} rowSpacing={{ xs: 3, sm: 3, md: 2, lg: 2 }}>
                         {children}
                     </Grid>
                 </Grid>

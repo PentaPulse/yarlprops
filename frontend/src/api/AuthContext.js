@@ -25,15 +25,12 @@ export const AuthProvider = ({ children }) => {
                     const userDoc = await getDoc(userDocRef);
                     if (adminDoc.exists()) {
                         setUser({ ...adminDoc.data(), ...currentUser })
-                        sessionStorage.setItem('pp', user.photoURL);
-                        sessionStorage.setItem('displayName', user.displayName);
                     }
                     else if (userDoc.exists()) {
                         setUser({ ...userDoc.data(), ...currentUser });
-                        sessionStorage.setItem('pp', user.photoURL);
-                        sessionStorage.setItem('displayName', user.displayName);
-                    }
-
+                    }                    
+                    sessionStorage.setItem('pp', currentUser.photoURL);
+                    sessionStorage.setItem('displayName', currentUser.displayName);
                 } catch (error) {
 
                 }
