@@ -8,11 +8,13 @@ import BadgeIcon from '@mui/icons-material/Badge';
 import StoreIcon from '@mui/icons-material/Store';
 import MiscellaneousServicesIcon from '@mui/icons-material/MiscellaneousServices';
 import CarRentalIcon from '@mui/icons-material/CarRental';
+import StorefrontIcon from '@mui/icons-material/Storefront';
 
 export const adminMenu = [
     ['Overview', <DashboardIcon />, 'overview'],
     ['Admins', <AdminPanelSettingsIcon />, 'adminlist'],
-    ['Users', <GroupIcon />, 'userlist'],
+    ['Merchants',<StoreIcon/>,'merchantlist'],
+    ['Customers', <GroupIcon />, 'customerlist'],
     ['Products', <InventoryIcon />, 'productlist'],
     ['Rentals', <CarRentalIcon />, 'rentallist'],
     ['Services', <MiscellaneousServicesIcon />, 'servicelist'],

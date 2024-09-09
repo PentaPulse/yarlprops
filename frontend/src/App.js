@@ -21,7 +21,6 @@ import Rentals from "./pages/Rentals/Rentals";
 import DashboardLayout from "./dashboards/DashboardLayout";
 import { db } from "./api/firebase";
 import Admins from "./dashboards/Admin/Admins";
-import AdminUsers from "./dashboards/Admin/AdminUsers";
 import AdminProducts from "./dashboards/Admin/AdminProducts";
 import AdminRentals from "./dashboards/Admin/AdminRentals";
 import AdminServices from "./dashboards/Admin/AdminServices";
@@ -37,6 +36,9 @@ import MerchantOverview from "./dashboards/Merchant/MerchantOverview";
 import AdminOverview from "./dashboards/Admin/AdminOverview";
 import Profile from "./dashboards/UserProfile";
 import CustomerOverview from './dashboards/Customer/CustomerOverview'
+import AdminCustomers from "./dashboards/Admin/AdminCustomers";
+import AdminMerchants from "./dashboards/Admin/AdminMerchants";
+import Guide from "./pages/Guide/Guide";
 
 const lightTheme = createTheme({
   palette: {
@@ -134,6 +136,7 @@ function PageRoutes({ handleMode }) {
           <Route path="services" element={<Services />} />
           <Route path="services/:cat" element={<Services />} />
           <Route path="service/:id" element={<ServicePage />} />
+          <Route path="guide" element={<Guide/>}/>
           <Route path="contact" element={<Contact />} />
         </Routes>
         <Footer />
@@ -178,7 +181,8 @@ function DashboardRoutes({handleMode}) {
 
           {/* Admin */}
           <Route path="adminlist" element={<Admins />} />
-          <Route path="userlist" element={<AdminUsers />} />
+          <Route path="merchantlist" element={<AdminMerchants/>}/>
+          <Route path="customerlist" element={<AdminCustomers />} />
           <Route path="productlist" element={<AdminProducts />} />
           <Route path="rentallist" element={<AdminRentals />} />
           <Route path="servicelist" element={<AdminServices />} />

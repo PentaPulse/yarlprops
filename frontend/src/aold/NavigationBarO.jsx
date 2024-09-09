@@ -1,61 +1,14 @@
 import * as React from 'react';
-import { styled, alpha } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import InputBase from '@mui/material/InputBase';
-import Badge from '@mui/material/Badge';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
+import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Button, Tooltip, MenuItem, Switch, FormControlLabel, ButtonGroup, Modal, Backdrop, Fade, alpha, InputBase } from '@mui/material';
+import { styled, useTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import MailIcon from '@mui/icons-material/Mail';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import { Avatar, Button, Switch, Tooltip, useTheme, ButtonGroup, Modal, Fade, Backdrop, Select } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../api/AuthContext';
-import { Login, Register } from '../Sign/Sign';
-import ModeSwitch from '../ModeHandler/ModeSwitch';
+import { useAuth } from '../api/AuthContext';
+import { Login, Register } from '../components/Sign/Sign';
+//import { auth } from '../../api/firebase';
 
-const Search = styled('div')(({ theme }) => ({
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.primary.main, 0.15),
-    '&:hover': {
-        backgroundColor: alpha(theme.palette.primary.main, 0.25),
-    },
-    marginRight: theme.spacing(2),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-        width: 'auto',
-    },
-}));
-
-const SearchType = styled(Select)(({ theme }) => ({
-    marginRight: theme.spacing(2),
-    backgroundColor: alpha(theme.palette.primary.main, 0.15),
-    '& .MuiSelect-select': {
-        padding: theme.spacing(1),
-        color: theme.palette.text.primary,
-    },
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    color: 'inherit',
-    '& .MuiInputBase-input': {
-        padding: theme.spacing(1, 1, 1, 0),
-        //paddingLeft: `calc(1em + ${theme.spacing(2)})`,
-        transition: theme.transitions.create('width'),
-        width: '100%',
-        [theme.breakpoints.up('md')]: {
-            
-        },
-    },
-}));
-
+const pages = [['Home', '/'], ['Products', '/p/products'], ['Rentals', '/p/rentals'], ['Services', '/p/services'], ['Contact', '/p/contact']];
 const style = {
     position: 'absolute',
     top: '50%',
@@ -72,32 +25,61 @@ const style = {
     textAlign: "center"
 };
 
-export default function NavigationBar({ handleMode }) {
+const Search = styled('div')(({ theme }) => ({
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: alpha(theme.palette.common.white, 0.15),
+    '&:hover': {
+        backgroundColor: alpha(theme.palette.common.white, 0.25),
+    },
+    marginRight: theme.spacing(2),
+    marginLeft: 0,
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+        marginLeft: theme.spacing(3),
+        width: 'auto',
+    },
+}));
+
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+    padding: theme.spacing(0, 2),
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+    color: 'inherit',
+    '& .MuiInputBase-input': {
+        padding: theme.spacing(1, 1, 1, 0),
+        // vertical padding + font size from searchIcon
+        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+        transition: theme.transitions.create('width'),
+        width: '100%',
+        [theme.breakpoints.up('md')]: {
+            width: '20ch',
+        },
+    },
+}));
+
+
+export default function NavigationBar({ handleMode, ok }) {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
-    const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-    const theme = useTheme()
+    const [isLogged, setIsLogged] = React.useState(false);
+    const { user } = useAuth()
+    const theme = useTheme();
     const [signin, setSignin] = React.useState(false);
     const [signup, setSignup] = React.useState(false);
-    const [isLogged, setIsLogged] = React.useState(false);
-    const [searchType,setSearchType]=React.useState('')
-    const { user } = useAuth()
-    const navigate = useNavigate()
 
-    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
-    };
-
-    const handleMobileMenuClose = () => {
-        setMobileMoreAnchorEl(null);
-    };
-
-    const handleMobileMenuOpen = (event) => {
-        setMobileMoreAnchorEl(event.currentTarget);
     };
 
     React.useEffect(() => {
@@ -107,107 +89,44 @@ export default function NavigationBar({ handleMode }) {
             setIsLogged(false);
         }
     }, [user])
-    const pages = [['Home', '/'], ['Products', '/p/products'], ['Rentals', '/p/rentals'], ['Services', '/p/services'], ['Guide', '/p/guide'], ['Contact', '/p/contact']];
-
-    const mobileMenuId = 'primary-search-account-menu-mobile';
-    const renderMobileMenu = (
-        <Menu
-            anchorEl={mobileMoreAnchorEl}
-            anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-            }}
-            id={mobileMenuId}
-            keepMounted
-            transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-            }}
-            open={isMobileMenuOpen}
-            onClose={handleMobileMenuClose}
-        >
-            <MenuItem>
-                <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-                    <Badge badgeContent={4} color="error">
-                        <MailIcon />
-                    </Badge>
-                </IconButton>
-                <Typography>Messages</Typography>
-            </MenuItem>
-            <MenuItem>
-                <IconButton
-                    size="large"
-                    aria-label="show 17 new notifications"
-                    color="inherit"
-                >
-                    <Badge badgeContent={17} color="error">
-                        <NotificationsIcon />
-                    </Badge>
-                </IconButton>
-                <Typography>Notifications</Typography>
-            </MenuItem>
-            <MenuItem onClick={() => navigate('/d/overview')}>
-                <IconButton
-                    size="large"
-                    aria-haspopup="true"
-                    color="inherit"
-                >
-                    <DashboardIcon />
-                </IconButton>
-                <Typography>Dashboard</Typography>
-            </MenuItem>
-        </Menu>
-    );
-
-    const SignBox = ({ sign, closeSign, Comp }) => {
-        return (
-            <Modal
-                open={sign}
-                onClose={closeSign}
-                closeAfterTransition
-                slots={{ backdrop: Backdrop }}
-                slotProps={{
-                    backdrop: {
-                        timeout: 500,
-                    },
-                }}
-                sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginTop: '30',
-                    textAlign: 'center'
-                }}>
-                <Fade in={sign}>
-                    <Box sx={style}>
-                        {sign ? <Comp closeBox={closeSign} /> : ''}
-                    </Box>
-                </Fade>
-            </Modal>
-        )
-    }
-
 
     return (
         <>
-            <Box sx={{ flexGrow: 1 }}>
-                <AppBar position="fixed"
-                    sx={{
-                        background: 'rgba(255, 255, 255, 0.5)',
-                        boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-                        borderRadius: '0 0 10px 10px',
-                        border: '1px solid rgba(255, 255, 255, 0.18)',
-                        backdropFilter: 'blur(3px)',
-                    }}
-                >
-                    <Toolbar >
-                        <Box>
+            <AppBar position="fixed" sx={{
+                background: 'rgba(255, 255, 255, 0.5)',
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+                borderRadius: '0 0 10px 10px',
+                border: '1px solid rgba(255, 255, 255, 0.18)',
+                backdropFilter: 'blur(3px)',
+            }}>
+                <Container maxWidth="xl">
+                    <Toolbar disableGutters>
+                        <Typography
+                            variant="h6"
+                            noWrap
+                            component="a"
+                            href="/"
+                            sx={{
+                                mr: 2,
+                                display: { xs: 'none', md: 'flex' },
+                                fontFamily: 'monospace',
+                                fontWeight: 700,
+                                letterSpacing: '.2rem',
+                                textDecoration: 'none',
+                                color: theme.palette.mode === 'light' ? '#000000' : '#FFFFFF',
+                            }}
+                        >
+                            YarlProps
+                        </Typography>
+
+                        <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
                             <IconButton
                                 size="large"
-                                edge="start"
-                                color={theme.palette.primary.main}
+                                aria-label="account of current user"
+                                aria-controls="menu-appbar"
+                                aria-haspopup="true"
                                 onClick={handleOpenNavMenu}
-                                sx={{ mr: 2, [theme.breakpoints.up('md')]: { display: 'none' } }}
+                                color={theme.palette.mode === 'light' ? '#000000' : '#FFFFFF'}
                             >
                                 <MenuIcon />
                             </IconButton>
@@ -239,18 +158,20 @@ export default function NavigationBar({ handleMode }) {
                             </Menu>
                         </Box>
                         <Typography
-                            variant="h6"
+                            variant="h5"
                             noWrap
                             component="a"
                             href="/"
                             sx={{
                                 mr: 2,
-                                display: { xs: 'none', md: 'flex' },
+                                display: { xs: 'flex', md: 'none' },
+                                flexGrow: 1,
                                 fontFamily: 'monospace',
                                 fontWeight: 700,
-                                letterSpacing: '.2rem',
-                                textDecoration: 'none',
-                                color: theme.palette.primary.main
+                                letterSpacing: '.3rem',
+                                color: 'inherit',
+                                textDecoration: 'none', // eslint-disable-next-line
+                                color: theme.palette.mode === 'light' ? '#000000' : '#FFFFFF',
                             }}
                         >
                             YarlProps
@@ -268,25 +189,24 @@ export default function NavigationBar({ handleMode }) {
                             ))}
                         </Box>
                         <Search>
-                            <SearchType
-                                value={searchType}
-                                onChange={(e) => setSearchType(e.target.value)}
-                                displayEmpty
-                            >
-                                <MenuItem value="products">Products</MenuItem>
-                                <MenuItem value="rentals">Rentals</MenuItem>
-                                <MenuItem value="services">Services</MenuItem>
-                            </SearchType>
-                            <SearchIcon/>
+                            <SearchIconWrapper>
+                                <SearchIcon />
+                            </SearchIconWrapper>
                             <StyledInputBase
                                 placeholder="Search…"
                                 inputProps={{ 'aria-label': 'search' }}
                             />
                         </Search>
-                        <Box sx={{ flexGrow: 1 }} />
-                        <ModeSwitch handleMode={handleMode} />
+                        <Box>
+                            <Tooltip title={`${theme.palette.mode} mode`}>
+                                <FormControlLabel
+                                    control={<MaterialUISwitch sx={{ m: 1 }} checked={theme.palette.mode === 'light' ? false : true} onClick={handleMode} />}
+                                />
+                            </Tooltip>
+                        </Box>
+
                         {isLogged ? (
-                            <ProfileBox isLogged={isLogged} handleProfileClick={handleMobileMenuOpen} />
+                            <ProfileBox isLogged={isLogged} />
                         ) : (
                             <>
                                 <ButtonGroup variant="text">
@@ -296,16 +216,63 @@ export default function NavigationBar({ handleMode }) {
                             </>
                         )}
                     </Toolbar>
-                </AppBar>
-                {renderMobileMenu}
-            </Box>
-            <SignBox sign={signin} closeSign={() => setSignin(false)} Comp={Login} />
-            <SignBox sign={signup} closeSign={() => setSignup(false)} Comp={Register} />
+                </Container>
+            </AppBar>
+            <Modal
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                open={signin}
+                onClose={() => setSignin(false)}
+                closeAfterTransition
+                slots={{ backdrop: Backdrop }}
+                slotProps={{
+                    backdrop: {
+                        timeout: 500,
+                    },
+                }}
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginTop: '30',
+                    textAlign: 'center'
+                }}>
+                <Fade in={signin}>
+                    <Box sx={style}>
+                        {signin ? <Login closeBox={() => setSignin(false)} /> : ''}
+                    </Box>
+                </Fade>
+            </Modal>
+            <Modal
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                open={signup}
+                onClose={() => setSignup(false)}
+                closeAfterTransition
+                slots={{ backdrop: Backdrop }}
+                slotProps={{
+                    backdrop: {
+                        timeout: 500,
+                    },
+                }}
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginTop: '30',
+                    textAlign: 'center'
+                }}>
+                <Fade in={signup}>
+                    <Box sx={style}>
+                        {signup ? <Register closeBox={() => setSignup(false)} /> : ''}
+                    </Box>
+                </Fade>
+            </Modal>
         </>
     );
 }
 
-export function ProfileBox({ loc, handleProfileClick }) {
+export function ProfileBox() {
     const theme = useTheme();
     const navigate = useNavigate()
     const { logout } = useAuth()
@@ -324,22 +291,6 @@ export function ProfileBox({ loc, handleProfileClick }) {
 
     return (
         <>
-            <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-                    <Badge badgeContent={4} color="error">
-                        <MailIcon />
-                    </Badge>
-                </IconButton>
-                <IconButton
-                    size="large"
-                    aria-label="show 17 new notifications"
-                    color="inherit"
-                >
-                    <Badge badgeContent={17} color="error">
-                        <NotificationsIcon />
-                    </Badge>
-                </IconButton>
-            </Box>
             <Box sx={{ flexGrow: 0, display: { xs: 'none', sm: 'none', md: 'flex', lg: 'flex' }, alignItems: 'center', borderWidth: '1px', borderStyle: 'solid', borderColor: theme.palette.mode === 'light' ? 'black' : 'white', borderRadius: '5px 25px', padding: '0 10px' }}>
                 <Tooltip title="Open dashboard">
                     <IconButton onClick={handleDashboards} sx={{ p: 0 }}>
@@ -355,7 +306,7 @@ export function ProfileBox({ loc, handleProfileClick }) {
             </Box>
             <Box sx={{ flexGrow: 0, display: { xs: 'block', sm: 'block', md: 'none', lg: 'none' } }}>
                 <Tooltip title="Open dashboard">
-                    <IconButton onClick={handleProfileClick} sx={{ p: 0 }}>
+                    <IconButton onClick={handleDashboards} sx={{ p: 0 }}>
                         <Avatar alt="User Profile" src={sessionStorage.getItem('pp')} />
                     </IconButton>
                 </Tooltip>
@@ -364,7 +315,6 @@ export function ProfileBox({ loc, handleProfileClick }) {
     );
 }
 
-//export const 
 export const MaterialUISwitch = styled(Switch)(({ theme }) => ({
     width: 62,
     height: 34,

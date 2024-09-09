@@ -10,6 +10,7 @@ export function Login({ closeBox }) {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const { login, reset, google } = useAuth();
+    const showAlerts=useAlerts()
     const [showPassword, setShowPassword] = React.useState(false);
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -30,12 +31,16 @@ export function Login({ closeBox }) {
 
     const handleLogin = async (e) => {
         e.preventDefault();
+        if ( !email || !password) {
+            return showAlerts('Enter details to Signin', 'warning')
+        } else {
         try {
             await login(email, password);
             closeBox()
         } catch (error) {
             console.error(error);
         }
+    }
     };
 
     const handleReset = async (e) => {
@@ -46,14 +51,14 @@ export function Login({ closeBox }) {
             console.error(error);
         }
     };
-
+/*
     const handleKeyDown = (event) => {
-        if(event.key==='Enter'){            
-        console.log(event)
+        if (event.key === 'Enter') {
+            console.log(event)
             event.preventDefault()
             handleLogin()
         }
-    }
+    }*/
 
 
     return (
@@ -121,7 +126,7 @@ export function Login({ closeBox }) {
     );
 }
 
-export function Register({closeBox}) {
+export function Register({ closeBox }) {
     const [firstName, setFirstName] = React.useState('');
     const [lastName, setLastName] = React.useState('');
     const [displayName, setDisplayName] = React.useState('');
@@ -129,6 +134,7 @@ export function Register({closeBox}) {
     const [password, setPassword] = React.useState('');
     const { register } = useAuth();
     const [showPassword, setShowPassword] = React.useState(false);
+    const showAlerts = useAlerts()
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -138,12 +144,17 @@ export function Register({closeBox}) {
 
     const handleRegister = async (e) => {
         e.preventDefault();
-        try {
-            await register(firstName, lastName, displayName, email, password);
-            closeBox()
-        } catch (error) {
-            console.error(error);
-            throw error
+        if (!firstName || !lastName || !displayName || !email || !password) {
+            return showAlerts('Enter details to Register', 'warning')
+        } else {
+            try {
+                await register(firstName, lastName, displayName, email, password).then(
+                    closeBox()
+                )
+            } catch (error) {
+                console.error(error);
+                throw error
+            }
         }
     }
 
