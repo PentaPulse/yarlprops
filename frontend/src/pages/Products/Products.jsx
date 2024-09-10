@@ -168,6 +168,7 @@ const ProductsContents = ({ category, subCategory, price, quantity }) => {
                     setProducts(productList);
                 }
             } catch (e) {
+              console.log(e)
                 setProducts([])
             }
         };
