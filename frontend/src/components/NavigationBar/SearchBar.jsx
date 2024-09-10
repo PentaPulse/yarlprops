@@ -36,10 +36,10 @@ export default function SearchBar() {
                 },
                 marginRight: theme.spacing(2),
                 padding: theme.spacing(0.5),
-                [theme.breakpoints.up('md')]: {
+                [theme.breakpoints.up('lg')]: {
                     width: 'auto',
                 },
-                [theme.breakpoints.down('md')]: {
+                [theme.breakpoints.down('lg')]: {
                     width: '100%',
                     alignItems: 'stretch',
                 },
