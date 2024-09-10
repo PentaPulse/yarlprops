@@ -84,7 +84,7 @@ function Contact() {
           }}
         >
           <Box sx={{ background: "white", opacity: "0.8", borderRadius: 3, padding: { xs: 3 } }}>
-            <Typography variant={"h1"} color="black" align="center" pt={8}>
+            <Typography variant={"h2"} color="black" align="center" pt={8}>
               <b>Contact Us</b>
             </Typography>
             <Typography variant="body1" color="black" align="center" pb={8}>
@@ -97,17 +97,17 @@ function Contact() {
 
       {/* Contact Form Section */}
       <Box sx={{ padding: 4 }}>
-        <Typography variant={"h3"} align="left" pt={8}>
+        <Typography variant={"h3"} align="center" pt={8}>
           <b>Contact <span style={{ color: "#0d6efd" }}>Yarl</span>Props</b>
         </Typography>
-        <Typography variant="body1" align="left" pb={8}>
-          If you want to know more about our service or have any issue, simply get in touch with us. Fill in the form here or please call one of our toll-free numbers below or email using the contact form below.
+        <Typography variant="body1" align="center" pb={8}>
+        We are committed to supporting you, first and foremost! We continually strive to exceed expectations and deliver superior 24/7 Days Support...
         </Typography>
-      </Box>
-      <Box sx={{ padding: 5 }}>
+     
+      <Box sx={{ padding: 2 }}>
         <Grid container spacing={3}>
           <Grid item xs={12} sm={8}>
-            <Card sx={{ backgroundColor: "rgba(255, 255, 255, 0.3)", padding: { xs: 3 }, borderRadius: 4 }}>
+            <Card sx={{ backgroundColor: "rgba(255, 255, 255, 0.3)", padding: { xs: 6 }, borderRadius: 4 }}>
               <CardContent>
                 <Typography gutterBottom variant="h5">
                   <b>Get in touch</b>
@@ -143,6 +143,7 @@ function Contact() {
             </Box>
           </Grid>
         </Grid>
+      </Box>
       </Box>
 
       {/* Map Section */}
