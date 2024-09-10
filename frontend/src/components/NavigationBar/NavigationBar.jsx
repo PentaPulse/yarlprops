@@ -1,60 +1,24 @@
 import * as React from 'react';
-import { styled, alpha } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import InputBase from '@mui/material/InputBase';
 import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { Avatar, Button, Switch, Tooltip, useTheme, ButtonGroup, Modal, Fade, Backdrop, Select } from '@mui/material';
+import { Avatar, Button, Switch, Tooltip, useTheme, ButtonGroup, Modal, Fade, Backdrop} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../api/AuthContext';
 import { Login, Register } from '../Sign/Sign';
 import ModeSwitch from '../ModeHandler/ModeSwitch';
-
-const Search = styled('div')(({ theme }) => ({
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.primary.main, 0.15),
-    '&:hover': {
-        backgroundColor: alpha(theme.palette.primary.main, 0.25),
-    },
-    marginRight: theme.spacing(2),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-        width: 'auto',
-    },
-}));
-
-const SearchType = styled(Select)(({ theme }) => ({
-    marginRight: theme.spacing(2),
-    backgroundColor: alpha(theme.palette.primary.main, 0.15),
-    '& .MuiSelect-select': {
-        padding: theme.spacing(1),
-        color: theme.palette.text.primary,
-    },
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    color: 'inherit',
-    '& .MuiInputBase-input': {
-        padding: theme.spacing(1, 1, 1, 0),
-        //paddingLeft: `calc(1em + ${theme.spacing(2)})`,
-        transition: theme.transitions.create('width'),
-        width: '100%',
-        [theme.breakpoints.up('md')]: {
-            
-        },
-    },
-}));
+import SearchBar from './SearchBar';
 
 const style = {
     position: 'absolute',
@@ -79,8 +43,7 @@ export default function NavigationBar({ handleMode }) {
     const [signin, setSignin] = React.useState(false);
     const [signup, setSignup] = React.useState(false);
     const [isLogged, setIsLogged] = React.useState(false);
-    const [searchType,setSearchType]=React.useState('')
-    const { user } = useAuth()
+    const { user,logout} = useAuth()
     const navigate = useNavigate()
 
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -98,6 +61,15 @@ export default function NavigationBar({ handleMode }) {
 
     const handleMobileMenuOpen = (event) => {
         setMobileMoreAnchorEl(event.currentTarget);
+    };
+    
+    const handleSignout = () => {
+        logout();
+        const them = sessionStorage.getItem('isLight')
+        sessionStorage.clear();
+        sessionStorage.setItem('isLight', them)
+        setMobileMoreAnchorEl(false)
+        navigate('/')
     };
 
     React.useEffect(() => {
@@ -156,6 +128,17 @@ export default function NavigationBar({ handleMode }) {
                 </IconButton>
                 <Typography>Dashboard</Typography>
             </MenuItem>
+            <MenuItem onClick={handleSignout}>
+                <IconButton
+                    size="large"
+                    aria-haspopup="true"
+                    color="inherit"
+                >
+                    <ExitToAppIcon />
+                </IconButton>
+                <Typography>Signout</Typography>
+            </MenuItem>
+            
         </Menu>
     );
 
@@ -267,22 +250,7 @@ export default function NavigationBar({ handleMode }) {
                                 </Button>
                             ))}
                         </Box>
-                        <Search>
-                            <SearchType
-                                value={searchType}
-                                onChange={(e) => setSearchType(e.target.value)}
-                                displayEmpty
-                            >
-                                <MenuItem value="products">Products</MenuItem>
-                                <MenuItem value="rentals">Rentals</MenuItem>
-                                <MenuItem value="services">Services</MenuItem>
-                            </SearchType>
-                            <SearchIcon/>
-                            <StyledInputBase
-                                placeholder="Search…"
-                                inputProps={{ 'aria-label': 'search' }}
-                            />
-                        </Search>
+                        <SearchBar/>
                         <Box sx={{ flexGrow: 1 }} />
                         <ModeSwitch handleMode={handleMode} />
                         {isLogged ? (
@@ -305,27 +273,13 @@ export default function NavigationBar({ handleMode }) {
     );
 }
 
-export function ProfileBox({ loc, handleProfileClick }) {
+export function ProfileBox({ handleProfileClick }) {
     const theme = useTheme();
-    const navigate = useNavigate()
-    const { logout } = useAuth()
-
-    const handleSignout = () => {
-        logout()
-        const them = sessionStorage.getItem('isLight')
-        sessionStorage.clear();
-        sessionStorage.setItem('isLight', them)
-        navigate('/')
-    };
-
-    const handleDashboards = () => {
-        navigate(`/d/overview`)
-    }
 
     return (
         <>
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+                <IconButton size="large" aria-label="show 4 new mails" color={theme.palette.primary.main}>
                     <Badge badgeContent={4} color="error">
                         <MailIcon />
                     </Badge>
@@ -333,27 +287,14 @@ export function ProfileBox({ loc, handleProfileClick }) {
                 <IconButton
                     size="large"
                     aria-label="show 17 new notifications"
-                    color="inherit"
+                    color={theme.palette.primary.main}
                 >
                     <Badge badgeContent={17} color="error">
                         <NotificationsIcon />
                     </Badge>
                 </IconButton>
             </Box>
-            <Box sx={{ flexGrow: 0, display: { xs: 'none', sm: 'none', md: 'flex', lg: 'flex' }, alignItems: 'center', borderWidth: '1px', borderStyle: 'solid', borderColor: theme.palette.mode === 'light' ? 'black' : 'white', borderRadius: '5px 25px', padding: '0 10px' }}>
-                <Tooltip title="Open dashboard">
-                    <IconButton onClick={handleDashboards} sx={{ p: 0 }}>
-                        <Avatar alt="User Profile" src={sessionStorage.getItem('pp')} />
-                    </IconButton>
-                </Tooltip>
-                <Box sx={{ textAlign: 'center', ml: 1 }}>
-                    <Typography color={theme.palette.mode === 'light' ? 'black' : 'white'}>
-                        {sessionStorage.getItem('displayName')}
-                    </Typography>
-                    <Button variant="contained" onClick={handleSignout}>Sign Out</Button>
-                </Box>
-            </Box>
-            <Box sx={{ flexGrow: 0, display: { xs: 'block', sm: 'block', md: 'none', lg: 'none' } }}>
+            <Box sx={{ flexGrow: 0, display: 'block' }}>
                 <Tooltip title="Open dashboard">
                     <IconButton onClick={handleProfileClick} sx={{ p: 0 }}>
                         <Avatar alt="User Profile" src={sessionStorage.getItem('pp')} />
