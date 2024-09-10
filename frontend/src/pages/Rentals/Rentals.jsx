@@ -20,7 +20,7 @@ export default function Rentals() {
         if (cat) {
             setCategory(cat)
         }
-    }, [])
+    }, [cat])
 
     const handleCategoryChange = (event) => {
         const value = event.target.value;
