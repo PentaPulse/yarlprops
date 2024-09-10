@@ -185,7 +185,7 @@ export default function NavigationBar({ handleMode }) {
                     }}
                 >
                     <Toolbar >
-                        <Box sx={{ [theme.breakpoints.down('md')]:{display: 'flex'} }}>
+                        <Box sx={{ [theme.breakpoints.up('md')]:{display: 'none'},display:'flex' }}>
                             <IconButton aria-label="Menu button" onClick={handleOpenNavMenu}>
                                 <MenuIcon />
                             </IconButton>
