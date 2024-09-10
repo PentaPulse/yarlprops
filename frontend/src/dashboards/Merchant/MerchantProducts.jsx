@@ -298,10 +298,9 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
             <FormControlLabel value="For Sale" control={<Radio checked/>} label="For Sale" />
             <FormControlLabel
               value="Sold Out"
-
               control={<Radio />}
               label="Sold Out!"
-              disabled
+              disabled={!pid}
             />
           </RadioGroup>
         </FormControl><br />

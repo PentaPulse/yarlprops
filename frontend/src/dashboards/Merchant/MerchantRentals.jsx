@@ -299,7 +299,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
 
               control={<Radio />}
               label="Sold Out!"
-              disabled
+              disabled={!rid}
             />
           </RadioGroup>
         </FormControl><br />
