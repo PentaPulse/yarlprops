@@ -12,13 +12,14 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { Button,useTheme, ButtonGroup, Modal, Fade, Backdrop} from '@mui/material';
+import { Button, useTheme, ButtonGroup, Modal, Fade, Backdrop,Drawer,Divider } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../api/AuthContext';
 import { Login, Register } from '../Sign/Sign';
 import ModeSwitch from '../ModeHandler/ModeSwitch';
 import SearchBar from './SearchBar';
 import ProfileBox from '../ProfileBox/ProfileBox';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 
 const style = {
     position: 'absolute',
@@ -43,7 +44,7 @@ export default function NavigationBar({ handleMode }) {
     const [signin, setSignin] = React.useState(false);
     const [signup, setSignup] = React.useState(false);
     const [isLogged, setIsLogged] = React.useState(false);
-    const { user,logout} = useAuth()
+    const { user, logout } = useAuth()
     const navigate = useNavigate()
 
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -62,7 +63,7 @@ export default function NavigationBar({ handleMode }) {
     const handleMobileMenuOpen = (event) => {
         setMobileMoreAnchorEl(event.currentTarget);
     };
-    
+
     const handleSignout = () => {
         logout();
         const them = sessionStorage.getItem('isLight')
@@ -98,7 +99,7 @@ export default function NavigationBar({ handleMode }) {
             open={isMobileMenuOpen}
             onClose={handleMobileMenuClose}
         >
-            <MenuItem sx={{[theme.breakpoints.up('md')]:{display:'none'}}}>
+            <MenuItem sx={{ [theme.breakpoints.up('md')]: { display: 'none' } }}>
                 <IconButton size="large" aria-label="show 4 new mails" color="inherit">
                     <Badge badgeContent={4} color="error">
                         <MailIcon />
@@ -106,7 +107,7 @@ export default function NavigationBar({ handleMode }) {
                 </IconButton>
                 <Typography>Messages</Typography>
             </MenuItem>
-            <MenuItem sx={{[theme.breakpoints.up('md')]:{display:'none'}}}>
+            <MenuItem sx={{ [theme.breakpoints.up('md')]: { display: 'none' } }}>
                 <IconButton
                     size="large"
                     aria-label="show 17 new notifications"
@@ -138,7 +139,7 @@ export default function NavigationBar({ handleMode }) {
                 </IconButton>
                 <Typography>Signout</Typography>
             </MenuItem>
-            
+
         </Menu>
     );
 
@@ -184,42 +185,43 @@ export default function NavigationBar({ handleMode }) {
                     }}
                 >
                     <Toolbar >
-                        <Box>
-                            <IconButton
-                                size="large"
-                                edge="start"
-                                color={theme.palette.primary.main}
-                                onClick={handleOpenNavMenu}
-                                sx={{ mr: 2, [theme.breakpoints.up('md')]: { display: 'none' } }}
-                            >
+                        <Box sx={{ [theme.breakpoints.down('md')]:{display: 'flex'} }}>
+                            <IconButton aria-label="Menu button" onClick={handleOpenNavMenu}>
                                 <MenuIcon />
                             </IconButton>
-                            <Menu
-                                id="menu-appbar"
-                                anchorEl={anchorElNav}
-                                anchorOrigin={{
-                                    vertical: 'bottom',
-                                    horizontal: 'left',
-                                }}
-                                keepMounted
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'left',
-                                }}
-                                open={Boolean(anchorElNav)}
-                                onClose={handleCloseNavMenu}
-                                sx={{
-                                    display: { xs: 'block', md: 'none' }, color: 'black'
-                                }}
-                            >
-                                {pages.map((page) => (
+                            <Drawer anchor="top" open={anchorElNav} onClose={handleCloseNavMenu}>
+                                <Box sx={{ p: 2, backgroundColor: 'background.default' }}>
+                                    <Box
+                                        sx={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'space-between',
+                                        }}
+                                    >
+                                        <IconButton onClick={handleCloseNavMenu}>
+                                            <CloseRoundedIcon />
+                                        </IconButton>
+                                    </Box>
+                                    <Divider sx={{ my: 3 }} />
+                                    {pages.map((page) => (
                                     <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                        <Button textAlign="center" onClick={()=>navigate(page[1])} sx={{ textDecoration: 'none', color: theme.palette.primary.main }}>
+                                        <Button textAlign="center" onClick={() => navigate(page[1])} sx={{ textDecoration: 'none', color: theme.palette.primary.main }}>
                                             {page[0]}
                                         </Button>
                                     </MenuItem>
                                 ))}
-                            </Menu>
+                                    <MenuItem>
+                                        <Button color="primary" variant="contained" fullWidth onClick={() => setSignup(true)}>
+                                            Sign up
+                                        </Button>
+                                    </MenuItem>
+                                    <MenuItem>
+                                        <Button color="primary" variant="outlined" fullWidth onClick={() => setSignin(true)}>
+                                            Sign in
+                                        </Button>
+                                    </MenuItem>
+                                </Box>
+                            </Drawer>
                         </Box>
                         <Typography
                             variant="h6"
@@ -242,21 +244,21 @@ export default function NavigationBar({ handleMode }) {
                             {pages.map((page) => (
                                 <Button
                                     key={page}
-                                    onClick={()=>navigate(page[1])}
+                                    onClick={() => navigate(page[1])}
                                     sx={{ my: 2, display: 'block', color: theme.palette.primary }}
                                 >
                                     {page[0]}
                                 </Button>
                             ))}
                         </Box>
-                        <SearchBar/>
+                        <SearchBar />
                         <Box sx={{ flexGrow: 1 }} />
                         <ModeSwitch handleMode={handleMode} />
                         {isLogged ? (
                             <ProfileBox isLogged={isLogged} handleProfileClick={handleMobileMenuOpen} />
                         ) : (
                             <>
-                                <ButtonGroup variant="text">
+                                <ButtonGroup variant="text" sx={{ [theme.breakpoints.down('md')]:{display: 'none'} }}>
                                     <Button sx={{ color: theme.palette.primary }} onClick={() => setSignin(true)}>Sign In</Button>
                                     <Button sx={{ color: theme.palette.primary }} onClick={() => setSignup(true)}>Sign Up</Button>
                                 </ButtonGroup>
