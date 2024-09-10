@@ -51,7 +51,7 @@ function Contact() {
     <div>
       {/* About Us Section */}
       <Box sx={{
-        padding: 4, backgroundColor: "#333", color: "#fff", marginBottom: 4, height: 300,
+        padding: 4, backgroundColor: "#333", color: "#fff", marginBottom: 4, 
         width: "93%", marginX: 6
       }}>
         <Typography variant="h2" align="center" gutterBottom>

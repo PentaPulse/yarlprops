@@ -1,0 +1,19 @@
+{
+  "name": "images/download.jpeg",
+  "bucket": "yarlprops.appspot.com",
+  "metageneration": 1,
+  "generation": 1725151478450,
+  "contentType": "image/jpeg",
+  "storageClass": "STANDARD",
+  "contentDisposition": "inline",
+  "downloadTokens": [
+    "2db54d65-90df-42e3-8c9b-0bf9fd6eb89f"
+  ],
+  "etag": "XvwK6MwVwIA0OcXH2NtsMdwv7gw",
+  "customMetadata": {},
+  "timeCreated": "2024-09-01T00:44:38.450Z",
+  "updated": "2024-09-01T00:44:38.450Z",
+  "size": 5186,
+  "md5Hash": "53O9W4gXbgGH/QR0UVehMA==",
+  "crc32c": "488798603"
+}
