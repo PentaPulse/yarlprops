@@ -22,7 +22,7 @@ export default function Footer() {
   const paperTextColor = isDarkMode ? '#aaa' : '#666';
 
   return (
-    <Box sx={{ backgroundColor: footerBackground, color: footerTextColor, paddingTop: '3rem', paddingBottom: '2rem' }}>
+    <Box sx={{ backgroundColor: footerBackground, color: footerTextColor, paddingTop: '3rem', paddingBottom: '2rem' ,marginTop: '1rem'}}>
       <Container>
         <Grid container spacing={4} sx={{ textAlign: { xs: 'center', md: 'left' }, color: footerTextColor }}>
           {/* Column 1: About Section */}
