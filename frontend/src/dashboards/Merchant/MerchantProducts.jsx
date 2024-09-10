@@ -301,6 +301,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
 
               control={<Radio />}
               label="Sold Out!"
+              disabled
             />
           </RadioGroup>
         </FormControl><br />
