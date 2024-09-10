@@ -10,7 +10,7 @@ import { fetchSelectedService, fetchServices } from '../../api/db/services';
 import Carousel from 'react-material-ui-carousel';
 import { fetchMerchantServiceDetails } from '../../api/db/users';
 import { serviceFilters } from '../../components/menuLists';
-import Filters from './Filters';
+
 
 export default function Services() {
     const [category, setCategory] = React.useState(null)
@@ -46,7 +46,7 @@ export default function Services() {
     return (
         <Grid container spacing={3} justifyContent="center">
             <Grid item xs={11} sm={11} md={11} lg={3}>
-                <Filters/>
+               
                 <Paper
                     sx={{
                         padding: '1.5rem',
