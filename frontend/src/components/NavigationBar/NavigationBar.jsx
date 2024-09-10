@@ -185,7 +185,7 @@ export default function NavigationBar({ handleMode }) {
                     }}
                 >
                     <Toolbar >
-                        <Box sx={{ [theme.breakpoints.up('md')]:{display: 'none'},display:'flex' }}>
+                        <Box sx={{ [theme.breakpoints.up('lg')]:{display: 'none'},display:'flex' }}>
                             <IconButton aria-label="Menu button" onClick={handleOpenNavMenu}>
                                 <MenuIcon />
                             </IconButton>
@@ -230,7 +230,8 @@ export default function NavigationBar({ handleMode }) {
                             href="/"
                             sx={{
                                 mr: 2,
-                                display: { xs: 'none', md: 'flex' },
+                                [theme.breakpoints.down('lg')]:{display:'none'},
+                                display: 'flex' ,
                                 fontFamily: 'monospace',
                                 fontWeight: 700,
                                 letterSpacing: '.2rem',
@@ -240,7 +241,8 @@ export default function NavigationBar({ handleMode }) {
                         >
                             YarlProps
                         </Typography>
-                        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                        <Box sx={{ flexGrow: 1, [theme.breakpoints.down('lg')]:{display:'none'},
+                                display: 'flex' , }}>
                             {pages.map((page) => (
                                 <Button
                                     key={page}
@@ -258,7 +260,7 @@ export default function NavigationBar({ handleMode }) {
                             <ProfileBox isLogged={isLogged} handleProfileClick={handleMobileMenuOpen} />
                         ) : (
                             <>
-                                <ButtonGroup variant="text" sx={{ [theme.breakpoints.down('md')]:{display: 'none'} }}>
+                                <ButtonGroup variant="text" sx={{ [theme.breakpoints.down('lg')]:{display: 'none'} }}>
                                     <Button sx={{ color: theme.palette.primary }} onClick={() => setSignin(true)}>Sign In</Button>
                                     <Button sx={{ color: theme.palette.primary }} onClick={() => setSignup(true)}>Sign Up</Button>
                                 </ButtonGroup>
