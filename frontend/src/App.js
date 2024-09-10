@@ -10,10 +10,8 @@ import Home from "./pages/Home/Home";
 //import Guide from "./pages/Guide/Guide";
 import Contact from "./pages/Contact/Contact";
 import Products from "./pages/Products/Products";
-import ProductPage from "./pages/Products/ProView/View";
+import { ProductPage } from "./pages/Products/Products";
 import Services, { ServicePage } from "./pages/Services/Services";
-import NavigationBar from "./components/NavigationBar/NavigationBar";
-import Footer from "./components/Footer/Footer";
 import { Box } from "@mui/material";
 import AdminLogin from "./dashboards/Admin/AdminLogin";
 import RentalPage from "./pages/Rentals/Rentals";
@@ -39,6 +37,7 @@ import CustomerOverview from './dashboards/Customer/CustomerOverview'
 import AdminCustomers from "./dashboards/Admin/AdminCustomers";
 import AdminMerchants from "./dashboards/Admin/AdminMerchants";
 import Guide from "./pages/Guide/Guide";
+import PageLayout from "./pages/PageLayout";
 
 const lightTheme = createTheme({
   palette: {
@@ -124,7 +123,7 @@ function PageRoutes({ handleMode }) {
   return (
     <>
       <Box sx={{ marginTop: '12vh' }}>
-        <NavigationBar handleMode={handleMode} />
+        <PageLayout handleMode={handleMode}>
         <Routes>
           <Route path="*" element={<Home />} />
           <Route path="products" element={<Products />} />
@@ -142,7 +141,7 @@ function PageRoutes({ handleMode }) {
           <Route path="guide" element={<Guide/>}/>
           <Route path="contact" element={<Contact />} />
         </Routes>
-        <Footer />
+        </PageLayout>
       </Box>
     </>
   )

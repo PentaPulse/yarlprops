@@ -242,9 +242,8 @@ export default function NavigationBar({ handleMode }) {
                             {pages.map((page) => (
                                 <Button
                                     key={page}
-                                    onClick={handleCloseNavMenu}
+                                    onClick={()=>navigate(page[1])}
                                     sx={{ my: 2, display: 'block', color: theme.palette.primary }}
-                                    href={page[1]}
                                 >
                                     {page[0]}
                                 </Button>

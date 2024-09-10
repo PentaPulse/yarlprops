@@ -2,9 +2,9 @@ import * as React from 'react';
 import { Button, Card, CardActionArea, CardContent, CardMedia, CardActions, Container, Grid, Typography, capitalize } from '@mui/material';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { collection, getDocs, query, where } from 'firebase/firestore';
-import { db } from '../../api/firebase';
-import { fetchProducts } from '../../api/db/products';
-import DbError from '../../components/DbError/DbError';
+import { db } from '../../../api/firebase';
+import { fetchProducts } from '../../../api/db/products';
+import DbError from '../../../components/DbError/DbError';
 
 const ProductsContents = ({ category, subCategory, price, quantity }) => {
     const [products, setProducts] = React.useState([]);

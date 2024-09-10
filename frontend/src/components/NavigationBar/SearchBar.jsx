@@ -29,10 +29,10 @@ export default function SearchBar() {
             sx={{
                 display: 'flex',
                 alignItems: 'center',
-                backgroundColor: alpha(theme.palette.primary.main, 0.15),
+                backgroundColor: alpha(theme.palette.primary.main, 0.05),
                 borderRadius: theme.shape.borderRadius,
                 '&:hover': {
-                    backgroundColor: alpha(theme.palette.primary.main, 0.25),
+                    backgroundColor: alpha(theme.palette.primary.main, 0.15),
                 },
                 marginRight: theme.spacing(2),
                 padding: theme.spacing(0.5),
