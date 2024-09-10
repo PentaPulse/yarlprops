@@ -39,9 +39,8 @@ export default function SearchBar() {
                 [theme.breakpoints.up('md')]: {
                     width: 'auto',
                 },
-                [theme.breakpoints.down('sm')]: {
+                [theme.breakpoints.down('md')]: {
                     width: '100%',
-                    flexDirection: 'column',
                     alignItems: 'stretch',
                 },
             }}

@@ -6,14 +6,12 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import * as React from 'react'
 import { useAuth } from '../api/AuthContext'
-import { MaterialUISwitch, ProfileBox } from '../components/NavigationBar/NavigationBar';
+import  ProfileBox from '../components/ProfileBox/ProfileBox';
 import { adminMenu, backToHome, merchMenu, userMenu } from '../components/menuLists';
 import { useNavigate } from 'react-router-dom';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../api/firebase';
-import MailIcon from '@mui/icons-material/Mail';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-//import MoreIcon from '@mui/icons-material/MoreVert';
+import ModeSwitch from '../components/ModeHandler/ModeSwitch';
 
 const drawerWidth = 240;
 
@@ -218,23 +216,8 @@ export default function DashboardLayout({ handleMode, children }) {
                         <Box sx={{ flexGrow: 1 }} />
                         <Box display={'flex'} gap={1} >
                             <Tooltip title={`${theme.palette.mode} mode`}>
-                                <FormControlLabel
-                                    control={<MaterialUISwitch checked={theme.palette.mode === 'light' ? false : true} onClick={handleMode} />}
-                                />
+                                <ModeSwitch handleMode={handleMode}/>
                             </Tooltip>
-                            <IconButton size="large" color="inherit">
-                                <Badge badgeContent={0} color="error">
-                                    <MailIcon />
-                                </Badge>
-                            </IconButton>
-                            <IconButton
-                                size="large"
-                                color="inherit"
-                            >
-                                <Badge badgeContent={17} color="error">
-                                    <NotificationsIcon />
-                                </Badge>
-                            </IconButton>
                             <Box sx={{ flexGrow: 1 }} />
                             <ProfileBox />
                         </Box>
