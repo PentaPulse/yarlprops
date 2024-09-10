@@ -12,7 +12,6 @@ export default function SearchBar() {
     const handleSearch = (e) => {
         if (e) e.preventDefault()
         if (searchTerm.trim()) {
-            // Construct the URL with the search type and term
             const path = `/p/${searchType}?search=${encodeURIComponent(searchTerm)}`;
             navigate(path);
         }
