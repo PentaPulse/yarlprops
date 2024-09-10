@@ -214,9 +214,9 @@ export default function NavigationBar({ handleMode }) {
                             >
                                 {pages.map((page) => (
                                     <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                        <Typography component="a" textAlign="center" href={page[1]} sx={{ textDecoration: 'none', color: theme.palette.primary }}>
+                                        <Button textAlign="center" onClick={()=>navigate(page[1])} sx={{ textDecoration: 'none', color: theme.palette.primary.main }}>
                                             {page[0]}
-                                        </Typography>
+                                        </Button>
                                     </MenuItem>
                                 ))}
                             </Menu>
