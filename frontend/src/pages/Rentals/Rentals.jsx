@@ -1,7 +1,7 @@
 import { Box, Button, capitalize, Card, CardActionArea, CardActions, CardContent, CardMedia, CircularProgress, Container, Divider, FormControl, FormControlLabel, FormLabel, Grid, IconButton, Paper, Radio, RadioGroup, Slider, TextField, Typography } from '@mui/material';
 import { collection, getDoc, getDocs, query, where } from 'firebase/firestore';
 import * as React from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { db } from '../../api/firebase';
 import DbError from '../../components/DbError/DbError';
 import { useTheme } from '@emotion/react';
@@ -11,7 +11,6 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { rentalFilters } from '../../components/menuLists';
 
 export default function Rentals() {
-    const [searchTerm, setSearchTerm] = React.useState('');
     const [category, setCategory] = React.useState(null)
     const [subCategory, setSubCategory] = React.useState(null)
     const [priceRange, setPriceRange] = React.useState([0, 10000]);
@@ -59,19 +58,6 @@ export default function Rentals() {
                         marginLeft: '5rem'
                     }}
                 >
-                    <Typography variant="h6" gutterBottom>
-                        Search
-                    </Typography>
-                    <TextField
-                    autoFocus
-                        label="Search"
-                        variant="outlined"
-                        fullWidth
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-
-                    <Divider sx={{ my: 2 }} />
                     <FormControl>
                         <FormLabel>Categories</FormLabel>
                         <RadioGroup name='categories' value={category} onChange={handleCategoryChange}>
@@ -134,7 +120,6 @@ export default function Rentals() {
             </Grid>
             <Grid item md={9}>
                 <RentalsContents
-                    searchTerm={searchTerm}
                     category={category}
                     subCategory={subCategory}
                     priceRange={priceRange}
@@ -145,9 +130,11 @@ export default function Rentals() {
     );
 }
 
-function RentalsContents({ searchTerm, category, subCategoryegory, price, quantity }) {
+function RentalsContents({  category, subCategoryegory, price, quantity }) {
     const [rentals, setRentals] = React.useState([]);
     const navigate = useNavigate();
+    const [search]=useSearchParams()
+    const searchTerm=search.get('search')
 
     React.useEffect(() => {
         const fetchData = async () => {
@@ -183,7 +170,6 @@ function RentalsContents({ searchTerm, category, subCategoryegory, price, quanti
                 setRentals([])
             }
         };
-
         fetchData()
     }, [searchTerm, category, subCategoryegory, price, quantity]);
 

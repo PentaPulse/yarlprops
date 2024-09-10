@@ -1,7 +1,7 @@
-import { Box, Button, capitalize, Card, CardActionArea, CardContent, CardMedia, CircularProgress, Container, Divider, FormControl, FormControlLabel, FormLabel, Grid, Paper, Radio, RadioGroup, Slider, TextField, Typography } from '@mui/material';
+import { Box, Button, capitalize, Card, CardActionArea, CardContent, CardMedia, CircularProgress, Container, Divider, FormControl, FormControlLabel, FormLabel, Grid, Paper, Radio, RadioGroup, Slider,  Typography } from '@mui/material';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import * as React from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { db } from '../../api/firebase';
 import DbError from '../../components/DbError/DbError';
 import { useTheme } from '@emotion/react';
@@ -12,7 +12,6 @@ import { fetchMerchantServiceDetails } from '../../api/db/users';
 import { serviceFilters } from '../../components/menuLists';
 
 export default function Services() {
-    const [searchTerm, setSearchTerm] = React.useState('');
     const [category, setCategory] = React.useState(null)
     const [subCategory, setSubCategory] = React.useState(null)
     const [priceRange, setPriceRange] = React.useState([0, 10000]);
@@ -21,7 +20,7 @@ export default function Services() {
         if (cat) {
             setCategory(cat)
         }
-    }, [])
+    }, [cat])
 
     const handleCategoryChange = (event) => {
         const value = event.target.value;
@@ -54,19 +53,6 @@ export default function Services() {
                         marginLeft: '5rem'
                     }}
                 >
-                    <Typography variant="h6" gutterBottom>
-                        Search
-                    </Typography>
-                    <TextField
-                    autoFocus
-                        label="Search"
-                        variant="outlined"
-                        fullWidth
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-
-                    <Divider sx={{ my: 2 }} />
                     <FormControl>
                         <FormLabel>Categories</FormLabel>
                         <RadioGroup name='categories' value={category} onChange={handleCategoryChange}>
@@ -118,7 +104,6 @@ export default function Services() {
             </Grid>
             <Grid item md={9}>
                 <ServicesContents
-                    searchTerm={searchTerm}
                     category={category}
                     subCategory={subCategory}
                     priceRange={priceRange}
@@ -128,9 +113,11 @@ export default function Services() {
     );
 }
 
-function ServicesContents({ searchTerm, category, subCategoryegory, price, quantity }) {
+function ServicesContents({ category, subCategoryegory, price, quantity }) {
     const [services, setServices] = React.useState([]);
     const navigate = useNavigate();
+    const [search]=useSearchParams()
+    const searchTerm=search.get('search')
 
     React.useEffect(() => {
         const fetchData = async () => {
@@ -165,7 +152,7 @@ function ServicesContents({ searchTerm, category, subCategoryegory, price, quant
                 setServices([])
             }
         };
-
+        console.log(`going to search ${searchTerm}`)
         fetchData()
     }, [searchTerm, category, subCategoryegory, price, quantity]);
 

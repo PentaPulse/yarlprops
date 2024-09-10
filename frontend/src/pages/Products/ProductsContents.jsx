@@ -1,14 +1,16 @@
 import * as React from 'react';
 import { Button, Card, CardActionArea, CardContent, CardMedia, CardActions, Container, Grid, Typography, capitalize } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../../api/firebase';
 import { fetchProducts } from '../../api/db/products';
 import DbError from '../../components/DbError/DbError';
 
-const ProductsContents = ({ searchTerm, category, subCategory, price, quantity }) => {
+const ProductsContents = ({ category, subCategory, price, quantity }) => {
     const [products, setProducts] = React.useState([]);
     const navigate = useNavigate();
+    const [search]=useSearchParams()
+    const searchTerm=search.get('search')
 
     React.useEffect(() => {
         const fetchData = async () => {
