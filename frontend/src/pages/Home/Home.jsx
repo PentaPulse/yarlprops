@@ -178,7 +178,7 @@ function RentalsList() {
             <Grid item xs={1} sm={1} md={1} lg={1} key={index}>
               <Card sx={{ boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)', position: 'relative' }}>
 
-                <CardActionArea onClick={() => handleCardClick(rental.pid)}>
+                <CardActionArea onClick={() => handleCardClick(rental.rid)}>
                   <CardMedia
                     sx={{ height: '20rem' }}
                     image={rental.images[0] || 'https://picsum.photos/id/11/200/300'}
@@ -227,7 +227,7 @@ function ServicesList() {
             <Grid item xs={1} sm={1} md={1} lg={1} key={index}>
               <Card sx={{ boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)', position: 'relative' }}>
 
-                <CardActionArea onClick={() => handleCardClick(service.pid)}>
+                <CardActionArea onClick={() => handleCardClick(service.sid)}>
                   <CardMedia
                     sx={{ height: '20rem' }}
                     image={service.images[0] || 'https://picsum.photos/id/11/200/300'}
