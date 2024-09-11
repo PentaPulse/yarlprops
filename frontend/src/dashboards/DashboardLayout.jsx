@@ -4,51 +4,36 @@ import {
   IconButton,
   Typography,
   Input,
-  Menu,
   MenuItem,
   Divider,
   GlobalStyles,
   useTheme,
-  Chip,
-  Button,
   MenuList,
   Avatar,
   Grid,
+  Paper,
 } from '@mui/material';
 import {
   BrightnessAutoRounded as BrightnessAutoRoundedIcon,
   SearchRounded as SearchRoundedIcon,
-  HomeRounded as HomeRoundedIcon,
-  DashboardRounded as DashboardRoundedIcon,
-  ShoppingCartRounded as ShoppingCartRoundedIcon,
-  AssignmentRounded as AssignmentRoundedIcon,
-  KeyboardArrowDown as KeyboardArrowDownIcon,
-  GroupRounded as GroupRoundedIcon,
-  QuestionAnswerRounded as QuestionAnswerRoundedIcon,
   SupportRounded as SupportRoundedIcon,
-  SettingsRounded as SettingsRoundedIcon,
   LogoutRounded as LogoutRoundedIcon,
   DarkModeRounded as DarkModeRoundedIcon,
   LightMode as LightModeIcon,
+  MenuRounded as MenuRoundedIcon,
+  HomeRounded as HomeRoundedIcon
 } from '@mui/icons-material';
 import { useAuth } from '../api/AuthContext';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../api/firebase';
 import { adminMenu, merchMenu, userMenu } from '../components/menuLists';
 import { useNavigate } from 'react-router-dom';
-import { registerUser } from '../api/db/users';
-
-function closeSidebar() {
-  if (typeof window !== 'undefined') {
-    document.documentElement.style.removeProperty('--SideNavigation-slideIn');
-    document.body.style.removeProperty('overflow');
-  }
-}
 
 export default function DashboardLayout({ handleMode, children }) {
   return (
     <><Grid container>
-      <Sidebar handleMode={handleMode}/>
+      <Sidebar handleMode={handleMode} />
+      <Header/>
       <Grid item xs={12} sm={12} md={12} lg={9} sx={{ pt: { xs: 10, sm: 10, md: 10, lg: 10 } }} >
         <Grid container columns={12} pl={2} columnSpacing={{ xs: 1, sm: 1, md: 2, lg: 2 }} rowSpacing={{ xs: 3, sm: 3, md: 2, lg: 2 }}>
           {children}
@@ -119,7 +104,7 @@ function Sidebar({ handleMode }) {
           styles={(theme) => ({
             ':root': {
               '--Sidebar-width': '220px',
-              [theme.breakpoints.up('lg')]: {
+              [theme.breakpoints.up('md')]: {
                 '--Sidebar-width': '240px',
               },
             },
@@ -145,7 +130,7 @@ function Sidebar({ handleMode }) {
           onClick={() => closeSidebar()}
         />
         <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-          <IconButton color="primary" size="small">
+          <IconButton color="primary" size="small" onClick={()=>navigate('/')}>
             {/**replace our logo */}
             <BrightnessAutoRoundedIcon />
           </IconButton>
@@ -175,7 +160,7 @@ function Sidebar({ handleMode }) {
             }}
           >
             {(adminList.includes(user.uid) ? adminMenu : (merchantList.includes(user.uid) ? merchMenu : userMenu)).map((text, index) => (
-              <MenuItem onClick={()=>navigate(text[2])}>{text[0]}</MenuItem>
+              <MenuItem onClick={() => navigate(text[2])}>{text[1]} {text[0]}</MenuItem>
             ))}
           </MenuList>
 
@@ -188,12 +173,12 @@ function Sidebar({ handleMode }) {
               gap: 0.5,
             }}
           >
-            <MenuItem>
+            <MenuItem onClick={()=>navigate('/d/profile')}>
               <SupportRoundedIcon />
               <Typography variant="body1">Profile</Typography>
             </MenuItem>
-            <MenuItem>
-              <SettingsRoundedIcon />
+            <MenuItem onClick={()=>navigate('/')}>
+              <HomeRoundedIcon/>
               <Typography variant="body1">Back to Home</Typography>
             </MenuItem>
           </MenuList>
@@ -201,11 +186,11 @@ function Sidebar({ handleMode }) {
         <Divider />
         <Box display={'flex'}>
           <Box display={'flex'} justifyContent={'space-between'}>
-          <Avatar src={sessionStorage.getItem('pp')} />
-          <Box>
-            <Typography >{sessionStorage.getItem('displayName')}</Typography>
-            <Typography>{user.email}</Typography>
-          </Box>
+            <Avatar src={sessionStorage.getItem('pp')} />
+            <Box>
+              <Typography >{sessionStorage.getItem('displayName')}</Typography>
+              <Typography>{user.email}</Typography>
+            </Box>
           </Box>
           <IconButton onClick={logout}>
             <LogoutRoundedIcon />
@@ -214,4 +199,72 @@ function Sidebar({ handleMode }) {
       </Box>
     </>
   );
+}
+
+function Header() {
+  return (
+    <Paper
+      sx={{
+        display: { xs: 'flex', md: 'none' },
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        position: 'fixed',
+        top: 0,
+        width: '100vw',
+        height: 'var(--Header-height)',
+        zIndex: 9998,
+        p: 2,
+        gap: 1,
+        borderBottom: '1px solid',
+        borderColor: 'background.level1',
+        boxShadow: 'sm',
+      }}
+    >
+      <GlobalStyles
+        styles={(theme) => ({
+          ':root': {
+            '--Header-height': '52px',
+            [theme.breakpoints.up('md')]: {
+              '--Header-height': '0px',
+            },
+          },
+        })}
+      />
+      <IconButton
+        onClick={() => toggleSidebar()}
+        variant="outlined"
+        color="neutral"
+        size="sm"
+      >
+        <MenuRoundedIcon />
+      </IconButton>
+    </Paper>
+  );
+}
+
+function closeSidebar() {
+  if (typeof window !== 'undefined') {
+    document.documentElement.style.removeProperty('--SideNavigation-slideIn');
+    document.body.style.removeProperty('overflow');
+  }
+}
+
+function openSidebar() {
+  if (typeof window !== 'undefined') {
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.setProperty('--SideNavigation-slideIn', '1');
+  }
+}
+
+function toggleSidebar() {
+  if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+    const slideIn = window
+      .getComputedStyle(document.documentElement)
+      .getPropertyValue('--SideNavigation-slideIn');
+    if (slideIn) {
+      closeSidebar();
+    } else {
+      openSidebar();
+    }
+  }
 }
