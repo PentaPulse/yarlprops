@@ -33,10 +33,12 @@ import { useNavigate } from 'react-router-dom';
 export default function DashboardLayout({ handleMode, children }) {
   return (
     <><Grid container>
+      <Grid item lg={2}>
       <Sidebar handleMode={handleMode} />
+      </Grid>
       <Header />
-      <Grid item xs={12} sm={12} md={12} lg={9} pt={10} >
-        <Grid container columns={12} pl={2} columnSpacing={{ xs: 1, sm: 1, md: 2, lg: 2 }} rowSpacing={{ xs: 3, sm: 3, md: 2, lg: 2 }}>
+      <Grid item xs={12} sm={12} md={12} lg={9} pt={10}>
+        <Grid container columns={12} columnSpacing={{ xs: 1, sm: 1, md: 2, lg: 2 }} rowSpacing={{ xs: 3, sm: 3, md: 2, lg: 2 }}>
           {children}
         </Grid>
       </Grid>
@@ -81,117 +83,8 @@ function Sidebar({ handleMode }) {
     navigate(path)
   }
 
-
-  /*return (
-    <>
-      <Box
-        className="Sidebar"
-        sx={{
-          [theme.breakpoints.down('md')]: { position: 'fixed' },
-          position: 'sticky',
-          transform: {
-            xs: 'translateX(calc(100% * (var(--SideNavigation-slideIn, 0) - 1)))',
-            md: 'none',
-          },
-          transition: 'transform 0.4s, width 0.4s',
-          zIndex: 10000,
-          height: '100dvh',
-          width: 'var(--Sidebar-width)+1',
-          top: 0,
-          p: 2,
-          flexShrink: 0,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 2,
-          borderRight: '1px solid',
-          borderColor: theme.palette.divider,
-          backgroundColor: theme.palette.background.default,
-        }}
-      >
-        <GlobalStyles
-          styles={(theme) => ({
-            ':root': {
-              '--Sidebar-width': '220px',
-              [theme.breakpoints.up('md')]: {
-                '--Sidebar-width': '240px',
-              },
-            },
-          })}
-        />
-
-        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-          <IconButton color="primary" size="small" onClick={() => navigate('/')}>
-            {/**replace our logo /}
-            <BrightnessAutoRoundedIcon />
-          </IconButton>
-          <Typography variant="h6">YARLPROPS</Typography>
-          <IconButton onClick={handleMode}>
-            {theme.palette.mode === 'dark' ? <DarkModeRoundedIcon /> : <LightModeIcon />}
-          </IconButton>
-        </Box>
-        <Input size="small" startAdornment={<SearchRoundedIcon />} placeholder="Search" />
-        <Box
-          sx={{
-            minHeight: 0,
-            overflow: 'auto',
-            flexGrow: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            '& .MuiMenuItem-root': {
-              gap: 1.5,
-            },
-          }}
-        >
-          <MenuList
-            sx={{
-              gap: 1,
-              '--MuiMenuItem-radius': theme.shape.borderRadius,
-              '--MuiMenuItem-insetStart': '30px',
-            }}
-          >
-            {(adminList.includes(user.uid) ? adminMenu : (merchantList.includes(user.uid) ? merchMenu : userMenu)).map((text, index) => (
-              <MenuItem onClick={() => handleNavigation(text[2])}>{text[1]} {text[0]}</MenuItem>
-            ))}
-          </MenuList>
-
-          <MenuList
-            sx={{
-              mt: 'auto',
-              flexGrow: 0,
-              '--MuiMenuItem-radius': theme.shape.borderRadius,
-              '--MuiMenuItem-insetStart': '30px',
-              gap: 0.5,
-            }}
-          >
-            <MenuItem onClick={() => handleNavigation('/d/profile')}>
-              <SupportRoundedIcon />
-              <Typography variant="body1">Profile</Typography>
-            </MenuItem>
-            <MenuItem onClick={() => handleNavigation('/')}>
-              <HomeRoundedIcon />
-              <Typography variant="body1">Back to Home</Typography>
-            </MenuItem>
-          </MenuList>
-        </Box>
-        <Divider />
-        <Box display={'flex'}>
-          <Box display={'flex'} justifyContent={'space-between'}>
-            <Avatar src={sessionStorage.getItem('pp')} />
-            <Box>
-              <Typography >{sessionStorage.getItem('displayName')}</Typography>
-              <Typography>{user.email}</Typography>
-            </Box>
-          </Box>
-          <IconButton onClick={logout}>
-            <LogoutRoundedIcon />
-          </IconButton>
-        </Box>
-      </Box>
-    </>
-  );
-  */
  return(
-  <Drawer open >    
+  <Drawer open variant='permanent'>    
     <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
           <IconButton color="primary" size="small" onClick={() => navigate('/')}>
             {/**replace our logo */}
