@@ -12,6 +12,7 @@ import {
   Avatar,
   Grid,
   Paper,
+  Drawer,
 } from '@mui/material';
 import {
   BrightnessAutoRounded as BrightnessAutoRoundedIcon,
@@ -33,8 +34,8 @@ export default function DashboardLayout({ handleMode, children }) {
   return (
     <><Grid container>
       <Sidebar handleMode={handleMode} />
-      <Header/>
-      <Grid item xs={12} sm={12} md={12} lg={9} sx={{ pt: { xs: 10, sm: 10, md: 10, lg: 10 } }} >
+      <Header />
+      <Grid item xs={12} sm={12} md={12} lg={9} pt={10} >
         <Grid container columns={12} pl={2} columnSpacing={{ xs: 1, sm: 1, md: 2, lg: 2 }} rowSpacing={{ xs: 3, sm: 3, md: 2, lg: 2 }}>
           {children}
         </Grid>
@@ -75,13 +76,19 @@ function Sidebar({ handleMode }) {
     fetchMerchantList()
   }, [])
 
+  const handleNavigation = (path) => {
+    closeSidebar()
+    navigate(path)
+  }
 
-  return (
+
+  /*return (
     <>
       <Box
         className="Sidebar"
         sx={{
-          position: { xs: 'fixed', md: 'sticky' },
+          [theme.breakpoints.down('md')]: { position: 'fixed' },
+          position: 'sticky',
           transform: {
             xs: 'translateX(calc(100% * (var(--SideNavigation-slideIn, 0) - 1)))',
             md: 'none',
@@ -89,7 +96,7 @@ function Sidebar({ handleMode }) {
           transition: 'transform 0.4s, width 0.4s',
           zIndex: 10000,
           height: '100dvh',
-          width: 'var(--Sidebar-width)',
+          width: 'var(--Sidebar-width)+1',
           top: 0,
           p: 2,
           flexShrink: 0,
@@ -98,6 +105,7 @@ function Sidebar({ handleMode }) {
           gap: 2,
           borderRight: '1px solid',
           borderColor: theme.palette.divider,
+          backgroundColor: theme.palette.background.default,
         }}
       >
         <GlobalStyles
@@ -110,27 +118,82 @@ function Sidebar({ handleMode }) {
             },
           })}
         />
+
+        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+          <IconButton color="primary" size="small" onClick={() => navigate('/')}>
+            {/**replace our logo /}
+            <BrightnessAutoRoundedIcon />
+          </IconButton>
+          <Typography variant="h6">YARLPROPS</Typography>
+          <IconButton onClick={handleMode}>
+            {theme.palette.mode === 'dark' ? <DarkModeRoundedIcon /> : <LightModeIcon />}
+          </IconButton>
+        </Box>
+        <Input size="small" startAdornment={<SearchRoundedIcon />} placeholder="Search" />
         <Box
-          className="Sidebar-overlay"
           sx={{
-            position: 'fixed',
-            zIndex: 9998,
-            top: 0,
-            left: 0,
-            width: '100vw',
-            height: '100vh',
-            opacity: 'var(--SideNavigation-slideIn)',
-            backgroundColor: theme.palette.background.default,
-            transition: 'opacity 0.4s',
-            transform: {
-              xs: 'translateX(calc(100% * (var(--SideNavigation-slideIn, 0) - 1) + var(--SideNavigation-slideIn, 0) * var(--Sidebar-width, 0px)))',
-              lg: 'translateX(-100%)',
+            minHeight: 0,
+            overflow: 'auto',
+            flexGrow: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            '& .MuiMenuItem-root': {
+              gap: 1.5,
             },
           }}
-          onClick={() => closeSidebar()}
-        />
-        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-          <IconButton color="primary" size="small" onClick={()=>navigate('/')}>
+        >
+          <MenuList
+            sx={{
+              gap: 1,
+              '--MuiMenuItem-radius': theme.shape.borderRadius,
+              '--MuiMenuItem-insetStart': '30px',
+            }}
+          >
+            {(adminList.includes(user.uid) ? adminMenu : (merchantList.includes(user.uid) ? merchMenu : userMenu)).map((text, index) => (
+              <MenuItem onClick={() => handleNavigation(text[2])}>{text[1]} {text[0]}</MenuItem>
+            ))}
+          </MenuList>
+
+          <MenuList
+            sx={{
+              mt: 'auto',
+              flexGrow: 0,
+              '--MuiMenuItem-radius': theme.shape.borderRadius,
+              '--MuiMenuItem-insetStart': '30px',
+              gap: 0.5,
+            }}
+          >
+            <MenuItem onClick={() => handleNavigation('/d/profile')}>
+              <SupportRoundedIcon />
+              <Typography variant="body1">Profile</Typography>
+            </MenuItem>
+            <MenuItem onClick={() => handleNavigation('/')}>
+              <HomeRoundedIcon />
+              <Typography variant="body1">Back to Home</Typography>
+            </MenuItem>
+          </MenuList>
+        </Box>
+        <Divider />
+        <Box display={'flex'}>
+          <Box display={'flex'} justifyContent={'space-between'}>
+            <Avatar src={sessionStorage.getItem('pp')} />
+            <Box>
+              <Typography >{sessionStorage.getItem('displayName')}</Typography>
+              <Typography>{user.email}</Typography>
+            </Box>
+          </Box>
+          <IconButton onClick={logout}>
+            <LogoutRoundedIcon />
+          </IconButton>
+        </Box>
+      </Box>
+    </>
+  );
+  */
+ return(
+  <Drawer open >    
+    <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+          <IconButton color="primary" size="small" onClick={() => navigate('/')}>
             {/**replace our logo */}
             <BrightnessAutoRoundedIcon />
           </IconButton>
@@ -160,7 +223,7 @@ function Sidebar({ handleMode }) {
             }}
           >
             {(adminList.includes(user.uid) ? adminMenu : (merchantList.includes(user.uid) ? merchMenu : userMenu)).map((text, index) => (
-              <MenuItem onClick={() => navigate(text[2])}>{text[1]} {text[0]}</MenuItem>
+              <MenuItem onClick={() => handleNavigation(text[2])}>{text[1]} {text[0]}</MenuItem>
             ))}
           </MenuList>
 
@@ -173,12 +236,12 @@ function Sidebar({ handleMode }) {
               gap: 0.5,
             }}
           >
-            <MenuItem onClick={()=>navigate('/d/profile')}>
+            <MenuItem onClick={() => handleNavigation('/d/profile')}>
               <SupportRoundedIcon />
               <Typography variant="body1">Profile</Typography>
             </MenuItem>
-            <MenuItem onClick={()=>navigate('/')}>
-              <HomeRoundedIcon/>
+            <MenuItem onClick={() => handleNavigation('/')}>
+              <HomeRoundedIcon />
               <Typography variant="body1">Back to Home</Typography>
             </MenuItem>
           </MenuList>
@@ -196,23 +259,24 @@ function Sidebar({ handleMode }) {
             <LogoutRoundedIcon />
           </IconButton>
         </Box>
-      </Box>
-    </>
-  );
+  </Drawer>
+ )
 }
 
 function Header() {
+  const theme = useTheme()
   return (
     <Paper
       sx={{
-        display: { xs: 'flex', md: 'none' },
+        [theme.breakpoints.up('md')]: { display: 'none' },
+        display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         position: 'fixed',
         top: 0,
         width: '100vw',
         height: 'var(--Header-height)',
-        zIndex: 9998,
+        zIndex: (theme) => theme.zIndex.drawer -1 ,
         p: 2,
         gap: 1,
         borderBottom: '1px solid',
