@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Container, Button, styled, Paper, Typography, TextField, FormControl, FormLabel, RadioGroup, Radio, FormControlLabel, Grid, TableCell, tableCellClasses, TableRow, TableContainer, Table, TableHead, TableBody, TablePagination, CircularProgress, InputLabel, Select, MenuItem } from '@mui/material';
+import { Container, Button, IconButton, styled, Paper, Typography, TextField, FormControl, FormLabel, RadioGroup, Radio, FormControlLabel, Grid, TableCell, tableCellClasses, TableRow, TableContainer, Table, TableHead, TableBody, TablePagination, CircularProgress, InputLabel, Select, MenuItem } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { addProduct, fetchSelectedProduct, updateProduct } from '../../api/db/products';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { db, storage } from '../../api/firebase';
@@ -78,7 +79,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
     title: '',
     category: '',
     subCategory: '',
-    description: '',
+    description: [''],
     quantity: '',
     location: '',
     status: '',
@@ -111,6 +112,21 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
       ...product,
       [event.target.name]: event.target.value,
     });
+  };
+
+  const handleDescriptionChange = (index, event) => {
+    const newProductDescription = [...product.description];
+    newProductDescription[index] = event.target.value;
+    setProduct({ ...product, description: newProductDescription });
+  };
+
+  const addDescriptionLine = () => {
+    setProduct({ ...product, description: [...product.description, ''] });
+  };
+
+  const handleRemoveDescriptionLine = (index) => {
+    const updatedDescriptions = product.description.filter((_, i) => i !== index);
+    setProduct({ ...product, description: updatedDescriptions });
   };
 
   const handleStatusChange = (event) => {
@@ -180,7 +196,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
         title: '',
         category: '',
         subCategory: '',
-        description: '',
+        description: [''],
         quantity: '',
         location: '',
         status: '',
@@ -256,15 +272,36 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
               ))}
           </Select>
         </FormControl>
-        <TextField
-          label="Description"
-          name="description"
-          value={product.description}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          required
-        />
+
+        {product.description.map((des, index) => (
+          <Grid container key={index} spacing={1} alignItems="center">
+            <Grid item xs={11}>
+              <TextField
+                label={`Description Line ${index + 1}`}
+                value={des}
+                onChange={(event) => handleDescriptionChange(index, event)}
+                fullWidth
+                margin="normal"
+                required
+              />
+            </Grid>
+            {index > 0 && (
+              <IconButton onClick={() => handleRemoveDescriptionLine(index)} style={{ marginTop: '1rem' }} aria-label="delete">
+                <DeleteIcon />
+              </IconButton>
+            )}
+          </Grid>
+        ))}
+
+        <Button
+          onClick={addDescriptionLine}
+          variant="outlined"
+          startIcon={<AddIcon />}
+          color="success"
+          style={{ marginTop: '10px', marginBottom: '10px' }}
+        >
+          Add new line
+        </Button>
         <TextField
           label="Quantity"
           name="quantity"
@@ -298,9 +335,9 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
             <FormControlLabel value="For Sale" control={<Radio checked/>} label="For Sale" />
             <FormControlLabel
               value="Sold Out"
-
               control={<Radio />}
               label="Sold Out!"
+              disabled={!pid}
             />
           </RadioGroup>
         </FormControl><br />

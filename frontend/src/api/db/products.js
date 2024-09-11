@@ -45,7 +45,7 @@ const fetchProducts = async () => {
     try {
         //if()
         const qSnapshot = await getDocs(productRef);
-        const productList = qSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const productList = qSnapshot.docs.map(doc => ({id:doc.id,...doc.data()} ));
         return productList;
     } catch (e) {
         return []
@@ -59,7 +59,7 @@ const fetchSelectedProduct = async (pid) => {
         const qSnapshot = await getDocs(q);
         if (!qSnapshot.empty) {
             const product = qSnapshot.docs[0];
-            return { id: product.id, ...product.data() };
+            return { id: product.pid, ...product.data() };
         } else {
             console.log("No such product!");
             return null;

@@ -6,6 +6,7 @@ import getMPTheme from './components/theme/getMPTheme'
 import { CssBaseline } from '@mui/material';
 import FAQ from './pages/FAQ/FAQ'
 import PageLayout from './pages/PageLayout';
+import DashboardLayout from './dashboards/DashboardLayout';
 
 export default function App() {
   const [mode, setMode] = React.useState('light');
@@ -44,6 +45,7 @@ export default function App() {
           <Routes>
             <Route path='/signin' element={<Signin />} />
             <Route path='*' element={<PageRoutes />} />
+            <Route path='/d' element={<DashboardLayout/>}/>
           </Routes>
         </Router>
       </ThemeProvider>
