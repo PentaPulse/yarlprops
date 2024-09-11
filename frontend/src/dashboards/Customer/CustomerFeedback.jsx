@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Typography, Grid, Card, CardContent, TextField, Button, Box } from '@mui/material';
+import { Container, Typography, Grid, Card, CardContent, TextField, Button, Box, useTheme } from '@mui/material';
 import FeedbackIcon from '@mui/icons-material/Feedback';
 
 // Example feedback data (replace with actual data)
@@ -23,6 +23,8 @@ export default function FeedbackPage() {
         title: '',
         content: '',
     });
+
+    const theme = useTheme(); // Access theme to handle dark/light mode
 
     // Handle form input changes
     const handleInputChange = (e) => {
@@ -58,6 +60,7 @@ export default function FeedbackPage() {
                     value={feedback.title}
                     onChange={handleInputChange}
                     sx={{ mb: 2 }}
+                    InputLabelProps={{ style: { color: theme.palette.text.primary } }} // Adjust label color
                 />
                 <TextField
                     fullWidth
@@ -68,6 +71,7 @@ export default function FeedbackPage() {
                     multiline
                     rows={4}
                     sx={{ mb: 2 }}
+                    InputLabelProps={{ style: { color: theme.palette.text.primary } }} // Adjust label color
                 />
                 <Button
                     variant="contained"
@@ -83,13 +87,21 @@ export default function FeedbackPage() {
             <Grid container spacing={4}>
                 {feedbacks.map((fb) => (
                     <Grid item xs={12} sm={6} key={fb.id}>
-                        <Card sx={{ maxWidth: 345, backgroundColor: '#e3f2fd' }}>
+                        <Card sx={{ 
+                            maxWidth: 345, 
+                            backgroundColor: theme.palette.mode === 'dark' ? '#424242' : '#e3f2fd', // Darker background for dark mode
+                            color: theme.palette.mode === 'dark' ? '#fff' : '#000', // Adjust text color based on mode
+                        }}>
                             <CardContent>
                                 <Box display="flex" alignItems="center" mb={2}>
-                                    <FeedbackIcon sx={{ color: '#1976d2', fontSize: 40, marginRight: 2 }} />
+                                    <FeedbackIcon sx={{ 
+                                        color: theme.palette.mode === 'dark' ? '#bbdefb' : '#1976d2', 
+                                        fontSize: 40, 
+                                        marginRight: 2 
+                                    }} />
                                     <Box>
                                         <Typography variant="h6">{fb.title}</Typography>
-                                        <Typography variant="body2" color="text.secondary">
+                                        <Typography variant="body2" sx={{ color: theme.palette.text.secondary }}>
                                             {fb.date}
                                         </Typography>
                                     </Box>
