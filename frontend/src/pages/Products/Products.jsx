@@ -148,7 +148,7 @@ const ProductsContents = ({ category, subCategory, price, quantity }) => {
     React.useEffect(() => {
         const fetchData = async () => {
             try {
-                if (searchTerm || category || subCategory || price || quantity) {
+                if (searchTerm || category || subCategory ) {
                     let q;
                     const productRef = collection(db, 'products')
                     if (searchTerm !== null) {
@@ -258,7 +258,7 @@ export function ProductPage() {
     const [selectedImageIndex, setSelectedImageIndex] = React.useState(0); // Track the index of the selected image
     const { id } = useParams();
     const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   
     React.useEffect(() => {
       const fetchProduct = async () => {

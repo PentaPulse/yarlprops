@@ -124,7 +124,7 @@ function ServicesContents({ category, subCategoryegory, price, quantity }) {
     React.useEffect(() => {
         const fetchData = async () => {
             try {
-                if (searchTerm || category || subCategoryegory || price) {
+                if (searchTerm || category || subCategoryegory ) {
                     let q;
                     const serviceRef = collection(db, 'services')
                     if (searchTerm !== null) {
