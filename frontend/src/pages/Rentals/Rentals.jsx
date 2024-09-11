@@ -139,7 +139,7 @@ function RentalsContents({  category, subCategoryegory, price, quantity }) {
     React.useEffect(() => {
         const fetchData = async () => {
             try {
-                if (searchTerm || category || subCategoryegory ) {
+                if (searchTerm || category || subCategoryegory || price || quantity) {
                     let q;
                     const rentalRef = collection(db, 'rentals')
                     if (searchTerm !== null) {
