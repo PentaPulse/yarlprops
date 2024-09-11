@@ -48,7 +48,7 @@ function closeSidebar() {
 export default function DashboardLayout({ handleMode, children }) {
   return (
     <><Grid container>
-      <Sidebar />
+      <Sidebar handleMode={handleMode}/>
       <Grid item xs={12} sm={12} md={12} lg={9} sx={{ pt: { xs: 10, sm: 10, md: 10, lg: 10 } }} >
         <Grid container columns={12} pl={2} columnSpacing={{ xs: 1, sm: 1, md: 2, lg: 2 }} rowSpacing={{ xs: 3, sm: 3, md: 2, lg: 2 }}>
           {children}
@@ -60,7 +60,7 @@ export default function DashboardLayout({ handleMode, children }) {
 
 }
 
-function Sidebar({ handleMode, children }) {
+function Sidebar({ handleMode }) {
   const theme = useTheme();
   const { user, logout } = useAuth()
   const [adminList, setAdminList] = React.useState([]);
@@ -200,42 +200,17 @@ function Sidebar({ handleMode, children }) {
         </Box>
         <Divider />
         <Box display={'flex'}>
+          <Box display={'flex'} justifyContent={'space-between'}>
           <Avatar src={sessionStorage.getItem('pp')} />
           <Box>
             <Typography >{sessionStorage.getItem('displayName')}</Typography>
             <Typography>{user.email}</Typography>
           </Box>
+          </Box>
           <IconButton onClick={logout}>
             <LogoutRoundedIcon />
           </IconButton>
         </Box>
-      </Box>
-    </>
-  );
-}
-
-function Toggler({ defaultExpanded = false, renderToggle, children }) {
-  const [open, setOpen] = React.useState(defaultExpanded);
-
-  return (
-    <>
-      <Box
-        sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
-        onClick={() => setOpen(!open)}
-      >
-        {renderToggle({ open, setOpen })}
-      </Box>
-      <Box
-        sx={{
-          display: 'grid',
-          transition: '0.2s ease',
-          gridTemplateRows: open ? '1fr' : '0fr',
-          '& > *': {
-            overflow: 'hidden',
-          },
-        }}
-      >
-        {children}
       </Box>
     </>
   );
