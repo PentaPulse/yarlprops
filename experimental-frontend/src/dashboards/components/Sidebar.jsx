@@ -32,18 +32,16 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 import ColorSchemeToggle from './ColorSchemeToggle';
 import { closeSidebar } from '../utils';
-
+function closeSidebar() {
+  if (typeof window !== 'undefined') {
+    document.documentElement.style.removeProperty('--SideNavigation-slideIn');
+    document.body.style.removeProperty('overflow');
+  }
+}
 function Toggler({
   defaultExpanded = false,
   renderToggle,
   children,
-}: {
-  defaultExpanded?: boolean;
-  children: React.ReactNode;
-  renderToggle: (params: {
-    open: boolean;
-    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  }) => React.ReactNode;
 }) {
   const [open, setOpen] = React.useState(defaultExpanded);
   return (
