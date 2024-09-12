@@ -88,7 +88,7 @@ function Sidebar({ handleMode }) {
     <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
           <IconButton color="primary" size="small" onClick={() => navigate('/')}>
             {/**replace our logo */}
-            <BrightnessAutoRoundedIcon />
+            Yp
           </IconButton>
           <Typography variant="h6">YARLPROPS</Typography>
           <IconButton onClick={handleMode}>
