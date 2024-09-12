@@ -18,7 +18,7 @@ export const adminMenu = [
     ['Products', <InventoryIcon />, 'productlist'],
     ['Rentals', <CarRentalIcon />, 'rentallist'],
     ['Services', <MiscellaneousServicesIcon />, 'servicelist'],
-    ['Contact us requests', <CommentIcon />, 'contactreqs'],
+    ['Contactus reqs', <CommentIcon />, 'contactreqs'],
 ]
 export const merchMenu = [
     ['Overview', <DashboardIcon />, 'overview'],
