@@ -261,18 +261,18 @@ export function ServicePage() {
                                     {service.serviceDescription.map((description, index) => (
                                         <li key={index}>{description}</li>
                                     ))}
-                                    <li>Location: {service.serviceLocation}</li>
+                                    <li>{service.serviceLocation}</li>
                                 </ul>
                             </Box>
                             <Box sx={{ mx: '1rem', mt: '4.5rem' }}>
                                 {/* Seller Details */}
                                 <Typography variant="h5" component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Service Provider's Details</Typography>
-                                <Typography variant="h6" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-user"></i> Name</Typography>
-                                <Typography>{merchant && merchant.firstName + ' ' + merchant.lastName}</Typography>
-                                <Typography variant="h6" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-location-dot"></i> Location</Typography>
-                                <Typography>{service.serviceLocation}</Typography>
-                                <Typography variant="h6" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-phone"></i> Contact No</Typography>
-                                <Typography>{merchant && merchant.phoneNumber}</Typography>
+                                <Typography variant="h6" component="h4" sx={{ textAlign: 'center', mb: '0.5rem' }}><i className="fa-solid fa-user"></i> Name : {merchant && merchant.firstName + ' ' + merchant.lastName}</Typography>
+                                {/* <Typography >{merchant && merchant.firstName + ' ' + merchant.lastName}</Typography> */}
+                                <Typography variant="h6" component="h4" sx={{ textAlign: 'center', mb: '0.5rem' }}><i className="fa-solid fa-location-dot"></i> Location : {service.serviceLocation}</Typography>
+                                {/* <Typography>{service.serviceLocation}</Typography> */}
+                                <Typography variant="h6" component="h4" sx={{ textAlign: 'center', mb: '0.5rem' }}><i className="fa-solid fa-phone"></i> Contact No : {merchant && merchant.phoneNumber}</Typography>
+                                {/* <Typography>{merchant && merchant.phoneNumber}</Typography> */}
                             </Box>
                         </CardContent>
                     </Card>

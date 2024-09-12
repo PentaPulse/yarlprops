@@ -40,7 +40,8 @@ export default function Home() {
             </Typography>
             <Grid container spacing={3}>
               {categories.map((category, index) => (
-                <Grid item key={index} xs={12} sm={6} md={4}>
+                <Grid item key={index} xs={4} sm={3} md={2} lg={2}> 
+                {/* xs={12} sm={6} md={4} */}
                   <Card
                     sx={{
                       borderRadius: '16px',
