@@ -34,6 +34,7 @@ export default function DashboardLayout({ handleMode, children }) {
 
   const handleNavigation = (path) => {
     navigate(path)
+    setOpen(false)
   }
   React.useEffect(() => {
     const fetchAdminList = async () => {
@@ -59,8 +60,7 @@ export default function DashboardLayout({ handleMode, children }) {
   }, [])
 
   const drawer = (
-    <>
-    
+    <>    
       <Box
         sx={{
           minHeight: 0,
