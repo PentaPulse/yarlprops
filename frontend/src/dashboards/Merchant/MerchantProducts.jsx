@@ -3,7 +3,7 @@ import { Container, Button, IconButton, styled, Paper, Typography, TextField, Fo
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { addProduct, fetchSelectedProduct, updateProduct } from '../../api/db/products';
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { getDownloadURL, ref, uploadBytes, uploadBytesResumable } from 'firebase/storage';
 import { db, storage } from '../../api/firebase';
 import Swal from 'sweetalert2';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
@@ -148,6 +148,8 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
     }
   };
 
+  const [uploadProgress, setUploadProgress] = useState(0);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -157,19 +159,29 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
       return;
     }
 
-    if (product.quantity <= 1) {
-      setValidationMessage('Quantity must be greater than 1 or equal to 1.');
-      return;
-    }
-    setValidationMessage('');
-
-
     try {
       // Upload new images and get their URLs
-      const newImageUrls = await Promise.all(newImages.map(async (image) => {
-        const imageRef = ref(storage, `images/${image.name}`);
-        await uploadBytes(imageRef, image);
-        return await getDownloadURL(imageRef);
+      const newImageUrls = await Promise.all(newImages.map((image, index) => {
+        return new Promise((resolve, reject) => {
+          const imageRef = ref(storage, `images/${image.name}`);
+          const uploadTask = uploadBytesResumable(imageRef, image);
+          
+          uploadTask.on('state_changed', (snapshot) => {
+            //Calculate progress as percentage
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            setUploadProgress(Math.round(progress));
+            console.log(`Upload is ${progress}% done`);
+          },
+          (error) => {
+            console.error('Upload failed: ', error);
+            reject(error);
+          },
+          async () => {
+            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+            resolve(downloadURL);
+          }
+        );
+      });
       }));
 
       // Combine existing and new image URLs
@@ -179,8 +191,6 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
       if (pid) {
         await updateProduct(pid, { ...product, images: allImageUrls });
       } else {
-        console.log("Stage 2", product)
-
         await addProduct({ ...product, images: allImageUrls });
       }
 
@@ -311,6 +321,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
           fullWidth
           margin="normal"
           required
+          inputProps={{ min:1 }} // Sets the minimum value to 1
         />
         <TextField
           label="Location"
@@ -356,6 +367,12 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
           Upload file
           <VisuallyHiddenInput type="file" />
         </Button>
+
+        {uploadProgress > 0 && (
+          <Typography variant="body2" color="textSecondary">
+            Upload Progress: {uploadProgress}%
+          </Typography>
+        )}
 
         <Grid container spacing={2}>
           {existingImages.map((src, index) => (

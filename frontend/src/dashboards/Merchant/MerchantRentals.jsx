@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Container, Button, styled, Paper, Typography, TextField, FormControl, FormLabel, RadioGroup, Radio, FormControlLabel, Grid, TableCell, tableCellClasses, TableRow, TableContainer, Table, TableHead, TableBody, TablePagination, CircularProgress, Select, InputLabel, MenuItem } from '@mui/material';
+import { Container, Button, IconButton, styled, Paper, Typography, TextField, FormControl, FormLabel, RadioGroup, Radio, FormControlLabel, Grid, TableCell, tableCellClasses, TableRow, TableContainer, Table, TableHead, TableBody, TablePagination, CircularProgress, Select, InputLabel, MenuItem } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { db, storage } from '../../api/firebase';
 import Swal from 'sweetalert2';
@@ -78,7 +79,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
     title: '',
     category: '',
     subCategory: '',
-    description: '',
+    description: [''],
     quantity: '',
     location: '',
     status: '',
@@ -109,6 +110,21 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
   const handleChange = (event) => {
     const { name, value } = event.target;
     setRental({ ...rental, [name]: value });
+  };
+  
+  const handleDescriptionChange = (index, event) => {
+    const newRentDescription = [...rental.description];
+    newRentDescription[index] = event.target.value;
+    setRental({ ...rental, description: newRentDescription });
+  };
+
+  const addDescriptionLine = () => {
+    setRental({ ...rental, description: [...rental.description, ''] });
+  };
+
+  const handleRemoveDescriptionLine = (index) => {
+    const updatedDescriptions = rental.description.filter((_, i) => i !== index);
+    setRental({ ...rental, description: updatedDescriptions });
   };
 
   const handleStatusChange = (event) => {
@@ -254,15 +270,35 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
               ))}
           </Select>
         </FormControl>
-        <TextField
-          label="Description"
-          name="description"
-          value={rental.description}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          required
-        />
+        {rental.description.map((des, index) => (
+          <Grid container key={index} spacing={1} alignItems="center">
+            <Grid item xs={11}>
+              <TextField
+                label={`Description Line ${index + 1}`}
+                value={des}
+                onChange={(event) => handleDescriptionChange(index, event)}
+                fullWidth
+                margin="normal"
+                required
+              />
+            </Grid>
+            {index > 0 && (
+              <IconButton onClick={() => handleRemoveDescriptionLine(index)} style={{ marginTop: '1rem' }} aria-label="delete">
+                <DeleteIcon />
+              </IconButton>
+            )}
+          </Grid>
+        ))}
+
+        <Button
+          onClick={addDescriptionLine}
+          variant="outlined"
+          startIcon={<AddIcon />}
+          color="success"
+          style={{ marginTop: '10px', marginBottom: '10px' }}
+        >
+          Add new line
+        </Button>
         <TextField
           label="Quantity"
           name="quantity"
@@ -272,6 +308,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
           fullWidth
           margin="normal"
           required
+          inputProps={{ min:1 }}
         />
         <TextField
           label="Location"
