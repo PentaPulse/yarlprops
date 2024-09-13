@@ -1,6 +1,16 @@
-const {onRequest} = require("firebase-functions/v2/https");
-const logger = require("firebase-functions/logger");
-const functions = require('firebase-functions');
-const admin = require('firebase-admin');
-admin.initializeApp();
-const db = admin.firestore();
+const express = require('express')
+const cors = require('cors')
+const app = express()
+
+app.use(cors({
+    origin:'https://192.168.8.165:3000',
+}));
+
+app.get(('/api/data'),(req,res)=>{
+    res.json({message:"Hello from backend"})
+})
+
+const port = 3000;
+app.listen(port,()=>{
+    console.log(`Backend port: ${port}`)
+})
