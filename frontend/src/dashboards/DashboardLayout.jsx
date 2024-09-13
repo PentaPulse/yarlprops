@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { AppBar, Avatar, Box, CssBaseline, Divider, Drawer, Grid, IconButton, Input, MenuItem, MenuList, Toolbar, Tooltip, Typography, useTheme } from '@mui/material'
+import {  Avatar, Box, CssBaseline, Divider,  Grid, IconButton, Input, MenuItem, MenuList, Toolbar, Tooltip, Typography, useTheme,styled } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -13,8 +13,73 @@ import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import SupportRoundedIcon from '@mui/icons-material/SupportRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import MuiDrawer from '@mui/material/Drawer';
+import MuiAppBar from '@mui/material/AppBar';
 
 const drawerWidth = 240;
+const openedMixin = (theme) => ({
+  width: drawerWidth,
+  transition: theme.transitions.create('width', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.enteringScreen,
+  }),
+  overflowX: 'hidden',
+});
+
+const closedMixin = (theme) => ({
+  transition: theme.transitions.create('width', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  overflowX: 'hidden',
+  width: `calc(${theme.spacing(7)} + 1px)`,
+  [theme.breakpoints.up('sm')]: {
+    width: `calc(${theme.spacing(8)} + 1px)`,
+  },
+});
+
+const DrawerHeader = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'flex-end',
+  padding: theme.spacing(0, 1),
+  ...theme.mixins.toolbar,
+}));
+
+const AppBar = styled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop !== 'open',
+})(({ theme, open }) => ({
+  zIndex: theme.zIndex.drawer + 1,
+  transition: theme.transitions.create(['width', 'margin'], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(open && {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  }),
+}));
+
+const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
+  ({ theme, open }) => ({
+    width: drawerWidth,
+    flexShrink: 0,
+    whiteSpace: 'nowrap',
+    boxSizing: 'border-box',
+    ...(open && {
+      ...openedMixin(theme),
+      '& .MuiDrawer-paper': openedMixin(theme),
+    }),
+    ...(!open && {
+      ...closedMixin(theme),
+      '& .MuiDrawer-paper': closedMixin(theme),
+    }),
+  }),
+);
 
 export default function DashboardLayout({ handleMode, children }) {
   const [open, setOpen] = React.useState(false);
@@ -60,7 +125,7 @@ export default function DashboardLayout({ handleMode, children }) {
   }, [])
 
   const drawer = (
-    <>    
+    <>
       <Box
         sx={{
           minHeight: 0,
@@ -124,16 +189,14 @@ export default function DashboardLayout({ handleMode, children }) {
     <>
       <Grid container columns={12}>
         <CssBaseline />
-        <AppBar position="fixed" open={open} color='inherit'sx={{
-    width: isMobile ? `calc(100% - ${drawerWidth}px)` : '100%',
-  }}>
+        <AppBar position="fixed" open={open} color='inherit'>
           <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Box display='flex'>
               <IconButton
                 size="large"
                 edge="start"
                 color="inherit"
-                sx={{ mr: 2, [theme.breakpoints.up('lg')]: { display: 'none' } }}
+                sx={{ mr: 2, display: { lg: 'none' } }}
                 onClick={handleDrawerOpen}
               >
                 <MenuIcon />
@@ -155,27 +218,27 @@ export default function DashboardLayout({ handleMode, children }) {
         </AppBar >
         <Grid item size={3}>
           < Drawer sx={{
-            [theme.breakpoints.up('lg')]: { display: 'none' },
-            display: 'block',      
-            width:{drawerWidth}      
-          }} variant={'temporary'} open={open} onClose={handleDrawerClose}>
-            {/*<DrawerHeader>
+            display: { xs: 'block', sm: 'block', md: 'block', lg: 'none' }
+            , '& .MuiDrawer-paper': { boxSizing: 'border-box', color: 'inherit' },
+          }} variant={open ? "permanent" : 'temporary'} open={open} onClose={handleDrawerClose}>
+            <DrawerHeader>
               <IconButton onClick={handleDrawerClose} >
                 {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
               </IconButton>
-            </DrawerHeader>*/}
+            </DrawerHeader>
             <Divider />
             {drawer}
           </Drawer >
           < Drawer sx={{
-            [theme.breakpoints.down('lg')]: { display: 'none' },
+            display: { xs: 'none', sm: 'none', md: 'none', lg: 'block' },
             flexShrink: 0,
-          }} variant='permanent'>
-            {/*<DrawerHeader>
+            [`& .MuiDrawer-paper`]: { boxSizing: 'border-box' },
+          }} variant="permanent" open >
+            <DrawerHeader>
               <IconButton onClick={handleDrawerClose} >
                 {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
               </IconButton>
-            </DrawerHeader>*/}
+            </DrawerHeader>
             <Divider />
             {drawer}
           </Drawer >
