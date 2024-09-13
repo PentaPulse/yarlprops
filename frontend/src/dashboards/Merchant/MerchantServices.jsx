@@ -4,7 +4,7 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Swal from 'sweetalert2';
-import { addService, fetchSelectedService, fetchServices, updateService } from '../../api/db/services';
+import { addService, fetchSelectedService,  updateService } from '../../api/db/services';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { db, storage } from '../../api/firebase';
 import { collection, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
@@ -423,7 +423,7 @@ const ServiceList = ({ onEditService, onViewService }) => {
     };
 
     fetchData();
-  }, []);
+  },[]);
 
   const handleDeleteService = async (serviceId) => {
     const result = await Swal.fire({

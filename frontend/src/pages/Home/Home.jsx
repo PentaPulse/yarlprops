@@ -304,34 +304,3 @@ function ServicesList() {
     </Container>
   );
 }
-
-
-{/* <Container fixed>
-      <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 1, sm: 2, md: 3, lg: 3 }}>
-        {rentals.length === 0 ?
-          <DbError items={3} />
-          :
-          rentals.map((rental, index) => (
-            <Grid item xs={1} sm={1} md={1} lg={1} key={index}>
-              <Card sx={{ boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)', position: 'relative' }}>
-
-                <CardActionArea onClick={() => handleCardClick(rental.rid)}>
-                  <CardMedia
-                    sx={{ height: '20rem' }}
-                    image={rental.images[0] || 'https://picsum.photos/id/11/200/300'}
-                    title={rental.name}
-                  />
-                  <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Typography gutterBottom variant='h6' component='div' color='inherit'>
-                      {rental.title}
-                    </Typography>
-                  </CardContent>
-                  <CardActions sx={{ position: 'absolute', top: '2px', left: '5px' }}>
-                    {(rental.status === "For Sale") ? (<Button size='small' style={{ backgroundColor: "green", color: 'white', fontWeight: 'bold' }}>For Sale</Button>) : ((rental.status === "For Rent") ? (<Button size='small' style={{ backgroundColor: "darkorange", color: 'white', fontWeight: 'bold' }}>For Rent</Button>) : ((<Button size='small' style={{ backgroundColor: "red", color: 'white', fontWeight: 'bold' }}>Sold Out!</Button>)))}
-                  </CardActions>
-                </CardActionArea>
-              </Card>
-            </Grid>
-          ))}
-      </Grid>
-    </Container> */}

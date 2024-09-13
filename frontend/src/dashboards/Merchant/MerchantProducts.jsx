@@ -159,6 +159,13 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
       return;
     }
 
+    if (product.quantity < 1) {
+      setValidationMessage('Quantity must be greater than 1 or equal to 1.');
+      return;
+    }
+    setValidationMessage('');
+
+
     try {
       // Upload new images and get their URLs
       const newImageUrls = await Promise.all(newImages.map((image, index) => {

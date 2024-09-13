@@ -1,6 +1,7 @@
 import "firebase/firestore";
 import { db } from "../firebase";
 import { doc, setDoc, collection, getDocs, query, where, addDoc, updateDoc, serverTimestamp, arrayUnion, getDoc } from "firebase/firestore";
+import axios from 'axios'
 
 // Reference
 const productRef = collection(db, "products");
@@ -22,6 +23,20 @@ const addProduct = async ({ merchantId, title, category, subCategory, descriptio
         });
         await setDoc(docRef, { pid: docRef.id }, { merge: true });
         await updateDoc(doc(db, 'systemusers', merchantId), { myProducts: arrayUnion(docRef.id) })
+        const p = {
+            pid:docRef.id,
+            mid:merchantId,
+            title,
+            category,
+            subCategory,
+            description,
+            location,
+            quantity,
+            status,
+            images,
+            timestamp: serverTimestamp()
+        }
+       const r = await axios.post('http://192.168.8.158:3000/api/p/add', p)
         return docRef.id;
     } catch (e) {
         console.error("Error adding product:", e);
@@ -45,7 +60,7 @@ const fetchProducts = async () => {
     try {
         //if()
         const qSnapshot = await getDocs(productRef);
-        const productList = qSnapshot.docs.map(doc => ({id:doc.id,...doc.data()} ));
+        const productList = qSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         return productList;
     } catch (e) {
         return []
