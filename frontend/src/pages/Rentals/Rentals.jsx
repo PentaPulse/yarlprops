@@ -1,4 +1,4 @@
-import { Box, Button, capitalize, Card, CardActionArea, CardActions, CardContent, CardMedia, CircularProgress, Container, Divider, FormControl, FormControlLabel, FormLabel, Grid, IconButton, Paper, Radio, RadioGroup, Slider, TextField, Typography } from '@mui/material';
+import { Box, Button, capitalize, Card, CardActionArea, CardActions, CardContent, CardMedia, CircularProgress, Container, Divider, FormControl, FormControlLabel, FormLabel, Grid, IconButton, Paper, Radio, RadioGroup, Slider, TextField, Typography, useMediaQuery } from '@mui/material';
 import { collection, getDoc, getDocs, query, where } from 'firebase/firestore';
 import * as React from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
@@ -16,6 +16,9 @@ export default function Rentals() {
     const [priceRange, setPriceRange] = React.useState([0, 10000]);
     const [quantity, setQuantity] = React.useState(1);
     const { cat } = useParams()
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
     React.useEffect(() => {
         if (cat) {
             setCategory(cat)
@@ -49,13 +52,13 @@ export default function Rentals() {
 
     return (
         <Grid container spacing={3} justifyContent="center">
-            <Grid item xs={11} sm={11} md={11} lg={3}>
+            <Grid item xs={12} sm={11.2} md={3} lg={3}>
                 <Paper
                     sx={{
                         padding: '1.5rem',
                         borderRadius: '8px',
                         boxShadow: 3,
-                        marginLeft: '5rem'
+                        margin: isMobile ? '0 1rem' : '0 1 0 1rem'
                     }}
                 >
                     <FormControl>
@@ -118,7 +121,7 @@ export default function Rentals() {
                     />
                 </Paper>
             </Grid>
-            <Grid item md={9}>
+            <Grid item xs={12} sm={12} md={9} lg={9}>
                 <RentalsContents
                     category={category}
                     subCategory={subCategory}
@@ -135,6 +138,10 @@ function RentalsContents({  category, subCategoryegory, price, quantity }) {
     const navigate = useNavigate();
     const [search]=useSearchParams()
     const searchTerm=search.get('search')
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
+
 
     React.useEffect(() => {
         const fetchData = async () => {
@@ -177,8 +184,8 @@ function RentalsContents({  category, subCategoryegory, price, quantity }) {
         navigate(`/p/rental/${rid}`);
     };
     return (
-        <Container fixed>
-            <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 1, sm: 2, md: 3, lg: 3 }}>
+        <Container maxWidth="xl">
+            <Grid container spacing={{ xs: 2, sm: 2, md: 3 }} columns={{ xs: 1, sm: 2, md: 3, lg: 4 }}>
                 {!rentals ? <DbError items={9} /> : rentals.length === 0 ?
                     <DbError items={9} />
                     :
@@ -188,12 +195,12 @@ function RentalsContents({  category, subCategoryegory, price, quantity }) {
 
                                 <CardActionArea onClick={() => handleCardClick(rental.rid)}>
                                     <CardMedia
-                                        sx={{ height: '20rem' }}
+                                        sx={{ height:  isMobile ? '15rem' : isTablet ? '18rem' : '20rem'}}
                                         image={rental.images[0] || 'https://picsum.photos/id/11/200/300'}
                                         title={rental.name}
                                     />
                                     <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                        <Typography gutterBottom variant='h6' component='div' color='inherit'>
+                                        <Typography gutterBottom variant={isMobile ? 'subtitle1' : 'h6'}  component='div' color='inherit'>
                                             {rental.title}
                                         </Typography>
                                     </CardContent>
@@ -214,6 +221,9 @@ export function RentalsPage() {
     const [selectedImageIndex, setSelectedImageIndex] = React.useState(0); // Track the index of the selected image
     const { id } = useParams();
     const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
+  
 
     React.useEffect(() => {
         const fetchrental = async () => {
@@ -243,7 +253,7 @@ export function RentalsPage() {
     };
 
     return (
-        <Container sx={{ backgroundColor: theme.palette.background.default }}>
+        <Container maxWidth="lg" sx={{ backgroundColor: theme.palette.background.default }}>
             <Grid container spacing={4}>
                 <Grid item xs={12} md={6}>
                     {/* Main rental Image */}
@@ -252,7 +262,7 @@ export function RentalsPage() {
                             component="img"
                             image={rental.images[selectedImageIndex]}  // Display the selected image as the main rental image
                             alt={rental.name}
-                            sx={{ borderRadius: '0px', width: '100%', height: 'auto', maxHeight: '400px', objectFit: 'cover' }}
+                            sx={{ borderRadius: '0px', width: '100%', height: 'auto', maxHeight: isMobile ? '300px' : '400px', objectFit: 'cover' }}
                         />
                     </Card>
 
@@ -272,7 +282,7 @@ export function RentalsPage() {
                                     alt={`image ${index}`}
                                     sx={{
                                         width: '100%',
-                                        height: '100px',
+                                        height: isMobile ? '70px' : '100px',
                                         borderRadius: '8px',
                                         objectFit: 'cover',
                                         boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
@@ -300,14 +310,14 @@ export function RentalsPage() {
                     <Card sx={{ height: '100%', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }}>
                         <CardContent sx={{ marginTop: '30px', marginBottom: '30px' }}>
                             {/* rental Details */}
-                            <Typography variant="h4" component="h2" sx={{ fontWeight: 'bold', textAlign: 'center' }}>{rental.title}</Typography>
-                            <Typography variant="h6" component="h4" sx={{ fontWeight: 'bold', textAlign: 'center', fontStyle: 'italic' }}>
+                            <Typography variant={isMobile ? 'h5' : 'h4'} component="h2" sx={{ fontWeight: 'bold', textAlign: 'center' }}>{rental.title}</Typography>
+                            <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ fontWeight: 'bold', textAlign: 'center', fontStyle: 'italic' }}>
                                 Category: {rental.category}
                             </Typography>
-                            <Typography variant="h6" component="h4" sx={{ fontWeight: 'bold', textAlign: 'center', fontStyle: 'italic' }}>
+                            <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ fontWeight: 'bold', textAlign: 'center', fontStyle: 'italic' }}>
                                 Type: {rental.type}
                             </Typography>
-                            <Typography variant="h6" component="h4" sx={{ fontWeight: 'bold', textAlign: 'center', fontStyle: 'italic' }}>
+                            <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ fontWeight: 'bold', textAlign: 'center', fontStyle: 'italic' }}>
                                 {(rental.status === "For Sale") ?
                                     (<Box sx={{ backgroundColor: "green", color: 'white', fontWeight: 'bold', mx: '11rem', borderRadius: '20px' }}>For Sale</Box>)
                                     : ((rental.status === "For Rent") ?
@@ -315,8 +325,8 @@ export function RentalsPage() {
                                         : (<Box sx={{ backgroundColor: "red", color: 'white', fontWeight: 'bold', mx: '11rem', borderRadius: '20px' }}>Sold Out!</Box>))}
                             </Typography>
 
-                            <Box sx={{ mx: '1.9rem', mt: '1rem' }}>
-                                <Typography variant="h6" component="h4" sx={{ fontWeight: 'bold' }}>Description</Typography>
+                            <Box /*sx={{ mx: '1.9rem', mt: '1rem' }}*/ sx={{ mt: { xs: 2, sm: 3 } }}>
+                                <Typography variant={isMobile ? 'h6' : 'h5'} component="h4" sx={{ fontWeight: 'bold' }}>Description</Typography>
                                 <ul style={{ textAlign: 'justify', fontSize: '18px' }}>
                                     <li>{rental.description}</li>
                                     <li>Quantity: {rental.quantity}</li>
@@ -325,13 +335,13 @@ export function RentalsPage() {
                             </Box>
                             <Box sx={{ marginLeft: '1rem', marginRight: '1rem', marginTop: '4.5rem' }}>
                                 {/* Seller Details */}
-                                <Typography variant="h5" component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
-                                <Typography variant="h6" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-user"></i> Name</Typography>
-                                <Typography>{rental.sellerName}</Typography>
-                                <Typography variant="h6" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-location-dot"></i> Location</Typography>
-                                <Typography>{rental.Location}</Typography>
-                                <Typography variant="h6" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-phone"></i> Contact No</Typography>
-                                <Typography>{rental.telephone}</Typography>
+                                <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
+                                <Typography variant="subtitle1" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-user"></i> Name</Typography>
+                                <Typography variant="body1">{rental.sellerName}</Typography>
+                                <Typography variant="subtitle1" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-location-dot"></i> Location</Typography>
+                                <Typography variant="body1">{rental.Location}</Typography>
+                                <Typography variant="subtitle1" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-phone"></i> Contact No</Typography>
+                                <Typography variant="body1">{rental.telephone}</Typography>
                             </Box>
                         </CardContent>
                     </Card>
@@ -339,7 +349,7 @@ export function RentalsPage() {
             </Grid>
             <Grid container spacing={0} sx={{ marginTop: '0.5rem' }}>
                 <Grid item>
-                    <Button variant="contained" component={Link} to="/p/rentals" startIcon={<ChevronLeftIcon />}>
+                    <Button variant="contained" component={Link} to="/p/rentals" startIcon={<ChevronLeftIcon />} size={isMobile ? "small" : "medium"}>
                         Back
                     </Button>
                 </Grid>
