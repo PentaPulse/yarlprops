@@ -12,6 +12,7 @@ exports.getProducts = async (req, res) => {
 
 exports.addProduct=async(req,res)=>{
   try{
+    
     const product = new Product(req.body)
     await product.save()
     res.json({message:"Product added successfully : ",product})
