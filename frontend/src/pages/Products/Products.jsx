@@ -149,7 +149,7 @@ const ProductsContents = ({ category, subCategory, price, quantity }) => {
     React.useEffect(() => {
         const fetchData = async () => {
             try {
-                if (searchTerm || category || subCategory || price || quantity) {
+                if (searchTerm || category || subCategory) {
                     let q;
                     const productRef = collection(db, 'products')
                     if (searchTerm !== null) {

@@ -38,6 +38,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "testdb":"node ./src/api/db/test.js",
     "eject": "react-scripts eject",
     "start-emulators": "bash ./run_emulators.sh start",
     "emu-charith": "firebase emulators:start --import=./datacharith",
