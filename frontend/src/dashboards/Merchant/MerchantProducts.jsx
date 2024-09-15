@@ -340,25 +340,30 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
           required
         />
 
-        <FormControl component="fieldset" sx={{ ml: "14px" }}>
-          <FormLabel component="legend">Status :</FormLabel>
-          <RadioGroup
-            row
-            aria-label="status"
-            name="status"
-            value={product.status}
-            onChange={handleStatusChange}
-            required
-          >
-            <FormControlLabel value="For Sale" control={<Radio checked/>} label="For Sale" />
-            <FormControlLabel
-              value="Sold Out"
-              control={<Radio />}
-              label="Sold Out!"
-              disabled={!pid}
-            />
-          </RadioGroup>
-        </FormControl><br />
+<FormControl component="fieldset" sx={{ ml: "14px" }}>
+  <FormLabel component="legend">Status :</FormLabel>
+  <RadioGroup
+    row
+    aria-label="status"
+    name="status"
+    value={product.status}  // Assuming `product.status` is controlled by your state
+    onChange={handleStatusChange}
+    required
+  >
+    <FormControlLabel
+      value="For Sale"
+      control={<Radio />}
+      label="For Sale"
+    />
+    <FormControlLabel
+      value="Sold Out"
+      control={<Radio />}
+      label="Sold Out!"
+      disabled={!pid}  // Disables the option if `pid` is not available
+    />
+  </RadioGroup>
+</FormControl>
+<br />
 
         <Button
           accept='image/*'

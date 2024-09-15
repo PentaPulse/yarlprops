@@ -8,6 +8,7 @@ const productRef = collection(db, "products");
 
 // Adding products
 const addProduct = async ({ merchantId, title, category, subCategory, description, quantity, location, status, images }) => {
+    console.log(status)
     try {
         const docRef = await addDoc(productRef, {
             title,
@@ -19,13 +20,14 @@ const addProduct = async ({ merchantId, title, category, subCategory, descriptio
             status,
             images,
             merchantId,
-            timestamp: serverTimestamp()
+            timestamp: new Date().toISOString()
         });
         await setDoc(docRef, { pid: docRef.id }, { merge: true });
         await updateDoc(doc(db, 'systemusers', merchantId), { myProducts: arrayUnion(docRef.id) })
-        const p = {
-            pid:docRef.id,
-            mid:merchantId,
+        /*
+        const r = await axios.post('https://rich-coyote-enabling.ngrok-free.app/api/p/add', {
+            pid: docRef.id,
+            mid: merchantId,
             title,
             category,
             subCategory,
@@ -34,9 +36,9 @@ const addProduct = async ({ merchantId, title, category, subCategory, descriptio
             quantity,
             status,
             images,
-            timestamp: serverTimestamp()
-        }
-       const r = await axios.post('http://192.168.8.158:3000/api/p/add', p)
+            timestamp: new Date().toISOString()
+        })
+        return r;*/
         return docRef.id;
     } catch (e) {
         console.error("Error adding product:", e);

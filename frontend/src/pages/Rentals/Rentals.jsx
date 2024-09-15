@@ -222,7 +222,7 @@ export function RentalsPage() {
     const { id } = useParams();
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-    const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
+    //const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
   
 
     React.useEffect(() => {
