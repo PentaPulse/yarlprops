@@ -52,7 +52,7 @@ export default function Rentals() {
 
     return (
         <Grid container spacing={3} justifyContent="center">
-            <Grid item xs={12} sm={11.2} md={3} lg={3}>
+            <Grid item xs={12} sm={11.2} md={3} lg={2.5}>
                 <Paper
                     sx={{
                         padding: '1.5rem',
@@ -185,7 +185,7 @@ function RentalsContents({  category, subCategoryegory, price, quantity }) {
     };
     return (
         <Container maxWidth="xl">
-            <Grid container spacing={{ xs: 2, sm: 2, md: 3 }} columns={{ xs: 1, sm: 2, md: 3, lg: 4 }}>
+            <Grid container spacing={{ xs: 2, sm: 2, md: 3 }} columns={{ xs: 1, sm: 2, md: 2, lg: 3 }}>
                 {!rentals ? <DbError items={9} /> : rentals.length === 0 ?
                     <DbError items={9} />
                     :

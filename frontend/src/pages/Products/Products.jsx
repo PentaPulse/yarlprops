@@ -53,7 +53,7 @@ function Products() {
 
     return (
         <Grid container spacing={3} justifyContent="center">
-            <Grid item xs={12} sm={11.2} md={3} lg={3}>
+            <Grid item xs={12} sm={11.2} md={3} lg={2.5}>
                 <Paper
                     sx={{
                         padding: '1.5rem',
@@ -149,7 +149,7 @@ const ProductsContents = ({ category, subCategory, price, quantity }) => {
     React.useEffect(() => {
         const fetchData = async () => {
             try {
-                if (searchTerm || category || subCategory || price || quantity) {
+                if (searchTerm || category || subCategory) {
                     let q;
                     const productRef = collection(db, 'products')
                     if (searchTerm !== null) {
@@ -189,7 +189,7 @@ const ProductsContents = ({ category, subCategory, price, quantity }) => {
     };
     return (
         <Container maxWidth="xl">
-            <Grid container spacing={{ xs: 2, sm: 2, md: 3 }} columns={{ xs: 1, sm: 2, md: 3, lg: 4 }}>
+            <Grid container spacing={{ xs: 2, sm: 2, md: 3 }} columns={{ xs: 1, sm: 2, md: 2, lg: 3 }}>
                 {!products ? <DbError items={9} /> : products.length === 0 ?
                     <DbError items={9} />
                     :
@@ -315,7 +315,11 @@ export function ProductPage() {
                 </Grid>
               ))}
   
-              <Grid item>
+              <Grid item
+                sx = {{
+                  width: '3%'
+                }}
+              >
                 <IconButton onClick={handleNext}>
                   <ArrowForwardIosIcon />
                 </IconButton>

@@ -1,0 +1,19 @@
+{
+  "name": "images/bed1.jpeg",
+  "bucket": "yarlprops.appspot.com",
+  "metageneration": 1,
+  "generation": 1726334046313,
+  "contentType": "image/jpeg",
+  "storageClass": "STANDARD",
+  "contentDisposition": "inline",
+  "downloadTokens": [
+    "ac527afe-d229-4097-b7fc-51f6912bb508"
+  ],
+  "etag": "skUSkH8hgHf+dk85dafk8AmULVQ",
+  "customMetadata": {},
+  "timeCreated": "2024-09-14T17:14:06.314Z",
+  "updated": "2024-09-14T17:14:06.314Z",
+  "size": 7516,
+  "md5Hash": "/icw1ApNwqk6L+L463i84w==",
+  "crc32c": "1240042615"
+}
