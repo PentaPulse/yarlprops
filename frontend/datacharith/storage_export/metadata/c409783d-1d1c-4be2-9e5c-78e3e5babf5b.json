@@ -1,0 +1,19 @@
+{
+  "name": "images/saloon.png",
+  "bucket": "yarlprops.appspot.com",
+  "metageneration": 1,
+  "generation": 1726252123593,
+  "contentType": "image/png",
+  "storageClass": "STANDARD",
+  "contentDisposition": "inline",
+  "downloadTokens": [
+    "f77b9881-3b5e-4959-ade6-c3f8180cd5b0"
+  ],
+  "etag": "Osd/8L7YPyni+uPPoo+wdHGVWEE",
+  "customMetadata": {},
+  "timeCreated": "2024-09-13T18:28:43.594Z",
+  "updated": "2024-09-13T18:28:43.594Z",
+  "size": 12159,
+  "md5Hash": "KP/MCfJI2HEnj9cXww1/Fg==",
+  "crc32c": "4074740001"
+}

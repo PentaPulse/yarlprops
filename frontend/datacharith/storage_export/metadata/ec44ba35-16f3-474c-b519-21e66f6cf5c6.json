@@ -1,0 +1,19 @@
+{
+  "name": "images/barber.jpg",
+  "bucket": "yarlprops.appspot.com",
+  "metageneration": 1,
+  "generation": 1726252123574,
+  "contentType": "image/jpeg",
+  "storageClass": "STANDARD",
+  "contentDisposition": "inline",
+  "downloadTokens": [
+    "78b1f0e8-f1b1-4865-b30d-c03e3005079c"
+  ],
+  "etag": "8VQs3Ghbt+T4d1xGyXKta1EUlT0",
+  "customMetadata": {},
+  "timeCreated": "2024-09-13T18:28:43.574Z",
+  "updated": "2024-09-13T18:28:43.574Z",
+  "size": 115874,
+  "md5Hash": "a6cUICziaXUE/I3mNB8ZMA==",
+  "crc32c": "3430866810"
+}

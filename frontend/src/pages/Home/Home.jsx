@@ -121,12 +121,12 @@ function ProductList() {
 
   return (
     <Container fixed>
-      <Grid container spacing={{ xs: 2, md: 3, lg: 4 }} columns={{ xs: 1, sm: 2, md: 4, lg: 4 }} justifyContent='flex-start' alignItems='flex-start'>
+      <Grid container spacing={{ xs: 3, md: 6, lg: 10 }} sx={{ justifyContent: "left"}} columns={24}>
         {products.length === 0 ?
           <DbError items={3} />
           :
           products.map((product, index) => (
-            <Grid item key={index}>
+            <Grid item key={index} xs={24} sm={12} md={8} lg={6}>
               <Card 
                 sx={{ 
                   width: '270px', // Fixed width for the card
@@ -195,12 +195,12 @@ function RentalsList() {
 
   return (
     <Container fixed>
-      <Grid container spacing={{ xs: 2, md: 3, lg: 4 }} columns={{ xs: 1, sm: 2, md: 4, lg: 4 }}>
+      <Grid container spacing={{ xs: 3, md: 6, lg: 10 }} sx={{ justifyContent: "left"}} columns={24}>
         {rentals.length === 0 ?
           <DbError items={3} />
           :
           rentals.map((rental, index) => (
-            <Grid item key={index}>
+            <Grid item key={index} xs={24} sm={12} md={8} lg={6}>
               <Card 
                 sx={{ 
                   width: '270px', // Fixed width for the card
@@ -266,12 +266,12 @@ function ServicesList() {
 
   return (
     <Container fixed>
-      <Grid container spacing={{ xs: 2, md: 3, lg: 4 }} columns={{ xs: 1, sm: 2, md: 4, lg: 4 }}>
+      <Grid container spacing={{ xs: 3, md: 6, lg: 10 }} sx={{ justifyContent: "left"}} columns={24}>
         {services.length === 0 ?
           <DbError items={3} />
           :
           services.map((service, index) => (
-            <Grid item key={index}>
+            <Grid item key={index} xs={24} sm={12} md={8} lg={6}>
               <Card 
                 sx={{ 
                   width: '270px', // Fixed width for the card

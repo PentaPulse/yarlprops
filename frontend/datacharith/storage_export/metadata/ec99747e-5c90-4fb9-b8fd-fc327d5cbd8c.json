@@ -1,0 +1,19 @@
+{
+  "name": "images/haircut.jpg",
+  "bucket": "yarlprops.appspot.com",
+  "metageneration": 1,
+  "generation": 1726252123585,
+  "contentType": "image/jpeg",
+  "storageClass": "STANDARD",
+  "contentDisposition": "inline",
+  "downloadTokens": [
+    "a44197fe-8abc-4822-9736-98255ee1ad84"
+  ],
+  "etag": "ags1nWJjrYBMrfpvHwFeO2ahoHo",
+  "customMetadata": {},
+  "timeCreated": "2024-09-13T18:28:43.586Z",
+  "updated": "2024-09-13T18:28:43.586Z",
+  "size": 37504,
+  "md5Hash": "7nYKIJaGQ0AwTKOyDEcoLA==",
+  "crc32c": "1166097503"
+}
