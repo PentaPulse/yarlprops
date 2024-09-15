@@ -10,7 +10,7 @@ exports.getProducts = async (req, res) => {
   }
 };
 
-const addProduct = async (req, res) => {
+exports.addProduct = async (req, res) => {
   try {
       const { pid, mid, title, category, subCategory, description, location, quantity, status, images, timestamp } = req.body;
       
