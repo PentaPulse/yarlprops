@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Slidshow from './Slideshow/Slidshow';
-import { Box, Container, Divider, Grid, Typography, Card, CardContent, CardActionArea, Button, CardMedia, CardActions } from '@mui/material';
+import { Box, Container, Divider, Grid, Typography, Card, CardContent, CardActionArea, Button, CardMedia, CardActions, useMediaQuery } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
@@ -14,6 +14,9 @@ import DbError from '../../components/DbError/DbError';
 
 export default function Home() {
   const navigate = useNavigate();
+  const isSmallScreen = useMediaQuery('(max-width:600px)');
+  const FontSize = isSmallScreen ? '0.9rem' : '1.2rem';
+
   const categories = [
     { name: 'Boarding', link: '/p/rentals/Bordim', icon: <HomeIcon fontSize="large" /> },
     { name: 'Furniture', link: '/products/Furnitures', icon: <WeekendIcon fontSize="large" /> },
@@ -57,7 +60,7 @@ export default function Home() {
                       <CardContent>
                         <Box display='flex' flexDirection='column' alignItems='center'>
                           {category.icon}
-                          <Typography variant='h6' gutterBottom>
+                          <Typography variant='h6' sx={{ fontSize: FontSize }} gutterBottom>
                             {category.name}
                           </Typography>
                         </Box>
@@ -148,7 +151,7 @@ function ProductList() {
                     title={product.name}
                   />
                   <CardContent sx={{ padding: '16px' }}>
-                    <Typography gutterBottom variant='h6' component='div' sx={{ fontWeight: 'bold' }}>
+                    <Typography gutterBottom variant='h6' component='div'>
                       {product.title}
                     </Typography>
                   </CardContent>
@@ -221,7 +224,7 @@ function RentalsList() {
                     title={rental.name}
                   />
                   <CardContent sx={{ padding: '16px' }}>
-                    <Typography gutterBottom variant='h6' component='div' sx={{ fontWeight: 'bold' }}>
+                    <Typography gutterBottom variant='h6' component='div'>
                       {rental.title}
                     </Typography>
                   </CardContent>
@@ -292,7 +295,7 @@ function ServicesList() {
                     title={service.name}
                   />
                   <CardContent sx={{ padding: '16px' }}>
-                    <Typography gutterBottom variant='h6' component='div' sx={{ fontStyle: 'italic' }}>
+                    <Typography gutterBottom variant='h6' component='div'>
                       {service.serviceName}
                     </Typography>
                   </CardContent>
