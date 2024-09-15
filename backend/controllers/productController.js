@@ -13,7 +13,9 @@ exports.getProducts = async (req, res) => {
 const addProduct = async (req, res) => {
     try {
         const { pid, mid, title, category, subCategory, description, location, quantity, status, images, timestamp } = req.body;
-        
+        if (!pid || !mid || !title || !category || !subCategory || !location || !quantity || !status || !timestamp) {
+          return res.status(400).json({ error: 'Missing required fields' });
+      }
         // Create a new product instance
         const product = new Product({
             pid,
