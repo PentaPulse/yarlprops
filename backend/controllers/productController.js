@@ -10,37 +10,37 @@ exports.getProducts = async (req, res) => {
   }
 };
 
-const addProduct = async (req, res) => {
-    try {
-        const { pid, mid, title, category, subCategory, description, location, quantity, status, images, timestamp } = req.body;
-        if (!pid || !mid || !title || !category || !subCategory || !location || !quantity || !status || !timestamp) {
-          return res.status(400).json({ error: 'Missing required fields' });
-      }
-        // Create a new product instance
-        const product = new Product({
-            pid,
-            mid,
-            title,
-            category,
-            subCategory,
-            description,
-            location,
-            quantity,
-            status,
-            images,
-            timestamp
-        });
+exports.addProduct = async (req, res) => {
+  try {
+    const { pid, mid, title, category, subCategory, description, location, quantity, status, images, timestamp } = req.body;
+    if (!pid || !mid || !title || !category || !subCategory || !location || !quantity || !status || !timestamp) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+    // Create a new product instance
+    const product = new Product({
+      pid,
+      mid,
+      title,
+      category,
+      subCategory,
+      description,
+      location,
+      quantity,
+      status,
+      images,
+      timestamp
+    });
 
-        // Save the product to the database
-        await product.save();
+    // Save the product to the database
+    await product.save();
 
-      res.status(201).json({ message: 'Product added successfully', product });
+    res.status(201).json({ message: 'Product added successfully', product });
   } catch (err) {
     console.error(err)
-      res.status(500).json({ error: 'Error adding product', details: err });
+    res.status(500).json({ error: 'Error adding product', details: err });
   }
 };
 
-exports.dummy = async(req,res)=>{
-  
+exports.dummy = async (req, res) => {
+
 }

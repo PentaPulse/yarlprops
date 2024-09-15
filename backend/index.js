@@ -4,9 +4,10 @@ const connectDB = require('./config/mongoDB')
 const productRoutes = require('./routes/productRoutes')
 //const rentalRoute= require('./routes/rentalRoutes')
 const app = express()
+app.use(express.json())
 
 app.use(cors({
-    origin:'https://192.168.8.165:3000',
+    origin:'*',
 }));
 
 connectDB()
