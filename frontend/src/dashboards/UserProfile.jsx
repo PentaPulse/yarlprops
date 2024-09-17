@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useAuth } from '../api/AuthContext';
-import { Box, Button, Container, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Avatar, Paper, Typography, CircularProgress, Tab, Tabs } from '@mui/material';
+import { Box, Button, Container, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Avatar, Paper, Typography, CircularProgress, Tab, Tabs,useTheme } from '@mui/material';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db, storage, auth } from '../api/firebase';
 import { updateEmail, updatePassword, updateProfile } from 'firebase/auth';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import PropTypes from 'prop-types';
+import Swal from 'sweetalert2';
 
 const Profile = () => {
   const { user } = useAuth();
@@ -193,6 +194,7 @@ const ProfileSettings = () => {
     gender: user?.gender || '',
   });
   const [edit, setEdit] = useState(false);
+  const theme=useTheme()
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -224,6 +226,9 @@ const ProfileSettings = () => {
       }
       await updateProfile(auth.currentUser, {
         displayName: profile.displayName
+      })
+      Swal.fire({
+        title:'Profile updated successfully',timer:3000,icon:'success',background:theme.palette.background.default,color:theme.palette.primary.main
       })
       setEdit(false);
     } catch (error) {
@@ -366,11 +371,12 @@ const AccountSettings = () => {
 
   const changeRole = async () => {
     try {
+      
       let isM = false;
       if (role === 'Merchant') {
         isM = true
       }
-      await updateDoc(doc(db, 'systemusers', user.uid), { 'isMerchant': isM });
+      //await updateDoc(doc(db, 'systemusers', user.uid), { 'isMerchant': isM });
       console.log('Role updated successfully');
     } catch (error) {
       console.error('Error updating role:', error);
