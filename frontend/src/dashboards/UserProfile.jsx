@@ -14,6 +14,7 @@ const Profile = () => {
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [value, setValue] = React.useState(0)
+  const [profilePercentage, setProfilePercentage] = useState(0);
 
   const uploadPP = async () => {
     if (!file) return;
@@ -169,10 +170,10 @@ const Profile = () => {
             </Tabs>
           </Box>
           <CustomTabPanel value={value} index={0}>
-            <ProfileSettings />
+            <ProfileSettings setProfilePercentage={setProfilePercentage}/>
           </CustomTabPanel>
-          <CustomTabPanel value={value} index={1}>
-            <AccountSettings />
+          <CustomTabPanel value={value} index={1} >
+            <AccountSettings profilePercentage={profilePercentage}/>
           </CustomTabPanel>
         </Paper>
       </Grid>
@@ -180,7 +181,7 @@ const Profile = () => {
   );
 };
 
-const ProfileSettings = () => {
+const ProfileSettings = ({setProfilePercentage}) => {
   const { user } = useAuth();
   const [profile, setProfile] = useState({
     firstName: user?.firstName || '',
@@ -237,6 +238,19 @@ const ProfileSettings = () => {
       setEdit(false)
     }
   };
+
+  React.useEffect(()=>{
+    const calculateCompletionPercentage = (data) => {
+      const totalFields = 5; // Adjust based on your number of fields
+      const requiredFields = ["firstName", "lastName", "email", "phoneNumber", "address"];
+      const filledFields = requiredFields.filter((field) => data[field] && data[field].trim() !== "").length;
+
+      const percentage = (filledFields / totalFields) * 100;
+      setProfilePercentage(percentage);
+    };
+
+    calculateCompletionPercentage(profile)
+  })
 
   const handleCancel = () => {
     setEdit(false);
@@ -353,13 +367,14 @@ const ProfileSettings = () => {
   );
 };
 
-const AccountSettings = () => {
+const AccountSettings = ({profilePercentage}) => {
   const { user } = useAuth();
 
   const [email, setEmail] = useState({ old: '', new: '', confirm: '' });
   const [phoneNumber, setPhoneNumber] = useState({ old: '', new: '', confirm: '' });
   const [password, setPassword] = useState({ old: '', new: '', confirm: '' });
   const [role, setRole] = useState('')
+  const theme=useTheme()
 
   const handleInputChange = (setter) => (e) => {
     const { name, value } = e.target;
@@ -371,7 +386,11 @@ const AccountSettings = () => {
 
   const changeRole = async () => {
     try {
-      
+      if(profilePercentage!==100 && !user.isMerchant){
+        Swal.fire({
+          icon:'warning',title:'Complete Your profile',background:theme.palette.background.default,color:theme.palette.primary.main
+        })
+      }
       let isM = false;
       if (role === 'Merchant') {
         isM = true
@@ -439,10 +458,11 @@ const AccountSettings = () => {
       >
         <Box>
           <Typography variant='h6'>Change role</Typography>
+          <Typography>I am currently a {user.isMerchant?'Merchant':'Customer'} in Yarlprops and I want to be a </Typography>
           <FormControl sx={{ m: 1 }} fullWidth>
             <InputLabel>Role</InputLabel>
             <Select
-              disabled={user.adminid && true}
+              disabled={user.adminid}
               value={role}
               onChange={handleSelectChange}
               label="Role"
