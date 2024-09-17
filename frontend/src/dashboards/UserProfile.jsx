@@ -190,7 +190,6 @@ const ProfileSettings = ({setProfilePercentage}) => {
     email: user?.email || '',
     phoneNumber: user?.phoneNumber || '',
     dateOfBirth: user?.dateOfBirth || '',
-    role: user?.role || '',
     address: user?.address || '',
     gender: user?.gender || '',
   });
@@ -241,9 +240,9 @@ const ProfileSettings = ({setProfilePercentage}) => {
 
   React.useEffect(()=>{
     const calculateCompletionPercentage = (data) => {
-      const totalFields = 5; // Adjust based on your number of fields
-      const requiredFields = ["firstName", "lastName", "email", "phoneNumber", "address"];
-      const filledFields = requiredFields.filter((field) => data[field] && data[field].trim() !== "").length;
+      const totalFields = 2; // Adjust based on your number of fields
+      const requiredFields = ["firstName", "lastName","email"];
+      const filledFields = requiredFields.filter((field) => data[field] && data[field].trim() !== null).length;
 
       const percentage = (filledFields / totalFields) * 100;
       setProfilePercentage(percentage);
@@ -472,6 +471,7 @@ const AccountSettings = ({profilePercentage}) => {
               ))}
             </Select>
           </FormControl>
+          {profilePercentage}
           <Container sx={{ display: 'flex', justifyContent: 'end', marginTop: '20px' }}>
             <Button variant="contained" fullWidth color="primary" onClick={changeRole}>Change Role</Button>
           </Container>
