@@ -184,7 +184,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
 
       Swal.fire({
         icon: 'success',
-        title: 'Rental details saved successfully',
+        title: 'Rental details saved successfully and request sent to the admin panel',
         showConfirmButton: false,
         timer: 1500,
       });
