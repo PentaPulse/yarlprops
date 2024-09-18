@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Button, IconButton, styled, Paper, Typography, TextField, FormControl, FormLabel, RadioGroup, Radio, FormControlLabel, Grid, TableCell, tableCellClasses, TableRow, TableContainer, Table, TableHead, TableBody, TablePagination, CircularProgress, InputLabel, Select, MenuItem } from '@mui/material';
+import { Container, Button, IconButton, styled, Paper, Typography, TextField, FormControl, FormLabel, RadioGroup, Radio, FormControlLabel, Grid, TableCell, tableCellClasses, TableRow, TableContainer, Table, TableHead, TableBody, TablePagination, CircularProgress, InputLabel, Select, MenuItem, useTheme } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { addProduct, fetchSelectedProduct, updateProduct } from '../../api/db/products';
@@ -91,6 +91,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
   const [existingImages, setExistingImages] = React.useState([]);
   const [newImages, setNewImages] = React.useState([]);
   const [validationMessage, setValidationMessage] = React.useState('');
+  const theme = useTheme()
 
   React.useEffect(() => {
     if (pid) {
@@ -197,16 +198,22 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
       // Add or update product with the combined image URLs
       if (pid) {
         await updateProduct(pid, { ...product, images: allImageUrls });
+        Swal.fire({
+          icon: 'success',
+          title: 'Product updated successfully',
+          showConfirmButton: false,
+          timer: 1500,
+        });
       } else {
         await addProduct({ ...product, images: allImageUrls });
+        
+        Swal.fire({
+          icon: 'success',
+          title: 'Product saved , request sent to the admin panel for approval',
+          showConfirmButton: false,
+          timer: 1500,
+        });
       }
-
-      Swal.fire({
-        icon: 'success',
-        title: 'Product saved successfully',
-        showConfirmButton: false,
-        timer: 1500,
-      });
 
       // Reset form state
       setProduct({
