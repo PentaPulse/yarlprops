@@ -7,6 +7,7 @@ import { updateEmail, updatePassword, updateProfile } from 'firebase/auth';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import PropTypes from 'prop-types';
 import Swal from 'sweetalert2';
+import { useAlerts } from '../api/AlertService';
 
 const Profile = () => {
   const { user } = useAuth();
@@ -374,6 +375,7 @@ const AccountSettings = ({profilePercentage}) => {
   const [password, setPassword] = useState({ old: '', new: '', confirm: '' });
   const [role, setRole] = useState('')
   const theme=useTheme()
+  const {showAlerts2}=useAlerts()
 
   const handleInputChange = (setter) => (e) => {
     const { name, value } = e.target;
@@ -386,9 +388,8 @@ const AccountSettings = ({profilePercentage}) => {
   const changeRole = async () => {
     try {
       if(profilePercentage!==100 && !user.isMerchant){
-        Swal.fire({
-          icon:'warning',title:'Complete Your profile',background:theme.palette.background.default,color:theme.palette.primary.main
-        })
+        showAlerts2('Complete Your profile','warning')
+        return 0
       }
       let isM = false;
       if (role === 'Merchant') {
@@ -396,6 +397,9 @@ const AccountSettings = ({profilePercentage}) => {
       }
       //await updateDoc(doc(db, 'systemusers', user.uid), { 'isMerchant': isM });
       console.log('Role updated successfully');
+      if(isM){
+        showAlerts2('Updated successfully','success')
+      }
     } catch (error) {
       console.error('Error updating role:', error);
     }
