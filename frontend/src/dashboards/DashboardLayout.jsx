@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {  Avatar, Box, CssBaseline, Divider,  Grid, IconButton, Input, MenuItem, MenuList, Toolbar, Tooltip, Typography, useTheme,styled } from '@mui/material'
+import { Avatar, Box, CssBaseline, Divider, Grid, IconButton, Input, MenuItem, MenuList, Toolbar, Tooltip, Typography, useTheme, styled } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -9,7 +9,6 @@ import { useNavigate } from 'react-router-dom';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../api/firebase';
 import ModeSwitch from '../components/ModeHandler/ModeSwitch';
-import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import SupportRoundedIcon from '@mui/icons-material/SupportRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
@@ -170,12 +169,21 @@ export default function DashboardLayout({ handleMode, children }) {
         </MenuList>
       </Box>
       <Divider />
-      <Box display={'flex'} pb={3}>
+      <Box display={'flex'} pb={3} justifyContent={'space-between'}>
         <Box display={'flex'} justifyContent={'space-between'}>
           <Avatar src={sessionStorage.getItem('pp')} />
-          <Box>
-            <Typography >{sessionStorage.getItem('displayName')}</Typography>
-            <Typography>{user.email}</Typography>
+          <Box pl={1}>
+            <Typography>{sessionStorage.getItem('displayName')}</Typography>
+            <Typography
+              sx={{
+                maxWidth: '150px', // set the max width
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap'
+              }}
+            >
+              {user.email}
+            </Typography>
           </Box>
         </Box>
         <IconButton onClick={logout}>
@@ -234,11 +242,7 @@ export default function DashboardLayout({ handleMode, children }) {
             flexShrink: 0,
             [`& .MuiDrawer-paper`]: { boxSizing: 'border-box' },
           }} variant="permanent" open >
-            <DrawerHeader>
-              <IconButton onClick={handleDrawerClose} >
-                {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-              </IconButton>
-            </DrawerHeader>
+            <DrawerHeader sx={{zIndex:theme.zIndex.appBar-1}}/>
             <Divider />
             {drawer}
           </Drawer >
