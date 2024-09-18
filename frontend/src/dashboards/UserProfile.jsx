@@ -240,7 +240,7 @@ const ProfileSettings = ({setProfilePercentage}) => {
 
   React.useEffect(()=>{
     const calculateCompletionPercentage = (data) => {
-      const totalFields = 2; // Adjust based on your number of fields
+      const totalFields = 3; // Adjust based on your number of fields
       const requiredFields = ["firstName", "lastName","email"];
       const filledFields = requiredFields.filter((field) => data[field] && data[field].trim() !== null).length;
 
