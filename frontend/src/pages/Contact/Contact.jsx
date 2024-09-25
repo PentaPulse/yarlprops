@@ -57,7 +57,7 @@ function Contact() {
         <Typography variant="h2" align="center" gutterBottom>
           <b>About Us</b>
         </Typography>
-        <Typography variant="body1" align="center" maxWidth="lg" sx={{ margin: '0 auto', paddingBottom: 4 }}>
+        <Typography variant="body1" align="justify" maxWidth="lg" sx={{ margin: '0 auto', paddingBottom: 4 }}>
           Welcome to YarlProps, your trusted platform for property management and advertisement. Whether you're looking to rent, buy, or sell a property, or you need reliable services, YarlProps offers comprehensive solutions tailored to your needs. Our platform connects property owners, renters, and service providers in a seamless and efficient manner. With our user-friendly interface and extensive listings, finding your next home or service has never been easier. At YarlProps, we are committed to providing superior customer service and innovative tools to help you navigate the property market with confidence.
         </Typography>
       </Box>
