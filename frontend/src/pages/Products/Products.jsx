@@ -19,7 +19,7 @@ function Products() {
     const {cat}=useParams()
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-
+    const [startIndex, setStartIndex] = React.useState(0);
 
     React.useEffect(()=>{
         if(cat){
@@ -195,13 +195,16 @@ const ProductsContents = ({ category, subCategory, price, quantity }) => {
                     :
                     products.map((product, index) => (
                         <Grid item xs={1} sm={1} md={1} lg={1} key={index}>
-                            <Card sx={{ boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)', position: 'relative' /* height: '100%',
-                                display: 'flex',
-                                flexDirection: 'column' */  }}>
+                            <Card sx={{ 
+                              boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)', 
+                              position: 'relative', 
+                              height: isMobile ? '18rem' : isTablet ? '22rem' : '24rem',
+                              width: '100%'
+                              }}>
 
                                 <CardActionArea onClick={() => handleCardClick(product.pid)}>
                                     <CardMedia
-                                        sx={{ height: isMobile ? '15rem' : isTablet ? '18rem' : '20rem' }}
+                                        sx={{ height: isMobile ? '14rem' : isTablet ? '18rem' : '20rem', objectFit: 'cover'}}
                                         image={product.images[0] || 'https://picsum.photos/id/11/200/300'}
                                         title={product.name}
 
