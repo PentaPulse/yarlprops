@@ -5,11 +5,12 @@ frontend/ui-debug.log
 frontend/ui-debug.log
 /frontend/datas
 /frontend/datas
-frontend/firebase-debug.1.log
+frontend/firebase-debug.log
 frontend/ui-debug.log
 frontend/ui-debug.log
-frontend/firestore-debug.log
 */firestore-debug.log
 frontend/datacharith
 frontend/datapriya
 frontend/datajanani
+frontend/database-debug.log
+*/ui-debug.log
