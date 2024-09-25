@@ -23,7 +23,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-/datacharith
-/datajanani
-/datapriya
-/datas
+/data*
+/database-debug.log
+/firebase-debug.log
