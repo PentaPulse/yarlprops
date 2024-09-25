@@ -115,7 +115,7 @@ function ProductList() {
 
   React.useEffect(() => {
     const getProducts = async () => {
-      const q = await getDocs(query(collection(db, 'products'), limit(3)))
+      const q = await getDocs(query(collection(db, 'products'), limit(4)))
       const productList = q.docs.map(doc => doc.data())
       setProducts(productList);
     };
