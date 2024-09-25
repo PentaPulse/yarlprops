@@ -19,7 +19,7 @@ function Products() {
     const {cat}=useParams()
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-
+    const [startIndex, setStartIndex] = React.useState(0);
 
     React.useEffect(()=>{
         if(cat){
@@ -195,13 +195,16 @@ const ProductsContents = ({ category, subCategory, price, quantity }) => {
                     :
                     products.map((product, index) => (
                         <Grid item xs={1} sm={1} md={1} lg={1} key={index}>
-                            <Card sx={{ boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)', position: 'relative' /* height: '100%',
-                                display: 'flex',
-                                flexDirection: 'column' */  }}>
+                            <Card sx={{ 
+                              boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)', 
+                              position: 'relative', 
+                              height: isMobile ? '18rem' : isTablet ? '22rem' : '24rem',
+                              width: '100%'
+                              }}>
 
                                 <CardActionArea onClick={() => handleCardClick(product.pid)}>
                                     <CardMedia
-                                        sx={{ height: isMobile ? '15rem' : isTablet ? '18rem' : '20rem' }}
+                                        sx={{ height: isMobile ? '14rem' : isTablet ? '18rem' : '20rem', objectFit: 'cover'}}
                                         image={product.images[0] || 'https://picsum.photos/id/11/200/300'}
                                         title={product.name}
 
@@ -279,12 +282,12 @@ export function ProductPage() {
                 component="img"
                 image={product.images[selectedImageIndex]}  // Display the selected image as the main product image
                 alt={product.name}
-                sx={{ borderRadius: '0px', width: '100%', height: 'auto', maxHeight: isMobile ? '300px' : '400px', objectFit: 'cover' }}
+                sx={{ borderRadius: '0px', width: '100%', height: '70vh', maxHeight: isMobile ? '300px' : '400px', objectFit: 'cover' }}
               />
             </Card>
   
             {/* Small Images Grid */}
-            <Grid container spacing={2} sx={{ mt: 2, alignItems: 'center' }}>
+            <Grid container spacing={2} sx={{ mt: 2, alignItems: 'center', justifyContent:'center'}}>
               <Grid item>
                 <IconButton onClick={handlePrevious}>
                   <ArrowBackIosIcon />
@@ -315,11 +318,7 @@ export function ProductPage() {
                 </Grid>
               ))}
   
-              <Grid item
-                sx = {{
-                  width: '3%'
-                }}
-              >
+              <Grid item>
                 <IconButton onClick={handleNext}>
                   <ArrowForwardIosIcon />
                 </IconButton>
@@ -331,46 +330,58 @@ export function ProductPage() {
             <Card sx={{ height: '100%', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }}>
               <CardContent sx={{ marginTop: '30px', marginBottom: '30px' }}>
                 {/* Product Details */}
-                <Typography variant={isMobile ? 'h5' : 'h4'} component="h2" sx={{ fontWeight: 'bold', textAlign: 'center' }}>{product.title}</Typography>
+                <Typography variant={isMobile ? 'h5' : 'h4'} component="h2" sx={{ fontWeight: 'bold', textAlign: 'center', fontSize: isMobile ? '1.4rem' : '1.8rem' }}>{product.title}</Typography>
                 <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ fontWeight: 'bold', textAlign: 'center', fontStyle: 'italic' }}>
                   Category: {product.category}
                 </Typography>
-                <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ fontWeight: 'bold', textAlign: 'center', fontStyle: 'italic' }}>
+                <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ fontWeight: 'bold', textAlign: 'center', fontStyle: 'italic' }} gutterBottom>
                   Sub category: {product.subCategory}
                 </Typography>
                 <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ fontWeight: 'bold', textAlign: 'center', fontStyle: 'italic' }}>
                   {(product.status === "For Sale") ?
-                    (<Box sx={{ backgroundColor: "green", color: 'white', fontWeight: 'bold', mx: '11rem', borderRadius: '20px' }}>For Sale</Box>)
+                    (<Typography variant="h5" sx={{ color: '#50C878', fontWeight: 'bold' }}>For Sale</Typography>)
                     : ((product.status === "For Rent") ?
-                      (<Box sx={{ backgroundColor: "darkorange", color: 'white', fontWeight: 'bold', mx: '11rem', borderRadius: '20px' }}>For Rent</Box>)
-                      : (<Box sx={{ backgroundColor: "red", color: 'white', fontWeight: 'bold', mx: '11rem', borderRadius: '20px' }}>Sold Out!</Box>))}
+                      (<Typography variant="h5" sx={{ color: "darkorange", fontWeight: 'bold' }}>For Rent</Typography>)
+                      : (<Typography variant="h5" sx={{ color: "red", fontWeight: 'bold' }}>Sold Out!</Typography>))}
                 </Typography>
   
-                <Box /*sx={{ mx: '1.9rem', mt: '1rem' }}*/ sx={{ mt: { xs: 2, sm: 3 } }}>
-                  <Typography variant={isMobile ? 'h6' : 'h5'} component="h4" sx={{ fontWeight: 'bold' }}>Description</Typography>
+                <Box sx={{ mx: '3rem', my: '1rem' }} /*sx={{ mt: { xs: 2, sm: 3 } }}*/>
+                  {/* <Typography variant={isMobile ? 'h6' : 'h5'} component="h4" sx={{ fontWeight: 'bold' }} gutterBottom>Description</Typography> */}
                   <ul style={{ textAlign: 'justify', fontSize: '18px' }}>
-                    <li>{product.description}</li>
-                    <li>Quantity: {product.quantity}</li>
-                    <li>Location: {product.location}</li>
+                    {product.description.map((item, index) => (
+                      <li key={index}><Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4">{item}</Typography></li>
+                    ))}
+                    <li><Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4">Quantity: {product.quantity}</Typography></li>
+                    {/* <li>Location: {product.location}</li> */}
                   </ul>
                 </Box>
-                <Box sx={{ marginLeft: '1rem', marginRight: '1rem', marginTop: '4.5rem' }}>
+                <Box sx={{ mx: '1rem', mt: '4.5rem' }}>
                   {/* Seller Details */}
                   <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
-                  <Typography variant="subtitle1" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-user"></i> Name</Typography>
-                  <Typography variant="body1" >{merchant && merchant.firstName + ' ' + merchant.lastName}</Typography>
-                  <Typography variant="subtitle1" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-location-dot"></i> Location</Typography>
-                  <Typography variant="body1">{product.location}</Typography>
-                  <Typography variant="subtitle1" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-phone"></i> Contact No</Typography>
-                  <Typography variant="body1">{merchant && merchant.phoneNumber}</Typography>
+                  <Typography variant="subtitle1" sx={{ textAlign: 'center'}} gutterBottom><i className="fa-solid fa-user"></i> Name : {merchant && merchant.firstName + ' ' + merchant.lastName}</Typography>
+                  <Typography variant="subtitle1" component="h4" sx={{ textAlign: 'center'}} gutterBottom><i className="fa-solid fa-location-dot"></i> Location : {product.location}</Typography>
+                  <Typography variant="subtitle1" component="h4" sx={{ textAlign: 'center'}}><i className="fa-solid fa-phone"></i> Contact No : {merchant && merchant.phoneNumber}</Typography>
                 </Box>
               </CardContent>
             </Card>
           </Grid>
         </Grid>
-        <Grid container spacing={0} sx={{ marginTop: '0.5rem' }}>
+        <Grid container spacing={1} sx={{ marginTop: '1rem' }}>
           <Grid item>
-            <Button variant="contained" component={Link} to="/p/products" startIcon={<ChevronLeftIcon />} size={isMobile ? "small" : "medium"}>
+            <Button 
+              variant="contained"
+              component={Link}
+              to="/p/products"
+              startIcon={<ChevronLeftIcon />}
+              size={isMobile ? "small" : "medium"}
+              sx={{
+                backgroundColor: '#0d6efd',
+                color: 'white',
+                '&:hover': {
+                  backgroundColor: '#90caf9',
+                }
+              }}
+            >
               Back
             </Button>
           </Grid>
@@ -378,3 +389,11 @@ export function ProductPage() {
       </Container>
     );
   }
+
+  {/* <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
+  <Typography variant="subtitle1" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-user"></i> Name</Typography>
+  <Typography variant="body1" >{merchant && merchant.firstName + ' ' + merchant.lastName}</Typography>
+  <Typography variant="subtitle1" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-location-dot"></i> Location</Typography>
+  <Typography variant="body1">{product.location}</Typography>
+  <Typography variant="subtitle1" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-phone"></i> Contact No</Typography>
+  <Typography variant="body1">{merchant && merchant.phoneNumber}</Typography> */}
