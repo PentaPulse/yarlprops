@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../api/AuthContext';
-import { Box, Button, Container, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Avatar, Paper, Typography, CircularProgress, Tab, Tabs, useTheme } from '@mui/material';
+import { Box, Button, Container, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Avatar, Paper, Typography, CircularProgress, Tab, Tabs, useTheme, LinearProgress } from '@mui/material';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db, storage, auth } from '../api/firebase';
 import { updateEmail, updatePassword, updateProfile } from 'firebase/auth';
@@ -8,6 +8,29 @@ import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import PropTypes from 'prop-types';
 import Swal from 'sweetalert2';
 import { useAlerts } from '../api/AlertService';
+
+function LinearProgressWithLabel(props) {
+  return (
+    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      <Box sx={{ width: '100%', mr: 1 }}>
+        <LinearProgress variant="determinate" {...props} />
+      </Box>
+      <Box sx={{ minWidth: 35 }}>
+        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+          {`${Math.round(props.value)}%`}
+        </Typography>
+      </Box>
+    </Box>
+  );
+}
+
+LinearProgressWithLabel.propTypes = {
+  /**
+   * The value of the progress indicator for the determinate and buffer variants.
+   * Value between 0 and 100.
+   */
+  value: PropTypes.number.isRequired,
+};
 
 const Profile = () => {
   const { user } = useAuth();
@@ -64,11 +87,22 @@ const Profile = () => {
     setValue(newValue);
   };
 
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      setProgress((prevProgress) => (prevProgress >= 100 ? 10 : prevProgress + 10));
+    }, 800);
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
+
   return (
-    <>{/*}
-    <Grid item xs={12} sm={12} md={12} lg={12}>
-    Profile completion {profilePercentage}
-    </Grid>*/}
+    <>
+      {profilePercentage < 100 &&
+        <Grid item xs={12} sm={12} md={12} lg={12}>
+          <LinearProgressWithLabel value={profilePercentage} />
+        </Grid>
+      }
       <Grid item xs={12} sm={12} md={5} lg={4} >
         <Paper
           elevation={3}
@@ -243,8 +277,8 @@ const ProfileSettings = ({ setProfilePercentage }) => {
 
   React.useEffect(() => {
     const calculateCompletionPercentage = (data) => {
-      const totalFields = 3; // Adjust based on your number of fields
-      const requiredFields = ["firstName", "lastName", "email"];
+      const totalFields = 7; // Adjust based on your number of fields
+      const requiredFields = ["firstName", "lastName", "email","displayName","dateOfBirth","gender","address"];
       const filledFields = requiredFields.filter((field) => data[field] && data[field].trim() !== null).length;
 
       const percentage = (filledFields / totalFields) * 100;
@@ -395,16 +429,16 @@ const AccountSettings = ({ profilePercentage }) => {
       }
 
       let isM = false;
-      if ( (user.myProducts.length > 0 || user.myRentals.length > 0 || user.myService.length > 0) && role === 'Customer' ) {
+      if ((user.myProducts.length > 0 || user.myRentals.length > 0 || user.myService.length > 0) && role === 'Customer') {
         showAlerts2('Remove ongoing items and try again', 'warning')
         return 0
       }
-      else{
+      else {
         isM = false
       }
       await updateDoc(doc(db, 'systemusers', user.uid), { 'isMerchant': isM });
-      
-      showAlerts2(`Successfully changed to ${role}`,'success')
+
+      showAlerts2(`Successfully changed to ${role}`, 'success')
     } catch (error) {
       console.error('Error updating role:', error);
     }
