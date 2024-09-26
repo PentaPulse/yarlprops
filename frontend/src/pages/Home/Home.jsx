@@ -143,7 +143,7 @@ function ProductList() {
               <Card 
                 sx={{ 
                   width: '100%', // Takes full width within its grid space
-                  height: 'auto', 
+                  height: 'auto',               
                   minHeight: '280px', // Minimum height, but allows it to expand
                   boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)',
                   transition: '0.3s',
@@ -202,7 +202,7 @@ function RentalsList() {
 
   React.useEffect(() => {
     const getRentals = async () => {
-      const q = await getDocs(query(collection(db, 'rentals'), limit(3)))
+      const q = await getDocs(query(collection(db, 'rentals'), limit(4)))
       const rentalsList = q.docs.map(doc => doc.data())
       setRentals(rentalsList);
     };
@@ -227,7 +227,8 @@ function RentalsList() {
                 sx={{ 
                   width: '100%',
                   height: 'auto',
-                  minHeight: '280px',
+                  maxHeight: '300px',
+                  minWidth: '230px',
                   boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)',
                   transition: '0.3s',
                   '&:hover': {
@@ -235,7 +236,8 @@ function RentalsList() {
                   },
                   borderRadius: '10px',
                   overflow: 'hidden',
-                  position: 'relative', 
+                  position: 'relative',
+                  fulWidth: 'true'
               }}>
                 <CardActionArea onClick={() => handleCardClick(rental.rid)}>
                   <CardMedia
@@ -283,7 +285,7 @@ function ServicesList() {
 
   React.useEffect(() => {
     const getServices = async () => {
-      const q = await getDocs(query(collection(db, 'services'), limit(3)))
+      const q = await getDocs(query(collection(db, 'services'), limit(4)))
       const serviceList = q.docs.map(doc => doc.data())
       setServices(serviceList);
     };
@@ -298,7 +300,7 @@ function ServicesList() {
         alignItems: 'center',
         justifyContent: 'center'
       }}>
-      <Grid container spacing={{ xs: 2, sm: 3, md: 3, lg: 3 }} sx={{ justifyContent: "left"}} columns={24}>
+      <Grid container spacing={{ xs: 2, sm: 3, md: 3, lg: 3 }} sx={{ justifyContent: "left", alignItems: "center"}} columns={24}>
         {services.length === 0 ?
           <DbError items={3} />
           :
@@ -308,7 +310,8 @@ function ServicesList() {
                 sx={{ 
                   width: '100%',
                   height: 'auto',
-                  minHeight: '280px',
+                  maxHeight: '300px',
+                  minWidth: '230px',           
                   boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)',
                   transition: '0.3s',
                   '&:hover': {
