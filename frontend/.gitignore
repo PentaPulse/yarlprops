@@ -23,6 +23,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-/data*
+
 /database-debug.log
 /firebase-debug.log
+/datajanani
+/datacharith
+/datapriya
+/datas

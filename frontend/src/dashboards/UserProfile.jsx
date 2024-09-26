@@ -395,7 +395,7 @@ const AccountSettings = ({profilePercentage}) => {
       if (role === 'Merchant') {
         isM = true
       }
-      //await updateDoc(doc(db, 'systemusers', user.uid), { 'isMerchant': isM });
+      await updateDoc(doc(db, 'systemusers', user.uid), { 'isMerchant': isM });
       console.log('Role updated successfully');
       if(isM){
         showAlerts2('Updated successfully','success')
