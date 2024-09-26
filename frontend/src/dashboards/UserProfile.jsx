@@ -65,8 +65,10 @@ const Profile = () => {
   };
 
   return (
-    <>
-      {/* Profile Information Section */}
+    <>{/*}
+    <Grid item xs={12} sm={12} md={12} lg={12}>
+    Profile completion {profilePercentage}
+    </Grid>*/}
       <Grid item xs={12} sm={12} md={5} lg={4} >
         <Paper
           elevation={3}
@@ -393,18 +395,16 @@ const AccountSettings = ({ profilePercentage }) => {
       }
 
       let isM = false;
-      if (role === 'Merchant') {
-        isM = true
-      }
-      if ( (user.myProducts > 0 || user.myRentals > 0 || user.myService > 0) && isM === false ) {
+      if ( (user.myProducts.length > 0 || user.myRentals.length > 0 || user.myService.length > 0) && role === 'Customer' ) {
         showAlerts2('Remove ongoing items and try again', 'warning')
         return 0
       }
-      await updateDoc(doc(db, 'systemusers', user.uid), { 'isMerchant': isM });
-      console.log('Role updated successfully');
-      if (isM) {
-        showAlerts2('Updated successfully', 'success')
+      else{
+        isM = false
       }
+      await updateDoc(doc(db, 'systemusers', user.uid), { 'isMerchant': isM });
+      
+      showAlerts2(`Successfully changed to ${role}`,'success')
     } catch (error) {
       console.error('Error updating role:', error);
     }
@@ -480,7 +480,6 @@ const AccountSettings = ({ profilePercentage }) => {
               ))}
             </Select>
           </FormControl>
-          {profilePercentage}
           <Container sx={{ display: 'flex', justifyContent: 'end', marginTop: '20px' }}>
             <Button variant="contained" fullWidth color="primary" onClick={changeRole}>Change Role</Button>
           </Container>
