@@ -197,7 +197,8 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
       const allImageUrls = [...existingImages, ...newImageUrls];
 
       // Add or update product with the combined image URLs
-      if (pid) {
+      if (pid) {        
+        console.log(product)
         await updateProduct(pid, { ...product, images: allImageUrls });
         Swal.fire({
           icon: 'success',

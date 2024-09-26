@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../api/AuthContext';
-import { Box, Button, Container, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Avatar, Paper, Typography, CircularProgress, Tab, Tabs,useTheme } from '@mui/material';
+import { Box, Button, Container, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Avatar, Paper, Typography, CircularProgress, Tab, Tabs, useTheme } from '@mui/material';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db, storage, auth } from '../api/firebase';
 import { updateEmail, updatePassword, updateProfile } from 'firebase/auth';
@@ -171,10 +171,10 @@ const Profile = () => {
             </Tabs>
           </Box>
           <CustomTabPanel value={value} index={0}>
-            <ProfileSettings setProfilePercentage={setProfilePercentage}/>
+            <ProfileSettings setProfilePercentage={setProfilePercentage} />
           </CustomTabPanel>
           <CustomTabPanel value={value} index={1} >
-            <AccountSettings profilePercentage={profilePercentage}/>
+            <AccountSettings profilePercentage={profilePercentage} />
           </CustomTabPanel>
         </Paper>
       </Grid>
@@ -182,7 +182,7 @@ const Profile = () => {
   );
 };
 
-const ProfileSettings = ({setProfilePercentage}) => {
+const ProfileSettings = ({ setProfilePercentage }) => {
   const { user } = useAuth();
   const [profile, setProfile] = useState({
     firstName: user?.firstName || '',
@@ -195,7 +195,7 @@ const ProfileSettings = ({setProfilePercentage}) => {
     gender: user?.gender || '',
   });
   const [edit, setEdit] = useState(false);
-  const theme=useTheme()
+  const theme = useTheme()
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -229,7 +229,7 @@ const ProfileSettings = ({setProfilePercentage}) => {
         displayName: profile.displayName
       })
       Swal.fire({
-        title:'Profile updated successfully',timer:3000,icon:'success',background:theme.palette.background.default,color:theme.palette.primary.main
+        title: 'Profile updated successfully', timer: 3000, icon: 'success', background: theme.palette.background.default, color: theme.palette.primary.main
       })
       setEdit(false);
     } catch (error) {
@@ -239,10 +239,10 @@ const ProfileSettings = ({setProfilePercentage}) => {
     }
   };
 
-  React.useEffect(()=>{
+  React.useEffect(() => {
     const calculateCompletionPercentage = (data) => {
       const totalFields = 3; // Adjust based on your number of fields
-      const requiredFields = ["firstName", "lastName","email"];
+      const requiredFields = ["firstName", "lastName", "email"];
       const filledFields = requiredFields.filter((field) => data[field] && data[field].trim() !== null).length;
 
       const percentage = (filledFields / totalFields) * 100;
@@ -261,69 +261,69 @@ const ProfileSettings = ({setProfilePercentage}) => {
       <Box
         component="form"
         sx={{
-          '& .MuiTextField-root': { p:1,width:{xs:'100%',sm:'100%',md:'100%',lg:'50%'}},
-          '& .MuiFormControl-root':{p:1,width:{xs:'100%',sm:'100%',md:'100%',lg:'50%'}}
+          '& .MuiTextField-root': { p: 1, width: { xs: '100%', sm: '100%', md: '100%', lg: '50%' } },
+          '& .MuiFormControl-root': { p: 1, width: { xs: '100%', sm: '100%', md: '100%', lg: '50%' } }
         }}
       >
         <Typography>Profile details</Typography>
         <Grid container columns={12} columnSpacing={2}>
-            <TextField
-              label="First name"
-              name="firstName"
-              value={profile.firstName}
-              onChange={handleInputChange}
-              InputProps={{
-                readOnly: !edit,
-              }}
-              fullWidth
-            />
-            <TextField
-              label="Last name"
-              name="lastName"
-              value={profile.lastName}
-              onChange={handleInputChange}
-              InputProps={{
-                readOnly: !edit,
-              }}
-              fullWidth
-            />
-            <TextField
-              label="Display name"
-              name="displayname"
-              value={profile.displayName}
-              onChange={handleInputChange}
-              InputProps={{
-                readOnly: !edit,
-              }}
-              fullWidth
-            />
-            <TextField
-              label="Date of Birth"
-              name="dateOfBirth"
-              type="date"
-              value={profile.dateOfBirth}
-              onChange={handleInputChange}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              InputProps={{
-                readOnly: !edit,
-              }}
-              fullWidth
-            />
-            <FormControl sx={{ m: 1 }} disabled={!edit} fullWidth>
-              <InputLabel>Gender</InputLabel>
-              <Select
-                value={profile.gender}
-                onChange={handleSelectChange}
-                label="Gender"
-              >
-                {['Male', 'Female'].map((roleOption, index) => (
-                  <MenuItem key={index} value={roleOption}>{roleOption}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
+          <TextField
+            label="First name"
+            name="firstName"
+            value={profile.firstName}
+            onChange={handleInputChange}
+            InputProps={{
+              readOnly: !edit,
+            }}
+            fullWidth
+          />
+          <TextField
+            label="Last name"
+            name="lastName"
+            value={profile.lastName}
+            onChange={handleInputChange}
+            InputProps={{
+              readOnly: !edit,
+            }}
+            fullWidth
+          />
+          <TextField
+            label="Display name"
+            name="displayname"
+            value={profile.displayName}
+            onChange={handleInputChange}
+            InputProps={{
+              readOnly: !edit,
+            }}
+            fullWidth
+          />
+          <TextField
+            label="Date of Birth"
+            name="dateOfBirth"
+            type="date"
+            value={profile.dateOfBirth}
+            onChange={handleInputChange}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            InputProps={{
+              readOnly: !edit,
+            }}
+            fullWidth
+          />
+          <FormControl sx={{ m: 1 }} disabled={!edit} fullWidth>
+            <InputLabel>Gender</InputLabel>
+            <Select
+              value={profile.gender}
+              onChange={handleSelectChange}
+              label="Gender"
+            >
+              {['Male', 'Female'].map((roleOption, index) => (
+                <MenuItem key={index} value={roleOption}>{roleOption}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
         <Typography>Contact details</Typography>
         <Grid container columns={12} columnSpacing={2}>
           <TextField
@@ -345,7 +345,7 @@ const ProfileSettings = ({setProfilePercentage}) => {
             }}
             fullWidth
           />
-          </Grid>
+        </Grid>
         <Container sx={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
           {!edit ? (
             <Button variant="contained" color="primary" onClick={handleEditProfile}>
@@ -353,7 +353,7 @@ const ProfileSettings = ({setProfilePercentage}) => {
             </Button>
           ) : (
             <>
-              <Button variant="contained" color="info" sx={{mr:2}} onClick={handleSubmit}>
+              <Button variant="contained" color="info" sx={{ mr: 2 }} onClick={handleSubmit}>
                 Submit
               </Button>
               <Button variant="contained" color="primary" onClick={handleCancel}>
@@ -367,15 +367,15 @@ const ProfileSettings = ({setProfilePercentage}) => {
   );
 };
 
-const AccountSettings = ({profilePercentage}) => {
+const AccountSettings = ({ profilePercentage }) => {
   const { user } = useAuth();
 
   const [email, setEmail] = useState({ old: '', new: '', confirm: '' });
   const [phoneNumber, setPhoneNumber] = useState({ old: '', new: '', confirm: '' });
   const [password, setPassword] = useState({ old: '', new: '', confirm: '' });
   const [role, setRole] = useState('')
-  const theme=useTheme()
-  const {showAlerts2}=useAlerts()
+  const theme = useTheme()
+  const { showAlerts2 } = useAlerts()
 
   const handleInputChange = (setter) => (e) => {
     const { name, value } = e.target;
@@ -387,18 +387,23 @@ const AccountSettings = ({profilePercentage}) => {
 
   const changeRole = async () => {
     try {
-      if(profilePercentage!==100 && !user.isMerchant){
-        showAlerts2('Complete Your profile','warning')
+      if (profilePercentage !== 100 && !user.isMerchant) {
+        showAlerts2('Complete Your profile', 'warning')
         return 0
       }
+
       let isM = false;
       if (role === 'Merchant') {
         isM = true
       }
+      if ( (user.myProducts > 0 || user.myRentals > 0 || user.myService > 0) && isM === false ) {
+        showAlerts2('Remove ongoing items and try again', 'warning')
+        return 0
+      }
       await updateDoc(doc(db, 'systemusers', user.uid), { 'isMerchant': isM });
       console.log('Role updated successfully');
-      if(isM){
-        showAlerts2('Updated successfully','success')
+      if (isM) {
+        showAlerts2('Updated successfully', 'success')
       }
     } catch (error) {
       console.error('Error updating role:', error);
@@ -461,7 +466,7 @@ const AccountSettings = ({profilePercentage}) => {
       >
         <Box>
           <Typography variant='h6'>Change role</Typography>
-          <Typography>I am currently a {user.isMerchant?'Merchant':'Customer'} in Yarlprops and I want to be a </Typography>
+          <Typography>I am currently a {user.isMerchant ? 'Merchant' : 'Customer'} in Yarlprops and I want to be a </Typography>
           <FormControl sx={{ m: 1 }} fullWidth>
             <InputLabel>Role</InputLabel>
             <Select
