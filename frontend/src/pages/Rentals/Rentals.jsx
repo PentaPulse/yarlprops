@@ -9,6 +9,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { rentalFilters } from '../../components/menuLists';
+import { fetchSelectedRental } from '../../api/db/rentals';
 
 export default function Rentals() {
     const [category, setCategory] = React.useState(null)
@@ -228,8 +229,7 @@ export function RentalsPage() {
     React.useEffect(() => {
         const fetchrental = async () => {
             try {
-                const q = await getDoc(query(collection(db, 'rentals'), where('rid', '==', id)))
-                const rentalData = q.docs.map(doc => doc.data())
+                const rentalData = await fetchSelectedRental(id)
                 setRental(rentalData);
                 setSelectedImageIndex(0);
             } catch (error) {
