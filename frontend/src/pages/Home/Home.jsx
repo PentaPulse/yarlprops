@@ -32,6 +32,7 @@ export default function Home() {
 
   return (
     <>
+    <Box>
       <Grid container justifyContent='center' spacing={3} columns={12}>
         <Grid item xs={11} sm={11} md={11} lg={11}>
           <Slidshow />
@@ -101,9 +102,12 @@ export default function Home() {
           </Container>
         </Grid>
       </Grid>
-    </>
+    </Box>
+  </>
   );
 }
+
+{/* Latest Products Row */}
 
 function ProductList() {
   const [products, setProducts] = React.useState([]);
@@ -123,8 +127,14 @@ function ProductList() {
   }, []);
 
   return (
-    <Container fixed>
-      <Grid container spacing={{ xs: 3, md: 6, lg: 10 }} sx={{ justifyContent: "left"}} columns={24}>
+    <Container 
+      fixed
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+      <Grid container spacing={{ xs: 2, sm: 3, md: 3, lg: 3 }} sx={{ justifyContent: "left", alignItems: "center"}} columns={24}>
         {products.length === 0 ?
           <DbError items={3} />
           :
@@ -132,8 +142,9 @@ function ProductList() {
             <Grid item key={index} xs={24} sm={12} md={8} lg={6}>
               <Card 
                 sx={{ 
-                  width: '270px', // Fixed width for the card
-                  height: '300px', // Fixed height for the card
+                  width: '100%', // Takes full width within its grid space
+                  height: 'auto', 
+                  minHeight: '280px', // Minimum height, but allows it to expand
                   boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)',
                   transition: '0.3s',
                   '&:hover': {
@@ -179,6 +190,8 @@ function ProductList() {
   );
 }
 
+{/* Latest Rentals Row */}
+
 function RentalsList() {
   const [rentals, setRentals] = React.useState([]);
   const navigate = useNavigate();
@@ -197,8 +210,14 @@ function RentalsList() {
   }, []);
 
   return (
-    <Container fixed>
-      <Grid container spacing={{ xs: 3, md: 6, lg: 10 }} sx={{ justifyContent: "left"}} columns={24}>
+    <Container 
+      fixed
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+      <Grid container spacing={{ xs: 2, sm: 3, md: 3, lg: 3 }} sx={{ justifyContent: "left", alignItems: "center"}} columns={24}>
         {rentals.length === 0 ?
           <DbError items={3} />
           :
@@ -206,8 +225,9 @@ function RentalsList() {
             <Grid item key={index} xs={24} sm={12} md={8} lg={6}>
               <Card 
                 sx={{ 
-                  width: '270px', // Fixed width for the card
-                  height: '300px', // Fixed height for the card
+                  width: '100%',
+                  height: 'auto',
+                  minHeight: '280px',
                   boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)',
                   transition: '0.3s',
                   '&:hover': {
@@ -250,6 +270,9 @@ function RentalsList() {
     </Container>
   );
 }
+
+{/* Latest Services Row */}
+
 function ServicesList() {
   const [services, setServices] = React.useState([]);
   const navigate = useNavigate();
@@ -268,7 +291,54 @@ function ServicesList() {
   }, []);
 
   return (
-    <Container fixed>
+    <Container 
+      fixed
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+      <Grid container spacing={{ xs: 2, sm: 3, md: 3, lg: 3 }} sx={{ justifyContent: "left"}} columns={24}>
+        {services.length === 0 ?
+          <DbError items={3} />
+          :
+          services.map((service, index) => (
+            <Grid item key={index} xs={24} sm={12} md={8} lg={6}>
+              <Card 
+                sx={{ 
+                  width: '100%',
+                  height: 'auto',
+                  minHeight: '280px',
+                  boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)',
+                  transition: '0.3s',
+                  '&:hover': {
+                    boxShadow: '0 8px 16px 0 rgba(0, 0, 0, 0.3)',
+                  },
+                  borderRadius: '10px',
+                  overflow: 'hidden',
+                  position: 'relative', 
+              }}>
+                <CardActionArea onClick={() => handleCardClick(service.sid)}>
+                  <CardMedia
+                    sx={{ height: '230px', objectFit: 'cover' }}
+                    image={service.images[0] || 'https://picsum.photos/id/11/200/300'}
+                    title={service.name}
+                  />
+                  <CardContent sx={{ padding: '16px' }}>
+                    <Typography gutterBottom variant='h6' component='div'>
+                      {service.serviceName}
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </Grid>
+          ))}
+      </Grid>
+    </Container>
+  );
+}
+
+{/* <Container fixed>
       <Grid container spacing={{ xs: 3, md: 6, lg: 10 }} sx={{ justifyContent: "left"}} columns={24}>
         {services.length === 0 ?
           <DbError items={3} />
@@ -304,6 +374,4 @@ function ServicesList() {
             </Grid>
           ))}
       </Grid>
-    </Container>
-  );
-}
+    </Container> */}
