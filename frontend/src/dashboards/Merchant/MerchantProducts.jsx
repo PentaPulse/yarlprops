@@ -9,7 +9,7 @@ import Swal from 'sweetalert2';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useAuth } from '../../api/AuthContext';
 import { collection, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
-import {  productFilters } from '../../components/menuLists';
+import { productFilters } from '../../components/menuLists';
 
 export default function MerchantProducts() {
   const [showAddProduct, setShowAddProduct] = useState(false);
@@ -83,6 +83,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
     quantity: '',
     location: '',
     status: '',
+    visibility: 'not',
     images: [
 
     ],
@@ -173,23 +174,23 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
         return new Promise((resolve, reject) => {
           const imageRef = ref(storage, `images/${image.name}`);
           const uploadTask = uploadBytesResumable(imageRef, image);
-          
+
           uploadTask.on('state_changed', (snapshot) => {
             //Calculate progress as percentage
             const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             setUploadProgress(Math.round(progress));
             console.log(`Upload is ${progress}% done`);
           },
-          (error) => {
-            console.error('Upload failed: ', error);
-            reject(error);
-          },
-          async () => {
-            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-            resolve(downloadURL);
-          }
-        );
-      });
+            (error) => {
+              console.error('Upload failed: ', error);
+              reject(error);
+            },
+            async () => {
+              const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+              resolve(downloadURL);
+            }
+          );
+        });
       }));
 
       // Combine existing and new image URLs
@@ -206,7 +207,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
         });
       } else {
         await addProduct({ ...product, images: allImageUrls });
-        
+
         Swal.fire({
           icon: 'success',
           title: 'Product saved , request sent to the admin panel for approval',
@@ -224,6 +225,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
         quantity: '',
         location: '',
         status: '',
+        visibility: '',
         images: []
       });
       setExistingImages([]);
@@ -249,7 +251,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
     left: 0,
     whiteSpace: 'nowrap',
     width: 1,
-  });  
+  });
 
   return (
     <Paper style={{ padding: 16 }}>
@@ -335,7 +337,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
           fullWidth
           margin="normal"
           required
-          inputProps={{ min:1 }} // Sets the minimum value to 1
+          inputProps={{ min: 1 }} // Sets the minimum value to 1
         />
         <TextField
           label="Location"
@@ -347,30 +349,30 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
           required
         />
 
-<FormControl component="fieldset" sx={{ ml: "14px" }}>
-  <FormLabel component="legend">Status :</FormLabel>
-  <RadioGroup
-    row
-    aria-label="status"
-    name="status"
-    value={product.status}  // Assuming `product.status` is controlled by your state
-    onChange={handleStatusChange}
-    required
-  >
-    <FormControlLabel
-      value="For Sale"
-      control={<Radio />}
-      label="For Sale"
-    />
-    <FormControlLabel
-      value="Sold Out"
-      control={<Radio />}
-      label="Sold Out!"
-      disabled={!pid}  // Disables the option if `pid` is not available
-    />
-  </RadioGroup>
-</FormControl>
-<br />
+        <FormControl component="fieldset" sx={{ ml: "14px" }}>
+          <FormLabel component="legend">Status :</FormLabel>
+          <RadioGroup
+            row
+            aria-label="status"
+            name="status"
+            value={product.status}  // Assuming `product.status` is controlled by your state
+            onChange={handleStatusChange}
+            required
+          >
+            <FormControlLabel
+              value="For Sale"
+              control={<Radio checked />}
+              label="For Sale"
+            />
+            <FormControlLabel
+              value="Sold Out"
+              control={<Radio />}
+              label="Sold Out!"
+              disabled={!pid}  // Disables the option if `pid` is not available
+            />
+          </RadioGroup>
+        </FormControl>
+        <br />
 
         <Button
           accept='image/*'
