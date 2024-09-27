@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Button, styled, Paper, Typography, TextField, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Grid, TableCell, TableRow, tableCellClasses, TableContainer, Table, TableHead, TableBody, TablePagination, CircularProgress } from '@mui/material';
+import { Container, Button,IconButton, styled, Paper, Typography, TextField, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Grid, TableCell, TableRow, tableCellClasses, TableContainer, Table, TableHead, TableBody, TablePagination, CircularProgress, Select, InputLabel, MenuItem } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { addProduct, fetchProducts, fetchSelectedProduct, updateProduct } from '../../api/db/products';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
@@ -7,6 +7,9 @@ import { db, storage } from '../../api/firebase';
 import Swal from 'sweetalert2';
 import { deleteDoc, doc } from 'firebase/firestore';
 import { useAuth } from '../../api/AuthContext';
+import { productFilters } from '../../components/menuLists';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const AdminProducts = () => {
   const [showAddProduct, setShowAddProduct] = useState(false);
@@ -96,6 +99,9 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
   const handleStatusChange = (event) => {
     setProduct({ ...product, status: event.target.value });
   };
+  const handleVisibilityChange = (event) => {
+    setProduct({ ...product, visibility: event.target.value });
+  };
   
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -163,7 +169,8 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
         description: '', 
         quantity: '', 
         location: '',
-        status: '', 
+        status: '',
+        visibility:'',
         images: [] });
       setExistingImages([]);
       setNewImages([]);
@@ -188,7 +195,22 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
     left: 0,
     whiteSpace: 'nowrap',
     width: 1,
-  });
+  });  
+
+  const handleDescriptionChange = (index, event) => {
+    const newProductDescription = [...product.description];
+    newProductDescription[index] = event.target.value;
+    setProduct({ ...product, description: newProductDescription });
+  };
+
+  const addDescriptionLine = () => {
+    setProduct({ ...product, description: [...product.description, ''] });
+  };
+
+  const handleRemoveDescriptionLine = (index) => {
+    const updatedDescriptions = product.description.filter((_, i) => i !== index);
+    setProduct({ ...product, description: updatedDescriptions });
+  };
 
   return (
     <Paper style={{ padding: 16 }}>
@@ -203,33 +225,67 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
           margin="normal"
           required
         />
-        <TextField
-          label="Category"
-          name="category"
-          value={product.category}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          required
-        />
-        <TextField
-          label="Type"
-          name="type"
-          value={product.type}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          required
-        />
-        <TextField
-          label="Description"
-          name="description"
-          value={product.description}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          required
-        />
+        <FormControl fullWidth margin='normal'>
+          <InputLabel>Category</InputLabel>
+          <Select
+            name="category"
+            value={product.category}
+            onChange={handleChange}
+            required
+          >
+            {Object.keys(productFilters["categories"]).map((category) => (
+              <MenuItem key={category} value={category}>
+                {category}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl fullWidth margin='normal'>
+          <InputLabel>SubCategory</InputLabel>
+          <Select
+            name="subCategory"
+            value={product.subCategory}
+            onChange={handleChange}
+            required
+            disabled={!product.category}
+          >
+            {product.category &&
+              productFilters["categories"][product.category].map((subCategory) => (
+                <MenuItem key={subCategory} value={subCategory}>
+                  {subCategory}
+                </MenuItem>
+              ))}
+          </Select>
+        </FormControl>
+        {product.description.map((des, index) => (
+          <Grid container key={index} spacing={1} alignItems="center">
+            <Grid item xs={11}>
+              <TextField
+                label={`Description Line ${index + 1}`}
+                value={des}
+                onChange={(event) => handleDescriptionChange(index, event)}
+                fullWidth
+                margin="normal"
+                required
+              />
+            </Grid>
+            {index > 0 && (
+              <IconButton onClick={() => handleRemoveDescriptionLine(index)} style={{ marginTop: '1rem' }} aria-label="delete">
+                <DeleteIcon />
+              </IconButton>
+            )}
+          </Grid>
+        ))}
+
+        <Button
+          onClick={addDescriptionLine}
+          variant="outlined"
+          startIcon={<AddIcon />}
+          color="success"
+          style={{ marginTop: '10px', marginBottom: '10px' }}
+        >
+          Add new line
+        </Button>
         <TextField
           label="Quantity"
           name="quantity"
@@ -268,6 +324,19 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
             control={<Radio />}
             label="Sold Out!"
           />
+        </RadioGroup>
+        </FormControl><br/>
+        <FormControl component="fieldset" sx={{ ml: "14px" }}>
+        <FormLabel component="legend">Visibility :</FormLabel>
+        <RadioGroup 
+          row 
+          name="visibility"
+          value={product.visibility}
+          onChange={handleVisibilityChange}
+          required
+        >
+          <FormControlLabel value="visible" control={<Radio />} label="Visible" />
+          <FormControlLabel value="not" control={<Radio />} label="Not" />
         </RadioGroup>
         </FormControl><br/>
 
@@ -424,6 +493,7 @@ const ProductList = ({ onEditProduct, onViewProduct }) => {
                       <StyledTableCell align="center">Quantity</StyledTableCell>
                       <StyledTableCell align="center">Location</StyledTableCell>
                       <StyledTableCell align="center">Current Status</StyledTableCell>
+                      <StyledTableCell align="center">Visibility</StyledTableCell>
                       <StyledTableCell align="center">Actions</StyledTableCell>
                   </TableRow>
               </TableHead>
@@ -438,6 +508,7 @@ const ProductList = ({ onEditProduct, onViewProduct }) => {
                       <StyledTableCell align="center">{product.quantity}</StyledTableCell>
                       <StyledTableCell align="center">{product.location}</StyledTableCell>
                       <StyledTableCell align="center">{product.status}</StyledTableCell>
+                      <StyledTableCell align="center">{product.visibility}</StyledTableCell>
                       
                       <StyledTableCell align="center">
                           <Button disabled={!user.approved} onClick={() => onViewProduct(product.id)} variant="outlined" color="secondary" style={{ margin: '5px', width: '100%' }}>View</Button>
@@ -499,6 +570,7 @@ const ProductDetail = ({ pid, onBack }) => {
       <Typography variant="body1">Quantity: {product.quantity}</Typography>
       <Typography variant="body1">Location: {product.location}</Typography>
       <Typography variant="body1">Status: {product.status}</Typography>
+      <Typography variant="body1">Visibility: {product.visibility}</Typography>
       <Grid container spacing={2} style={{ marginTop: 16 }}>
         {product.images && product.images.map((src, index) => (
           <Grid item key={index}>

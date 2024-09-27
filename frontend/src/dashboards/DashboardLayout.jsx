@@ -169,8 +169,8 @@ export default function DashboardLayout({ handleMode, children }) {
         </MenuList>
       </Box>
       <Divider />
-      <Box display={'flex'} pb={3} justifyContent={'space-between'}>
-        <Box display={'flex'} justifyContent={'space-between'}>
+      <Box display={'flex'} pb={3} justifyContent={'space-between'} mb={6}>
+        <Box display={'flex'} justifyContent={'space-between'} ml={2}>
           <Avatar src={sessionStorage.getItem('pp')} />
           <Box pl={1}>
             <Typography>{sessionStorage.getItem('displayName')}</Typography>

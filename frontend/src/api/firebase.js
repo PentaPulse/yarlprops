@@ -28,6 +28,7 @@ const appCheck = initializeAppCheck(app, {
   isTokenAutoRefreshEnabled: true
 });
 */
+
 if (window.location.hostname === "localhost" || window.location.hostname === '127.0.0.1') {
   connectFirestoreEmulator(db, '127.0.0.1', 8080);
   connectAuthEmulator(auth, "http://127.0.0.1:9099");

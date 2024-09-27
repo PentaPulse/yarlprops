@@ -1,4 +1,4 @@
-import { Box, Button, capitalize, Card, CardActionArea, CardContent, CardMedia, CircularProgress, Container, Divider, FormControl, FormControlLabel, FormLabel, Grid, Paper, Radio, RadioGroup, Slider,  Typography } from '@mui/material';
+import { Box, Button, capitalize, Card, CardActionArea, CardContent, CardMedia, CircularProgress, Container, Divider, FormControl, FormControlLabel, FormLabel, Grid, Paper, Radio, RadioGroup, Slider,  Typography, useMediaQuery} from '@mui/material';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import * as React from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
@@ -17,6 +17,9 @@ export default function Services() {
     const [subCategory, setSubCategory] = React.useState(null)
     const [priceRange, setPriceRange] = React.useState([0, 10000]);
     const { cat } = useParams()
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    
     React.useEffect(() => {
         if (cat) {
             setCategory(cat)
@@ -45,17 +48,17 @@ export default function Services() {
 
     return (
         <Grid container spacing={3} justifyContent="center">
-            <Grid item xs={11} sm={11} md={11} lg={3}>
+            <Grid item xs={12} sm={11.2} md={3} lg={2.5}>
                
                 <Paper
                     sx={{
                         padding: '1.5rem',
                         borderRadius: '8px',
                         boxShadow: 3,
-                        marginLeft: '5rem'
+                        margin: isMobile ? '0 1rem' : '0 1 0 1rem'
                     }}
                 >
-                    <FormControl>
+                    <FormControl fullWidth>
                         <FormLabel>Categories</FormLabel>
                         <RadioGroup name='categories' value={category} onChange={handleCategoryChange}>
                             {Object.keys(serviceFilters["categories"]).map((category) => (
@@ -71,7 +74,7 @@ export default function Services() {
 
                     <Divider sx={{ my: 2 }} />
 
-                    <FormControl>
+                    <FormControl fullWidth>
                         <FormLabel>Sub Categories</FormLabel>
                         {category && (
                             <RadioGroup value={subCategory} onChange={handleSubCategoryegoryChange}>
@@ -104,7 +107,7 @@ export default function Services() {
                     <Divider sx={{ my: 2 }} />
                 </Paper>
             </Grid>
-            <Grid item md={9}>
+            <Grid item xs={12} sm={12} md={9} lg={9}>
                 <ServicesContents
                     category={category}
                     subCategory={subCategory}
@@ -120,6 +123,10 @@ function ServicesContents({ category, subCategoryegory, price, quantity }) {
     const navigate = useNavigate();
     const [search]=useSearchParams()
     const searchTerm=search.get('search')
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
+
 
     React.useEffect(() => {
         const fetchData = async () => {
@@ -162,22 +169,27 @@ function ServicesContents({ category, subCategoryegory, price, quantity }) {
         navigate(`/p/service/${sid}`);
     };
     return (
-        <Container fixed>
-            <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 1, sm: 2, md: 3, lg: 3 }}>
+        <Container maxWidth="xl">
+            <Grid container spacing={{ xs: 2, sm: 2, md: 3 }} columns={{ xs: 1, sm: 2, md: 2, lg: 3 }}>
                 {!services ? <DbError items={9} /> : services.length === 0 ?
                     <DbError items={9} />
                     :
                     services.map((service, index) => (
                         <Grid item xs={1} sm={1} md={1} lg={1} key={index}>
-                            <Card>
+                            <Card sx={{ 
+                              boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)', 
+                              position: 'relative', 
+                              height: isMobile ? '18rem' : isTablet ? '22rem' : '24rem',
+                              width: '100%'
+                              }}>
                                 <CardActionArea onClick={() => handleCardClick(service.id)}>
                                     <CardMedia
-                                        sx={{ height: '20rem' }}
+                                        sx={{ height: isMobile ? '14rem' : isTablet ? '18rem' : '20rem', objectFit: 'cover'}}
                                         image={service.images && service.images[0] ? service.images[0] : 'https://picsum.photos/id/11/200/300'}
                                         title={service.serviceName}
                                     />
                                     <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                        <Typography gutterBottom variant='h6' component='div' color='inherit'>
+                                        <Typography gutterBottom variant={isMobile ? 'subtitle1' : 'h6'} component='div' color='inherit'>
                                             {service.serviceName}
                                         </Typography>
                                     </CardContent>
@@ -195,6 +207,7 @@ export function ServicePage() {
     const [merchant, setMerchant] = React.useState(null)
     const { id } = useParams();
     const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     React.useEffect(() => {
         const fetchService = async () => {

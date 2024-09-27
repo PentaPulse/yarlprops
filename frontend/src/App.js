@@ -14,7 +14,7 @@ import { ProductPage } from "./pages/Products/Products";
 import Services, { ServicePage } from "./pages/Services/Services";
 import { Box } from "@mui/material";
 import AdminLogin from "./dashboards/Admin/AdminLogin";
-import RentalPage from "./pages/Rentals/Rentals";
+import RentalPage, { RentalsPage } from "./pages/Rentals/Rentals";
 import Rentals from "./pages/Rentals/Rentals";
 import DashboardLayout from "./dashboards/DashboardLayout";
 import { db } from "./api/firebase";
@@ -134,7 +134,7 @@ function PageRoutes({ handleMode }) {
           <Route path="rentals" element={<Rentals />} />
           <Route path="rentals/:cat" element={<Rentals />} />
           <Route path="rentals/:search" element={<Rentals />} />
-          <Route path="rental/:id" element={<RentalPage />} />
+          <Route path="rental/:id" element={<RentalsPage />} />
           <Route path="services" element={<Services />} />
           <Route path="services/:cat" element={<Services />} />
           <Route path="services/:search" element={<Services />} />
