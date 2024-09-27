@@ -49,6 +49,7 @@ const lightTheme = createTheme({
       default: "#E3E1D9",
     },
   },
+  
 });
 
 const darkTheme = createTheme({
