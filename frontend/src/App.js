@@ -13,8 +13,8 @@ import Products from "./pages/Products/Products";
 import { ProductPage } from "./pages/Products/Products";
 import Services, { ServicePage } from "./pages/Services/Services";
 import { Box } from "@mui/material";
-import AdminLogin from "./dashboards/Admin/AdminLogin";
-import RentalPage, { RentalsPage } from "./pages/Rentals/Rentals";
+import AdminRegister from "./dashboards/Admin/AdminRegister";
+import { RentalsPage } from "./pages/Rentals/Rentals";
 import Rentals from "./pages/Rentals/Rentals";
 import DashboardLayout from "./dashboards/DashboardLayout";
 import { db } from "./api/firebase";
@@ -113,7 +113,7 @@ function Routings({ handleMode }) {
           <Route path="*" element={<PageRoutes handleMode={handleMode} />} />
           <Route path="/p/*" element={<PageRoutes handleMode={handleMode} />} />
           <Route path="/d/*" element={<PrivateRoute><DashboardRoutes handleMode={handleMode} /></PrivateRoute>} />
-          <Route path="/adminLogin" element={<AdminLogin handleMode={handleMode} />} />
+          <Route path="/adminRegiAdminRegister" element={<AdminRegister handleMode={handleMode} />} />
         </Routes>
       </AuthProvider>
     </>

@@ -5,6 +5,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { registerUser } from './db/users';
 import { useNavigate } from 'react-router-dom';
 import { useAlerts } from './AlertService';
+import { resetLog, signinLog, signoutLog } from './db/logs';
 
 const AuthContext = React.createContext();
 
@@ -28,7 +29,7 @@ export const AuthProvider = ({ children }) => {
                     }
                     else if (userDoc.exists()) {
                         setUser({ ...userDoc.data(), ...currentUser });
-                    }                    
+                    }
                     sessionStorage.setItem('pp', currentUser.photoURL);
                     sessionStorage.setItem('displayName', currentUser.displayName);
                 } catch (error) {
@@ -44,15 +45,26 @@ export const AuthProvider = ({ children }) => {
         return () => unsubscribe();
     }, [ok]);
 
+    const checkUserExistence = async (userId) => {
+        const adminDocRef = doc(db, 'admins', userId);
+        const adminDoc = await getDoc(adminDocRef)
+        const userDocRef = doc(db, 'systemusers', userId);
+        const userDoc = await getDoc(userDocRef);
+        if (adminDoc.exists()||userDoc.exists()) {
+            return true
+        }else{
+            return false
+        }
+    }
+
     //registering
     const register = async (fname, lname, dname, email, password) => {
         await createUserWithEmailAndPassword(auth, email, password)
             .then((result) => {
                 const user = result.user;
-                const userid = user.uid;
                 updateProfile(user, { displayName: dname })
                     .then(() => {
-                        registerUser(userid, fname, lname, dname, email).then((result) => {
+                        registerUser(user.uid,fname, lname, dname, email).then((result) => {
                             if (result.success) {
                                 sessionStorage.setItem('pp', user.photoURL);
                                 sessionStorage.setItem('displayName', user.displayName);
@@ -83,18 +95,21 @@ export const AuthProvider = ({ children }) => {
             });
     }
 
-    //login
+    //login    
     const provider = new GoogleAuthProvider();
     const google = () => signInWithPopup(auth, provider)
         .then((result) => {
             const user = result.user;
+            if (!checkUserExistence(user.uid)) {
+                registerUser(user.uid,'', '', user.displayName, user.email).then((result) => {
+                    if (result.success) {
+                        setOk(true)
+                    }
+                })
+            }
+            signinLog(user.uid,{method:'google'});
             sessionStorage.setItem('pp', user.photoURL);
             sessionStorage.setItem('displayName', user.displayName);
-            registerUser(user.uid, '', '', user.displayName, user.email).then((result) => {
-                if (result.success) {
-                    setOk(true)
-                }
-            })
         })
         .catch(() => {
             showAlerts('Error occured , Try again with different gmail', 'error')
@@ -105,6 +120,7 @@ export const AuthProvider = ({ children }) => {
             const user = result.user
             sessionStorage.setItem('pp', user.photoURL);
             sessionStorage.setItem('displayName', user.displayName);
+            signinLog(user.uid, { method: 'email&password' })
             showAlerts('Successfully logged', 'success')
         })
         .catch((error) => {
@@ -122,6 +138,7 @@ export const AuthProvider = ({ children }) => {
     //reset password
     const reset = (email) => sendPasswordResetEmail(auth, email)
         .then(() => {
+            resetLog(auth.currentUser.uid)
             showAlerts(`Check ${email} inbox`, 'info')
         })
         .catch((error) => {
@@ -133,6 +150,7 @@ export const AuthProvider = ({ children }) => {
     //logout
     const logout = () => signOut(auth)
         .then(() => {
+            signoutLog(user.uid)
             const the = sessionStorage.getItem('isLight');
             sessionStorage.clear();
             sessionStorage.setItem('isLight', the)
