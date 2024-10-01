@@ -231,6 +231,8 @@ export function ProductPage() {
     const [product, setProduct] = React.useState(null);
     const [merchant, setMerchant] = React.useState(null)
     const [selectedImageIndex, setSelectedImageIndex] = React.useState(0); // Track the index of the selected image
+    const [startIndex, setStartIndex] = React.useState(0); // Added state to track the current image
+    const visibleImagesCount = 3; // Number of images to display at a time
     const { id } = useParams();
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -265,17 +267,25 @@ export function ProductPage() {
       return <CircularProgress />;
     }
   
+    // const handlePrevious = () => {
+    //   setSelectedImageIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : product.images.length - 1));
+    // };
+  
+    // const handleNext = () => {
+    //   setSelectedImageIndex((prevIndex) => (prevIndex < product.images.length - 1 ? prevIndex + 1 : 0));
+    // };
+
     const handlePrevious = () => {
-      setSelectedImageIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : product.images.length - 1));
+      setStartIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : 0)); //Decrement startIndex for the previous images
     };
   
     const handleNext = () => {
-      setSelectedImageIndex((prevIndex) => (prevIndex < product.images.length - 1 ? prevIndex + 1 : 0));
+      setStartIndex((prevIndex) => (prevIndex < product.images.length - visibleImagesCount ? prevIndex + 1 : prevIndex)); //Increment startIndex for the next set of images
     };
   
     return (
       <Container maxWidth="lg" sx={{ backgroundColor: theme.palette.background.default }}>
-        <Grid container spacing={4}>
+        <Grid container spacing={4} sx={{ alignItems: 'center', justifyContent:'center'}}>
           <Grid item xs={12} md={6}>
             {/* Main Product Image */}
             <Card sx={{ boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }}>
@@ -289,13 +299,17 @@ export function ProductPage() {
   
             {/* Small Images Grid */}
             <Grid container spacing={2} sx={{ mt: 2, alignItems: 'center', justifyContent:'center'}}>
-              <Grid item>
-                <IconButton onClick={handlePrevious}>
+              <Grid item xs={1} sm={1} md={1} lg={1} sx={{ display: 'flex', justifyContent: 'center'}}>
+                <IconButton 
+                  onClick={handlePrevious} 
+                  disabled={startIndex === 0}
+                  sx={{ fontSize: { xs:'1.5rem', sm: '2rem'}}}
+                >
                   <ArrowBackIosIcon />
                 </IconButton>
               </Grid>
   
-              {product.images.map((image, index) => (
+              {product.images.slice(startIndex, startIndex + visibleImagesCount).map((image, index) => (
                 <Grid item xs={3} key={index}>
                   <CardMedia
                     component="img"
@@ -309,18 +323,22 @@ export function ProductPage() {
                       boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
                       cursor: 'pointer',
                       transition: 'transform 0.3s',
-                      border: selectedImageIndex === index ? '3px solid blue' : 'none', // Highlight the selected image
+                      border: selectedImageIndex === index + startIndex ? '3px solid blue' : 'none', // Highlight the selected image
                       '&:hover': {
                         transform: 'scale(1.1)',
                       },
                     }}
-                    onClick={() => setSelectedImageIndex(index)}  // Update the main image on click
+                    onClick={() => setSelectedImageIndex(index + startIndex)}  // Update the main image on click
                   />
                 </Grid>
               ))}
   
-              <Grid item>
-                <IconButton onClick={handleNext}>
+              <Grid item xs={1} sm={1} md={1} lg={1} sx={{ display: 'flex', justifyContent: 'center'}}>
+                <IconButton 
+                  onClick={handleNext} 
+                  disabled={startIndex >= product.images.length - visibleImagesCount}
+                  sx={{ fontSize: { xs: '1.5rem', sm: '2rem'}}}
+                >
                   <ArrowForwardIosIcon />
                 </IconButton>
               </Grid>
@@ -346,15 +364,21 @@ export function ProductPage() {
                       : (<Typography variant="h5" sx={{ color: "red", fontWeight: 'bold' }}>Sold Out!</Typography>))}
                 </Typography>
   
-                <Box sx={{ mx: '3rem', my: '1rem' }} /*sx={{ mt: { xs: 2, sm: 3 } }}*/>
+                <Box 
+                  sx={{ 
+                    mx: { xs: '1rem', sm:'2rem', md:'3rem', lg:'3rem'},
+                    my: { xs: '0.5rem', sm:'0.7rem', md:'1rem', lg:'1rem'},
+                  }} /*sx={{ mt: { xs: 2, sm: 3 } }}*/>
                   {/* <Typography variant={isMobile ? 'h6' : 'h5'} component="h4" sx={{ fontWeight: 'bold' }} gutterBottom>Description</Typography> */}
                   <ul style={{ textAlign: 'justify', fontSize: '18px' }}>
+
                     {product.description.map((item, index) => (
                       <li key={index}><Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4">{item}</Typography></li>
                     ))}
                     <li><Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4">Quantity: {product.quantity}</Typography></li>
                     {/* <li>Location: {product.location}</li> */}
                   </ul>
+                  
                 </Box>
                 <Box sx={{ mx: '1rem', mt: '4.5rem' }}>
                   {/* Seller Details */}
