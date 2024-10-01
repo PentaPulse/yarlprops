@@ -15,3 +15,4 @@ frontend/datajanani
 frontend/database-debug.log
 */ui-debug.log
 *.log
+/frontend/datas
