@@ -4,26 +4,58 @@ service cloud.firestore {
 
     match /systemusers/{uid}{
       allow read;
-      allow write:if request.auth != null && request.auth.uid == uid;
+      allow write:if isAdmin(request.auth.uid) || isUser(request.auth.uid);
     }
 
     match /admins/{aid}{
       allow read;
-      allow write:if request.auth != null && request.auth.uid == aid;
+      allow write:if isAdmin(request.auth.uid)
     }
 
     match /contactus/{id}{
-      allow read,write;
+      allow read:if isAdmin(request.auth.uid);
+      allow write:if true;
     }
 
-    match /products/{productId}{
-      allow read,write;
+    match /products/{productId} {
+      allow read: if true;
+      
+      allow write, update, delete: if request.auth != null && 
+        (request.auth.uid == resource.data.merchantId || isAdmin(request.auth.uid));
     }
+
     match /services/{serviceId}{
-      allow read, write;
+      allow read: if true;
+      
+      allow write, update, delete: if request.auth != null && 
+        (request.auth.uid == resource.data.merchantId|| isAdmin(request.auth.uid));
     }
+
     match /rentals/{rentalId}{
-      allow read, write;
+      allow read: if true;
+      
+      allow write, update, delete: if request.auth != null && 
+        (request.auth.uid == resource.data.merchantId || isAdmin(request.auth.uid));
+    }
+    match /logs/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if request.auth != null && request.auth.uid == userId;
+      
+      match /signinlogs/{logId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;  // Apply the same rule for sub-collection
+      }
+       match /signoutlogs/{logId} {
+        allow read : if request.auth != null && request.auth.uid == userId;  // Apply the same rule for sub-collection
+        allow write;
+      }
+    }
+
+    function isAdmin(userId) {
+      return exists(/databases/$(database)/documents/admins/$(userId));
+    }
+
+    function isUser(userId){
+      return exists(/databases/$(database)/documents/systemusers/$(userId))
     }
   }
 }
