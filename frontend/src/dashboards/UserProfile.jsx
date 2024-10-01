@@ -429,7 +429,7 @@ const AccountSettings = ({ profilePercentage }) => {
       }
 
       let isM = false;
-      if ((user.myProducts.length > 0 || user.myRentals.length > 0 || user.myService.length > 0) && role === 'Customer') {
+      if (user.isMerchant && (user.myProducts.length > 0 || user.myRentals.length > 0 || user.myService.length > 0) ) {
         showAlerts2('Remove ongoing items and try again', 'warning')
         return 0
       }
