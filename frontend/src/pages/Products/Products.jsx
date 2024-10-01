@@ -10,6 +10,7 @@ import { fetchMerchantProductDetails } from '../../api/db/users';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import Filters from '../../components/Filters/Filters';
 
 function Products() {
     const [category, setCategory] = React.useState(null)
@@ -19,7 +20,6 @@ function Products() {
     const {cat}=useParams()
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-    const [startIndex, setStartIndex] = React.useState(0);
 
     React.useEffect(()=>{
         if(cat){
@@ -53,6 +53,7 @@ function Products() {
 
     return (
         <Grid container spacing={3} justifyContent="center">
+          <Filters/>
             <Grid item xs={12} sm={11.2} md={3} lg={2.5}>
                 <Paper
                     sx={{
