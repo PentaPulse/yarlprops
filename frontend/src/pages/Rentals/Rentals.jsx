@@ -311,7 +311,7 @@ export function RentalsPage() {
 
                 <Grid item xs={12} md={6}>
                     <Card sx={{ height: '100%', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }}>
-                        <CardContent sx={{ mt: '30px', mb: '30px' }}>
+                        <CardContent sx={{ my: '30px' }}>
                             {/* rental Details */}
                             <Typography variant={isMobile ? 'h5' : 'h4'} component="h2" sx={{ fontWeight: 'bold', textAlign: 'center', fontSize: isMobile ? '1.4rem' : '1.8rem' }}>{rental.title}</Typography>
                             <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ fontWeight: 'bold', textAlign: 'center', fontStyle: 'italic' }}>
@@ -320,20 +320,20 @@ export function RentalsPage() {
                             <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ fontWeight: 'bold', textAlign: 'center', fontStyle: 'italic' }}>
                                 Type: {rental.type}
                             </Typography>
-                            <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ fontWeight: 'bold', textAlign: 'center', fontStyle: 'italic' }}>
-                            {(rental.status === "For Sale") ?
+                            <Typography sx={{ textAlign: 'center', fontStyle: 'italic' }} gutterBottom>
+                                {(rental.status === "For Sale") ?
                                 (<Typography variant={isMobile ? 'h6' : 'h5'} sx={{ color: '#50C878', fontWeight: 'bold' }}>For Sale</Typography>)
                                 : ((rental.status === "For Rent") ?
-                                (<Typography variant="h5" sx={{ color: "darkorange", fontWeight: 'bold' }}>For Rent</Typography>)
-                                : (<Typography variant="h5" sx={{ color: "red", fontWeight: 'bold' }}>Sold Out!</Typography>))}
+                                (<Typography variant={isMobile ? 'h6' : 'h5'} sx={{ color: "darkorange", fontWeight: 'bold' }}>For Rent</Typography>)
+                                : (<Typography variant={isMobile ? 'h6' : 'h5'} sx={{ color: "red", fontWeight: 'bold' }}>Sold Out!</Typography>))}
                             </Typography>
 
                             <Box 
                                 sx={{ 
-                                    mx: { xs: '1rem', sm:'2rem', md:'3rem', lg:'3rem'},
-                                    my: { xs: '0.5rem', sm:'0.7rem', md:'1rem', lg:'1rem'},
+                                    mx: { xs: '1rem', sm:'4rem', md:'3rem', lg:'3rem'},
+                                    my: { xs: '0.5rem', sm:'0.7rem', md:'1rem', lg:'1.5rem'},
                                  }}>
-                                <Typography variant={isMobile ? 'h6' : 'h5'} component="h4" sx={{ fontWeight: 'bold' }}>Description</Typography>
+                                {/* <Typography variant={isMobile ? 'h6' : 'h5'} component="h4" sx={{ fontWeight: 'bold' }}>Description</Typography> */}
                                 <ul style={{ textAlign: 'justify', fontSize: '18px' }}>
                                     {rental.description.map((item, index) => (
                                         <li key={index}><Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4">{item}</Typography></li>
@@ -341,7 +341,7 @@ export function RentalsPage() {
                                     <li><Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4">Quantity: {rental.quantity}</Typography></li>
                                 </ul>
                             </Box>
-                            <Box sx={{ mx: '1rem', mt: '4.5rem' }}>
+                            <Box sx={{ mx: '1rem', mt: '2.5rem' }}>
                                 {/* Seller Details */}
                                 <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
                                 <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center'}}><i className="fa-solid fa-user"></i> Name : {rental.sellerName}</Typography>

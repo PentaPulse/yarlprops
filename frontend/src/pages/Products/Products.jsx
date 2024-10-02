@@ -351,21 +351,21 @@ export function ProductPage() {
                 <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ fontWeight: 'bold', textAlign: 'center', fontStyle: 'italic' }}>
                   Category: {product.category}
                 </Typography>
-                <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ fontWeight: 'bold', textAlign: 'center', fontStyle: 'italic' }} gutterBottom>
+                <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ fontWeight: 'bold', textAlign: 'center', fontStyle: 'italic' }}>
                   Sub category: {product.subCategory}
                 </Typography>
-                <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ fontWeight: 'bold', textAlign: 'center', fontStyle: 'italic' }}>
+                <Typography sx={{ textAlign: 'center', fontStyle: 'italic' }} gutterBottom>
                   {(product.status === "For Sale") ?
                     (<Typography variant={isMobile ? 'h6' : 'h5'} sx={{ color: '#50C878', fontWeight: 'bold' }}>For Sale</Typography>)
                     : ((product.status === "For Rent") ?
-                      (<Typography variant="h5" sx={{ color: "darkorange", fontWeight: 'bold' }}>For Rent</Typography>)
-                      : (<Typography variant="h5" sx={{ color: "red", fontWeight: 'bold' }}>Sold Out!</Typography>))}
+                      (<Typography variant={isMobile ? 'h6' : 'h5'} sx={{ color: "darkorange", fontWeight: 'bold' }}>For Rent</Typography>)
+                      : (<Typography variant={isMobile ? 'h6' : 'h5'} sx={{ color: "red", fontWeight: 'bold' }}>Sold Out!</Typography>))}
                 </Typography>
   
                 <Box 
                   sx={{ 
-                    mx: { xs: '1rem', sm:'2rem', md:'3rem', lg:'3rem'},
-                    my: { xs: '0.5rem', sm:'0.7rem', md:'1rem', lg:'1rem'},
+                    mx: { xs: '1rem', sm:'4rem', md:'3rem', lg:'3rem'},
+                    my: { xs: '0.5rem', sm:'0.7rem', md:'1rem', lg:'1.5rem'},
                   }} /*sx={{ mt: { xs: 2, sm: 3 } }}*/>
                   {/* <Typography variant={isMobile ? 'h6' : 'h5'} component="h4" sx={{ fontWeight: 'bold' }} gutterBottom>Description</Typography> */}
                   <ul style={{ textAlign: 'justify', fontSize: '18px' }}>
@@ -378,7 +378,7 @@ export function ProductPage() {
                   </ul>
                   
                 </Box>
-                <Box sx={{ mx: '1rem', mt: '4.5rem' }}>
+                <Box sx={{ mx: '1rem', mt: '2.5rem' }}>
                   {/* Seller Details */}
                   <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
                   <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center'}} gutterBottom><i className="fa-solid fa-user"></i> Name : {merchant && merchant.firstName + ' ' + merchant.lastName}</Typography>
