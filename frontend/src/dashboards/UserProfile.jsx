@@ -410,7 +410,7 @@ const AccountSettings = ({ profilePercentage }) => {
   const [phoneNumber, setPhoneNumber] = useState({ old: '', new: '', confirm: '' });
   const [password, setPassword] = useState({ old: '', new: '', confirm: '' });
   const [role, setRole] = useState('')
-  const theme = useTheme()
+  //const theme = useTheme()
   const { showAlerts2 } = useAlerts()
 
   const handleInputChange = (setter) => (e) => {
