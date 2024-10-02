@@ -1,4 +1,4 @@
-import { Radio, FormControlLabel, Grid, TextField, Typography, Slider, Paper, Divider, FormControl, FormLabel, RadioGroup, Button, capitalize, Container, Card, CardActionArea, CardMedia, CardContent, CardActions, useTheme, CircularProgress, IconButton, Box, useMediaQuery } from '@mui/material';
+import {  Grid,  Typography,  Button, capitalize, Container, Card, CardActionArea, CardMedia, CardContent, CardActions, useTheme, CircularProgress, IconButton, Box, useMediaQuery } from '@mui/material';
 import * as React from 'react';
 import { productFilters } from '../../components/menuLists';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
@@ -10,139 +10,32 @@ import { fetchMerchantProductDetails } from '../../api/db/users';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import Filters from '../../components/Filters/Filters';
 
 function Products() {
-    const [category, setCategory] = React.useState(null)
-    const [subCategory, setSubCategory] = React.useState(null)
-    const [priceRange, setPriceRange] = React.useState([0, 10000]);
-    const [quantity, setQuantity] = React.useState(1);
-    const {cat}=useParams()
-    const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-
-    React.useEffect(()=>{
-        if(cat){
-            setCategory(cat)
-        }
-    },[cat])
-    const handleCategoryChange = (event) => {
-        const value = event.target.value;
-        setCategory(value);
-        setSubCategory(null)
-    };
-    const handleSubCategoryegoryChange = (event) => {
-        const value = event.target.value;
-        setSubCategory(value)
-    };
-
-    const handlePriceRangeChange = (event, newValue) => {
-        setPriceRange(newValue);
-    };
-
-    const handleQuantityChange = (event) => {
-        setQuantity(event.target.value);
-    };
-    const handleClearCategories = () => {
-        setCategory(null)
-        setSubCategory(null)
-    }
-    const handleClearSubCategoryegories = () => {
-        setSubCategory(null)
-    }
-
     return (
-        <Grid container spacing={3} justifyContent="center">
-            <Grid item xs={12} sm={11.2} md={3} lg={2.5}>
-                <Paper
-                    sx={{
-                        padding: '1.5rem',
-                        borderRadius: '8px',
-                        boxShadow: 3,
-                        margin: isMobile ? '0 1rem' : '0 1 0 1rem'
-                    }}
-                >
-                    <FormControl fullWidth> 
-                        <FormLabel>Categories</FormLabel>
-                        <RadioGroup name='categories' value={category} onChange={handleCategoryChange}>
-                            {Object.keys(productFilters["categories"]).map((category) => (
-                                <FormControlLabel
-                                    key={category}
-                                    control={<Radio value={category} />}
-                                    label={category}
-                                />
-                            ))}
-                        </RadioGroup>
-                        {category && <Button onClick={handleClearCategories}>Clear</Button>}
-                    </FormControl>
-
-                    <Divider sx={{ my: 2 }} />
-
-                    <FormControl fullWidth>
-                        <FormLabel>Sub Categories</FormLabel>
-                        {category && (
-                            <RadioGroup value={subCategory} onChange={handleSubCategoryegoryChange}>
-                                {productFilters["categories"][category]?.map((subCategoryegory) => (
-                                    <FormControlLabel
-                                        key={subCategoryegory}
-                                        control={<Radio value={subCategoryegory} />}
-                                        label={subCategoryegory}
-                                    />
-                                ))}
-                            </RadioGroup>
-                        )}
-                        {subCategory && <Button onClick={handleClearSubCategoryegories}>Clear</Button>}
-                    </FormControl>
-
-                    <Divider sx={{ my: 2 }} />
-
-                    <Typography variant="h6" gutterBottom>
-                        Price Range
-                    </Typography>
-                    <Slider
-                        value={priceRange}
-                        onChange={handlePriceRangeChange}
-                        valueLabelDisplay="auto"
-                        min={0}
-                        max={10000}
-                        step={500}
-
-                    />
-
-                    <Divider sx={{ my: 2 }} />
-
-                    <Typography variant="h6" gutterBottom>
-                        Quantity
-                    </Typography>
-                    <TextField
-                        type="number"
-                        value={quantity}
-                        onChange={handleQuantityChange}
-                        InputProps={{ inputProps: { min: 1, max: 10 } }}
-                        fullWidth
-                    />
-                </Paper>
-            </Grid>
-            <Grid item xs={12} sm={12} md={9} lg={9}>
-                <ProductsContents
-                    category={category}
-                    subCategory={subCategory}
-                    priceRange={priceRange}
-                    quantity={quantity}
-                />
-            </Grid>
-        </Grid>
+      <Grid container spacing={3} justifyContent="center">
+      <Filters itemList={productFilters}/>
+      <Grid item xs={12} sm={12} md={9} lg={9}>
+        <ProductsContents />
+      </Grid>
+    </Grid>
     );
 }
 
 export default Products;
-const ProductsContents = ({ category, subCategory, price, quantity }) => {
-    const [products, setProducts] = React.useState([]);
-    const navigate = useNavigate();
-    const [search]=useSearchParams()
-    const searchTerm=search.get('search')
-    const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-    const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
+const ProductsContents = () => {
+  const [products, setProducts] = React.useState([]);
+  const navigate = useNavigate();
+  const [search] = useSearchParams()
+  const searchTerm = search.get('search')
+  const category = search.get('category')
+  const subCategory = search.get('subcategory');
+  const price = search.get('price')
+  const quantity = search.get('quantity')
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
 
 
     React.useEffect(() => {
