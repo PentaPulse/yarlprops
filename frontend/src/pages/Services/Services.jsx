@@ -267,17 +267,22 @@ export function ServicePage() {
                     <Card sx={{ height: '100%', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }}>
                         <CardContent sx={{ my: '30px' }}>
                             {/* Service Details */}
-                            <Typography variant="h4" component="h2" sx={{ fontWeight: 'bold', textAlign: 'center' }}>{service.serviceName}</Typography>
-                            <Box sx={{ mx: '1.9rem', mt: '1rem' }}>
+                            <Typography variant={isMobile ? 'h5' : 'h3'} component="h2" sx={{ fontWeight: 'bold', textAlign: 'center', fontSize: isMobile ? '1.4rem' : '1.8rem' }}>{service.serviceName}</Typography>
+                            <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ fontWeight: 'bold', textAlign: 'center', fontStyle: 'italic' }} gutterBottom>
+                                Category: {service.category}
+                            </Typography>
+                            <Box sx={{
+                                mx: { xs: '1rem', sm:'4rem', md:'3rem', lg:'3rem'},
+                                my: { xs: '0.5rem', sm:'0.7rem', md:'1rem', lg:'1.5rem'},
+                             }}>
                                 {/* <Typography variant="h6" component="h4" sx={{ fontWeight: 'bold' }}>Description</Typography> */}
                                 <ul style={{ textAlign: 'justify', fontSize: '18px' }}>
                                     {service.serviceDescription.map((description, index) => (
-                                        <li key={index}>{description}</li>
+                                        <li key={index}><Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4">{description}</Typography></li>
                                     ))}
-                                    <li>{service.serviceLocation}</li>
                                 </ul>
                             </Box>
-                            <Box sx={{ mx: '1rem', mt: '4.5rem' }}>
+                            <Box sx={{ mx: '1rem', mt: '2.5rem' }}>
                                 {/* Seller Details */}
                                 <Typography variant="h5" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Service Provider's Details</Typography>
                                 <Typography variant="h6" sx={{ textAlign: 'center'}} gutterBottom><i className="fa-solid fa-user"></i> Name : {merchant && merchant.firstName + ' ' + merchant.lastName}</Typography>
@@ -291,9 +296,22 @@ export function ServicePage() {
                     </Card>
                 </Grid>
             </Grid>
-            <Grid container spacing={0} sx={{ mt: '0.5rem' }}>
+            <Grid container spacing={1} sx={{ mt: '0.5rem' }}>
                 <Grid item>
-                    <Button variant="contained" component={Link} to="/p/services" startIcon={<ChevronLeftIcon />}>
+                    <Button 
+                        variant="contained"
+                        component={Link}
+                        to="/p/rentals"
+                        startIcon={<ChevronLeftIcon />}
+                        size={isMobile ? "small" : "medium"}
+                        sx={{
+                            backgroundColor: '#0d6efd',
+                            color: 'white',
+                            '&:hover': {
+                              backgroundColor: '#90caf9',
+                            }
+                        }}
+                    >
                         Back
                     </Button>
                 </Grid>
