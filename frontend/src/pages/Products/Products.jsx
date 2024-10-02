@@ -1,4 +1,4 @@
-import { Grid, Typography, Button, capitalize, Container, Card, CardActionArea, CardMedia, CardContent, CardActions, useTheme, CircularProgress, IconButton, Box, useMediaQuery } from '@mui/material';
+import { Radio, FormControlLabel, Grid, TextField, Typography, Slider, Paper, Divider, FormControl, FormLabel, RadioGroup, Button, capitalize, Container, Card, CardActionArea, CardMedia, CardContent, CardActions, useTheme, CircularProgress, IconButton, Box, useMediaQuery } from '@mui/material';
 import * as React from 'react';
 import { productFilters } from '../../components/menuLists';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
@@ -10,163 +10,268 @@ import { fetchMerchantProductDetails } from '../../api/db/users';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import Filters from '../../components/Filters/Filters';
 
 function Products() {
-  return (
-    <Grid container spacing={3} justifyContent="center">
-      <Filters itemList={productFilters} />
-      <Grid item xs={12} sm={12} md={12} lg={9}>
-        <ProductsContents />
-      </Grid>
-    </Grid>
-  );
+    const [category, setCategory] = React.useState(null)
+    const [subCategory, setSubCategory] = React.useState(null)
+    const [priceRange, setPriceRange] = React.useState([0, 10000]);
+    const [quantity, setQuantity] = React.useState(1);
+    const {cat}=useParams()
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+    React.useEffect(()=>{
+        if(cat){
+            setCategory(cat)
+        }
+    },[cat])
+    const handleCategoryChange = (event) => {
+        const value = event.target.value;
+        setCategory(value);
+        setSubCategory(null)
+    };
+    const handleSubCategoryegoryChange = (event) => {
+        const value = event.target.value;
+        setSubCategory(value)
+    };
+
+    const handlePriceRangeChange = (event, newValue) => {
+        setPriceRange(newValue);
+    };
+
+    const handleQuantityChange = (event) => {
+        setQuantity(event.target.value);
+    };
+    const handleClearCategories = () => {
+        setCategory(null)
+        setSubCategory(null)
+    }
+    const handleClearSubCategoryegories = () => {
+        setSubCategory(null)
+    }
+
+    return (
+        <Grid container spacing={3} justifyContent="center">
+            <Grid item xs={12} sm={11.2} md={3} lg={2.5}>
+                <Paper
+                    sx={{
+                        padding: '1.5rem',
+                        borderRadius: '8px',
+                        boxShadow: 3,
+                        margin: isMobile ? '0 1rem' : '0 1 0 1rem'
+                    }}
+                >
+                    <FormControl fullWidth> 
+                        <FormLabel>Categories</FormLabel>
+                        <RadioGroup name='categories' value={category} onChange={handleCategoryChange}>
+                            {Object.keys(productFilters["categories"]).map((category) => (
+                                <FormControlLabel
+                                    key={category}
+                                    control={<Radio value={category} />}
+                                    label={category}
+                                />
+                            ))}
+                        </RadioGroup>
+                        {category && <Button onClick={handleClearCategories}>Clear</Button>}
+                    </FormControl>
+
+                    <Divider sx={{ my: 2 }} />
+
+                    <FormControl fullWidth>
+                        <FormLabel>Sub Categories</FormLabel>
+                        {category && (
+                            <RadioGroup value={subCategory} onChange={handleSubCategoryegoryChange}>
+                                {productFilters["categories"][category]?.map((subCategoryegory) => (
+                                    <FormControlLabel
+                                        key={subCategoryegory}
+                                        control={<Radio value={subCategoryegory} />}
+                                        label={subCategoryegory}
+                                    />
+                                ))}
+                            </RadioGroup>
+                        )}
+                        {subCategory && <Button onClick={handleClearSubCategoryegories}>Clear</Button>}
+                    </FormControl>
+
+                    <Divider sx={{ my: 2 }} />
+
+                    <Typography variant="h6" gutterBottom>
+                        Price Range
+                    </Typography>
+                    <Slider
+                        value={priceRange}
+                        onChange={handlePriceRangeChange}
+                        valueLabelDisplay="auto"
+                        min={0}
+                        max={10000}
+                        step={500}
+
+                    />
+
+                    <Divider sx={{ my: 2 }} />
+
+                    <Typography variant="h6" gutterBottom>
+                        Quantity
+                    </Typography>
+                    <TextField
+                        type="number"
+                        value={quantity}
+                        onChange={handleQuantityChange}
+                        InputProps={{ inputProps: { min: 1, max: 10 } }}
+                        fullWidth
+                    />
+                </Paper>
+            </Grid>
+            <Grid item xs={12} sm={12} md={9} lg={9}>
+                <ProductsContents
+                    category={category}
+                    subCategory={subCategory}
+                    priceRange={priceRange}
+                    quantity={quantity}
+                />
+            </Grid>
+        </Grid>
+    );
 }
 
 export default Products;
-const ProductsContents = () => {
-  const [products, setProducts] = React.useState([]);
-  const navigate = useNavigate();
-  const [search] = useSearchParams()
-  const searchTerm = search.get('search')
-  const category = search.get('category')
-  const subCategory = search.get('subcategory');
-  const price = search.get('price')
-  const quantity = search.get('quantity')
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
+const ProductsContents = ({ category, subCategory, price, quantity }) => {
+    const [products, setProducts] = React.useState([]);
+    const navigate = useNavigate();
+    const [search]=useSearchParams()
+    const searchTerm=search.get('search')
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
 
 
+    React.useEffect(() => {
+        const fetchData = async () => {
+            try {
+                if (searchTerm || category || subCategory) {
+                    let q;
+                    const productRef = collection(db, 'products')
+                    if (searchTerm !== null) {
+                        q = query(productRef, where('title', '>=', capitalize(searchTerm)), where('title', '<=', capitalize(searchTerm) + '\uf8ff'));
+                    }
+                    if (category !== null) {
+                        q = query(productRef, where('category', '==', category))
+                    }
+                    if (subCategory !== null) {
+                        q = query(productRef, where('subCategory', '==', subCategory))
+                    }/*
+                if (price) {
+                    q = query(productRef, where('category', '==', price))
+                }
+                if (quantity) {
+                    q = query(productRef, where('category', '==', quantity))
+                }*/
+                    const querySnapshot = await getDocs(q);
+                    const items = querySnapshot.docs.map(doc => doc.data());
+                    setProducts(items);
 
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        console.log(search)
-        if (searchTerm || category || subCategory) {
-          let q;
-          const productRef = collection(db, 'products')
-          if (searchTerm !== null) {
-            q = query(productRef, where('title', '>=', capitalize(searchTerm)), where('title', '<=', capitalize(searchTerm) + '\uf8ff'));
-          }
-          if (category !== null) {
-            q = query(productRef, where('category', '==', category))
-          }
-          if (subCategory !== null) {
-            q = query(productRef, where('subCategory', '==', subCategory))
-          }
-          if (price) {
-            q = query(productRef, where('category', '==', price))
-          }
-          if (quantity) {
-            q = query(productRef, where('category', '==', quantity))
-          }
-          const querySnapshot = await getDocs(q);
-          const items = querySnapshot.docs.map(doc => doc.data());
-          setProducts(items);
+                } else {
+                    const productList = await fetchProducts();
+                    setProducts(productList);
+                }
+            } catch (e) {
+              console.log(e)
+                setProducts([])
+            }
+        };
 
-        } else {
-          const productList = await fetchProducts();
-          setProducts(productList);
-        }
-      } catch (e) {
-        console.log(e)
-        setProducts([])
-      }
+        fetchData()
+    }, [searchTerm, category, subCategory, price, quantity]);
+
+    const handleCardClick = (pid) => {
+        navigate(`/p/product/${pid}`);
     };
+    return (
+        <Container maxWidth="xl">
+            <Grid container spacing={{ xs: 2, sm: 2, md: 3 }} columns={{ xs: 1, sm: 2, md: 2, lg: 3 }}>
+                {!products ? <DbError items={9} /> : products.length === 0 ?
+                    <DbError items={9} />
+                    :
+                    products.map((product, index) => (
+                        <Grid item xs={1} sm={1} md={1} lg={1} key={index}>
+                            <Card sx={{ 
+                              boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)', 
+                              position: 'relative', 
+                              height: isMobile ? '18rem' : isTablet ? '22rem' : '24rem',
+                              width: '100%'
+                              }}>
 
-    fetchData()
-  }, [search]);
+                                <CardActionArea onClick={() => handleCardClick(product.pid)}>
+                                    <CardMedia
+                                        sx={{ height: isMobile ? '14rem' : isTablet ? '18rem' : '20rem', objectFit: 'cover'}}
+                                        image={product.images[0] || 'https://picsum.photos/id/11/200/300'}
+                                        title={product.name}
 
-  const handleCardClick = (pid) => {
-    navigate(`/p/product/${pid}`);
-  };
-  return (
-    <Container maxWidth="xl">
-      <Grid container spacing={{ xs: 2, sm: 2, md: 3 }} columns={{ xs: 1, sm: 2, md: 2, lg: 3 }}>
-        {!products ? <DbError items={9} /> : products.length === 0 ?
-          <DbError items={9} />
-          :
-          products.map((product, index) => (
-            <Grid item xs={1} sm={1} md={1} lg={1} key={index}>
-              <Card sx={{
-                boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
-                position: 'relative',
-                height: isMobile ? '18rem' : isTablet ? '22rem' : '24rem',
-                width: '100%'
-              }}>
-
-                <CardActionArea onClick={() => handleCardClick(product.pid)}>
-                  <CardMedia
-                    sx={{ height: isMobile ? '14rem' : isTablet ? '18rem' : '20rem', objectFit: 'cover' }}
-                    image={product.images[0] || 'https://picsum.photos/id/11/200/300'}
-                    title={product.name}
-
-                  />
-                  <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Typography gutterBottom variant={isMobile ? 'subtitle1' : 'h6'} component='div' color='inherit'>
-                      {product.title}
-                    </Typography>
-                  </CardContent>
-                  <CardActions sx={{ position: 'absolute', top: '2px', left: '5px' }}>
-                    {(product.status === "For Sale") ? (<Button size='small' style={{ backgroundColor: "green", color: 'white', fontWeight: 'bold' }}>For Sale</Button>) : ((product.status === "For Rent") ? (<Button size='small' style={{ backgroundColor: "darkorange", color: 'white', fontWeight: 'bold' }}>For Rent</Button>) : ((<Button size='small' style={{ backgroundColor: "red", color: 'white', fontWeight: 'bold' }}>Sold Out!</Button>)))}
-                  </CardActions>
-                </CardActionArea>
-              </Card>
+                                    />
+                                    <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                        <Typography gutterBottom variant={isMobile ? 'subtitle1' : 'h6'} component='div' color='inherit'>
+                                            {product.title}
+                                        </Typography>
+                                    </CardContent>
+                                    <CardActions sx={{ position: 'absolute', top: '2px', left: '5px' }}>
+                                        {(product.status === "For Sale") ? (<Button size='small' style={{ backgroundColor: "green", color: 'white', fontWeight: 'bold' }}>For Sale</Button>) : ((product.status === "For Rent") ? (<Button size='small' style={{ backgroundColor: "darkorange", color: 'white', fontWeight: 'bold' }}>For Rent</Button>) : ((<Button size='small' style={{ backgroundColor: "red", color: 'white', fontWeight: 'bold' }}>Sold Out!</Button>)))}
+                                    </CardActions>
+                                </CardActionArea>
+                            </Card>
+                        </Grid>
+                    ))}
             </Grid>
-          ))}
-      </Grid>
-    </Container>
-  );
+        </Container>
+    );
 };
 
 export function ProductPage() {
-  const [product, setProduct] = React.useState(null);
-  const [merchant, setMerchant] = React.useState(null)
-  const [selectedImageIndex, setSelectedImageIndex] = React.useState(0); // Track the index of the selected image
-  const [startIndex, setStartIndex] = React.useState(0); // Added state to track the current image
-  const visibleImagesCount = 3; // Number of images to display at a time
-  const { id } = useParams();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  //const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
-
-
-  React.useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const productData = await fetchSelectedProduct(id);
-        setProduct(productData);
-        setSelectedImageIndex(0); // Start with the first image
-      } catch (error) {
-        console.error("Error fetching product:", error);
+    const [product, setProduct] = React.useState(null);
+    const [merchant, setMerchant] = React.useState(null)
+    const [selectedImageIndex, setSelectedImageIndex] = React.useState(0); // Track the index of the selected image
+    const [startIndex, setStartIndex] = React.useState(0); // Added state to track the current image
+    const visibleImagesCount = 3; // Number of images to display at a time
+    const { id } = useParams();
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    //const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
+  
+  
+    React.useEffect(() => {
+      const fetchProduct = async () => {
+        try {
+          const productData = await fetchSelectedProduct(id);
+          setProduct(productData);
+          setSelectedImageIndex(0); // Start with the first image
+        } catch (error) {
+          console.error("Error fetching product:", error);
+        }
+      };
+      fetchProduct();
+      
+      const fetchMerchant = async ()=>{
+        try{
+          const merchantData = await fetchMerchantProductDetails(id);
+          setMerchant(merchantData)
+        }catch(error){
+          console.error("Error fetching merchant:", error);
+        }
       }
-    };
-    fetchProduct();
-
-    const fetchMerchant = async () => {
-      try {
-        const merchantData = await fetchMerchantProductDetails(id);
-        setMerchant(merchantData)
-      } catch (error) {
-        console.error("Error fetching merchant:", error);
-      }
+  
+      fetchMerchant();
+    }, [id]);
+  
+    if (!product) {
+      return <CircularProgress />;
     }
-
-    fetchMerchant();
-  }, [id]);
-
-  if (!product) {
-    return <CircularProgress />;
-  }
-
-  // const handlePrevious = () => {
-  //   setSelectedImageIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : product.images.length - 1));
-  // };
-
-  // const handleNext = () => {
-  //   setSelectedImageIndex((prevIndex) => (prevIndex < product.images.length - 1 ? prevIndex + 1 : 0));
-  // };
+  
+    // const handlePrevious = () => {
+    //   setSelectedImageIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : product.images.length - 1));
+    // };
+  
+    // const handleNext = () => {
+    //   setSelectedImageIndex((prevIndex) => (prevIndex < product.images.length - 1 ? prevIndex + 1 : 0));
+    // };
 
     const handlePrevious = () => {
       setStartIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : 0)); //Decrement startIndex for the previous images
@@ -265,50 +370,50 @@ export function ProductPage() {
                   {/* <Typography variant={isMobile ? 'h6' : 'h5'} component="h4" sx={{ fontWeight: 'bold' }} gutterBottom>Description</Typography> */}
                   <ul style={{ textAlign: 'justify', fontSize: '18px' }}>
 
-                  {product.description.map((item, index) => (
-                    <li key={index}><Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4">{item}</Typography></li>
-                  ))}
-                  <li><Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4">Quantity: {product.quantity}</Typography></li>
-                  {/* <li>Location: {product.location}</li> */}
-                </ul>
-
-              </Box>
-              <Box sx={{ mx: '1rem', mt: '4.5rem' }}>
-                {/* Seller Details */}
-                <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
-                <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }} gutterBottom><i className="fa-solid fa-user"></i> Name : {merchant && merchant.firstName + ' ' + merchant.lastName}</Typography>
-                <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }} gutterBottom><i className="fa-solid fa-location-dot"></i> Location : {product.location}</Typography>
-                <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }}><i className="fa-solid fa-phone"></i> Contact No : {merchant && merchant.phoneNumber}</Typography>
-              </Box>
-            </CardContent>
-          </Card>
+                    {product.description.map((item, index) => (
+                      <li key={index}><Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4">{item}</Typography></li>
+                    ))}
+                    <li><Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4">Quantity: {product.quantity}</Typography></li>
+                    {/* <li>Location: {product.location}</li> */}
+                  </ul>
+                  
+                </Box>
+                <Box sx={{ mx: '1rem', mt: '4.5rem' }}>
+                  {/* Seller Details */}
+                  <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
+                  <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center'}} gutterBottom><i className="fa-solid fa-user"></i> Name : {merchant && merchant.firstName + ' ' + merchant.lastName}</Typography>
+                  <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center'}} gutterBottom><i className="fa-solid fa-location-dot"></i> Location : {product.location}</Typography>
+                  <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center'}}><i className="fa-solid fa-phone"></i> Contact No : {merchant && merchant.phoneNumber}</Typography>
+                </Box>
+              </CardContent>
+            </Card>
+          </Grid>
         </Grid>
-      </Grid>
-      <Grid container spacing={1} sx={{ marginTop: '1rem' }}>
-        <Grid item>
-          <Button
-            variant="contained"
-            component={Link}
-            to="/p/products"
-            startIcon={<ChevronLeftIcon />}
-            size={isMobile ? "small" : "medium"}
-            sx={{
-              backgroundColor: '#0d6efd',
-              color: 'white',
-              '&:hover': {
-                backgroundColor: '#90caf9',
-              }
-            }}
-          >
-            Back
-          </Button>
+        <Grid container spacing={1} sx={{ marginTop: '1rem' }}>
+          <Grid item>
+            <Button 
+              variant="contained"
+              component={Link}
+              to="/p/products"
+              startIcon={<ChevronLeftIcon />}
+              size={isMobile ? "small" : "medium"}
+              sx={{
+                backgroundColor: '#0d6efd',
+                color: 'white',
+                '&:hover': {
+                  backgroundColor: '#90caf9',
+                }
+              }}
+            >
+              Back
+            </Button>
+          </Grid>
         </Grid>
-      </Grid>
-    </Container>
-  );
-}
+      </Container>
+    );
+  }
 
-{/* <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
+  {/* <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
   <Typography variant="subtitle1" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-user"></i> Name</Typography>
   <Typography variant="body1" >{merchant && merchant.firstName + ' ' + merchant.lastName}</Typography>
   <Typography variant="subtitle1" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-location-dot"></i> Location</Typography>

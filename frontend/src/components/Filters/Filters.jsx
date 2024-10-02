@@ -51,7 +51,7 @@ export default function Filters({ itemList }) {
     };
 
     React.useEffect(() => {
-        navigate(`/p/products?category=${category}&subcategory=${subCategory}&price=${priceRange}&quantity=${quantity}`);
+        navigate(`/p/products?category=${category}&subcategory=${subCategory}`);
     }, [category, subCategory])
 
     const filters = (
