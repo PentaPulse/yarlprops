@@ -136,7 +136,7 @@ function ProductList() {
       }}>
       <Grid container spacing={{ xs: 2, sm: 3, md: 3, lg: 3 }} sx={{ justifyContent: "left", alignItems: "center"}} columns={24}>
         {products.length === 0 ?
-          <DbError items={3} />
+          <DbError home={true} />
           :
           products.map((product, index) => (
             <Grid item key={index} xs={24} sm={12} md={8} lg={6}>
@@ -219,7 +219,7 @@ function RentalsList() {
       }}>
       <Grid container spacing={{ xs: 2, sm: 3, md: 3, lg: 3 }} sx={{ justifyContent: "left", alignItems: "center"}} columns={24}>
         {rentals.length === 0 ?
-          <DbError items={3} />
+          <DbError home={true} />
           :
           rentals.map((rental, index) => (
             <Grid item key={index} xs={24} sm={12} md={8} lg={6}>
@@ -302,7 +302,7 @@ function ServicesList() {
       }}>
       <Grid container spacing={{ xs: 2, sm: 3, md: 3, lg: 3 }} sx={{ justifyContent: "left", alignItems: "center"}} columns={24}>
         {services.length === 0 ?
-          <DbError items={3} />
+          <DbError home={true} />
           :
           services.map((service, index) => (
             <Grid item key={index} xs={24} sm={12} md={8} lg={6}>
