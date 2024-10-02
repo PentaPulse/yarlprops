@@ -17,7 +17,7 @@ export default function Filters({ itemList }) {
 
     const updateFilters = (newFilter,remove) => {
         const params = new URLSearchParams(searchParams);
-
+console.log(remove)
         Object.keys(newFilter).forEach((key) => {
             if (remove) {
                 params.delete(key);
@@ -59,12 +59,12 @@ export default function Filters({ itemList }) {
     const handleClearCategories = () => {
         setCategory(null);
         setSubCategory(null);
-        updateFilters({ cat: null, subcat: null }, true)
+        updateFilters({ category: null, subcategory: null }, true)
     };
 
     const handleClearSubCategories = () => {
         setSubCategory(null);
-        updateFilters({ subcat: null }, true);
+        updateFilters({ subcategory: null }, true);
     };
 
     const toggleDrawer = (open) => (event) => {

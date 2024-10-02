@@ -2,7 +2,7 @@ import * as React from 'react';
 import Image1 from "./images/contact1.jpg";
 import Image2 from "./images/hi1.png";
 
-import { Box, Typography,Container} from "@mui/material";
+import { Box, Typography, Container } from "@mui/material";
 import Grid from '@mui/system/Unstable_Grid';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -31,8 +31,8 @@ function Contact() {
     email: '',
     message: '',
   })
-  const  showAlerts  = useAlerts()
-  const theme=useTheme()
+  const showAlerts = useAlerts()
+  const theme = useTheme()
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -43,31 +43,32 @@ function Contact() {
     e.preventDefault();
     try {
       await sendMessage(details.firstName, details.lastName, details.email, details.message)
-      showAlerts('Message sent ','success')
+      showAlerts('Message sent ', 'success')
 
     } catch (error) {
-      console.log(error)
+      //console.log(error)
     }
   };
   return (
     <Box sx={{
-      display:'flex',
-      flexDirection:'column',
-      justifyContent:'center',
-      alignItems:'center'
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center'
     }}>
       {/* About Us Section */}
       <Box sx={{
-        padding: 2, backgroundColor: "#333", color: "#fff", marginBottom: 4, 
+        padding: 2, backgroundColor: "#333", color: "#fff", marginBottom: 4,
         width: "90%"
       }}>
         <Typography
-         variant="h2"
+          variant="h2"
           align="center"
-           gutterBottom
-           sx={{fontSize:{xs:'1.8rem',sm:'2.5rem',md:'3rem'},
+          gutterBottom
+          sx={{
+            fontSize: { xs: '1.8rem', sm: '2.5rem', md: '3rem' },
           }}
-           >
+        >
           <b>About Us</b>
         </Typography>
         <Typography variant="body1" align="justify" maxWidth="lg" sx={{ margin: '0 auto', paddingBottom: 4 }}>
@@ -87,8 +88,8 @@ function Contact() {
         width: "90%",
         display: "flex",
         justifyContent: "center",
-        
-       
+
+
       }}>
         <Box
           sx={{
@@ -110,58 +111,58 @@ function Contact() {
       </Box>
 
       {/* Contact Form Section */}
-      <Box sx={{ padding: 4 ,}}>
+      <Box sx={{ padding: 4, }}>
         <Typography variant={"h3"} align="center" pt={8}>
           <b>Contact <span style={{ color: "#0d6efd" }}>Yarl</span>Props</b>
         </Typography>
         <Typography variant="body1" align="center" pb={8}>
-        We are committed to supporting you, first and foremost! We continually strive to exceed expectations and deliver superior 24/7 Days Support...
+          We are committed to supporting you, first and foremost! We continually strive to exceed expectations and deliver superior 24/7 Days Support...
         </Typography>
-     
-      <Box sx={{ padding: 1 ,marginLeft:'-10px'}}>
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={8}>
-            <Card sx={{ backgroundColor: "rgba(255, 255, 255, 0.3)", padding: { xs: 3 }, borderRadius: 4 }}>
-              <CardContent>
-                <Typography gutterBottom variant="h5">
-                  <b>Get in touch</b>
-                </Typography>
-                <Typography variant="body2" color="textSecondary" component="p" gutterBottom>
-                  Fill up the form and our team will get back to you within 24 hours.
-                </Typography>
-                <form >
-                  <Grid container spacing={2}>
-                    <Grid item xs={12} sm={6}>
-                      <TextField placeholder="Enter first name" label="First Name" variant="outlined" name='firstName' fullWidth value={details.firstName} onChange={handleChange} required />
+
+        <Box sx={{ padding: 1, marginLeft: '-10px' }}>
+          <Grid container spacing={3}>
+            <Grid item xs={12} sm={8}>
+              <Card sx={{ backgroundColor: "rgba(255, 255, 255, 0.3)", padding: { xs: 3 }, borderRadius: 4 }}>
+                <CardContent>
+                  <Typography gutterBottom variant="h5">
+                    <b>Get in touch</b>
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary" component="p" gutterBottom>
+                    Fill up the form and our team will get back to you within 24 hours.
+                  </Typography>
+                  <form >
+                    <Grid container spacing={2}>
+                      <Grid item xs={12} sm={6}>
+                        <TextField placeholder="Enter first name" label="First Name" variant="outlined" name='firstName' fullWidth value={details.firstName} onChange={handleChange} required />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <TextField placeholder="Enter last name" label="Last Name" variant="outlined" name='lastName' fullWidth value={details.lastName} onChange={handleChange} required />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField type="email" placeholder="Enter email" label="Email" variant="outlined" name='email' fullWidth value={details.email} onChange={handleChange} required />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField label="Message" multiline rows={4} placeholder="Type your message here" name='message' variant="outlined" fullWidth value={details.message} onChange={handleChange} required />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Button type="submit" variant="contained" onClick={handleSubmit} endIcon={<SendIcon />} fullWidth>Send</Button>
+                      </Grid>
                     </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <TextField placeholder="Enter last name" label="Last Name" variant="outlined" name='lastName' fullWidth value={details.lastName} onChange={handleChange} required />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <TextField type="email" placeholder="Enter email" label="Email" variant="outlined" name='email' fullWidth value={details.email} onChange={handleChange} required />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <TextField label="Message" multiline rows={4} placeholder="Type your message here" name='message' variant="outlined" fullWidth value={details.message} onChange={handleChange} required />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Button type="submit" variant="contained" onClick={handleSubmit} endIcon={<SendIcon />} fullWidth>Send</Button>
-                    </Grid>
-                  </Grid>
-                </form>
-              </CardContent>
-            </Card>
+                  </form>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <Box display="flex" justifyContent="center" alignItems="center" height="100%">
+                <img src={Image2} alt="Contact Us" style={{ maxWidth: '80%', height: 'auto', margin: '0 auto' }} />
+              </Box>
+            </Grid>
           </Grid>
-          <Grid item xs={12} sm={4}>
-            <Box display="flex" justifyContent="center" alignItems="center" height="100%">
-              <img src={Image2} alt="Contact Us" style={{ maxWidth: '80%', height: 'auto', margin: '0 auto' }} />
-            </Box>
-          </Grid>
-        </Grid>
-      </Box>
+        </Box>
       </Box>
 
       {/* Map Section */}
-      <Box sx={{ width: "90%", marginTop: 10}}>
+      <Box sx={{ width: "90%", marginTop: 10 }}>
         <iframe title='our-map' src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3932.966514762512!2d80.02048177450527!3d9.683898978395154!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3afe55d8c70c5db9%3A0xc4ee5d6945ad9bbd!2sUniversity%20of%20Jaffna!5e0!3m2!1sen!2slk!4v1712031159798!5m2!1sen!2slk"
           width="100%" height="450" allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
       </Box>

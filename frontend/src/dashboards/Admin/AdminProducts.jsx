@@ -84,7 +84,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
           setProduct(fetchedProduct);
           setExistingImages(fetchedProduct.images || []);
         } else {
-          console.log('No such document!');
+          //console.log('No such document!');
         }
       };
       fetchProduct();
@@ -442,7 +442,7 @@ const ProductList = ({ onEditProduct, onViewProduct }) => {
               });
           }
       } catch (error) {
-          console.error("Error deleting product: ", error);
+          //console.error("Error deleting product: ", error);
           Swal.fire({
               icon: 'error',
               title: 'Error!',

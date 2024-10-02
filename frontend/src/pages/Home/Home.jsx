@@ -134,7 +134,7 @@ function ProductList() {
         alignItems: 'center',
         justifyContent: 'center',
       }}>
-      <Grid container spacing={{ xs: 2, sm: 3, md: 3, lg: 3 }} sx={{ justifyContent: "left", alignItems: "center"}} columns={24}>
+      <Grid container spacing={{ xs: 2, sm: 3, md: 3, lg: 3  }} sx={{ justifyContent: "left", alignItems: "center"}} columns={24}>
         {products.length === 0 ?
           <DbError home={true} />
           :

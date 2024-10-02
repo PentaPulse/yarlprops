@@ -153,7 +153,7 @@ export function ProductPage() {
         setProduct(productData);
         setSelectedImageIndex(0); // Start with the first image
       } catch (error) {
-        console.error("Error fetching product:", error);
+        //console.error("Error fetching product:", error);
       }
     };
     fetchProduct();
@@ -163,7 +163,7 @@ export function ProductPage() {
         const merchantData = await fetchMerchantProductDetails(id);
         setMerchant(merchantData)
       } catch (error) {
-        console.error("Error fetching merchant:", error);
+        //console.error("Error fetching merchant:", error);
       }
     }
 

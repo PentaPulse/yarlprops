@@ -69,7 +69,7 @@ export default function AdminMerchants() {
                 setCustomers(userList)
             }
         } catch (e) {
-            console.log(e)
+            //console.log(e)
         }
     }
     useEffect(() => {

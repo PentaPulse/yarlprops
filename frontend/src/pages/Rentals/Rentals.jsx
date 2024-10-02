@@ -235,7 +235,7 @@ export function RentalsPage() {
                 setRental(rentalData);
                 setSelectedImageIndex(0);
             } catch (error) {
-                console.error("Error fetching rental:", error);
+                //console.error("Error fetching rental:", error);
             }
         };
 
