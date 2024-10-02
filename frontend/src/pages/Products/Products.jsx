@@ -291,7 +291,7 @@ export function ProductPage() {
                 component="img"
                 image={product.images[selectedImageIndex]}  // Display the selected image as the main product image
                 alt={product.name}
-                sx={{ borderRadius: '0px', width: '100%', height: '70vh', maxHeight: isMobile ? '300px' : '400px', objectFit: 'cover' }}
+                sx={{ borderRadius: '0px', width: '100%', height: 'auto', maxHeight: isMobile ? '300px' : '400px', objectFit: 'cover' }}
               />
             </Card>
   
