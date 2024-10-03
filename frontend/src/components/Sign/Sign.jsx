@@ -10,7 +10,7 @@ export function Login({ closeBox }) {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const { login, reset, google } = useAuth();
-    const showAlerts=useAlerts()
+    const showAlerts = useAlerts();
     const [showPassword, setShowPassword] = React.useState(false);
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -30,17 +30,17 @@ export function Login({ closeBox }) {
     };
 
     const handleLogin = async (e) => {
-        e.preventDefault();
-        if ( !email || !password) {
-            return showAlerts('Enter details to Signin', 'warning')
+        e.preventDefault(); 
+        if (!email || !password) {
+            return showAlerts('Enter details to Sign in', 'warning');
         } else {
-        try {
-            await login(email, password);
-            closeBox()
-        } catch (error) {
-            console.error(error);
+            try {
+                await login(email, password);
+                closeBox();
+            } catch (error) {
+                console.error(error);
+            }
         }
-    }
     };
 
     const handleReset = async (e) => {
@@ -51,15 +51,6 @@ export function Login({ closeBox }) {
             console.error(error);
         }
     };
-/*
-    const handleKeyDown = (event) => {
-        if (event.key === 'Enter') {
-            console.log(event)
-            event.preventDefault()
-            handleLogin()
-        }
-    }*/
-
 
     return (
         <div className="d-flex flex-column gap-2">
@@ -71,7 +62,7 @@ export function Login({ closeBox }) {
                     border: `1px solid ${theme.palette.mode === 'light' ? '#FFFFFF' : '#000000'}`,
                     gap: 3,
                     display: 'block',
-                    margin: 'auto'
+                    margin: 'auto',
                 }}
                 onClick={handleGoogle}
             >
@@ -85,6 +76,12 @@ export function Login({ closeBox }) {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     fullWidth
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault(); 
+                            handleLogin(e);
+                        }
+                    }}
                 />
                 <FormControl variant="outlined">
                     <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
@@ -106,6 +103,12 @@ export function Login({ closeBox }) {
                             </InputAdornment>
                         }
                         label="Password"
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                e.preventDefault();
+                                handleLogin(e);
+                            }
+                        }}
                     />
                 </FormControl>
                 <Typography
@@ -117,7 +120,7 @@ export function Login({ closeBox }) {
             </div>
             <div className="text-center">
                 <ButtonGroup aria-label="Vertical button group" className="gap-3">
-                    <Button variant="contained" onClick={handleLogin} >
+                    <Button variant="contained" onClick={handleLogin}>
                         Sign in
                     </Button>
                 </ButtonGroup>
