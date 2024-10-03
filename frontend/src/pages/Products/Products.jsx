@@ -1,4 +1,4 @@
-import {  Grid,  Typography,  Button, capitalize, Container, Card, CardActionArea, CardMedia, CardContent, CardActions, useTheme, CircularProgress, IconButton, Box, useMediaQuery } from '@mui/material';
+import { Grid, Typography, Button, capitalize, Container, Card, CardActionArea, CardMedia, CardContent, CardActions, useTheme, CircularProgress, IconButton, Box, useMediaQuery } from '@mui/material';
 import * as React from 'react';
 import { productFilters } from '../../components/menuLists';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
@@ -13,14 +13,14 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import Filters from '../../components/Filters/Filters';
 
 function Products() {
-    return (
-      <Grid container spacing={3} justifyContent="center">
-      <Filters itemList={productFilters}/>
+  return (
+    <Grid container spacing={3} justifyContent="center">
+      <Filters itemList={productFilters} />
       <Grid item xs={12} sm={12} md={9} lg={9}>
         <ProductsContents />
       </Grid>
     </Grid>
-    );
+  );
 }
 
 export default Products;
@@ -38,133 +38,149 @@ const ProductsContents = () => {
   const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
 
 
-    React.useEffect(() => {
-        const fetchData = async () => {
-            try {
-                if (searchTerm || category || subCategory) {
-                    let q;
-                    const productRef = collection(db, 'products')
-                    if (searchTerm !== null) {
-                        q = query(productRef, where('title', '>=', capitalize(searchTerm)), where('title', '<=', capitalize(searchTerm) + '\uf8ff'));
-                    }
-                    if (category !== null) {
-                        q = query(productRef, where('category', '==', category))
-                    }
-                    if (subCategory !== null) {
-                        q = query(productRef, where('subCategory', '==', subCategory))
-                    }/*
-                if (price) {
-                    q = query(productRef, where('category', '==', price))
-                }
-                if (quantity) {
-                    q = query(productRef, where('category', '==', quantity))
-                }*/
-                    const querySnapshot = await getDocs(q);
-                    const items = querySnapshot.docs.map(doc => doc.data());
-                    setProducts(items);
-
-                } else {
-                    const productList = await fetchProducts();
-                    setProducts(productList);
-                }
-            } catch (e) {
-              console.log(e)
-                setProducts([])
-            }
-        };
-
-        fetchData()
-    }, [searchTerm, category, subCategory, price, quantity]);
-
-    const handleCardClick = (pid) => {
-        navigate(`/p/product/${pid}`);
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        console.log(category);
+    
+        const productRef = collection(db, 'products');
+        let q = productRef;
+    
+        if (searchTerm) {
+          q = query(q, where('title', '>=', capitalize(searchTerm)), where('title', '<=', capitalize(searchTerm) + '\uf8ff'));
+        }
+    
+        if (category && !subCategory) {
+          q = query(q, where('category', '==', category));
+        }
+    
+        if (subCategory) {
+          q = query(q, where('subCategory', '==', subCategory));
+        }
+    
+        /*
+        if (price) {
+          q = query(q, where('price', '==', price));
+        }
+    
+        if (quantity) {
+          q = query(q, where('quantity', '==', quantity));
+        }
+        */
+    
+        if (!category && !subCategory && !searchTerm) {
+          fetchProductsWithoutFilters();
+          return
+        }
+    
+        const querySnapshot = await getDocs(q);
+        const items = querySnapshot.docs.map(doc => doc.data());
+    
+        setProducts(items);
+    
+      } catch (e) {
+        console.error(e);
+        setProducts([]); 
+      }
     };
-    return (
-        <Container maxWidth="xl">
-            <Grid container spacing={{ xs: 2, sm: 2, md: 3 }} columns={{ xs: 1, sm: 2, md: 2, lg: 3 }}>
-                {!products ? <DbError items={9} /> : products.length === 0 ?
-                    <DbError items={9} />
-                    :
-                    products.map((product, index) => (
-                        <Grid item xs={1} sm={1} md={1} lg={1} key={index}>
-                            <Card sx={{ 
-                              boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)', 
-                              position: 'relative', 
-                              height: isMobile ? '18rem' : isTablet ? '22rem' : '24rem',
-                              width: '100%'
-                              }}>
 
-                                <CardActionArea onClick={() => handleCardClick(product.pid)}>
-                                    <CardMedia
-                                        sx={{ height: isMobile ? '14rem' : isTablet ? '18rem' : '20rem', objectFit: 'cover'}}
-                                        image={product.images[0] || 'https://picsum.photos/id/11/200/300'}
-                                        title={product.name}
+    const fetchProductsWithoutFilters = async () => {
+      const productList = await fetchProducts();
+      setProducts(productList);
+    }
 
-                                    />
-                                    <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                        <Typography gutterBottom variant={isMobile ? 'subtitle1' : 'h6'} component='div' color='inherit'>
-                                            {product.title}
-                                        </Typography>
-                                    </CardContent>
-                                    <CardActions sx={{ position: 'absolute', top: '2px', left: '5px' }}>
-                                        {(product.status === "For Sale") ? (<Button size='small' style={{ backgroundColor: "green", color: 'white', fontWeight: 'bold' }}>For Sale</Button>) : ((product.status === "For Rent") ? (<Button size='small' style={{ backgroundColor: "darkorange", color: 'white', fontWeight: 'bold' }}>For Rent</Button>) : ((<Button size='small' style={{ backgroundColor: "red", color: 'white', fontWeight: 'bold' }}>Sold Out!</Button>)))}
-                                    </CardActions>
-                                </CardActionArea>
-                            </Card>
-                        </Grid>
-                    ))}
+    fetchData()
+  }, [searchTerm, category, subCategory, price, quantity]);
+
+  const handleCardClick = (pid) => {
+    navigate(`/p/product/${pid}`);
+  };
+  return (
+    <Container maxWidth="xl">
+      <Grid container spacing={{ xs: 2, sm: 2, md: 3 }} columns={{ xs: 1, sm: 2, md: 2, lg: 3 }}>
+        {!products ? <DbError items={9} /> : products.length === 0 ?
+          <DbError items={9} />
+          :
+          products.map((product, index) => (
+            <Grid item xs={1} sm={1} md={1} lg={1} key={index}>
+              <Card sx={{
+                boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
+                position: 'relative',
+                height: isMobile ? '18rem' : isTablet ? '22rem' : '24rem',
+                width: '100%'
+              }}>
+
+                <CardActionArea onClick={() => handleCardClick(product.pid)}>
+                  <CardMedia
+                    sx={{ height: isMobile ? '14rem' : isTablet ? '18rem' : '20rem', objectFit: 'cover' }}
+                    image={product.images[0] || 'https://picsum.photos/id/11/200/300'}
+                    title={product.name}
+
+                  />
+                  <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Typography gutterBottom variant={isMobile ? 'subtitle1' : 'h6'} component='div' color='inherit'>
+                      {product.title}
+                    </Typography>
+                  </CardContent>
+                  <CardActions sx={{ position: 'absolute', top: '2px', left: '5px' }}>
+                    {(product.status === "For Sale") ? (<Button size='small' style={{ backgroundColor: "green", color: 'white', fontWeight: 'bold' }}>For Sale</Button>) : ((product.status === "For Rent") ? (<Button size='small' style={{ backgroundColor: "darkorange", color: 'white', fontWeight: 'bold' }}>For Rent</Button>) : ((<Button size='small' style={{ backgroundColor: "red", color: 'white', fontWeight: 'bold' }}>Sold Out!</Button>)))}
+                  </CardActions>
+                </CardActionArea>
+              </Card>
             </Grid>
-        </Container>
-    );
+          ))}
+      </Grid>
+    </Container>
+  );
 };
 
 export function ProductPage() {
-    const [product, setProduct] = React.useState(null);
-    const [merchant, setMerchant] = React.useState(null)
-    const [selectedImageIndex, setSelectedImageIndex] = React.useState(0); // Track the index of the selected image
-    const [startIndex, setStartIndex] = React.useState(0); // Added state to track the current image
-    const visibleImagesCount = 3; // Number of images to display at a time
-    const { id } = useParams();
-    const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-    //const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
-  
-  
-    React.useEffect(() => {
-      const fetchProduct = async () => {
-        try {
-          const productData = await fetchSelectedProduct(id);
-          setProduct(productData);
-          setSelectedImageIndex(0); // Start with the first image
-        } catch (error) {
-          console.error("Error fetching product:", error);
-        }
-      };
-      fetchProduct();
-      
-      const fetchMerchant = async ()=>{
-        try{
-          const merchantData = await fetchMerchantProductDetails(id);
-          setMerchant(merchantData)
-        }catch(error){
-          console.error("Error fetching merchant:", error);
-        }
+  const [product, setProduct] = React.useState(null);
+  const [merchant, setMerchant] = React.useState(null)
+  const [selectedImageIndex, setSelectedImageIndex] = React.useState(0); // Track the index of the selected image
+  const [startIndex, setStartIndex] = React.useState(0); // Added state to track the current image
+  const visibleImagesCount = 3; // Number of images to display at a time
+  const { id } = useParams();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  //const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
+
+
+  React.useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const productData = await fetchSelectedProduct(id);
+        setProduct(productData);
+        setSelectedImageIndex(0); // Start with the first image
+      } catch (error) {
+        //console.error("Error fetching product:", error);
       }
-  
-      fetchMerchant();
-    }, [id]);
-  
-    if (!product) {
-      return <CircularProgress />;
+    };
+    fetchProduct();
+
+    const fetchMerchant = async () => {
+      try {
+        const merchantData = await fetchMerchantProductDetails(id);
+        setMerchant(merchantData)
+      } catch (error) {
+        //console.error("Error fetching merchant:", error);
+      }
     }
-  
-    // const handlePrevious = () => {
-    //   setSelectedImageIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : product.images.length - 1));
-    // };
-  
-    // const handleNext = () => {
-    //   setSelectedImageIndex((prevIndex) => (prevIndex < product.images.length - 1 ? prevIndex + 1 : 0));
-    // };
+
+    fetchMerchant();
+  }, [id]);
+
+  if (!product) {
+    return <CircularProgress />;
+  }
+
+  // const handlePrevious = () => {
+  //   setSelectedImageIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : product.images.length - 1));
+  // };
+
+  // const handleNext = () => {
+  //   setSelectedImageIndex((prevIndex) => (prevIndex < product.images.length - 1 ? prevIndex + 1 : 0));
+  // };
 
     const handlePrevious = () => {
       setStartIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : 0)); //Decrement startIndex for the previous images
@@ -307,7 +323,7 @@ export function ProductPage() {
     );
   }
 
-  {/* <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
+{/* <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
   <Typography variant="subtitle1" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-user"></i> Name</Typography>
   <Typography variant="body1" >{merchant && merchant.firstName + ' ' + merchant.lastName}</Typography>
   <Typography variant="subtitle1" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-location-dot"></i> Location</Typography>

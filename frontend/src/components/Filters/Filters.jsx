@@ -1,47 +1,71 @@
 import * as React from 'react';
 import { Drawer, Typography, Button, Divider, FormControl, Paper, Radio, RadioGroup, useMediaQuery, useTheme, FormLabel, Grid, FormControlLabel, Slider, TextField } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
 
 export default function Filters({ itemList }) {
-    const [state, setState] = React.useState({
-        top: false,
-        left: false,
-        bottom: false,
-        right: false,
-    });
-    const [category, setCategory] = React.useState(null)
-    const [subCategory, setSubCategory] = React.useState(null)
+    const [category, setCategory] = React.useState(null);
+    const [subCategory, setSubCategory] = React.useState(null);
     const [priceRange, setPriceRange] = React.useState([0, 10000]);
     const [quantity, setQuantity] = React.useState(1);
-    const theme = useTheme()
+    const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('lg'));
     const navigate = useNavigate();
     const [open, setOpen] = React.useState(false);
+    const [set, setSet] = React.useState(false);
+    const [searchParams] = useSearchParams();
+
+    const updateFilters = (newFilter,remove) => {
+        const params = new URLSearchParams(searchParams);
+console.log(remove)
+        Object.keys(newFilter).forEach((key) => {
+            if (remove) {
+                params.delete(key);
+            } else {
+                params.set(key, newFilter[key]);
+            }
+        });
+
+        navigate({
+            pathname: '/p/products',
+            search: params.toString(),
+        });
+    };
 
     const handleCategoryChange = (event) => {
         const value = event.target.value;
         setCategory(value);
-        setSubCategory(null)
+        updateFilters({ category: value });
+        setSubCategory(null); // Clear subcategory when category changes
     };
-    const handleSubCategoryegoryChange = (event) => {
+
+    const handleSubCategoryChange = (event) => {
         const value = event.target.value;
-        setSubCategory(value)
+        setSubCategory(value);
+        updateFilters({ subcategory: value });
     };
 
     const handlePriceRangeChange = (event, newValue) => {
         setPriceRange(newValue);
+        updateFilters({ price: newValue });
     };
 
     const handleQuantityChange = (event) => {
-        setQuantity(event.target.value);
+        const value = event.target.value;
+        setQuantity(value);
+        updateFilters({ quantity: value });
     };
+
     const handleClearCategories = () => {
-        setCategory(null)
-        setSubCategory(null)
-    }
-    const handleClearSubCategoryegories = () => {
-        setSubCategory(null)
-    }
+        setCategory(null);
+        setSubCategory(null);
+        updateFilters({ category: null, subcategory: null }, true)
+    };
+
+    const handleClearSubCategories = () => {
+        setSubCategory(null);
+        updateFilters({ subcategory: null }, true);
+    };
 
     const toggleDrawer = (open) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -49,10 +73,6 @@ export default function Filters({ itemList }) {
         }
         setOpen(open);
     };
-
-    React.useEffect(() => {
-        navigate(`/p/products?category=${category}&subcategory=${subCategory}`);
-    }, [category, subCategory])
 
     const filters = (
         <Paper
@@ -62,6 +82,7 @@ export default function Filters({ itemList }) {
                 boxShadow: 3,
                 margin: isSmallScreen ? '0 1rem' : '0 1 0 1rem'
             }}
+            onClick={() => setSet(true)}
         >
             <FormControl fullWidth>
                 <FormLabel>Categories</FormLabel>
@@ -82,17 +103,17 @@ export default function Filters({ itemList }) {
             <FormControl fullWidth>
                 <FormLabel>Sub Categories</FormLabel>
                 {category && (
-                    <RadioGroup value={subCategory} onChange={handleSubCategoryegoryChange}>
-                        {itemList["categories"][category]?.map((subCategoryegory) => (
+                    <RadioGroup value={subCategory} onChange={handleSubCategoryChange}>
+                        {itemList["categories"][category]?.map((subCategory) => (
                             <FormControlLabel
-                                key={subCategoryegory}
-                                control={<Radio value={subCategoryegory} />}
-                                label={subCategoryegory}
+                                key={subCategory}
+                                control={<Radio value={subCategory} />}
+                                label={subCategory}
                             />
                         ))}
                     </RadioGroup>
                 )}
-                {subCategory && <Button onClick={handleClearSubCategoryegories}>Clear</Button>}
+                {subCategory && <Button onClick={handleClearSubCategories}>Clear</Button>}
             </FormControl>
 
             <Divider sx={{ my: 2 }} />
@@ -122,7 +143,8 @@ export default function Filters({ itemList }) {
                 fullWidth
             />
         </Paper>
-    )
+    );
+
     if (isSmallScreen) {
         return (
             <>
@@ -140,23 +162,18 @@ export default function Filters({ itemList }) {
                         backgroundColor: '#115293',
                     },
                 }} onClick={toggleDrawer(true)}>
-                    {'FILTERS'.split('').map((letter, index) => (
-                        <Typography key={index} >
-                            {letter}
-                        </Typography>
-                    ))}
+                    <FilterAltIcon />
                 </Button>
                 <Drawer anchor='left' open={open} onClose={toggleDrawer(false)}>
                     {filters}
                 </Drawer>
             </>
-        )
-    }
-    else {
+        );
+    } else {
         return (
-            <Grid item xs={12} sm={11.2} md={3} lg={2.5}>
+            <Grid item lg>
                 {filters}
             </Grid>
-        )
+        );
     }
 }

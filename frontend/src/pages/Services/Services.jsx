@@ -215,7 +215,7 @@ export function ServicePage() {
                 const serviceData = await fetchSelectedService(id);
                 setService(serviceData);
             } catch (error) {
-                console.error("Error fetching service:", error);
+                //console.error("Error fetching service:", error);
             }
         };
 
@@ -225,7 +225,7 @@ export function ServicePage() {
                 const merchantData = await fetchMerchantServiceDetails(id);
                 setMerchant(merchantData)
             } catch (error) {
-                console.error("Error fetching merchant:", error);
+                //console.error("Error fetching merchant:", error);
             }
         }
 

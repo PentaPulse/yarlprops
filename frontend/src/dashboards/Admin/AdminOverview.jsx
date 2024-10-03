@@ -142,7 +142,7 @@ function ContactResponsesTable() {
                 const responses = q.docs.map((doc) => doc.data())
                 setResponses(responses);
             } catch (err) {
-                setError(err.message);
+                //setError(err.message);
             }
         }
         fetchData();
