@@ -1,7 +1,10 @@
-import React from 'react';
-import { Container, Grid, Paper, Typography, Box } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Container, Grid, Paper, Typography, Box, useTheme } from '@mui/material';
 import { Pie, Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { useAuth } from '../../api/AuthContext';
+import { db } from '../../api/firebase';
 
 // Data for Pie Charts
 const createPieData = (sold, available) => ({
@@ -38,12 +41,39 @@ const popularTimesData = {
 };
 
 const MerchantOverview = () => {
-  const soldProducts = 150;
-  const availableProducts = 350;
+  const theme=useTheme()
+  const [availableProductCount, setAvailbleProductCount] = useState(0)
+  const [soldProductCount,setSoldProductCount]=useState(0)
   const rentedRentals = 100;
   const availableRentals = 200;
   const soldServices = 90;
   const availableServices = 110;
+  const { user } = useAuth();
+
+  useEffect(() => {
+    const fetchAvailableProductCount = async () => {
+      const q = query(collection(db, "products"), where("merchantId", "==", user.uid),where("status","==","For Sale"))
+      try {
+        const qSnapshot = await getDocs(q)
+        setAvailbleProductCount(qSnapshot.size)
+      } catch (e) {
+        //console.error(e)
+      }
+    }
+
+    fetchAvailableProductCount()
+    const fetchSoldProductCount = async () => {
+      const q = query(collection(db, "products"), where("merchantId", "==", user.uid),where("status","!=","For Sale"))
+      try {
+        const qSnapshot = await getDocs(q)
+        setSoldProductCount(qSnapshot.size)
+      } catch (e) {
+        //console.error(e)
+      }
+    }
+
+    fetchSoldProductCount()
+  },[availableProductCount,soldProductCount])
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
@@ -54,17 +84,17 @@ const MerchantOverview = () => {
       <Grid container spacing={4}>
         {/* Pie Charts */}
         <Grid item xs={12} md={4}>
-          <Paper elevation={3} sx={{ padding: 2, backgroundColor: '#f5f5f5' }}>
-            <Typography variant="h6" align="center" color="primary">
+          <Paper elevation={3} sx={{ padding: 2, backgroundColor: theme.palette.background }}>
+            <Typography variant="h6" align="center" color={'inherit'}>
               Products (Sold vs Available)
             </Typography>
-            <Pie data={createPieData(soldProducts, availableProducts)} />
+            <Pie data={createPieData(soldProductCount, availableProductCount)} />
           </Paper>
         </Grid>
 
         <Grid item xs={12} md={4}>
-          <Paper elevation={3} sx={{ padding: 2, backgroundColor: '#f5f5f5' }}>
-            <Typography variant="h6" align="center" color="primary">
+          <Paper elevation={3} sx={{ padding: 2, backgroundColor: theme.palette.background }}>
+            <Typography variant="h6" align="center" color={'inherit'}>
               Rentals (Rented vs Available)
             </Typography>
             <Pie data={createPieData(rentedRentals, availableRentals)} />
@@ -72,8 +102,8 @@ const MerchantOverview = () => {
         </Grid>
 
         <Grid item xs={12} md={4}>
-          <Paper elevation={3} sx={{ padding: 2, backgroundColor: '#f5f5f5' }}>
-            <Typography variant="h6" align="center" color="primary">
+          <Paper elevation={3} sx={{ padding: 2, backgroundColor: theme.palette.background }}>
+            <Typography variant="h6" align="center" color={'inherit'}>
               Services (Sold vs Available)
             </Typography>
             <Pie data={createPieData(soldServices, availableServices)} />
@@ -82,8 +112,8 @@ const MerchantOverview = () => {
 
         {/* Popular Times Bar Chart */}
         <Grid item xs={12}>
-          <Paper elevation={3} sx={{ padding: 2, backgroundColor: '#f5f5f5' }}>
-            <Typography variant="h6" align="center" color="primary">
+          <Paper elevation={3} sx={{ padding: 2, backgroundColor: theme.palette.background }}>
+            <Typography variant="h6" align="center" color={'inherit'}>
               Most Popular Times for Products, Rentals, and Services
             </Typography>
             <Bar data={popularTimesData} />
@@ -92,20 +122,20 @@ const MerchantOverview = () => {
 
         {/* Summary and Comparisons */}
         <Grid item xs={12} md={6}>
-          <Paper elevation={3} sx={{ padding: 2, backgroundColor: '#f5f5f5' }}>
-            <Typography variant="h6" align="center" color="primary">
+          <Paper elevation={3} sx={{ padding: 2, backgroundColor: theme.palette.background }}>
+            <Typography variant="h6" align="center" color={'inherit'}>
               Products Summary
             </Typography>
             <Box sx={{ p: 2 }}>
-              <Typography>Total Products Sold: {soldProducts}</Typography>
-              <Typography>Total Products Available: {availableProducts}</Typography>
+              <Typography>Total Products Sold: {soldProductCount}</Typography>
+              <Typography>Total Products Available: {availableProductCount}</Typography>
             </Box>
           </Paper>
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <Paper elevation={3} sx={{ padding: 2, backgroundColor: '#f5f5f5' }}>
-            <Typography variant="h6" align="center" color="primary">
+          <Paper elevation={3} sx={{ padding: 2, backgroundColor: theme.palette.background }}>
+            <Typography variant="h6" align="center" color={'inherit'}>
               Rentals Summary
             </Typography>
             <Box sx={{ p: 2 }}>
@@ -116,8 +146,8 @@ const MerchantOverview = () => {
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <Paper elevation={3} sx={{ padding: 2, backgroundColor: '#f5f5f5' }}>
-            <Typography variant="h6" align="center" color="primary">
+          <Paper elevation={3} sx={{ padding: 2, backgroundColor: theme.palette.background }}>
+            <Typography variant="h6" align="center" color={'inherit'}>
               Services Summary
             </Typography>
             <Box sx={{ p: 2 }}>
@@ -141,12 +171,12 @@ export default MerchantOverview;
 //import MerchantOverview from './components/MerchantOverview';
 
 //function App() {
-  //return (
-   // <div>
-     // {/* Rendering the MerchantOverview component */}
-     // <MerchantOverview />
-   // </div>
- // );
+//return (
+// <div>
+// {/* Rendering the MerchantOverview component */}
+// <MerchantOverview />
+// </div>
+// );
 //}
 
 // Exporting the App component as the default export

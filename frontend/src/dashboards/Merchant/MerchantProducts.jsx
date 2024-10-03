@@ -82,7 +82,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
     description: [''],
     quantity: '',
     location: '',
-    status: '',
+    status: 'For Sale',
     visibility: 'not',
     images: [
 
