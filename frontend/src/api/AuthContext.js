@@ -145,6 +145,7 @@ export const AuthProvider = ({ children }) => {
             if (error.code === 'auth/missing-email') {
                 showAlerts('Enter your email address', 'warning')
             }
+            console.error(error)
         })
 
     //logout

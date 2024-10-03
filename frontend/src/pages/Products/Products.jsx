@@ -97,12 +97,12 @@ const ProductsContents = () => {
   };
   return (
     <Container maxWidth="xl">
-      <Grid container spacing={{ xs: 2, sm: 2, md: 3 }} columns={{ xs: 1, sm: 2, md: 2, lg: 3 }}>
+      <Grid container spacing={{ xs: 2, sm: 2, md: 3 }} columns={24}>
         {!products ? <DbError items={9} /> : products.length === 0 ?
           <DbError items={9} />
           :
           products.map((product, index) => (
-            <Grid item xs={1} sm={1} md={1} lg={1} key={index}>
+            <Grid item xs={24} sm={12} md={12} lg={8} key={index}>
               <Card sx={{
                 boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
                 position: 'relative',

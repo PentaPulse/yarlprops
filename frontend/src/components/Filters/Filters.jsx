@@ -12,7 +12,6 @@ export default function Filters({ itemList }) {
     const isSmallScreen = useMediaQuery(theme.breakpoints.down('lg'));
     const navigate = useNavigate();
     const [open, setOpen] = React.useState(false);
-    const [set, setSet] = React.useState(false);
     const [searchParams] = useSearchParams();
 
     const updateFilters = (newFilter,remove) => {
@@ -80,9 +79,10 @@ console.log(remove)
                 padding: '1.5rem',
                 borderRadius: '8px',
                 boxShadow: 3,
-                margin: isSmallScreen ? '0 1rem' : '0 1 0 1rem'
+                margin: isSmallScreen ? '0 1rem' : '0 1 0 1rem',
+                width:'300px',
+                backgroundColor:`${theme.palette.background} ,1`                
             }}
-            onClick={() => setSet(true)}
         >
             <FormControl fullWidth>
                 <FormLabel>Categories</FormLabel>
@@ -164,7 +164,7 @@ console.log(remove)
                 }} onClick={toggleDrawer(true)}>
                     <FilterAltIcon />
                 </Button>
-                <Drawer anchor='left' open={open} onClose={toggleDrawer(false)}>
+                <Drawer  anchor='left' open={open} onClose={toggleDrawer(false)}>
                     {filters}
                 </Drawer>
             </>
