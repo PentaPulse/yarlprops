@@ -184,7 +184,7 @@ export function ProductPage() {
                 component="img"
                 image={product.images[selectedImageIndex]}  // Display the selected image as the main product image
                 alt={product.name}
-                sx={{ borderRadius: '0px', width: '100%', height: 'auto', maxHeight: isMobile ? '300px' : '400px', objectFit: 'cover' }}
+                sx={{ borderRadius: '0px', width: '100%', height: { xs: '300px', sm:'480px', md: '430px', lg: '445px'}, maxHeight: '445px',objectFit: 'cover' }}
               />
             </Card>
   
@@ -208,7 +208,8 @@ export function ProductPage() {
                     alt={`image ${index}`}
                     sx={{
                       width: '100%',
-                      height: isMobile ? '70px' : '100px',
+                      // height: isMobile ? '70px' : '100px',
+                      height: { xs: '70px', sm:'120px', md:'100px', lg:'100px'},
                       borderRadius: '8px',
                       objectFit: 'cover',
                       boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',

@@ -144,7 +144,9 @@ function ProductList() {
                 sx={{ 
                   width: '100%', // Takes full width within its grid space
                   height: 'auto',               
-                  minHeight: '280px', // Minimum height, but allows it to expand
+                  // minHeight: '280px', Minimum height, but allows it to expand
+                  maxHeight: '300px',
+                  minWidth: '230px',
                   boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)',
                   transition: '0.3s',
                   '&:hover': {
