@@ -3,8 +3,8 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     match /systemusers/{uid}{
-      allow read;
-      allow write:if isAdmin(request.auth.uid) || isUser(request.auth.uid);
+      allow read,update,delete;//:if isAdmin(request.auth.uid) || isUser(request.auth.uid);
+      allow write;
     }
 
     match /admins/{aid}{
