@@ -183,11 +183,21 @@ export function ProductPage() {
   // };
 
     const handlePrevious = () => {
-      setStartIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : 0)); //Decrement startIndex for the previous images
+      // setStartIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : 0)); //Decrement startIndex for the previous images
+      if(startIndex > 0){
+        setStartIndex(startIndex - 1);
+      } else {
+        setStartIndex(product.images.length - visibleImagesCount);
+      }
     };
   
     const handleNext = () => {
-      setStartIndex((prevIndex) => (prevIndex < product.images.length - visibleImagesCount ? prevIndex + 1 : prevIndex)); //Increment startIndex for the next set of images
+      // setStartIndex((prevIndex) => (prevIndex < product.images.length - visibleImagesCount ? prevIndex + 1 : prevIndex)); //Increment startIndex for the next set of images
+      if(startIndex + visibleImagesCount < product.images.length){
+        setStartIndex(startIndex + 1);
+      } else {
+        setStartIndex(0);
+      }
     };
   
     return (
@@ -208,9 +218,8 @@ export function ProductPage() {
             <Grid container spacing={2} sx={{ mt: 2, alignItems: 'center', justifyContent:'center'}}>
               <Grid item xs={1} sm={1} md={1} lg={1} sx={{ display: 'flex', justifyContent: 'center'}}>
                 <IconButton 
-                  onClick={handlePrevious} 
-                  disabled={startIndex === 0}
-                  sx={{ fontSize: { xs:'1.5rem', sm: '2rem'}}}
+                  onClick={handlePrevious}
+                  sx={{ fontSize: { xs:'1.5rem', sm: '2rem' }}}
                 >
                   <ArrowBackIosIcon />
                 </IconButton>
@@ -244,7 +253,6 @@ export function ProductPage() {
               <Grid item xs={1} sm={1} md={1} lg={1} sx={{ display: 'flex', justifyContent: 'center'}}>
                 <IconButton 
                   onClick={handleNext} 
-                  disabled={startIndex >= product.images.length - visibleImagesCount}
                   sx={{ fontSize: { xs: '1.5rem', sm: '2rem'}}}
                 >
                   <ArrowForwardIosIcon />
