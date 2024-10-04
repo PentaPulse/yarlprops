@@ -2,49 +2,51 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    match /systemusers/{uid}{
-      allow read;
-      allow write:if isAdmin(request.auth.uid) || isUser(request.auth.uid);
+    match /systemusers/{userId} {      
+      allow create: if isCustomer(request.auth.uid);
+      allow read: if isUser(request.auth.uid) ||isAdmin(request.auth.uid);
+      allow update: if isUser(request.auth.uid);
+      allow delete: if false;
     }
 
     match /admins/{aid}{
       allow read;
-      allow write:if isAdmin(request.auth.uid)
+      allow write,update:if isAdmin(request.auth.uid)
     }
 
     match /contactus/{id}{
-      allow read:if isAdmin(request.auth.uid);
+      allow read,update:if isAdmin(request.auth.uid);
       allow write:if true;
     }
 
     match /products/{productId} {
       allow read: if true;
-      
-      allow write, update, delete: if request.auth != null && 
-        (request.auth.uid == resource.data.merchantId || isAdmin(request.auth.uid));
+      allow write:if isMerchant(request.auth.uid)||isAdmin(request.auth.uid);
+      //allow write, update, delete: if request.auth != null && 
+      //(request.auth.uid == resource.data.merchantId || isAdmin(request.auth.uid));
     }
 
     match /services/{serviceId}{
       allow read: if true;
-      
+
       allow write, update, delete: if request.auth != null && 
-        (request.auth.uid == resource.data.merchantId|| isAdmin(request.auth.uid));
+      (request.auth.uid == resource.data.merchantId|| isAdmin(request.auth.uid));
     }
 
     match /rentals/{rentalId}{
       allow read: if true;
-      
+
       allow write, update, delete: if request.auth != null && 
-        (request.auth.uid == resource.data.merchantId || isAdmin(request.auth.uid));
+      (request.auth.uid == resource.data.merchantId || isAdmin(request.auth.uid));
     }
     match /logs/{userId} {
       allow read: if request.auth != null && request.auth.uid == userId;
       allow write: if request.auth != null && request.auth.uid == userId;
-      
+
       match /signinlogs/{logId} {
         allow read, write: if request.auth != null && request.auth.uid == userId;  // Apply the same rule for sub-collection
       }
-       match /signoutlogs/{logId} {
+      match /signoutlogs/{logId} {
         allow read : if request.auth != null && request.auth.uid == userId;  // Apply the same rule for sub-collection
         allow write;
       }
@@ -53,9 +55,18 @@ service cloud.firestore {
     function isAdmin(userId) {
       return exists(/databases/$(database)/documents/admins/$(userId));
     }
-
+    function isMerchant(userId) {
+      return exists(/databases/$(database)/documents/systemusers/$(userId)) &&
+      request.auth != null &&
+      request.auth.token.isMerchant == true;
+    }
+    function isCustomer(userId) {
+      return exists(/databases/$(database)/documents/systemusers/$(userId)) &&
+      request.auth != null &&
+      request.auth.token.isMerchant == false;
+    }
     function isUser(userId){
-      return exists(/databases/$(database)/documents/systemusers/$(userId))
+      return exists(/databases/$(database)/documents/systemusers/$(userId));
     }
   }
 }

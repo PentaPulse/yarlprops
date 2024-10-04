@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = React.useState(true);
     const [ok, setOk] = React.useState(false)
     const navigate = useNavigate()
-    const showAlerts = useAlerts();
+    const {showAlerts} = useAlerts();
 
     React.useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -138,13 +138,14 @@ export const AuthProvider = ({ children }) => {
     //reset password
     const reset = (email) => sendPasswordResetEmail(auth, email)
         .then(() => {
-            resetLog(auth.currentUser.uid)
+            //resetLog(user.uid) //no user object returning
             showAlerts(`Check ${email} inbox`, 'info')
         })
         .catch((error) => {
             if (error.code === 'auth/missing-email') {
                 showAlerts('Enter your email address', 'warning')
             }
+            console.error(error)
         })
 
     //logout

@@ -26,7 +26,7 @@ export default function DbError({ home }) {
     }, [isMobile, isTablet])
     return (<>
         {Array.from(new Array(count)).map((_, index) => (
-            <Grid item xs={1} sm={1} md={1} lg={1} key={index}>
+            <Grid item xs={24} sm={12} md={12} lg={8} key={index}>
                 <Skeleton variant='rectangular' sx={{
                     boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
                     position: 'relative',
