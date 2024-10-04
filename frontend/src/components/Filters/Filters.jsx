@@ -171,7 +171,7 @@ console.log(remove)
         );
     } else {
         return (
-            <Grid item lg>
+            <Grid item lg={3}>
                 {filters}
             </Grid>
         );
