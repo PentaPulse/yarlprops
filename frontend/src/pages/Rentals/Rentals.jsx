@@ -264,7 +264,7 @@ export function RentalsPage() {
                             component="img"
                             image={rental.images[selectedImageIndex]}  // Display the selected image as the main rental image
                             alt={rental.name}
-                            sx={{ borderRadius: '0px', width: '100%', height: 'auto', maxHeight: isMobile ? '300px' : '400px', objectFit: 'cover' }}
+                            sx={{ borderRadius: '0px', width: '100%', height: { xs: '300px', sm:'550px', md: '430px', lg: '445px'}, minHeight:'300px', objectFit: 'cover' }}
                         />
                     </Card>
 
@@ -272,7 +272,9 @@ export function RentalsPage() {
                     <Grid container spacing={2} sx={{ mt: 2, alignItems: 'center', justifyContent: 'center' }}>
                         <Grid item xs={1} sm={1} md={1} lg={1} sx={{ display: 'flex', justifyContent: 'center'}}>
                             <IconButton 
-                                onClick={handlePrevious}>
+                                onClick={handlePrevious}
+                                sx={{ fontSize: { xs:'1.5rem', sm: '2rem' }}}
+                            >
                                 <ArrowBackIosIcon />
                             </IconButton>
                         </Grid>
@@ -285,7 +287,7 @@ export function RentalsPage() {
                                     alt={`image ${index}`}
                                     sx={{
                                         width: '100%',
-                                        height: isMobile ? '70px' : '100px',
+                                        height: { xs: '70px', sm:'120px', md:'100px', lg:'100px'},
                                         borderRadius: '8px',
                                         objectFit: 'cover',
                                         boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
@@ -302,7 +304,10 @@ export function RentalsPage() {
                         ))}
 
                         <Grid item xs={1} sm={1} md={1} lg={1} sx={{ display: 'flex', justifyContent: 'center'}}>
-                            <IconButton onClick={handleNext}>
+                            <IconButton 
+                                onClick={handleNext}
+                                sx={{ fontSize: { xs: '1.5rem', sm: '2rem'}}}
+                            >
                                 <ArrowForwardIosIcon />
                             </IconButton>
                         </Grid>
@@ -344,8 +349,8 @@ export function RentalsPage() {
                             <Box sx={{ mx: '1rem', mt: '2.5rem' }}>
                                 {/* Seller Details */}
                                 <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
-                                <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center'}}><i className="fa-solid fa-user"></i> Name : {rental.sellerName}</Typography>
-                                <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center'}}><i className="fa-solid fa-location-dot"></i> Location : {rental.Location}</Typography>
+                                <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center'}} gutterBottom><i className="fa-solid fa-user"></i> Name : {rental.sellerName}</Typography>
+                                <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center'}} gutterBottom><i className="fa-solid fa-location-dot"></i> Location : {rental.Location}</Typography>
                                 <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center'}}><i className="fa-solid fa-phone"></i> Contact No : {rental.telephone}</Typography>
                             </Box>
                         </CardContent>

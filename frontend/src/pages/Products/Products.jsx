@@ -202,7 +202,7 @@ export function ProductPage() {
   
     return (
       <Container maxWidth="lg" sx={{ backgroundColor: theme.palette.background.default }}>
-        <Grid container spacing={4} sx={{ alignItems: 'center', justifyContent:'center'}}>
+        <Grid container spacing={4}>
           <Grid item xs={12} md={6}>
             {/* Main Product Image */}
             <Card sx={{ boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }}>
@@ -210,7 +210,7 @@ export function ProductPage() {
                 component="img"
                 image={product.images[selectedImageIndex]}  // Display the selected image as the main product image
                 alt={product.name}
-                sx={{ borderRadius: '0px', width: '100%', height: { xs: '300px', sm:'480px', md: '430px', lg: '445px'}, maxHeight: '445px',objectFit: 'cover' }}
+                sx={{ borderRadius: '0px', width: '100%', height: { xs: '300px', sm:'550px', md: '430px', lg: '445px'}, minHeight:'300px', objectFit: 'cover' }}
               />
             </Card>
   
@@ -263,9 +263,9 @@ export function ProductPage() {
   
           <Grid item xs={12} md={6}>
             <Card sx={{ height: '100%', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }}>
-              <CardContent sx={{ marginTop: '30px', marginBottom: '30px' }}>
+              <CardContent sx={{ my: '30px' }}>
                 {/* Product Details */}
-                <Typography variant={isMobile ? 'h5' : 'h3'} component="h2" sx={{ fontWeight: 'bold', textAlign: 'center', fontSize: isMobile ? '1.4rem' : '1.8rem' }}>{product.title}</Typography>
+                <Typography variant={isMobile ? 'h5' : 'h4'} component="h2" sx={{ fontWeight: 'bold', textAlign: 'center', fontSize: isMobile ? '1.4rem' : '1.8rem' }}>{product.title}</Typography>
                 <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ fontWeight: 'bold', textAlign: 'center', fontStyle: 'italic' }}>
                   Category: {product.category}
                 </Typography>
@@ -301,13 +301,13 @@ export function ProductPage() {
                   <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
                   <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center'}} gutterBottom><i className="fa-solid fa-user"></i> Name : {merchant && merchant.firstName + ' ' + merchant.lastName}</Typography>
                   <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center'}} gutterBottom><i className="fa-solid fa-location-dot"></i> Location : {product.location}</Typography>
-                  <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center'}}><i className="fa-solid fa-phone"></i> Contact No : {merchant && merchant.phoneNumber}</Typography>
+                  <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center'}} gutterBottom><i className="fa-solid fa-phone"></i> Contact No : {merchant && merchant.phoneNumber}</Typography>
                 </Box>
               </CardContent>
             </Card>
           </Grid>
         </Grid>
-        <Grid container spacing={1} sx={{ marginTop: '1rem' }}>
+        <Grid container spacing={1} sx={{ mt: '0.5rem' }}>
           <Grid item>
             <Button 
               variant="contained"

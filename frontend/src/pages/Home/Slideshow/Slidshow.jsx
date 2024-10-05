@@ -7,7 +7,7 @@ function SlideShow() {
   const isSmallScreen = useMediaQuery('(max-width:600px)');
   const isMediumScreen = useMediaQuery('(max-width:960px)');
 
-  const carouselHeight = isSmallScreen ? '40vh' : isMediumScreen ? '60vh' : '80vh';
+  const carouselHeight = isSmallScreen ? '55vh' : isMediumScreen ? '60vh' : '75vh';
   const FontSize = isSmallScreen ? '1.0rem' : isMediumScreen ? '1.3rem' : '1.6rem';
 
   return (

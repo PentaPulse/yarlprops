@@ -256,7 +256,13 @@ export function ServicePage() {
                                         component="img"
                                         image={image}
                                         alt={`slide ${index}`}
-                                        sx={{ height: '80vh', borderRadius: '25px', p: '15px' }}
+                                        sx={{ 
+                                            height: { xs: '350px', sm:'470px', md:'500px', lg:'600px'},
+                                            minHeight: '350px',
+                                            width:'100%', 
+                                            borderRadius: '25px', 
+                                            p: '15px' 
+                                        }}
                                     />
                                 </Box>
                             ))}
@@ -264,15 +270,21 @@ export function ServicePage() {
                     </Card>
                 </Grid>
                 <Grid item xs={12} md={6}>
-                    <Card sx={{ height: '100%', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }}>
+                    <Card 
+                        sx={{ 
+                            height: '100%',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'
+                        }}>
                         <CardContent sx={{ my: '30px' }}>
                             {/* Service Details */}
-                            <Typography variant={isMobile ? 'h5' : 'h3'} component="h2" sx={{ fontWeight: 'bold', textAlign: 'center', fontSize: isMobile ? '1.4rem' : '1.8rem' }}>{service.serviceName}</Typography>
+                            <Typography variant={isMobile ? 'h5' : 'h4'} component="h2" sx={{ fontWeight: 'bold', textAlign: 'center', fontSize: isMobile ? '1.4rem' : '1.8rem' }}>{service.serviceName}</Typography>
                             <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ fontWeight: 'bold', textAlign: 'center', fontStyle: 'italic' }} gutterBottom>
                                 Category: {service.category}
                             </Typography>
                             <Box sx={{
-                                mx: { xs: '1rem', sm:'4rem', md:'3rem', lg:'3rem'},
+                                mx: { xs: '1rem', sm:'5rem', md:'3.5rem', lg:'3rem'},
                                 my: { xs: '0.5rem', sm:'0.7rem', md:'1rem', lg:'1.5rem'},
                              }}>
                                 {/* <Typography variant="h6" component="h4" sx={{ fontWeight: 'bold' }}>Description</Typography> */}
@@ -284,13 +296,10 @@ export function ServicePage() {
                             </Box>
                             <Box sx={{ mx: '1rem', mt: '2.5rem' }}>
                                 {/* Seller Details */}
-                                <Typography variant="h5" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Service Provider's Details</Typography>
-                                <Typography variant="h6" sx={{ textAlign: 'center'}} gutterBottom><i className="fa-solid fa-user"></i> Name : {merchant && merchant.firstName + ' ' + merchant.lastName}</Typography>
-                                {/* <Typography >{merchant && merchant.firstName + ' ' + merchant.lastName}</Typography> */}
-                                <Typography variant="h6" sx={{ textAlign: 'center'}} gutterBottom><i className="fa-solid fa-location-dot"></i> Location : {service.serviceLocation}</Typography>
-                                {/* <Typography>{service.serviceLocation}</Typography> */}
-                                <Typography variant="h6" sx={{ textAlign: 'center'}} gutterBottom><i className="fa-solid fa-phone"></i> Contact No : {merchant && merchant.phoneNumber}</Typography>
-                                {/* <Typography>{merchant && merchant.phoneNumber}</Typography> */}
+                                <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Service Provider's Details</Typography>
+                                <Typography variant={isMobile ? 'subtitle1' : 'h6'} sx={{ textAlign: 'center'}} gutterBottom><i className="fa-solid fa-user"></i> Name : {merchant && merchant.firstName + ' ' + merchant.lastName}</Typography>
+                                <Typography variant={isMobile ? 'subtitle1' : 'h6'} sx={{ textAlign: 'center'}} gutterBottom><i className="fa-solid fa-location-dot"></i> Location : {service.serviceLocation}</Typography>
+                                <Typography variant={isMobile ? 'subtitle1' : 'h6'} sx={{ textAlign: 'center'}} gutterBottom><i className="fa-solid fa-phone"></i> Contact No : {merchant && merchant.phoneNumber}</Typography>
                             </Box>
                         </CardContent>
                     </Card>

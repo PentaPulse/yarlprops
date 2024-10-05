@@ -146,7 +146,7 @@ function ProductList() {
                   height: 'auto',               
                   // minHeight: '280px', Minimum height, but allows it to expand
                   maxHeight: '300px',
-                  minWidth: '230px',
+                  minWidth: '270px',
                   boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)',
                   transition: '0.3s',
                   '&:hover': {
@@ -230,7 +230,7 @@ function RentalsList() {
                   width: '100%',
                   height: 'auto',
                   maxHeight: '300px',
-                  minWidth: '230px',
+                  minWidth: '270px',
                   boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)',
                   transition: '0.3s',
                   '&:hover': {
@@ -313,7 +313,7 @@ function ServicesList() {
                   width: '100%',
                   height: 'auto',
                   maxHeight: '300px',
-                  minWidth: '230px',           
+                  minWidth: '270px',           
                   boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)',
                   transition: '0.3s',
                   '&:hover': {
