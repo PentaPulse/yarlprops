@@ -15,7 +15,7 @@ import Filters from '../../components/Filters/Filters';
 function Products() {
   return (
     <Grid container spacing={3} justifyContent="center">
-      <Filters itemList={productFilters} />
+      <Filters itemList={productFilters} page={'products'} />
       <Grid item xs={12} sm={12} md={9} lg={9}>
         <ProductsContents />
       </Grid>

@@ -3,7 +3,7 @@ import { Drawer, Typography, Button, Divider, FormControl, Paper, Radio, RadioGr
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 
-export default function Filters({ itemList }) {
+export default function Filters({ itemList,page }) {
     const [category, setCategory] = React.useState(null);
     const [subCategory, setSubCategory] = React.useState(null);
     const [priceRange, setPriceRange] = React.useState([0, 10000]);
@@ -26,7 +26,7 @@ console.log(remove)
         });
 
         navigate({
-            pathname: '/p/products',
+            pathname: `/p/${page}`,
             search: params.toString(),
         });
     };
@@ -35,7 +35,7 @@ console.log(remove)
         const value = event.target.value;
         setCategory(value);
         updateFilters({ category: value });
-        setSubCategory(null); // Clear subcategory when category changes
+        setSubCategory(null); 
     };
 
     const handleSubCategoryChange = (event) => {
@@ -150,9 +150,11 @@ console.log(remove)
             <>
                 <Button variant="contained" sx={{
                     position: 'fixed',
-                    top: '20%',
-                    left: '-2%',
+                    top: '9%',
+                    left:0,
                     zIndex: 1000,
+                    minWidth:'32px',
+                    padding:'3px 8px',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'center',
