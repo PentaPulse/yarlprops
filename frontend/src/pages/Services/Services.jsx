@@ -10,6 +10,7 @@ import { fetchSelectedService, fetchServices } from '../../api/db/services';
 import Carousel from 'react-material-ui-carousel';
 import { fetchMerchantServiceDetails } from '../../api/db/users';
 import { serviceFilters } from '../../components/menuLists';
+import Filters from '../../components/Filters/Filters';
 
 
 export default function Services() {
@@ -30,7 +31,7 @@ export default function Services() {
         const value = event.target.value;
         setCategory(value);
     };
-    const handleSubCategoryegoryChange = (event) => {
+    const handleSubCategoryChange = (event) => {
         const value = event.target.value;
         setSubCategory(value)
     };
@@ -48,65 +49,7 @@ export default function Services() {
 
     return (
         <Grid container spacing={3} justifyContent="center">
-            <Grid item xs={12} sm={11.2} md={3} lg={2.5}>
-               
-                <Paper
-                    sx={{
-                        padding: '1.5rem',
-                        borderRadius: '8px',
-                        boxShadow: 3,
-                        margin: isMobile ? '0 1rem' : '0 1 0 1rem'
-                    }}
-                >
-                    <FormControl fullWidth>
-                        <FormLabel>Categories</FormLabel>
-                        <RadioGroup name='categories' value={category} onChange={handleCategoryChange}>
-                            {Object.keys(serviceFilters["categories"]).map((category) => (
-                                <FormControlLabel
-                                    key={category}
-                                    control={<Radio value={category} />}
-                                    label={category}
-                                />
-                            ))}
-                        </RadioGroup>
-                        {category && <Button onClick={handleClearCategories}>Clear</Button>}
-                    </FormControl>
-
-                    <Divider sx={{ my: 2 }} />
-
-                    <FormControl fullWidth>
-                        <FormLabel>Sub Categories</FormLabel>
-                        {category && (
-                            <RadioGroup value={subCategory} onChange={handleSubCategoryegoryChange}>
-                                {serviceFilters["categories"][category]?.map((subCategoryegory) => (
-                                    <FormControlLabel
-                                        key={subCategoryegory}
-                                        control={<Radio value={subCategoryegory} />}
-                                        label={subCategoryegory}
-                                    />
-                                ))}
-                            </RadioGroup>
-                        )}
-                        {subCategory && <Button onClick={handleClearSubCategoryegories}>Clear</Button>}
-                    </FormControl>
-
-                    <Divider sx={{ my: 2 }} />
-
-                    <Typography variant="h6" gutterBottom>
-                        Price Range
-                    </Typography>
-                    <Slider
-                        value={priceRange}
-                        onChange={handlePriceRangeChange}
-                        valueLabelDisplay="auto"
-                        min={0}
-                        max={10000}
-                        step={500}
-                    />
-
-                    <Divider sx={{ my: 2 }} />
-                </Paper>
-            </Grid>
+             <Filters itemList={serviceFilters} page={'services'}/>
             <Grid item xs={12} sm={12} md={9} lg={9}>
                 <ServicesContents
                     category={category}
@@ -118,11 +61,15 @@ export default function Services() {
     );
 }
 
-function ServicesContents({ category, subCategoryegory, price, quantity }) {
+function ServicesContents() {
     const [services, setServices] = React.useState([]);
     const navigate = useNavigate();
-    const [search]=useSearchParams()
-    const searchTerm=search.get('search')
+    const [search] = useSearchParams()
+    const searchTerm = search.get('search')
+    const category = search.get('category')
+    const subCategory = search.get('subcategory');
+    const price = search.get('price')
+    const quantity = search.get('quantity')
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
@@ -131,7 +78,7 @@ function ServicesContents({ category, subCategoryegory, price, quantity }) {
     React.useEffect(() => {
         const fetchData = async () => {
             try {
-                if (searchTerm || category || subCategoryegory ) {
+                if (searchTerm || category || subCategory ) {
                     let q;
                     const serviceRef = collection(db, 'services')
                     if (searchTerm !== null) {
@@ -140,8 +87,8 @@ function ServicesContents({ category, subCategoryegory, price, quantity }) {
                     if (category !== null) {
                         q = query(serviceRef, where('category', '==', category))
                     }
-                    if (subCategoryegory !== null) {
-                        q = query(serviceRef, where('subCategoryegory', '==', subCategoryegory))
+                    if (subCategory !== null) {
+                        q = query(serviceRef, where('subCategory', '==', subCategory))
                     }/*
                 if (price) {
                     q = query(serviceRef, where('category', '==', price))
@@ -163,7 +110,7 @@ function ServicesContents({ category, subCategoryegory, price, quantity }) {
         };
         console.log(`going to search ${searchTerm}`)
         fetchData()
-    }, [searchTerm, category, subCategoryegory, price, quantity]);
+    }, [searchTerm, category, subCategory, price, quantity]);
 
     const handleCardClick = (sid) => {
         navigate(`/p/service/${sid}`);

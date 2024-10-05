@@ -10,135 +10,28 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { rentalFilters } from '../../components/menuLists';
 import { fetchSelectedRental } from '../../api/db/rentals';
+import Filters from '../../components/Filters/Filters';
 
 export default function Rentals() {
-    const [category, setCategory] = React.useState(null)
-    const [subCategory, setSubCategory] = React.useState(null)
-    const [priceRange, setPriceRange] = React.useState([0, 10000]);
-    const [quantity, setQuantity] = React.useState(1);
-    const { cat } = useParams()
-    const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-
-    React.useEffect(() => {
-        if (cat) {
-            setCategory(cat)
-        }
-    }, [cat])
-
-    const handleCategoryChange = (event) => {
-        const value = event.target.value;
-        setCategory(value);
-    };
-    const handleSubCategoryegoryChange = (event) => {
-        const value = event.target.value;
-        setSubCategory(value)
-    };
-
-    const handlePriceRangeChange = (event, newValue) => {
-        setPriceRange(newValue);
-    };
-
-    const handleQuantityChange = (event) => {
-        setQuantity(event.target.value);
-    };
-
-    const handleClearCategories = () => {
-        setCategory(null)
-        setSubCategory(null)
-    }
-    const handleClearSubCategoryegories = () => {
-        setSubCategory(null)
-    }
-
     return (
         <Grid container spacing={3} justifyContent="center">
-            <Grid item xs={12} sm={11.2} md={3} lg={2.5}>
-                <Paper
-                    sx={{
-                        padding: '1.5rem',
-                        borderRadius: '8px',
-                        boxShadow: 3,
-                        margin: isMobile ? '0 1rem' : '0 1 0 1rem'
-                    }}
-                >
-                    <FormControl>
-                        <FormLabel>Categories</FormLabel>
-                        <RadioGroup name='categories' value={category} onChange={handleCategoryChange}>
-                            {Object.keys(rentalFilters["categories"]).map((category) => (
-                                <FormControlLabel
-                                    key={category}
-                                    control={<Radio value={category} />}
-                                    label={category}
-                                />
-                            ))}
-                        </RadioGroup>
-                        {category && <Button onClick={handleClearCategories}>Clear</Button>}
-                    </FormControl>
-
-                    <Divider sx={{ my: 2 }} />
-
-                    <FormControl>
-                        <FormLabel>Sub Categories</FormLabel>
-                        {category && (
-                            <RadioGroup value={subCategory} onChange={handleSubCategoryegoryChange}>
-                                {rentalFilters["categories"][category]?.map((subCategoryegory) => (
-                                    <FormControlLabel
-                                        key={subCategoryegory}
-                                        control={<Radio value={subCategoryegory} />}
-                                        label={subCategoryegory}
-                                    />
-                                ))}
-                            </RadioGroup>
-                        )}
-                        {subCategory && <Button onClick={handleClearSubCategoryegories}>Clear</Button>}
-                    </FormControl>
-
-                    <Divider sx={{ my: 2 }} />
-
-                    <Typography variant="h6" gutterBottom>
-                        Price Range
-                    </Typography>
-                    <Slider
-                        value={priceRange}
-                        onChange={handlePriceRangeChange}
-                        valueLabelDisplay="auto"
-                        min={0}
-                        max={10000}
-                        step={500}
-                    />
-
-                    <Divider sx={{ my: 2 }} />
-
-                    <Typography variant="h6" gutterBottom>
-                        Quantity
-                    </Typography>
-                    <TextField
-                        type="number"
-                        value={quantity}
-                        onChange={handleQuantityChange}
-                        InputProps={{ inputProps: { min: 1, max: 10 } }}
-                        fullWidth
-                    />
-                </Paper>
-            </Grid>
+            <Filters itemList={rentalFilters} page={'rentals'}/>
             <Grid item xs={12} sm={12} md={9} lg={9}>
-                <RentalsContents
-                    category={category}
-                    subCategory={subCategory}
-                    priceRange={priceRange}
-                    quantity={quantity}
-                />
+                <RentalsContents />
             </Grid>
         </Grid>
     );
 }
 
-function RentalsContents({  category, subCategoryegory, price, quantity }) {
+function RentalsContents() {
     const [rentals, setRentals] = React.useState([]);
     const navigate = useNavigate();
-    const [search]=useSearchParams()
-    const searchTerm=search.get('search')
+    const [search] = useSearchParams()
+    const searchTerm = search.get('search')
+    const category = search.get('category')
+    const subCategory = search.get('subcategory');
+    const price = search.get('price')
+    const quantity = search.get('quantity')
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
@@ -147,7 +40,7 @@ function RentalsContents({  category, subCategoryegory, price, quantity }) {
     React.useEffect(() => {
         const fetchData = async () => {
             try {
-                if (searchTerm || category || subCategoryegory ) {
+                if (searchTerm || category || subCategory) {
                     let q;
                     const rentalRef = collection(db, 'rentals')
                     if (searchTerm !== null) {
@@ -156,8 +49,8 @@ function RentalsContents({  category, subCategoryegory, price, quantity }) {
                     if (category !== null) {
                         q = query(rentalRef, where('category', '==', category))
                     }
-                    if (subCategoryegory !== null) {
-                        q = query(rentalRef, where('subCategoryegory', '==', subCategoryegory))
+                    if (subCategory !== null) {
+                        q = query(rentalRef, where('subCategory', '==', subCategory))
                     }/*
                 if (price) {
                     q = query(rentalRef, where('category', '==', price))
@@ -179,7 +72,7 @@ function RentalsContents({  category, subCategoryegory, price, quantity }) {
             }
         };
         fetchData()
-    }, [searchTerm, category, subCategoryegory, price, quantity]);
+    }, [searchTerm, category, subCategory, price, quantity]);
 
     const handleCardClick = (rid) => {
         navigate(`/p/rental/${rid}`);
@@ -196,12 +89,12 @@ function RentalsContents({  category, subCategoryegory, price, quantity }) {
 
                                 <CardActionArea onClick={() => handleCardClick(rental.rid)}>
                                     <CardMedia
-                                        sx={{ height:  isMobile ? '15rem' : isTablet ? '18rem' : '20rem'}}
+                                        sx={{ height: isMobile ? '15rem' : isTablet ? '18rem' : '20rem' }}
                                         image={rental.images[0] || 'https://picsum.photos/id/11/200/300'}
                                         title={rental.name}
                                     />
                                     <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                        <Typography gutterBottom variant={isMobile ? 'subtitle1' : 'h6'}  component='div' color='inherit'>
+                                        <Typography gutterBottom variant={isMobile ? 'subtitle1' : 'h6'} component='div' color='inherit'>
                                             {rental.title}
                                         </Typography>
                                     </CardContent>
@@ -226,7 +119,7 @@ export function RentalsPage() {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     //const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
-  
+
 
     React.useEffect(() => {
         const fetchrental = async () => {
@@ -270,11 +163,9 @@ export function RentalsPage() {
 
                     {/* Small Images Grid */}
                     <Grid container spacing={2} sx={{ mt: 2, alignItems: 'center', justifyContent: 'center' }}>
-                        <Grid item xs={1} sm={1} md={1} lg={1} sx={{ display: 'flex', justifyContent: 'center'}}>
-                            <IconButton 
-                                onClick={handlePrevious}
-                                sx={{ fontSize: { xs:'1.5rem', sm: '2rem' }}}
-                            >
+                        <Grid item xs={1} sm={1} md={1} lg={1} sx={{ display: 'flex', justifyContent: 'center' }}>
+                            <IconButton
+                                onClick={handlePrevious}>
                                 <ArrowBackIosIcon />
                             </IconButton>
                         </Grid>
@@ -303,11 +194,8 @@ export function RentalsPage() {
                             </Grid>
                         ))}
 
-                        <Grid item xs={1} sm={1} md={1} lg={1} sx={{ display: 'flex', justifyContent: 'center'}}>
-                            <IconButton 
-                                onClick={handleNext}
-                                sx={{ fontSize: { xs: '1.5rem', sm: '2rem'}}}
-                            >
+                        <Grid item xs={1} sm={1} md={1} lg={1} sx={{ display: 'flex', justifyContent: 'center' }}>
+                            <IconButton onClick={handleNext}>
                                 <ArrowForwardIosIcon />
                             </IconButton>
                         </Grid>
@@ -327,17 +215,17 @@ export function RentalsPage() {
                             </Typography>
                             <Typography sx={{ textAlign: 'center', fontStyle: 'italic' }} gutterBottom>
                                 {(rental.status === "For Sale") ?
-                                (<Typography variant={isMobile ? 'h6' : 'h5'} sx={{ color: '#50C878', fontWeight: 'bold' }}>For Sale</Typography>)
-                                : ((rental.status === "For Rent") ?
-                                (<Typography variant={isMobile ? 'h6' : 'h5'} sx={{ color: "darkorange", fontWeight: 'bold' }}>For Rent</Typography>)
-                                : (<Typography variant={isMobile ? 'h6' : 'h5'} sx={{ color: "red", fontWeight: 'bold' }}>Sold Out!</Typography>))}
+                                    (<Typography variant={isMobile ? 'h6' : 'h5'} sx={{ color: '#50C878', fontWeight: 'bold' }}>For Sale</Typography>)
+                                    : ((rental.status === "For Rent") ?
+                                        (<Typography variant={isMobile ? 'h6' : 'h5'} sx={{ color: "darkorange", fontWeight: 'bold' }}>For Rent</Typography>)
+                                        : (<Typography variant={isMobile ? 'h6' : 'h5'} sx={{ color: "red", fontWeight: 'bold' }}>Sold Out!</Typography>))}
                             </Typography>
 
-                            <Box 
-                                sx={{ 
-                                    mx: { xs: '1rem', sm:'4rem', md:'3rem', lg:'3rem'},
-                                    my: { xs: '0.5rem', sm:'0.7rem', md:'1rem', lg:'1.5rem'},
-                                 }}>
+                            <Box
+                                sx={{
+                                    mx: { xs: '1rem', sm: '4rem', md: '3rem', lg: '3rem' },
+                                    my: { xs: '0.5rem', sm: '0.7rem', md: '1rem', lg: '1.5rem' },
+                                }}>
                                 {/* <Typography variant={isMobile ? 'h6' : 'h5'} component="h4" sx={{ fontWeight: 'bold' }}>Description</Typography> */}
                                 <ul style={{ textAlign: 'justify', fontSize: '18px' }}>
                                     {rental.description.map((item, index) => (
@@ -349,9 +237,9 @@ export function RentalsPage() {
                             <Box sx={{ mx: '1rem', mt: '2.5rem' }}>
                                 {/* Seller Details */}
                                 <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
-                                <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center'}} gutterBottom><i className="fa-solid fa-user"></i> Name : {rental.sellerName}</Typography>
-                                <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center'}} gutterBottom><i className="fa-solid fa-location-dot"></i> Location : {rental.Location}</Typography>
-                                <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center'}}><i className="fa-solid fa-phone"></i> Contact No : {rental.telephone}</Typography>
+                                <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }}><i className="fa-solid fa-user"></i> Name : {rental.sellerName}</Typography>
+                                <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }}><i className="fa-solid fa-location-dot"></i> Location : {rental.Location}</Typography>
+                                <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }}><i className="fa-solid fa-phone"></i> Contact No : {rental.telephone}</Typography>
                             </Box>
                         </CardContent>
                     </Card>
@@ -359,7 +247,7 @@ export function RentalsPage() {
             </Grid>
             <Grid container spacing={1} sx={{ mt: '0.5rem' }}>
                 <Grid item>
-                    <Button 
+                    <Button
                         variant="contained"
                         component={Link}
                         to="/p/rentals"
@@ -369,7 +257,7 @@ export function RentalsPage() {
                             backgroundColor: '#0d6efd',
                             color: 'white',
                             '&:hover': {
-                              backgroundColor: '#90caf9',
+                                backgroundColor: '#90caf9',
                             }
                         }}
                     >
