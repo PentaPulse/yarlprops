@@ -258,7 +258,7 @@ export function ServicePage() {
                     <Button 
                         variant="contained"
                         component={Link}
-                        to="/p/rentals"
+                        to="/p/services"
                         startIcon={<ChevronLeftIcon />}
                         size={isMobile ? "small" : "medium"}
                         sx={{

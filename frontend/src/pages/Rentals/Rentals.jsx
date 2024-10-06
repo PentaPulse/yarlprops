@@ -112,6 +112,7 @@ function RentalsContents() {
 
 export function RentalsPage() {
     const [rental, setRental] = React.useState(null);
+    const [merchant, setMerchant] = React.useState(null);
     const [selectedImageIndex, setSelectedImageIndex] = React.useState(0); // Track the index of the selected image
     const [startIndex, setStartIndex] = React.useState(0); 
     const visibleImagesCount = 3; // Number of images to display at a time
@@ -273,9 +274,9 @@ export function RentalsPage() {
                             <Box sx={{ mx: '1rem', mt: '2.5rem' }}>
                                 {/* Seller Details */}
                                 <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
-                                <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }}><i className="fa-solid fa-user"></i> Name : {rental.sellerName}</Typography>
-                                <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }}><i className="fa-solid fa-location-dot"></i> Location : {rental.Location}</Typography>
-                                <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }}><i className="fa-solid fa-phone"></i> Contact No : {rental.telephone}</Typography>
+                                <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }}><i className="fa-solid fa-user"></i> Name : {merchant && merchant.firstName + ' ' + merchant.lastName}</Typography>
+                                <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }}><i className="fa-solid fa-location-dot"></i> Location : {rental.location}</Typography>
+                                <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }}><i className="fa-solid fa-phone"></i> Contact No : {merchant && merchant.phoneNumber}</Typography>
                             </Box>
                         </CardContent>
                     </Card>
