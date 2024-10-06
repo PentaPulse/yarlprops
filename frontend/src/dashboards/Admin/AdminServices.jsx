@@ -39,8 +39,6 @@ const AdminServices = () => {
 
   return (
     <>
-      <h2>SERVICES</h2>
-      
       <Container>
         {user.approved?(showAddService ? (
           <ServicesForm sid={editingServiceId} onSuccess={handleSuccess} onCancel={handleCancel} />

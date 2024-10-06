@@ -45,17 +45,15 @@ export default function MerchantProducts() {
 
   return (
     <>
-      <h2>MY PRODUCTS</h2>
-
-      <Button
-        variant="contained"
-        color="success"
-        startIcon={<AddIcon />}
-        onClick={handleAddProduct}
-        style={{ margin: '20px' }}
-      >
-        Add Product
-      </Button>
+        <Button
+          variant="contained"
+          color="success"
+          startIcon={<AddIcon />}
+          onClick={handleAddProduct}
+          style={{ margin: '20px' }}
+        >
+          Add Product
+        </Button>
 
       <Container>
         {
@@ -197,7 +195,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
       const allImageUrls = [...existingImages, ...newImageUrls];
 
       // Add or update product with the combined image URLs
-      if (pid) {        
+      if (pid) {
         console.log(product)
         await updateProduct(pid, { ...product, images: allImageUrls });
         Swal.fire({

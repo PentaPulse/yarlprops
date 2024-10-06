@@ -4,14 +4,13 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import GroupIcon from '@mui/icons-material/Group';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import CommentIcon from '@mui/icons-material/Comment';
-import BadgeIcon from '@mui/icons-material/Badge';
 import StoreIcon from '@mui/icons-material/Store';
 import MiscellaneousServicesIcon from '@mui/icons-material/MiscellaneousServices';
 import CarRentalIcon from '@mui/icons-material/CarRental';
-import StorefrontIcon from '@mui/icons-material/Storefront';
 
 export const adminMenu = [
     ['Overview', <DashboardIcon />, 'overview'],
+    ['Site messages',<CommentIcon/>,'amsgs'],
     ['Admins', <AdminPanelSettingsIcon />, 'adminlist'],
     ['Merchants',<StoreIcon/>,'merchantlist'],
     ['Customers', <GroupIcon />, 'customerlist'],

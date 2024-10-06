@@ -39,9 +39,7 @@ const AdminProducts = () => {
   };
 
   return (
-    <>
-      <h2>PRODUCTS</h2>
-      
+    <>      
       <Container>
         {user.approved?(showAddProduct ? (
           <ProductForm pid={editingProductId} onSuccess={handleSuccess} onCancel={handleCancel} />
@@ -67,9 +65,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
     quantity: '', 
     location: '',
     status: '', 
-    images: [
-
-    ], 
+    images: [], 
   });
   
   const [existingImages, setExistingImages] = useState([]);
