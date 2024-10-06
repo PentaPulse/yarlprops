@@ -8,9 +8,13 @@ import {
   CardContent, 
   Link,
   Box,
-  InputAdornment
+  InputAdornment,
+  Modal,
+  Backdrop,
+  Fade,
+  Button
 } from '@mui/material';
-import { Search as SearchIcon } from 'lucide-react';
+import { Search as SearchIcon, X as CloseIcon} from 'lucide-react';
 import { useState } from 'react';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import EmailIcon from '@mui/icons-material/Email';
@@ -59,21 +63,37 @@ const guidData = [
 
 const Guide = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedFAQ, setSelectedFAQ] = useState(null);
 
   const filteredFAQs = guidData.filter(faq => 
     faq.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
     faq.answer.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const handleOpenModal = (faq) => {
+    setSelectedFAQ(faq);
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    setSelectedFAQ(null);
+  };
+
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       
       <Container maxWidth="lg" sx={{ mt: 4 }}>
-        <Typography variant="h3" component="h1" gutterBottom>
+        <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 'bold'}}>
           Get your questions answered
         </Typography>
-        <Typography variant="body1" paragraph>
-          Find answers to the most commonly asked questions below. Search for topics you're interested in or sort by category.
+        <Typography variant="body1" paragraph sx = {{fontSize: '1.1rem'}}>
+          Find answers to the most commonly asked questions below. Search for topics you're interested in or sort by category. If you still can't find the answer you are loocking for just  
+          <Link color="success" href="/contact" underline="hover" sx ={{fontStyle: 'italic'}}>
+             {' Contact Us'}
+          </Link> .
         </Typography>
         <TextField
           fullWidth
@@ -96,10 +116,10 @@ const Guide = () => {
         <Grid container spacing={3}>
           {filteredFAQs.map((faq, index) => (
             <Grid item xs={12} sm={6} md={4} key={index}>
-              <Card sx={{ height: 250 }}>
+              <Card sx={{ height: 350 }}>
                 <CardContent sx={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <Box sx={{ mb: 2 }}>{faq.icon}</Box>
-                  <Typography variant="h6" component="h3" gutterBottom>
+                  <Typography variant="h5" component="h3" gutterBottom sx={{ fontSize: '1.4rem', fontWeight: 'bold'}}>
                     {faq.question}
                   </Typography>
                   <Typography 
@@ -109,6 +129,8 @@ const Guide = () => {
                       flexGrow: 1, 
                       overflow: 'auto',
                       mb: 1,
+                      fontSize: '1.1rem',
+                      height: '150px',
                       '&::-webkit-scrollbar': {
                         width: '0.4em'
                       },
@@ -126,9 +148,13 @@ const Guide = () => {
                     {faq.answer}
                   </Typography>
                   {faq.readMore && (
-                    <Link href="#" color="primary" sx={{ alignSelf: 'flex-start' }}>
+                    <Button 
+                      color="primary" 
+                      onClick={() => handleOpenModal(faq)}
+                      sx={{ alignSelf: 'flex-start' }}
+                    >
                       Read more
-                    </Link>
+                    </Button>
                   )}
                 </CardContent>
               </Card>
@@ -136,6 +162,51 @@ const Guide = () => {
           ))}
         </Grid>
       </Container>
+      <Modal
+        open={openModal}
+        onClose={handleCloseModal}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openModal}>
+          <Box sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '80%',
+            maxWidth: 600,
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 2,
+            maxHeight: '90vh',
+            overflow: 'auto'
+          }}>
+            <Button 
+              onClick={handleCloseModal}
+              sx={{ position: 'absolute', right: 8, top: 8 }}
+            >
+              <CloseIcon />
+            </Button>
+            {selectedFAQ && (
+              <>
+                <Box sx={{ mb: 2 }}>{selectedFAQ.icon}</Box>
+                <Typography variant="h4" component="h2" gutterBottom>
+                  {selectedFAQ.question}
+                </Typography>
+                <Typography variant="body1" sx={{fontSize: '1.2rem'}}>
+                  {selectedFAQ.answer}
+                </Typography>
+              </>
+            )}
+          </Box>
+        </Fade>
+      </Modal>
+
     </Box>
   );
 };
