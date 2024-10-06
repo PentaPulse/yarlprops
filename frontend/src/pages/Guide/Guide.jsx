@@ -86,12 +86,12 @@ const Guide = () => {
     <Box sx={{ flexGrow: 1 }}>
       
       <Container maxWidth="lg" sx={{ mt: 4 }}>
-        <Typography variant="h3" component="h1" gutterBottom>
+        <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 'bold'}}>
           Get your questions answered
         </Typography>
-        <Typography variant="body1" paragraph>
+        <Typography variant="body1" paragraph sx = {{fontSize: '1.1rem'}}>
           Find answers to the most commonly asked questions below. Search for topics you're interested in or sort by category. If you still can't find the answer you are loocking for just  
-          <Link href="/contact" underline="hover">
+          <Link color="success" href="/contact" underline="hover" sx ={{fontStyle: 'italic'}}>
              {' Contact Us'}
           </Link> .
         </Typography>
@@ -116,10 +116,10 @@ const Guide = () => {
         <Grid container spacing={3}>
           {filteredFAQs.map((faq, index) => (
             <Grid item xs={12} sm={6} md={4} key={index}>
-              <Card sx={{ height: 290 }}>
+              <Card sx={{ height: 350 }}>
                 <CardContent sx={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <Box sx={{ mb: 2 }}>{faq.icon}</Box>
-                  <Typography variant="h6" component="h3" gutterBottom>
+                  <Typography variant="h5" component="h3" gutterBottom sx={{ fontSize: '1.4rem', fontWeight: 'bold'}}>
                     {faq.question}
                   </Typography>
                   <Typography 
@@ -129,6 +129,8 @@ const Guide = () => {
                       flexGrow: 1, 
                       overflow: 'auto',
                       mb: 1,
+                      fontSize: '1.1rem',
+                      height: '150px',
                       '&::-webkit-scrollbar': {
                         width: '0.4em'
                       },
@@ -193,10 +195,10 @@ const Guide = () => {
             {selectedFAQ && (
               <>
                 <Box sx={{ mb: 2 }}>{selectedFAQ.icon}</Box>
-                <Typography variant="h5" component="h2" gutterBottom>
+                <Typography variant="h4" component="h2" gutterBottom>
                   {selectedFAQ.question}
                 </Typography>
-                <Typography variant="body1">
+                <Typography variant="body1" sx={{fontSize: '1.2rem'}}>
                   {selectedFAQ.answer}
                 </Typography>
               </>
