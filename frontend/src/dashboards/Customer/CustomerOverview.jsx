@@ -1,18 +1,65 @@
 import React from 'react';
-import { Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { Container, Typography, Grid, Paper, Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { useAuth } from '../../api/AuthContext';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import MessageIcon from '@mui/icons-material/Message';
+import FeedbackIcon from '@mui/icons-material/Feedback';
 
-export default function CustomerOverview  ()  {
-    const {user} = useAuth()
-    console.log(user)
+export default function CustomerOverview() {
+    const { user } = useAuth();
+    console.log(user);
+
     return (
         <Container>
             {/* Welcome Message */}
             <Typography variant="h4" gutterBottom>
                 Welcome, <b>{user.displayName}!</b>
             </Typography>
-            
-            {/* Orders Table */}
+
+            {/* Overview Summary */}
+            <Grid container spacing={4}>
+
+                {/* Active Listings */}
+                <Grid item xs={12} sm={6} md={3}>
+                    <Paper elevation={3} sx={{ padding: 2, textAlign: 'center' }}>
+                        <ShoppingCartIcon fontSize="large" />
+                        <Typography variant="h6">Complete orders</Typography>
+                        <Typography variant="h5">5</Typography> {/* Replace with dynamic value */}
+                    </Paper>
+                </Grid>
+
+                {/* Pending Requests */}
+                <Grid item xs={12} sm={6} md={3}>
+                    <Paper elevation={3} sx={{ padding: 2, textAlign: 'center' }}>
+                        <AssignmentIcon fontSize="large" />
+                        <Typography variant="h6">Pending Orders</Typography>
+                        <Typography variant="h5">2</Typography> {/* Replace with dynamic value */}
+                    </Paper>
+                </Grid>
+
+                {/* New Messages */}
+                <Grid item xs={12} sm={6} md={3}>
+                    <Paper elevation={3} sx={{ padding: 2, textAlign: 'center' }}>
+                        <MessageIcon fontSize="large" />
+                        <Typography variant="h6">New Messages</Typography>
+                        <Typography variant="h5">3</Typography> {/* Replace with dynamic value */}
+                    </Paper>
+                </Grid>
+
+                {/* Feedback */}
+                <Grid item xs={12} sm={6} md={3}>
+                    <Paper elevation={3} sx={{ padding: 2, textAlign: 'center' }}>
+                        <FeedbackIcon fontSize="large" />
+                        <Typography variant="h6">Feedback</Typography>
+                        <Typography variant="h5">1</Typography> {/* Replace with dynamic value */}
+                    </Paper>
+                </Grid>
+            </Grid>
+
+            {/* Add more sections or summaries as needed */}
+            <Box mt={4}>
+
             <TableContainer component={Paper}>
                 <Table>
                     <TableHead>
@@ -25,27 +72,21 @@ export default function CustomerOverview  ()  {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {orders.map((order) => (
-                            <TableRow key={order.id}>
+                        
+                            <TableRow >
                                 <TableCell component="th" scope="row">
-                                    {order.id}
+                                    {}
                                 </TableCell>
-                                <TableCell align="right">{order.product}</TableCell>
-                                <TableCell align="right">{order.quantity}</TableCell>
-                                <TableCell align="right">Rs.{order.price}</TableCell>
-                                <TableCell align="right">{order.status}</TableCell>
+                                <TableCell align="right">{}</TableCell>
+                                <TableCell align="right">{}</TableCell>
+                                <TableCell align="right">{}</TableCell>
+                                <TableCell align="right">{}</TableCell>
                             </TableRow>
-                        ))}
+                    
                     </TableBody>
                 </Table>
             </TableContainer>
+            </Box>
         </Container>
     );
 };
-
-// Example usage with sample data
-const orders = [
-    { id: 1, product: 'Bicycle Rental', quantity: 1, price: 15.00, status: 'Completed' },
-    { id: 2, product: 'Furniture Rental', quantity: 2, price: 50.00, status: 'Pending' },
-    { id: 3, product: 'Food Service', quantity: 3, price: 30.00, status: 'Completed' },
-];
