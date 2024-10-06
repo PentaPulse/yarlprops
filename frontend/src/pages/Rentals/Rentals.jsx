@@ -15,7 +15,7 @@ import Filters from '../../components/Filters/Filters';
 export default function Rentals() {
     return (
         <Grid container spacing={3} justifyContent="center">
-            <Filters itemList={rentalFilters} page={'rentals'}/>
+            <Filters itemList={rentalFilters} page={'rentals'} />
             <Grid item xs={12} sm={12} md={9} lg={9}>
                 <RentalsContents />
             </Grid>
