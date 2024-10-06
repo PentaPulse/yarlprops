@@ -138,7 +138,7 @@ export function ProductPage() {
   const [product, setProduct] = React.useState(null);
   const [merchant, setMerchant] = React.useState(null)
   const [selectedImageIndex, setSelectedImageIndex] = React.useState(0); // Track the index of the selected image
-  const [startIndex, setStartIndex] = React.useState(0); // Added state to track the current image
+  const [startIndex, setStartIndex] = React.useState(0); 
   const visibleImagesCount = 3; // Number of images to display at a time
   const { id } = useParams();
   const theme = useTheme();
@@ -174,32 +174,26 @@ export function ProductPage() {
     return <CircularProgress />;
   }
 
-  // const handlePrevious = () => {
-  //   setSelectedImageIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : product.images.length - 1));
-  // };
-
-  // const handleNext = () => {
-  //   setSelectedImageIndex((prevIndex) => (prevIndex < product.images.length - 1 ? prevIndex + 1 : 0));
-  // };
-
     const handlePrevious = () => {
-      // setStartIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : 0)); //Decrement startIndex for the previous images
       if(startIndex > 0){
         setStartIndex(startIndex - 1);
+        setSelectedImageIndex(startIndex - 1);
       } else {
         setStartIndex(product.images.length - visibleImagesCount);
+        setSelectedImageIndex(product.images.length - 1);
       }
     };
   
     const handleNext = () => {
-      // setStartIndex((prevIndex) => (prevIndex < product.images.length - visibleImagesCount ? prevIndex + 1 : prevIndex)); //Increment startIndex for the next set of images
       if(startIndex + visibleImagesCount < product.images.length){
         setStartIndex(startIndex + 1);
+        setSelectedImageIndex(startIndex + 1);
       } else {
         setStartIndex(0);
+        setSelectedImageIndex(0);
       }
     };
-  
+
     return (
       <Container maxWidth="lg" sx={{ backgroundColor: theme.palette.background.default }}>
         <Grid container spacing={4}>

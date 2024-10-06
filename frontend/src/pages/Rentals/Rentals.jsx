@@ -113,8 +113,8 @@ function RentalsContents() {
 export function RentalsPage() {
     const [rental, setRental] = React.useState(null);
     const [selectedImageIndex, setSelectedImageIndex] = React.useState(0); // Track the index of the selected image
-    const [startIndex, setStartIndex] = React.useState(0);
-    const visibleImagesCount = 3;
+    const [startIndex, setStartIndex] = React.useState(0); 
+    const visibleImagesCount = 3; // Number of images to display at a time
     const { id } = useParams();
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -139,12 +139,48 @@ export function RentalsPage() {
         return <CircularProgress />;
     }
 
-    const handlePrevious = () => {
-        setSelectedImageIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : rental.images.length - 1));
-    };
+    // const handlePrevious = () => {
+    //     setSelectedImageIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : rental.images.length - 1));
 
+    //     if(selectedImageIndex === visibleImageRange[0]){
+    //         setVisibleImageRange((prevRange) => [
+    //             prevRange[0] - 1 < 0 ? rental.images.length- 3 : prevRange[0] - 1,
+    //             prevRange[1] - 1 < 0 ? rental.images.length- 2 : prevRange[1] - 1,
+
+    //         ]);
+    //     }
+    // };
+
+    // const handleNext = () => {
+    //     setSelectedImageIndex((prevIndex) => (prevIndex < rental.images.length - 1 ? prevIndex + 1 : 0));
+
+    //     if(selectedImageIndex === visibleImageRange[1] - 1){
+    //         setVisibleImageRange((prevRange) => [
+    //             prevRange[0] + 1 >= rental.images.length ? 0 : prevRange[0] + 1,
+    //             prevRange[1] + 1 >= rental.images.length ? 3 : prevRange[1] + 1,
+
+    //         ]);
+    //     }
+    // };
+
+    const handlePrevious = () => {
+        if(startIndex > 0){
+          setStartIndex(startIndex - 1);
+          setSelectedImageIndex(startIndex - 1);
+        } else {
+          setStartIndex(rental.images.length - visibleImagesCount);
+          setSelectedImageIndex(rental.images.length - 1);
+        }
+    };
+    
     const handleNext = () => {
-        setSelectedImageIndex((prevIndex) => (prevIndex < rental.images.length - 1 ? prevIndex + 1 : 0));
+        if(startIndex + visibleImagesCount < rental.images.length){
+          setStartIndex(startIndex + 1);
+          setSelectedImageIndex(startIndex + 1);
+        } else {
+          setStartIndex(0);
+          setSelectedImageIndex(0);
+        }
     };
 
     return (
