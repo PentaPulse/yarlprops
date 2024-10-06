@@ -37,8 +37,6 @@ export default function AdminRentals() {
 
   return (
     <>
-      <h2>RENTALS</h2>
-
       <Container>
         {user.approved?(
           showAddRental ? (

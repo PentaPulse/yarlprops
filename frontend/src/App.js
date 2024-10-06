@@ -38,6 +38,7 @@ import AdminCustomers from "./dashboards/Admin/AdminCustomers";
 import AdminMerchants from "./dashboards/Admin/AdminMerchants";
 import Guide from "./pages/Guide/Guide";
 import PageLayout from "./pages/PageLayout";
+import { AdminMessages } from "./dashboards/Admin/AdminMessages";
 
 const lightTheme = createTheme({
   palette: {
@@ -184,6 +185,7 @@ function DashboardRoutes({handleMode}) {
 
           {/* Admin */}
           <Route path="adminlist" element={<Admins />} />
+          <Route path="amsgs" element={<AdminMessages />} />
           <Route path="merchantlist" element={<AdminMerchants/>}/>
           <Route path="customerlist" element={<AdminCustomers />} />
           <Route path="productlist" element={<AdminProducts />} />

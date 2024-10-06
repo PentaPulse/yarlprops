@@ -45,8 +45,6 @@ export default function MerchantRentals() {
 
   return (
     <>
-      <h2>MY RENTALS</h2>
-
       <Button
         variant="contained"
         color="success"

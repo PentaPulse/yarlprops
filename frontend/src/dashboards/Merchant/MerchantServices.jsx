@@ -45,8 +45,6 @@ export default function MerchantServices() {
 
   return (
     <>
-      <h2>MY SERVICES</h2>
-
       <Button
         variant="contained"
         color="success"

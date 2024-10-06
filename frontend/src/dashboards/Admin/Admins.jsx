@@ -45,11 +45,11 @@ export default function Admins() {
     return (
         <>
             <Box sx={{ textAlign: 'center', margin: 'auto' }}>
-                <Grid container alignItems="center" justifyContent="center" sx={{ mb: 2 }}>
-                    <Grid item sx={{ mt: 5 }}>
+                <Grid container alignItems="center" justifyContent="space-between" sx={{ mb: 2 ,mt:5}}>
+                    <Grid item>
                         <h1>Adminstrators</h1>
                     </Grid>
-                    <Grid item sx={{ ml: 50, mt: 5 }}>
+                    <Grid item>
                         <ButtonGroup>
                             <Button
                                 disabled={!user.approved}

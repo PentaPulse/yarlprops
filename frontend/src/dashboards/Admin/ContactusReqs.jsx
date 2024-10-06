@@ -29,8 +29,6 @@ export default function ContactusRequests() {
 
   return (
     <>
-      <Typography variant='h4'>Contact us Requests</Typography>
-
       <Container>
         {user.approved?(viewingResponseId ? (
           <ContactusResponseDetail id={viewingResponseId} onBack={handleCancel} />
