@@ -42,22 +42,22 @@ const ProductsContents = () => {
     const fetchData = async () => {
       try {
         console.log(category);
-    
+
         const productRef = collection(db, 'products');
         let q = productRef;
-    
+
         if (searchTerm) {
           q = query(q, where('title', '>=', capitalize(searchTerm)), where('title', '<=', capitalize(searchTerm) + '\uf8ff'));
         }
-    
+
         if (category && !subCategory) {
           q = query(q, where('category', '==', category));
         }
-    
+
         if (subCategory) {
           q = query(q, where('subCategory', '==', subCategory));
         }
-    
+
         /*
         if (price) {
           q = query(q, where('price', '==', price));
@@ -67,20 +67,20 @@ const ProductsContents = () => {
           q = query(q, where('quantity', '==', quantity));
         }
         */
-    
+
         if (!category && !subCategory && !searchTerm) {
           fetchProductsWithoutFilters();
           return
         }
-    
+
         const querySnapshot = await getDocs(q);
         const items = querySnapshot.docs.map(doc => doc.data());
-    
+
         setProducts(items);
-    
+
       } catch (e) {
         console.error(e);
-        setProducts([]); 
+        setProducts([]);
       }
     };
 
