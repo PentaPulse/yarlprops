@@ -15,7 +15,7 @@ import Filters from '../../components/Filters/Filters';
 function Products() {
   return (
     <Grid container spacing={3} justifyContent="center">
-      <Filters itemList={productFilters} />
+      <Filters itemList={productFilters} page={'products'} />
       <Grid item xs={12} sm={12} md={9} lg={9}>
         <ProductsContents />
       </Grid>
@@ -42,22 +42,22 @@ const ProductsContents = () => {
     const fetchData = async () => {
       try {
         console.log(category);
-    
+
         const productRef = collection(db, 'products');
         let q = productRef;
-    
+
         if (searchTerm) {
           q = query(q, where('title', '>=', capitalize(searchTerm)), where('title', '<=', capitalize(searchTerm) + '\uf8ff'));
         }
-    
+
         if (category && !subCategory) {
           q = query(q, where('category', '==', category));
         }
-    
+
         if (subCategory) {
           q = query(q, where('subCategory', '==', subCategory));
         }
-    
+
         /*
         if (price) {
           q = query(q, where('price', '==', price));
@@ -67,20 +67,20 @@ const ProductsContents = () => {
           q = query(q, where('quantity', '==', quantity));
         }
         */
-    
+
         if (!category && !subCategory && !searchTerm) {
           fetchProductsWithoutFilters();
           return
         }
-    
+
         const querySnapshot = await getDocs(q);
         const items = querySnapshot.docs.map(doc => doc.data());
-    
+
         setProducts(items);
-    
+
       } catch (e) {
         console.error(e);
-        setProducts([]); 
+        setProducts([]);
       }
     };
 
@@ -138,7 +138,7 @@ export function ProductPage() {
   const [product, setProduct] = React.useState(null);
   const [merchant, setMerchant] = React.useState(null)
   const [selectedImageIndex, setSelectedImageIndex] = React.useState(0); // Track the index of the selected image
-  const [startIndex, setStartIndex] = React.useState(0); // Added state to track the current image
+  const [startIndex, setStartIndex] = React.useState(0); 
   const visibleImagesCount = 3; // Number of images to display at a time
   const { id } = useParams();
   const theme = useTheme();
@@ -174,35 +174,29 @@ export function ProductPage() {
     return <CircularProgress />;
   }
 
-  // const handlePrevious = () => {
-  //   setSelectedImageIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : product.images.length - 1));
-  // };
-
-  // const handleNext = () => {
-  //   setSelectedImageIndex((prevIndex) => (prevIndex < product.images.length - 1 ? prevIndex + 1 : 0));
-  // };
-
     const handlePrevious = () => {
-      // setStartIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : 0)); //Decrement startIndex for the previous images
       if(startIndex > 0){
         setStartIndex(startIndex - 1);
+        setSelectedImageIndex(startIndex - 1);
       } else {
         setStartIndex(product.images.length - visibleImagesCount);
+        setSelectedImageIndex(product.images.length - 1);
       }
     };
   
     const handleNext = () => {
-      // setStartIndex((prevIndex) => (prevIndex < product.images.length - visibleImagesCount ? prevIndex + 1 : prevIndex)); //Increment startIndex for the next set of images
       if(startIndex + visibleImagesCount < product.images.length){
         setStartIndex(startIndex + 1);
+        setSelectedImageIndex(startIndex + 1);
       } else {
         setStartIndex(0);
+        setSelectedImageIndex(0);
       }
     };
-  
+
     return (
       <Container maxWidth="lg" sx={{ backgroundColor: theme.palette.background.default }}>
-        <Grid container spacing={4} sx={{ alignItems: 'center', justifyContent:'center'}}>
+        <Grid container spacing={4}>
           <Grid item xs={12} md={6}>
             {/* Main Product Image */}
             <Card sx={{ boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }}>
@@ -210,7 +204,7 @@ export function ProductPage() {
                 component="img"
                 image={product.images[selectedImageIndex]}  // Display the selected image as the main product image
                 alt={product.name}
-                sx={{ borderRadius: '0px', width: '100%', height: { xs: '300px', sm:'480px', md: '430px', lg: '445px'}, maxHeight: '445px',objectFit: 'cover' }}
+                sx={{ borderRadius: '0px', width: '100%', height: { xs: '300px', sm:'550px', md: '430px', lg: '445px'}, minHeight:'300px', objectFit: 'cover' }}
               />
             </Card>
   
@@ -263,9 +257,9 @@ export function ProductPage() {
   
           <Grid item xs={12} md={6}>
             <Card sx={{ height: '100%', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }}>
-              <CardContent sx={{ marginTop: '30px', marginBottom: '30px' }}>
+              <CardContent sx={{ my: '30px' }}>
                 {/* Product Details */}
-                <Typography variant={isMobile ? 'h5' : 'h3'} component="h2" sx={{ fontWeight: 'bold', textAlign: 'center', fontSize: isMobile ? '1.4rem' : '1.8rem' }}>{product.title}</Typography>
+                <Typography variant={isMobile ? 'h5' : 'h4'} component="h2" sx={{ fontWeight: 'bold', textAlign: 'center', fontSize: isMobile ? '1.4rem' : '1.8rem' }}>{product.title}</Typography>
                 <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ fontWeight: 'bold', textAlign: 'center', fontStyle: 'italic' }}>
                   Category: {product.category}
                 </Typography>
@@ -301,13 +295,13 @@ export function ProductPage() {
                   <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
                   <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center'}} gutterBottom><i className="fa-solid fa-user"></i> Name : {merchant && merchant.firstName + ' ' + merchant.lastName}</Typography>
                   <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center'}} gutterBottom><i className="fa-solid fa-location-dot"></i> Location : {product.location}</Typography>
-                  <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center'}}><i className="fa-solid fa-phone"></i> Contact No : {merchant && merchant.phoneNumber}</Typography>
+                  <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center'}} gutterBottom><i className="fa-solid fa-phone"></i> Contact No : {merchant && merchant.phoneNumber}</Typography>
                 </Box>
               </CardContent>
             </Card>
           </Grid>
         </Grid>
-        <Grid container spacing={1} sx={{ marginTop: '1rem' }}>
+        <Grid container spacing={1} sx={{ mt: '0.5rem' }}>
           <Grid item>
             <Button 
               variant="contained"

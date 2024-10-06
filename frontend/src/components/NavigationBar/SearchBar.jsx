@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { TextField, Select, MenuItem,  useTheme, Box, alpha, IconButton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 
@@ -8,6 +8,13 @@ export default function SearchBar() {
     const [searchType, setSearchType] = useState('products'); // Default to 'products'
     const navigate = useNavigate();
     const theme = useTheme();
+    const location = useLocation()
+    const [showSearchList,setShowSearchList]=useState(false)
+    const [checked,setChecked]=useState({
+        product:false,
+        rental:false,
+        service:false
+    })
 
     const handleSearch = (e) => {
         if (e) e.preventDefault()
@@ -23,7 +30,31 @@ export default function SearchBar() {
         }
     };
 
-    return (
+    useEffect(()=>{
+        //if(location.)
+        console.log(location)
+        if(location.pathname==='/p/products'){
+            setChecked({
+                product:true,
+                rental:false,
+                service:false
+            })
+        }else if(location.pathname==='/p/rentals'){
+            setChecked({
+                product:false,
+                rental:true,
+                service:false
+            })
+        } else if(location.pathname==='/p/services'){
+            setChecked({
+                product:false,
+                rental:false,
+                service:true
+            })
+        }
+        console.log(checked)
+    },[location.pathname])
+        return (
         <Box
             sx={{
                 display: 'flex',
@@ -61,9 +92,9 @@ export default function SearchBar() {
                     },
                 }}
             >
-                <MenuItem value="products">Products</MenuItem>
-                <MenuItem value="rentals">Rentals</MenuItem>
-                <MenuItem value="services">Services</MenuItem>
+                <MenuItem value="products" selected={checked.product}>Products</MenuItem>
+                <MenuItem value="rentals" selected={checked.rental}>Rentals</MenuItem>
+                <MenuItem value="services" selected={checked.service} >Services</MenuItem>
             </Select>
             <TextField
                 value={searchTerm}

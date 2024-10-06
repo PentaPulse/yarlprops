@@ -16,3 +16,5 @@ frontend/database-debug.log
 */ui-debug.log
 *.log
 /frontend/datas
+frontend/ui-debug.log
+frontend/firestore-debug.log

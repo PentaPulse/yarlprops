@@ -10,6 +10,7 @@ import { fetchSelectedService, fetchServices } from '../../api/db/services';
 import Carousel from 'react-material-ui-carousel';
 import { fetchMerchantServiceDetails } from '../../api/db/users';
 import { serviceFilters } from '../../components/menuLists';
+import Filters from '../../components/Filters/Filters';
 
 
 export default function Services() {
@@ -30,7 +31,7 @@ export default function Services() {
         const value = event.target.value;
         setCategory(value);
     };
-    const handleSubCategoryegoryChange = (event) => {
+    const handleSubCategoryChange = (event) => {
         const value = event.target.value;
         setSubCategory(value)
     };
@@ -48,65 +49,7 @@ export default function Services() {
 
     return (
         <Grid container spacing={3} justifyContent="center">
-            <Grid item xs={12} sm={11.2} md={3} lg={2.5}>
-               
-                <Paper
-                    sx={{
-                        padding: '1.5rem',
-                        borderRadius: '8px',
-                        boxShadow: 3,
-                        margin: isMobile ? '0 1rem' : '0 1 0 1rem'
-                    }}
-                >
-                    <FormControl fullWidth>
-                        <FormLabel>Categories</FormLabel>
-                        <RadioGroup name='categories' value={category} onChange={handleCategoryChange}>
-                            {Object.keys(serviceFilters["categories"]).map((category) => (
-                                <FormControlLabel
-                                    key={category}
-                                    control={<Radio value={category} />}
-                                    label={category}
-                                />
-                            ))}
-                        </RadioGroup>
-                        {category && <Button onClick={handleClearCategories}>Clear</Button>}
-                    </FormControl>
-
-                    <Divider sx={{ my: 2 }} />
-
-                    <FormControl fullWidth>
-                        <FormLabel>Sub Categories</FormLabel>
-                        {category && (
-                            <RadioGroup value={subCategory} onChange={handleSubCategoryegoryChange}>
-                                {serviceFilters["categories"][category]?.map((subCategoryegory) => (
-                                    <FormControlLabel
-                                        key={subCategoryegory}
-                                        control={<Radio value={subCategoryegory} />}
-                                        label={subCategoryegory}
-                                    />
-                                ))}
-                            </RadioGroup>
-                        )}
-                        {subCategory && <Button onClick={handleClearSubCategoryegories}>Clear</Button>}
-                    </FormControl>
-
-                    <Divider sx={{ my: 2 }} />
-
-                    <Typography variant="h6" gutterBottom>
-                        Price Range
-                    </Typography>
-                    <Slider
-                        value={priceRange}
-                        onChange={handlePriceRangeChange}
-                        valueLabelDisplay="auto"
-                        min={0}
-                        max={10000}
-                        step={500}
-                    />
-
-                    <Divider sx={{ my: 2 }} />
-                </Paper>
-            </Grid>
+             <Filters itemList={serviceFilters} page={'services'}/>
             <Grid item xs={12} sm={12} md={9} lg={9}>
                 <ServicesContents
                     category={category}
@@ -118,11 +61,15 @@ export default function Services() {
     );
 }
 
-function ServicesContents({ category, subCategoryegory, price, quantity }) {
+function ServicesContents() {
     const [services, setServices] = React.useState([]);
     const navigate = useNavigate();
-    const [search]=useSearchParams()
-    const searchTerm=search.get('search')
+    const [search] = useSearchParams()
+    const searchTerm = search.get('search')
+    const category = search.get('category')
+    const subCategory = search.get('subcategory');
+    const price = search.get('price')
+    const quantity = search.get('quantity')
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
@@ -131,7 +78,7 @@ function ServicesContents({ category, subCategoryegory, price, quantity }) {
     React.useEffect(() => {
         const fetchData = async () => {
             try {
-                if (searchTerm || category || subCategoryegory ) {
+                if (searchTerm || category || subCategory ) {
                     let q;
                     const serviceRef = collection(db, 'services')
                     if (searchTerm !== null) {
@@ -140,8 +87,8 @@ function ServicesContents({ category, subCategoryegory, price, quantity }) {
                     if (category !== null) {
                         q = query(serviceRef, where('category', '==', category))
                     }
-                    if (subCategoryegory !== null) {
-                        q = query(serviceRef, where('subCategoryegory', '==', subCategoryegory))
+                    if (subCategory !== null) {
+                        q = query(serviceRef, where('subCategory', '==', subCategory))
                     }/*
                 if (price) {
                     q = query(serviceRef, where('category', '==', price))
@@ -163,7 +110,7 @@ function ServicesContents({ category, subCategoryegory, price, quantity }) {
         };
         console.log(`going to search ${searchTerm}`)
         fetchData()
-    }, [searchTerm, category, subCategoryegory, price, quantity]);
+    }, [searchTerm, category, subCategory, price, quantity]);
 
     const handleCardClick = (sid) => {
         navigate(`/p/service/${sid}`);
@@ -256,7 +203,13 @@ export function ServicePage() {
                                         component="img"
                                         image={image}
                                         alt={`slide ${index}`}
-                                        sx={{ height: '80vh', borderRadius: '25px', p: '15px' }}
+                                        sx={{ 
+                                            height: { xs: '350px', sm:'470px', md:'500px', lg:'600px'},
+                                            minHeight: '350px',
+                                            width:'100%', 
+                                            borderRadius: '25px', 
+                                            p: '15px' 
+                                        }}
                                     />
                                 </Box>
                             ))}
@@ -264,15 +217,22 @@ export function ServicePage() {
                     </Card>
                 </Grid>
                 <Grid item xs={12} md={6}>
-                    <Card sx={{ height: '100%', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }}>
+                    <Card 
+                        sx={{ 
+                            height: '100%',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'space-between',
+                            boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'
+                        }}>
                         <CardContent sx={{ my: '30px' }}>
                             {/* Service Details */}
-                            <Typography variant={isMobile ? 'h5' : 'h3'} component="h2" sx={{ fontWeight: 'bold', textAlign: 'center', fontSize: isMobile ? '1.4rem' : '1.8rem' }}>{service.serviceName}</Typography>
+                            <Typography variant={isMobile ? 'h5' : 'h4'} component="h2" sx={{ fontWeight: 'bold', textAlign: 'center', fontSize: isMobile ? '1.4rem' : '1.8rem' }}>{service.serviceName}</Typography>
                             <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ fontWeight: 'bold', textAlign: 'center', fontStyle: 'italic' }} gutterBottom>
                                 Category: {service.category}
                             </Typography>
                             <Box sx={{
-                                mx: { xs: '1rem', sm:'4rem', md:'3rem', lg:'3rem'},
+                                mx: { xs: '1rem', sm:'5rem', md:'3.5rem', lg:'3rem'},
                                 my: { xs: '0.5rem', sm:'0.7rem', md:'1rem', lg:'1.5rem'},
                              }}>
                                 {/* <Typography variant="h6" component="h4" sx={{ fontWeight: 'bold' }}>Description</Typography> */}
@@ -284,13 +244,10 @@ export function ServicePage() {
                             </Box>
                             <Box sx={{ mx: '1rem', mt: '2.5rem' }}>
                                 {/* Seller Details */}
-                                <Typography variant="h5" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Service Provider's Details</Typography>
-                                <Typography variant="h6" sx={{ textAlign: 'center'}} gutterBottom><i className="fa-solid fa-user"></i> Name : {merchant && merchant.firstName + ' ' + merchant.lastName}</Typography>
-                                {/* <Typography >{merchant && merchant.firstName + ' ' + merchant.lastName}</Typography> */}
-                                <Typography variant="h6" sx={{ textAlign: 'center'}} gutterBottom><i className="fa-solid fa-location-dot"></i> Location : {service.serviceLocation}</Typography>
-                                {/* <Typography>{service.serviceLocation}</Typography> */}
-                                <Typography variant="h6" sx={{ textAlign: 'center'}} gutterBottom><i className="fa-solid fa-phone"></i> Contact No : {merchant && merchant.phoneNumber}</Typography>
-                                {/* <Typography>{merchant && merchant.phoneNumber}</Typography> */}
+                                <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Service Provider's Details</Typography>
+                                <Typography variant={isMobile ? 'subtitle1' : 'h6'} sx={{ textAlign: 'center'}} gutterBottom><i className="fa-solid fa-user"></i> Name : {merchant && merchant.firstName + ' ' + merchant.lastName}</Typography>
+                                <Typography variant={isMobile ? 'subtitle1' : 'h6'} sx={{ textAlign: 'center'}} gutterBottom><i className="fa-solid fa-location-dot"></i> Location : {service.serviceLocation}</Typography>
+                                <Typography variant={isMobile ? 'subtitle1' : 'h6'} sx={{ textAlign: 'center'}} gutterBottom><i className="fa-solid fa-phone"></i> Contact No : {merchant && merchant.phoneNumber}</Typography>
                             </Box>
                         </CardContent>
                     </Card>
@@ -301,7 +258,7 @@ export function ServicePage() {
                     <Button 
                         variant="contained"
                         component={Link}
-                        to="/p/rentals"
+                        to="/p/services"
                         startIcon={<ChevronLeftIcon />}
                         size={isMobile ? "small" : "medium"}
                         sx={{
