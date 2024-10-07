@@ -3,7 +3,7 @@ import React from 'react'
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 
-export default function ModeSwitc({handleMode}) {
+export default function ModeSwitch({handleMode}) {
     const theme = useTheme()
     return (
         <>

@@ -83,7 +83,6 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 export default function DashboardLayout({ handleMode, children }) {
   const [open, setOpen] = React.useState(false);
   const [adminList, setAdminList] = React.useState([]);
-  const [merchantList, setMerchantList] = React.useState([]);
   const { user, logout } = useAuth()
   const theme = useTheme();
   const navigate = useNavigate();
@@ -110,17 +109,7 @@ export default function DashboardLayout({ handleMode, children }) {
 
       }
     }
-    const fetchMerchantList = async () => {
-      try {
-        const q = await getDocs(query(collection(db, 'systemusers'), where('isMerchant', '==', true)))
-        const list = q.docs.map((doc) => doc.data().uid)
-        setMerchantList(list)
-      } catch (e) {
-
-      }
-    }
     fetchAdminList()
-    fetchMerchantList()
   }, [])
 
   const drawer = (
@@ -144,7 +133,7 @@ export default function DashboardLayout({ handleMode, children }) {
             '--MuiMenuItem-insetStart': '30px',
           }}
         >
-          {(adminList.includes(user.uid) ? adminMenu : (merchantList.includes(user.uid) ? merchMenu : userMenu)).map((text, index) => (
+          {adminMenu.map((text, index) => (
             <MenuItem onClick={() => handleNavigation(text[2])}>{text[1]} {text[0]}</MenuItem>
           ))}
         </MenuList>
@@ -161,10 +150,6 @@ export default function DashboardLayout({ handleMode, children }) {
           <MenuItem onClick={() => handleNavigation('/d/profile')}>
             <SupportRoundedIcon />
             <Typography variant="body1">Profile</Typography>
-          </MenuItem>
-          <MenuItem onClick={() => handleNavigation('/')}>
-            <HomeRoundedIcon />
-            <Typography variant="body1">Back to Home</Typography>
           </MenuItem>
         </MenuList>
       </Box>
@@ -242,7 +227,7 @@ export default function DashboardLayout({ handleMode, children }) {
             flexShrink: 0,
             [`& .MuiDrawer-paper`]: { boxSizing: 'border-box' },
           }} variant="permanent" open >
-            <DrawerHeader sx={{zIndex:theme.zIndex.appBar-1}}/>
+            <DrawerHeader sx={{ zIndex: theme.zIndex.appBar - 1 }} />
             <Divider />
             {drawer}
           </Drawer >

@@ -1,10 +1,9 @@
 import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
+import {AppBar ,Box , Toolbar ,Tooltip,Typography, useTheme } from '@mui/material';
+import ModeSwitch from '../ModeHandler/ModeSwitch';
 
-export default function NavigationBar() {
+export default function NavigationBar({handleMode}) {
+    const theme = useTheme()
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
@@ -12,6 +11,11 @@ export default function NavigationBar() {
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         Yarlprops
                     </Typography>
+                    <Box display={'flex'} gap={1} >
+                        <Tooltip title={`${theme.palette.mode} mode`}>
+                            <ModeSwitch handleMode={handleMode} />
+                        </Tooltip>
+                    </Box>
                 </Toolbar>
             </AppBar>
         </Box>
