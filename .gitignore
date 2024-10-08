@@ -4,8 +4,8 @@
 /node_modules
 main-app/node_modules
 admin-app/node_modules
-main
-admin
+/main
+/admin
 /.pnp
 .pnp.js
 
