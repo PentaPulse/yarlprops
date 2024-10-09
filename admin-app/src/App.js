@@ -5,7 +5,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import AlertProvider from "./api/AlertService";
 import { AuthProvider } from "./api/AuthContext";
 import PrivateRoute from "./api/PrivateRoute";
-import { LoginLayout } from "./dashboards/Admin/LoginLayout";
+import { LoginLayout } from "./components/Sign/LoginLayout";
 import DashboardLayout from "./dashboards/DashboardLayout";
 import Admins from "./dashboards/Admin/Admins";
 import AdminProducts from "./dashboards/Admin/AdminProducts";

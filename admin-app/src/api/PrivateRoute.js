@@ -1,12 +1,12 @@
 //import* as  React from 'react';
 import { useAuth } from './AuthContext';
-import AdminRegister from '../dashboards/Admin/LoginLayout';
+import {LoginLayout} from '../components/Sign/LoginLayout';
 
 const PrivateRoute = ({ children }) => {
     const { user } = useAuth();
 
     if (!user) {
-        return <AdminRegister/>;
+        return <LoginLayout/>;
     }
     return children;
 };

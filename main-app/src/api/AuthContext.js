@@ -21,13 +21,8 @@ export const AuthProvider = ({ children }) => {
             if (currentUser) {
                 try {
                     const userDocRef = doc(db, 'systemusers', currentUser.uid);
-                    const adminDocRef = doc(db, 'admins', currentUser.uid);
-                    const adminDoc = await getDoc(adminDocRef)
                     const userDoc = await getDoc(userDocRef);
-                    if (adminDoc.exists()) {
-                        setUser({ ...adminDoc.data(), ...currentUser })
-                    }
-                    else if (userDoc.exists()) {
+                    if (userDoc.exists()) {
                         setUser({ ...userDoc.data(), ...currentUser });
                     }
                     sessionStorage.setItem('pp', currentUser.photoURL);
@@ -46,11 +41,9 @@ export const AuthProvider = ({ children }) => {
     }, [ok]);
 
     const checkUserExistence = async (userId) => {
-        const adminDocRef = doc(db, 'admins', userId);
-        const adminDoc = await getDoc(adminDocRef)
         const userDocRef = doc(db, 'systemusers', userId);
         const userDoc = await getDoc(userDocRef);
-        if (adminDoc.exists()||userDoc.exists()) {
+        if (userDoc.exists()) {
             return true
         }else{
             return false

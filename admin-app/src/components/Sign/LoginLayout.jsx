@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import NavigationBar from '../../components/NavigationBar/NavigationBar';
+import NavigationBar from '../NavigationBar/NavigationBar';
 import { Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, FormControl, FormControlLabel, FormLabel, Grid, IconButton, InputAdornment, InputLabel, OutlinedInput, Stack, styled, SvgIcon, TextField, Typography } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -12,13 +12,14 @@ import MuiCard from '@mui/material/Card';
 import PropTypes from 'prop-types';
 
 export function LoginLayout({ handleMode }) {
+    const [signin,setSignin]=useState(true)
     return (
         <>
             <Box>
                 <NavigationBar handleMode={handleMode} />
                 <Grid container mt={10} justifyContent='space-around' alignItems='center'>
-                    <SignIn />
-                    <SignUp />
+                    <SignIn signin={signin} setSignin={()=>setSignin(false)}/>
+                    <SignUp signin={signin} setSignin={()=>setSignin(true)}/>
                 </Grid>
             </Box>
         </>
@@ -66,7 +67,7 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
     },
 }));
 
-function SignIn() {
+function SignIn({signin,setSignin}) {
     const [emailError, setEmailError] = React.useState(false);
     const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
     const [passwordError, setPasswordError] = React.useState(false);
@@ -126,7 +127,7 @@ function SignIn() {
     };
 
     return (
-        <SignInContainer direction="column" justifyContent="space-between">
+        <SignInContainer display={signin?"flex":"none"} direction="column" justifyContent="space-between">
             <Card variant="outlined">
                 <Typography
                     component="h1"
@@ -208,13 +209,13 @@ function SignIn() {
                     <Typography sx={{ textAlign: 'center' }}>
                         Don&apos;t have an account?{' '}
                         <span>
-                            <Link
-                                href="/material-ui/getting-started/templates/sign-in/"
+                            <Button
+                            onClick={setSignin}
                                 variant="body2"
                                 sx={{ alignSelf: 'center' }}
                             >
                                 Sign up
-                            </Link>
+                            </Button>
                         </span>
                     </Typography>
                 </Box>
@@ -328,9 +329,7 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
     }),
 }));
 
-function SignUp() {
-    const [mode, setMode] = React.useState('light');
-    const [showCustomTheme, setShowCustomTheme] = React.useState(true);
+function SignUp({signin,setSignin}) {
     const [nameError, setNameError] = React.useState(false);
     const [nameErrorMessage, setNameErrorMessage] = React.useState('');
     const [emailError, setEmailError] = React.useState(false);
@@ -375,22 +374,21 @@ function SignUp() {
         return isValid;
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async(event) => {
         if (nameError || emailError || passwordError) {
             event.preventDefault();
             return;
         }
         const data = new FormData(event.currentTarget);
-        console.log({
-            name: data.get('name'),
-            lastName: data.get('lastName'),
-            email: data.get('email'),
-            password: data.get('password'),
-        });
+        await createUserWithEmailAndPassword(auth,data.email,data.password)
+        .then((result)=>{
+            const user = result.user;
+            
+        })
     };
 
     return (
-        <SignUpContainer direction="column" justifyContent="space-between">
+        <SignUpContainer display={!signin?"flex":"none"} direction="column" justifyContent="space-between">
             <Card variant="outlined">
                 <Typography
                     component="h1"
@@ -464,13 +462,13 @@ function SignUp() {
                     <Typography sx={{ textAlign: 'center' }}>
                         Already have an account?{' '}
                         <span>
-                            <Link
-                                href="/material-ui/getting-started/templates/sign-in/"
+                            <Button
+                            onClick={setSignin}
                                 variant="body2"
                                 sx={{ alignSelf: 'center' }}
                             >
                                 Sign in
-                            </Link>
+                            </Button>
                         </span>
                     </Typography>
                 </Box>
