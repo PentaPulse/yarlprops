@@ -33,8 +33,7 @@
     "build:main": "cd main-app && npm run build && cp -r build/* ../main",
     "build:admin": "cd admin-app && npm run build && cp -r build/* ../admin",
     "start:main": "cd main-app && npm start",
-    "start:admin": "cd admin-app && npm start",
-    "start:both": "npm-run-all --parallel start:main start:admin"
+    "start:admin": "cd admin-app && npm start"
   },
   "eslintConfig": {
     "extends": [
