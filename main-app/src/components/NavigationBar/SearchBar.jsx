@@ -48,6 +48,12 @@ export default function SearchBar() {
                 rental:false,
                 service:true
             })
+        } else{
+            setChecked({
+                product:false,
+                rental:false,
+                service:false
+            })
         }
     },[location.pathname])
         return (

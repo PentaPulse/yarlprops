@@ -7,7 +7,6 @@ import { AuthProvider, useAuth } from "./api/AuthContext";
 import PrivateRoute from "./api/PrivateRoute";
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import Home from "./pages/Home/Home";
-//import Guide from "./pages/Guide/Guide";
 import Contact from "./pages/Contact/Contact";
 import Products from "./pages/Products/Products";
 import { ProductPage } from "./pages/Products/Products";

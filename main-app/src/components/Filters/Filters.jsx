@@ -3,7 +3,7 @@ import { Drawer, Typography, Button, Divider, FormControl, Paper, Radio, RadioGr
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 
-export default function Filters({ itemList,page }) {
+export default function Filters({ itemList, page }) {
     const [category, setCategory] = React.useState(null);
     const [subCategory, setSubCategory] = React.useState(null);
     const [priceRange, setPriceRange] = React.useState([0, 10000]);
@@ -14,9 +14,9 @@ export default function Filters({ itemList,page }) {
     const [open, setOpen] = React.useState(false);
     const [searchParams] = useSearchParams();
 
-    const updateFilters = (newFilter,remove) => {
+    const updateFilters = (newFilter, remove) => {
         const params = new URLSearchParams(searchParams);
-console.log(remove)
+        console.log(remove)
         Object.keys(newFilter).forEach((key) => {
             if (remove) {
                 params.delete(key);
@@ -35,7 +35,7 @@ console.log(remove)
         const value = event.target.value;
         setCategory(value);
         updateFilters({ category: value });
-        setSubCategory(null); 
+        setSubCategory(null);
     };
 
     const handleSubCategoryChange = (event) => {
@@ -80,8 +80,8 @@ console.log(remove)
                 borderRadius: '8px',
                 boxShadow: 3,
                 margin: isSmallScreen ? '0 1rem' : '0 1 0 1rem',
-                width:'300px',
-                backgroundColor:`${theme.palette.background} ,1`                
+                width: '300px',
+                backgroundColor: `${theme.palette.background} ,1`
             }}
         >
             <FormControl fullWidth>
@@ -151,10 +151,10 @@ console.log(remove)
                 <Button variant="contained" sx={{
                     position: 'fixed',
                     top: '9%',
-                    left:0,
+                    left: 0,
                     zIndex: 1000,
-                    minWidth:'32px',
-                    padding:'3px 8px',
+                    minWidth: '32px',
+                    padding: '3px 8px',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'center',
@@ -166,7 +166,7 @@ console.log(remove)
                 }} onClick={toggleDrawer(true)}>
                     <FilterAltIcon />
                 </Button>
-                <Drawer  anchor='left' open={open} onClose={toggleDrawer(false)}>
+                <Drawer anchor='left' open={open} onClose={toggleDrawer(false)}>
                     {filters}
                 </Drawer>
             </>
