@@ -70,6 +70,18 @@ export const fetchSelectedService = async (sid) => {
     }
 };
 
+
+export const fetchServiceOrders = async(cid)=>{
+    const q = query(serviceRef,where('customers','==',cid))
+    try{
+        const qsnapshot = await getDocs(q)
+        const productOrders = qsnapshot.docs.map((doc)=>doc.data())
+        return productOrders;
+    }catch(e){
+        console.log(e)
+    }
+}
+
 //count services
 export const countservices = async () => {
     const servicesSnapshot = await getDocs(serviceRef);

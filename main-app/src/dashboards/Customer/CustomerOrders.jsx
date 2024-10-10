@@ -14,6 +14,8 @@ import { fetchProductOrders } from "../../api/db/products"; // Import the API fu
 import { useAuth } from "../../api/AuthContext"; // For accessing authenticated user
 import { arrayUnion } from "firebase/firestore";
 import { fetchRentalOrders } from "../../api/db/rentals";
+import { fetchServiceOrders } from "../../api/db/services";
+
 
 export default function MyOrders() {
   const theme = useTheme(); // Get theme to handle dark/light mode dynamically
@@ -22,12 +24,14 @@ export default function MyOrders() {
 
   useEffect(() => {
     const fetchOdata = async () => {
-      try {
+         try {
         // Fetch product orders for the logged-in user
         const data = await fetchProductOrders(user.uid);
         setOrders([...orders, data]);
         const rdata = await fetchRentalOrders(user.uid);
         setOrders([...orders, rdata]);
+        const sdata = await fetchServiceOrders(user.uid);
+        setOrders([...orders, sdata]);
       } catch (e) {
         console.error("Error fetching product orders:", e);
       }
@@ -63,7 +67,7 @@ export default function MyOrders() {
                   <CardMedia
                     component="img"
                     height="140"
-                    //image={order.images[0]} // Display first image from images array
+                   // image={order.images[0]} // Display first image from images array
                     alt={order.title}
                   />
                   <CardContent>
