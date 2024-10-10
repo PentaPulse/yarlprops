@@ -1,4 +1,4 @@
-import { Box, Button, capitalize, Card, CardActionArea, CardActions, CardContent, CardMedia, CircularProgress, Container, Grid, IconButton,  Typography, useMediaQuery } from '@mui/material';
+import { Box, Button, capitalize, Card, CardActionArea, CardActions, CardContent, CardMedia, CircularProgress, Container, Grid, IconButton, Typography, useMediaQuery } from '@mui/material';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import * as React from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
@@ -11,6 +11,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { rentalFilters } from '../../components/menuLists';
 import { fetchSelectedRental } from '../../api/db/rentals';
 import Filters from '../../components/Filters/Filters';
+import Details from '../../components/Details/Details';
 
 export default function Rentals() {
     return (
@@ -110,11 +111,11 @@ function RentalsContents() {
     );
 };
 
-export function RentalsPage() {
+export function RentalsPage({ setSignin, setSignup }) {
     const [rental, setRental] = React.useState(null);
     const [merchant, setMerchant] = React.useState(null);
     const [selectedImageIndex, setSelectedImageIndex] = React.useState(0); // Track the index of the selected image
-    const [startIndex, setStartIndex] = React.useState(0); 
+    const [startIndex, setStartIndex] = React.useState(0);
     const visibleImagesCount = 3; // Number of images to display at a time
     const { id } = useParams();
     const theme = useTheme();
@@ -165,22 +166,22 @@ export function RentalsPage() {
     // };
 
     const handlePrevious = () => {
-        if(startIndex > 0){
-          setStartIndex(startIndex - 1);
-          setSelectedImageIndex(startIndex - 1);
+        if (startIndex > 0) {
+            setStartIndex(startIndex - 1);
+            setSelectedImageIndex(startIndex - 1);
         } else {
-          setStartIndex(rental.images.length - visibleImagesCount);
-          setSelectedImageIndex(rental.images.length - 1);
+            setStartIndex(rental.images.length - visibleImagesCount);
+            setSelectedImageIndex(rental.images.length - 1);
         }
     };
-    
+
     const handleNext = () => {
-        if(startIndex + visibleImagesCount < rental.images.length){
-          setStartIndex(startIndex + 1);
-          setSelectedImageIndex(startIndex + 1);
+        if (startIndex + visibleImagesCount < rental.images.length) {
+            setStartIndex(startIndex + 1);
+            setSelectedImageIndex(startIndex + 1);
         } else {
-          setStartIndex(0);
-          setSelectedImageIndex(0);
+            setStartIndex(0);
+            setSelectedImageIndex(0);
         }
     };
 
@@ -194,7 +195,7 @@ export function RentalsPage() {
                             component="img"
                             image={rental.images[selectedImageIndex]}  // Display the selected image as the main rental image
                             alt={rental.name}
-                            sx={{ borderRadius: '0px', width: '100%', height: { xs: '300px', sm:'550px', md: '430px', lg: '445px'}, minHeight:'300px', objectFit: 'cover' }}
+                            sx={{ borderRadius: '0px', width: '100%', height: { xs: '300px', sm: '550px', md: '430px', lg: '445px' }, minHeight: '300px', objectFit: 'cover' }}
                         />
                     </Card>
 
@@ -215,7 +216,7 @@ export function RentalsPage() {
                                     alt={`image ${index}`}
                                     sx={{
                                         width: '100%',
-                                        height: { xs: '70px', sm:'120px', md:'100px', lg:'100px'},
+                                        height: { xs: '70px', sm: '120px', md: '100px', lg: '100px' },
                                         borderRadius: '8px',
                                         objectFit: 'cover',
                                         boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
@@ -274,29 +275,8 @@ export function RentalsPage() {
                             <Box sx={{ mx: '1rem', mt: '2.5rem' }}>
                                 {/* Seller Details */}
                                 <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
-                                <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }}><i className="fa-solid fa-user"></i> Name : {merchant && merchant.firstName + ' ' + merchant.lastName}</Typography>
-                                <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }}><i className="fa-solid fa-location-dot"></i> Location : {rental.location}</Typography>
-                                <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }}><i className="fa-solid fa-phone"></i> Contact No : {merchant && merchant.phoneNumber}</Typography>
                             </Box>
-                            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                            <Button
-                                variant="contained"
-                                component={Link}
-                                to=""
-                                size={isMobile ? "small" : "medium"}
-                                sx={{
-                                    mt: '0.8rem',
-                                    fontWeight: 'bold',
-                                    backgroundColor: '#0d6efd',
-                                    color: 'white',
-                                    '&:hover': {
-                                        backgroundColor: '#90caf9',
-                                    }
-                                }}
-                            >
-                                Buy Now
-                            </Button>
-                        </Box>
+                            <Details setSignin={setSignin} setSignup={setSignup} item={rental} merchant={merchant} />
                         </CardContent>
                     </Card>
                 </Grid>

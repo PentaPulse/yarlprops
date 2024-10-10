@@ -39,7 +39,7 @@ const lightTheme = createTheme({
       default: "#E3E1D9",
     },
   },
-  
+
 });
 
 const darkTheme = createTheme({
@@ -110,36 +110,36 @@ function Routings({ handleMode }) {
 }
 
 function PageRoutes({ handleMode }) {
-  const [signin,setSignin]=React.useState(false)
-  const [signup,setSignup]=React.useState(false)
+  const [signin, setSignin] = React.useState(false)
+  const [signup, setSignup] = React.useState(false)
   return (
     <>
       <Box sx={{ marginTop: '12vh' }}>
         <PageLayout handleMode={handleMode} signin={signin} setSignin={setSignin} signup={signup} setSignup={setSignup}>
-        <Routes>
-          <Route path="*" element={<Home />} />
-          <Route path="products" element={<Products />} />
-          <Route path="products/:cat" element={<Products />} />
-          <Route path="products/:search" element={<Products />} />
-          <Route path="product/:id" element={<ProductPage setSignin={setSignin} setSignup={setSignup}/>} />
-          <Route path="rentals" element={<Rentals />} />
-          <Route path="rentals/:cat" element={<Rentals />} />
-          <Route path="rentals/:search" element={<Rentals />} />
-          <Route path="rental/:id" element={<RentalsPage />} />
-          <Route path="services" element={<Services />} />
-          <Route path="services/:cat" element={<Services />} />
-          <Route path="services/:search" element={<Services />} />
-          <Route path="service/:id" element={<ServicePage />} />
-          <Route path="guide" element={<Guide/>}/>
-          <Route path="contact" element={<Contact />} />
-        </Routes>
+          <Routes>
+            <Route path="*" element={<Home />} />
+            <Route path="products" element={<Products />} />
+            <Route path="products/:cat" element={<Products />} />
+            <Route path="products/:search" element={<Products />} />
+            <Route path="product/:id" element={<ProductPage setSignin={setSignin} setSignup={setSignup} />} />
+            <Route path="rentals" element={<Rentals />} />
+            <Route path="rentals/:cat" element={<Rentals />} />
+            <Route path="rentals/:search" element={<Rentals />} />
+            <Route path="rental/:id" element={<RentalsPage setSignin={setSignin} setSignup={setSignup} />} />
+            <Route path="services" element={<Services />} />
+            <Route path="services/:cat" element={<Services />} />
+            <Route path="services/:search" element={<Services />} />
+            <Route path="service/:id" element={<ServicePage setSignin={setSignin} setSignup={setSignup} />} />
+            <Route path="guide" element={<Guide />} />
+            <Route path="contact" element={<Contact />} />
+          </Routes>
         </PageLayout>
       </Box>
     </>
   )
 }
 
-function DashboardRoutes({handleMode}) {
+function DashboardRoutes({ handleMode }) {
   const { user } = useAuth();
   const [merchantList, setMerchantList] = React.useState([]);
 
@@ -152,7 +152,7 @@ function DashboardRoutes({handleMode}) {
         setMerchantList(list);
       } catch (e) { }
     };
-    
+
     fetchMerchantList();
   }, []);
   return (

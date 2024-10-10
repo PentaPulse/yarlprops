@@ -43,6 +43,7 @@ export default function NavigationBar({ handleMode, signin, setSignin, signup, s
     const [isLogged, setIsLogged] = React.useState(false);
     const { user, logout } = useAuth()
     const navigate = useNavigate()
+    const [page,setPage]=React.useState('Home')
 
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -69,6 +70,11 @@ export default function NavigationBar({ handleMode, signin, setSignin, signup, s
         setMobileMoreAnchorEl(false)
         navigate('/')
     };
+
+    const handleNavigatePages=(array)=>{
+        setPage(array[0])
+        navigate(array[1])
+    }
 
     React.useEffect(() => {
         if (user) {
@@ -193,7 +199,7 @@ export default function NavigationBar({ handleMode, signin, setSignin, signup, s
                                     <Divider sx={{ my: 3 }} />
                                     {pages.map((page) => (
                                         <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                            <Button textAlign="center" onClick={() => navigate(page[1])} sx={{ textDecoration: 'none', color: theme.palette.primary.main }}>
+                                            <Button textAlign="center" onClick={()=>handleNavigatePages(page)} sx={{ textDecoration: 'none', color: theme.palette.primary.main }}>
                                                 {page[0]}
                                             </Button>
                                         </MenuItem>
@@ -236,14 +242,14 @@ export default function NavigationBar({ handleMode, signin, setSignin, signup, s
                             {pages.map((page) => (
                                 <Button
                                     key={page}
-                                    onClick={() => navigate(page[1])}
+                                    onClick={()=>handleNavigatePages(page)}
                                     sx={{ my: 2, display: 'block', color: theme.palette.primary }}
                                 >
                                     {page[0]}
                                 </Button>
                             ))}
                         </Box>
-                        <SearchBar />
+                        <SearchBar page={page}/>
                         <Box sx={{ flexGrow: 1 }} />
                         <ModeSwitch handleMode={handleMode} />
                         {isLogged ? (

@@ -1,19 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { TextField, Select, MenuItem,  useTheme, Box, alpha, IconButton } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { TextField, Select, MenuItem, useTheme, Box, alpha, IconButton, Tooltip } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 
-export default function SearchBar() {
+export default function SearchBar({ page }) {
     const [searchTerm, setSearchTerm] = useState('');
-    const [searchType, setSearchType] = useState('products'); // Default to 'products'
+    const [searchType, setSearchType] = useState('products');
     const navigate = useNavigate();
     const theme = useTheme();
-    const location = useLocation()
-    const [checked,setChecked]=useState({
-        product:false,
-        rental:false,
-        service:false
-    })
 
     const handleSearch = (e) => {
         if (e) e.preventDefault()
@@ -29,34 +23,18 @@ export default function SearchBar() {
         }
     };
 
-    useEffect(()=>{
-        if(location.pathname==='/p/products'){
-            setChecked({
-                product:true,
-                rental:false,
-                service:false
-            })
-        }else if(location.pathname==='/p/rentals'){
-            setChecked({
-                product:false,
-                rental:true,
-                service:false
-            })
-        } else if(location.pathname==='/p/services'){
-            setChecked({
-                product:false,
-                rental:false,
-                service:true
-            })
-        } else{
-            setChecked({
-                product:false,
-                rental:false,
-                service:false
-            })
+    useEffect(() => {
+        if (page === 'Products') {
+            setSearchType('products')
+        } else if (page === 'Rentals') {
+            setSearchType('rentals')
+        } else if (page === 'Services') {
+            setSearchType('services')
+        } else {
+            setSearchType('')
         }
-    })
-        return (
+    }, [page])
+    return (
         <Box
             sx={{
                 display: 'flex',
@@ -76,28 +54,29 @@ export default function SearchBar() {
                     alignItems: 'stretch',
                 },
             }}
-        >
-            <Select
-                value={searchType}
-                onChange={(e) => setSearchType(e.target.value)}
-                sx={{
-                    marginRight: theme.spacing(2),
-                    backgroundColor: 'transparent',
-                    borderRadius: theme.shape.borderRadius,
-                    '& .MuiSelect-select': {
-                        padding: theme.spacing(1),
-                        color: theme.palette.primary.main,
-                    },
-                    [theme.breakpoints.down('sm')]: {
-                        marginRight: 0,
-                        marginBottom: theme.spacing(1),
-                    },
-                }}
-            >
-                <MenuItem value="products" selected={checked.product}>Products</MenuItem>
-                <MenuItem value="rentals" selected={checked.rental}>Rentals</MenuItem>
-                <MenuItem value="services" selected={checked.service} >Services</MenuItem>
-            </Select>
+        ><Tooltip title={'change item type'}>
+                <Select
+                    value={searchType}
+                    onChange={(e) => setSearchType(e.target.value)}
+                    sx={{
+                        marginRight: theme.spacing(2),
+                        backgroundColor: 'transparent',
+                        borderRadius: theme.shape.borderRadius,
+                        '& .MuiSelect-select': {
+                            padding: theme.spacing(1),
+                            color: theme.palette.primary.main,
+                        },
+                        [theme.breakpoints.down('sm')]: {
+                            marginRight: 0,
+                            marginBottom: theme.spacing(1),
+                        },
+                    }}
+                >
+                    <MenuItem value="products" >Products</MenuItem>
+                    <MenuItem value="rentals" >Rentals</MenuItem>
+                    <MenuItem value="services" >Services</MenuItem>
+                </Select>
+            </Tooltip>
             <TextField
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}

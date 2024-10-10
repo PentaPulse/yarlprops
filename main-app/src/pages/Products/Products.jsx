@@ -12,6 +12,7 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import Filters from '../../components/Filters/Filters';
 import { useAuth } from '../../api/AuthContext';
+import Details from '../../components/Details/Details';
 
 function Products() {
   return (
@@ -135,7 +136,7 @@ const ProductsContents = () => {
   );
 };
 
-export function ProductPage({setSignin,setSignup}) {
+export function ProductPage({ setSignin, setSignup }) {
   const [product, setProduct] = React.useState(null);
   const [merchant, setMerchant] = React.useState(null)
   const [selectedImageIndex, setSelectedImageIndex] = React.useState(0); // Track the index of the selected image
@@ -195,10 +196,6 @@ export function ProductPage({setSignin,setSignup}) {
       setSelectedImageIndex(0);
     }
   };
-
-  const hanldeBuyNow=()=>{
-    
-  }
 
   return (
     <Container maxWidth="lg" sx={{ backgroundColor: theme.palette.background.default }}>
@@ -300,37 +297,7 @@ export function ProductPage({setSignin,setSignup}) {
                 {/* Seller Details */}
                 <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
               </Box>
-              {user ?
-                <>
-                  <Box>
-                    <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }} gutterBottom><i className="fa-solid fa-user"></i> Name : {merchant && merchant.firstName + ' ' + merchant.lastName}</Typography>
-                    <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }} gutterBottom><i className="fa-solid fa-location-dot"></i> Location : {product.location}</Typography>
-                    <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }} gutterBottom><i className="fa-solid fa-phone"></i> Contact No : {merchant && merchant.phoneNumber}</Typography>
-                  </Box>
-                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Button
-                      variant="contained"
-                      component={Link}
-                      to=""
-                      size={isMobile ? "small" : "medium"}
-                      sx={{
-                        mt: '0.8rem',
-                        fontWeight: 'bold',
-                        backgroundColor: '#0d6efd',
-                        color: 'white',
-                        '&:hover': {
-                          backgroundColor: '#90caf9',
-                        }
-                      }}
-                      onClick={hanldeBuyNow}
-                    >
-                      Buy Now
-                    </Button>
-                  </Box>
-                </> :
-                <Box display={'flex'} justifyContent={'center'} alignItems={'center'}>
-                  <Typography> <Button onClick={setSignin}>Signin</Button> or <Button onClick={setSignup}>Signup</Button> to see Seller details</Typography>
-                </Box>}
+              <Details setSignin={setSignin} setSignup={setSignup} item={product} merchant={merchant} />
             </CardContent>
           </Card>
         </Grid>

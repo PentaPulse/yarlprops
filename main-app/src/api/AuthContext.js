@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = React.useState(true);
     const [ok, setOk] = React.useState(false)
     const navigate = useNavigate()
-    const {showAlerts} = useAlerts();
+    const { showAlerts } = useAlerts();
 
     React.useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -45,47 +45,9 @@ export const AuthProvider = ({ children }) => {
         const userDoc = await getDoc(userDocRef);
         if (userDoc.exists()) {
             return true
-        }else{
+        } else {
             return false
         }
-    }
-
-    //registering
-    const register = async (fname, lname, dname, email, password) => {
-        await createUserWithEmailAndPassword(auth, email, password)
-            .then((result) => {
-                const user = result.user;
-                updateProfile(user, { displayName: dname })
-                    .then(() => {
-                        registerUser(user.uid,fname, lname, dname, email).then((result) => {
-                            if (result.success) {
-                                sessionStorage.setItem('pp', user.photoURL);
-                                sessionStorage.setItem('displayName', user.displayName);
-                                setOk(true)
-                            }
-                        })
-                    })/*
-                    .catch((error) => {
-                        console.error("Error updating profile:", error);
-                    });*/
-                showAlerts('Account created , wait a little ', 'success', 'top-center')
-            })
-            .catch((error) => {
-                //showAlerts('ww' + error, 'error')
-                if (email === '' || password === '' || fname === '' || lname === '') {
-                    if (error.code === 'auth/invalid-email' || error.code === 'auth/missing-password') {
-                        showAlerts('Enter details', 'warning')
-                    }
-                } else if (error.code === 'auth/invalid-email') {
-                    showAlerts('Try different email', 'warning')
-                }
-                if (error.code === 'auth/email-already-in-use') {
-                    showAlerts('Try different email', 'warning')
-                }
-                if (error.code === 'auth/weak-password') {
-                    showAlerts('Try different password', 'warning')
-                }
-            });
     }
 
     //login    
@@ -94,13 +56,13 @@ export const AuthProvider = ({ children }) => {
         .then((result) => {
             const user = result.user;
             if (!checkUserExistence(user.uid)) {
-                registerUser(user.uid,'', '', user.displayName, user.email).then((result) => {
+                registerUser(user.uid, '', '', user.displayName, user.email).then((result) => {
                     if (result.success) {
                         setOk(true)
                     }
                 })
             }
-            signinLog(user.uid,{method:'google'});
+            signinLog(user.uid, { method: 'google' });
             sessionStorage.setItem('pp', user.photoURL);
             sessionStorage.setItem('displayName', user.displayName);
         })
@@ -189,7 +151,7 @@ export const AuthProvider = ({ children }) => {
         }
     */
     return (
-        <AuthContext.Provider value={{ user, register, login, logout, reset, google, home }}>
+        <AuthContext.Provider value={{ user, login, logout, reset, google, home }}>
             {loading ? '' : children}
         </AuthContext.Provider>
     );

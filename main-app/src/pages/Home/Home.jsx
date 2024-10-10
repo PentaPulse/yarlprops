@@ -18,12 +18,12 @@ export default function Home() {
   const FontSize = isSmallScreen ? '0.9rem' : '1.2rem';
 
   const categories = [
-    { name: 'Boarding', link: '/p/rentals/Bordim', icon: <HomeIcon fontSize="large" /> },
-    { name: 'Furniture', link: '/products/Furnitures', icon: <WeekendIcon fontSize="large" /> },
-    { name: 'Foods', link: '/services/Food', icon: <FastfoodIcon fontSize="large" /> },
-    { name: 'Accessories', link: '/products/accessories', icon: <WatchIcon fontSize="large" /> },
-    { name: 'Vehicles', link: '/rentals/Vehicles', icon: <DirectionsCarIcon fontSize="large" /> },
-    { name: 'Salon', link: '/services/Saloon', icon: <SpaIcon fontSize="large" /> },
+    { name: 'Boarding', link: '/p/rentals?category=Bordims', icon: <HomeIcon fontSize="large" /> },
+    { name: 'Furniture', link: '/p/products?category=Furnitures', icon: <WeekendIcon fontSize="large" /> },
+    { name: 'Foods', link: '/p/services?category=Food', icon: <FastfoodIcon fontSize="large" /> },
+    { name: 'Accessories', link: '/p/products?category=accessories', icon: <WatchIcon fontSize="large" /> },
+    { name: 'Vehicles', link: '/p/rentals?category=Vehicles', icon: <DirectionsCarIcon fontSize="large" /> },
+    { name: 'Salon', link: '/p/services?category=Saloon', icon: <SpaIcon fontSize="large" /> },
   ];
 
   const handleSeeAll = (page) => {

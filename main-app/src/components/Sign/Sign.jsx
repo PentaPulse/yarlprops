@@ -4,6 +4,9 @@ import { useAuth } from "../../api/AuthContext";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useAlerts } from "../../api/AlertService";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth } from "../../api/firebase";
+import { registerUser } from "../../api/db/users";
 function GoogleIcon() {
     return (
         <SvgIcon>
@@ -164,9 +167,8 @@ export function Register({ closeBox }) {
     const [displayName, setDisplayName] = React.useState('');
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
-    const { register } = useAuth();
     const [showPassword, setShowPassword] = React.useState(false);
-    const showAlerts = useAlerts()
+    const {showAlerts} = useAlerts()
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -180,7 +182,36 @@ export function Register({ closeBox }) {
             return showAlerts('Enter details to Register', 'warning')
         } else {
             try {
-                await register(firstName, lastName, displayName, email, password)
+                await createUserWithEmailAndPassword(auth, email, password)
+            .then((result) => {
+                const user = result.user;
+                updateProfile(user, { displayName: displayName })
+                    .then(() => {
+                        registerUser(user.uid, firstName, lastName, displayName, email).then((result) => {
+                            if (result.success) {
+                                sessionStorage.setItem('pp', user.photoURL);
+                                sessionStorage.setItem('displayName', user.displayName);
+                            }
+                        })
+                    })
+                showAlerts('Account created , wait a little ', 'success', 'top-center')
+            })
+            .catch((error) => {
+                //showAlerts('ww' + error, 'error')
+                if (email === '' || password === '' || firstName === '' || lastName === '') {
+                    if (error.code === 'auth/invalid-email' || error.code === 'auth/missing-password') {
+                        showAlerts('Enter details', 'warning')
+                    }
+                } else if (error.code === 'auth/invalid-email') {
+                    showAlerts('Try different email', 'warning')
+                }
+                if (error.code === 'auth/email-already-in-use') {
+                    showAlerts('Try different email', 'warning')
+                }
+                if (error.code === 'auth/weak-password') {
+                    showAlerts('Try different password', 'warning')
+                }
+            });
                 closeBox()
             } catch (error) {
                 console.error(error);

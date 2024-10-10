@@ -18,20 +18,17 @@ import { fetchServiceOrders } from "../../api/db/services";
 
 
 export default function MyOrders() {
-  const theme = useTheme(); // Get theme to handle dark/light mode dynamically
+  const theme = useTheme();
   const [orders, setOrders] = useState([]);
-  const { user } = useAuth(); // Get the authenticated user
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchOdata = async () => {
-         try {
-        // Fetch product orders for the logged-in user
-        const data = await fetchProductOrders(user.uid);
-        setOrders(data);
+      try {
+        const pdata = await fetchProductOrders(user.uid);
         const rdata = await fetchRentalOrders(user.uid);
-        setOrders([...orders, rdata]);
         const sdata = await fetchServiceOrders(user.uid);
-        setOrders([...orders, sdata]);
+        setOrders((prevOrders) => [...prevOrders, ...pdata, ...rdata, ...sdata]);
       } catch (e) {
         console.error("Error fetching product orders:", e);
       }
@@ -50,88 +47,88 @@ export default function MyOrders() {
       <Grid container spacing={4}>
         {orders.length > 0
           ? orders.map((order) => (
-              <Grid item xs={12} sm={6} md={4} key={order.pid}>
-                <Card
-                  sx={{
-                    maxWidth: 345,
-                    backgroundColor:
-                      theme.palette.mode === "dark"
-                        ? order.status === "Completed"
-                          ? "#1e1e1e"
-                          : "#333333"
-                        : order.status === "Completed"
+            <Grid item xs={12} sm={6} md={4} key={order.pid}>
+              <Card
+                sx={{
+                  maxWidth: 345,
+                  backgroundColor:
+                    theme.palette.mode === "dark"
+                      ? order.status === "Completed"
+                        ? "#1e1e1e"
+                        : "#333333"
+                      : order.status === "Completed"
                         ? "#e8f5e9"
                         : "#ffebee",
-                  }}
-                >
-                  <CardMedia
-                    component="img"
-                    height="140"
-                   // image={order.images[0]} // Display first image from images array
-                    alt={order.title}
-                  />
-                  <CardContent>
-                    <Typography
-                      gutterBottom
-                      variant="h5"
-                      component="div"
-                      sx={{
-                        color:
-                          theme.palette.mode === "dark" ? "#ffffff" : "#000000",
-                      }}
-                    >
-                      {order.title}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        color:
-                          theme.palette.mode === "dark" ? "#b0bec5" : "#616161",
-                      }}
-                    >
-                      Quantity: {order.title}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        color:
-                          theme.palette.mode === "dark" ? "#b0bec5" : "#616161",
-                      }}
-                    >
-                      Price: Rs.{order.price}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        color:
-                          theme.palette.mode === "dark" ? "#b0bec5" : "#616161",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      Status: {order.status}
-                    </Typography>
-                  </CardContent>
-                  <Box sx={{ textAlign: "center", pb: 2 }}>
-                    <Button
-                      variant="contained"
-                      color={
-                        order.status === "Completed"
-                          ? theme.palette.mode === "dark"
-                            ? "success"
-                            : "success"
-                          : theme.palette.mode === "dark"
+                }}
+              >
+                <CardMedia
+                  component="img"
+                  height="140"
+                  image={order.images[0]} 
+                  alt={order.title}
+                />
+                <CardContent>
+                  <Typography
+                    gutterBottom
+                    variant="h5"
+                    component="div"
+                    sx={{
+                      color:
+                        theme.palette.mode === "dark" ? "#ffffff" : "#000000",
+                    }}
+                  >
+                    {order.title}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color:
+                        theme.palette.mode === "dark" ? "#b0bec5" : "#616161",
+                    }}
+                  >
+                    Quantity: {order.title}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color:
+                        theme.palette.mode === "dark" ? "#b0bec5" : "#616161",
+                    }}
+                  >
+                    Price: Rs.{order.price}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color:
+                        theme.palette.mode === "dark" ? "#b0bec5" : "#616161",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Status: {order.status}
+                  </Typography>
+                </CardContent>
+                <Box sx={{ textAlign: "center", pb: 2 }}>
+                  <Button
+                    variant="contained"
+                    color={
+                      order.status === "Completed"
+                        ? theme.palette.mode === "dark"
+                          ? "success"
+                          : "success"
+                        : theme.palette.mode === "dark"
                           ? "warning"
                           : "warning"
-                      }
-                    >
-                      {order.status === "Completed"
-                        ? "View Details"
-                        : "Pending"}
-                    </Button>
-                  </Box>
-                </Card>
-              </Grid>
-            ))
+                    }
+                  >
+                    {order.status === "Completed"
+                      ? "View Details"
+                      : "Pending"}
+                  </Button>
+                </Box>
+              </Card>
+            </Grid>
+          ))
           : "No orders to show"}
       </Grid>
     </Container>

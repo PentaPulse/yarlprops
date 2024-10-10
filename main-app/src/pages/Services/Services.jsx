@@ -11,6 +11,7 @@ import Carousel from 'react-material-ui-carousel';
 import { fetchMerchantServiceDetails } from '../../api/db/users';
 import { serviceFilters } from '../../components/menuLists';
 import Filters from '../../components/Filters/Filters';
+import Details from '../../components/Details/Details';
 
 
 export default function Services() {
@@ -113,7 +114,7 @@ function ServicesContents() {
     );
 };
 
-export function ServicePage() {
+export function ServicePage({ setSignin, setSignup }) {
     const [service, setService] = React.useState(null);
     const [merchant, setMerchant] = React.useState(null)
     const { id } = useParams();
@@ -208,11 +209,9 @@ export function ServicePage() {
                             </Box>
                             <Box sx={{ mx: '1rem', mt: '2.5rem' }}>
                                 {/* Seller Details */}
-                                <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Service Provider's Details</Typography>
-                                <Typography variant={isMobile ? 'subtitle1' : 'h6'} sx={{ textAlign: 'center' }} gutterBottom><i className="fa-solid fa-user"></i> Name : {merchant && merchant.firstName + ' ' + merchant.lastName}</Typography>
-                                <Typography variant={isMobile ? 'subtitle1' : 'h6'} sx={{ textAlign: 'center' }} gutterBottom><i className="fa-solid fa-location-dot"></i> Location : {service.serviceLocation}</Typography>
-                                <Typography variant={isMobile ? 'subtitle1' : 'h6'} sx={{ textAlign: 'center' }} gutterBottom><i className="fa-solid fa-phone"></i> Contact No : {merchant && merchant.phoneNumber}</Typography>
+                                <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
                             </Box>
+                            <Details setSignin={setSignin} setSignup={setSignup} item={service} merchant={merchant} />
                         </CardContent>
                     </Card>
                 </Grid>
