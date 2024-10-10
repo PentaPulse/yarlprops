@@ -9,14 +9,6 @@ export default function ProfileBox({ handleProfileClick }) {
     return (
         <>
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                <IconButton 
-                size="large" 
-                 color={theme.palette.primary.main} 
-                 sx={{[theme.breakpoints.down('md')]:{display:'none'}}}>
-                    <Badge badgeContent={4} color="error">
-                        <MailIcon />
-                    </Badge>
-                </IconButton>
                 <IconButton
                     size="large"
                     aria-label="show 17 new notifications"

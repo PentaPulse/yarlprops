@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Button, SvgIcon,ButtonGroup, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Typography, useTheme } from "@mui/material";
+import { Button, SvgIcon, ButtonGroup, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Typography, useTheme } from "@mui/material";
 import { useAuth } from "../../api/AuthContext";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -59,7 +59,7 @@ export function Login({ closeBox }) {
     };
 
     const handleLogin = async (e) => {
-        e.preventDefault(); 
+        e.preventDefault();
         if (!email || !password) {
             return showAlerts('Enter details to Sign in', 'warning');
         } else {
@@ -95,7 +95,7 @@ export function Login({ closeBox }) {
                 }}
                 onClick={handleGoogle}
             >
-                <GoogleIcon/> Connect with Google
+                <GoogleIcon /> Connect with Google
             </Button>
             <h5>OR</h5>
             <hr />
@@ -107,7 +107,7 @@ export function Login({ closeBox }) {
                     fullWidth
                     onKeyDown={(e) => {
                         if (e.key === 'Enter') {
-                            e.preventDefault(); 
+                            e.preventDefault();
                             handleLogin(e);
                         }
                     }}
@@ -180,9 +180,8 @@ export function Register({ closeBox }) {
             return showAlerts('Enter details to Register', 'warning')
         } else {
             try {
-                await register(firstName, lastName, displayName, email, password).then(
-                    closeBox()
-                )
+                await register(firstName, lastName, displayName, email, password)
+                closeBox()
             } catch (error) {
                 console.error(error);
                 throw error
