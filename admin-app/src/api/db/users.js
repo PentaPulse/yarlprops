@@ -4,7 +4,7 @@ import { doc, setDoc, collection, getDoc, getDocs, where, query } from "firebase
 import { updateProfile } from "firebase/auth";
 
 //reference
-const userRef = collection(db, "systemusers")
+const userRef = collection(db, "admin")
 
 //functions
 //register user
@@ -15,7 +15,7 @@ export const registerUser = async (uid, fname, lname, dname, email) => {
             throw new Error('Missing required user information');
         }
 
-        const newUserRef = doc(db, "systemusers", uid);
+        const newUserRef = doc(db, "admin", uid);
         const userSnap = await getDoc(newUserRef);
 
         if (!userSnap.exists()) {

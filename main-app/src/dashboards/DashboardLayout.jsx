@@ -4,7 +4,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { useAuth } from '../api/AuthContext'
-import { adminMenu, merchMenu, userMenu } from '../components/menuLists';
+import {  merchMenu, userMenu } from '../components/menuLists';
 import { useNavigate } from 'react-router-dom';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../api/firebase';
@@ -82,7 +82,6 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 export default function DashboardLayout({ handleMode, children }) {
   const [open, setOpen] = React.useState(false);
-  const [adminList, setAdminList] = React.useState([]);
   const [merchantList, setMerchantList] = React.useState([]);
   const { user, logout } = useAuth()
   const theme = useTheme();
@@ -101,15 +100,6 @@ export default function DashboardLayout({ handleMode, children }) {
     setOpen(false)
   }
   React.useEffect(() => {
-    const fetchAdminList = async () => {
-      try {
-        const q = await getDocs(query(collection(db, 'admins')))
-        const list = q.docs.map((doc) => doc.data().uid)
-        setAdminList(list);
-      } catch (e) {
-
-      }
-    }
     const fetchMerchantList = async () => {
       try {
         const q = await getDocs(query(collection(db, 'systemusers'), where('isMerchant', '==', true)))
@@ -119,7 +109,6 @@ export default function DashboardLayout({ handleMode, children }) {
 
       }
     }
-    fetchAdminList()
     fetchMerchantList()
   }, [])
 
@@ -144,7 +133,7 @@ export default function DashboardLayout({ handleMode, children }) {
             '--MuiMenuItem-insetStart': '30px',
           }}
         >
-          {(adminList.includes(user.uid) ? adminMenu : (merchantList.includes(user.uid) ? merchMenu : userMenu)).map((text, index) => (
+          {(merchantList.includes(user.uid) ? merchMenu : userMenu).map((text, index) => (
             <MenuItem onClick={() => handleNavigation(text[2])}>{text[1]} {text[0]}</MenuItem>
           ))}
         </MenuList>
