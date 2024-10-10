@@ -25,7 +25,7 @@ export default function MyOrders() {
       try {
         // Fetch product orders for the logged-in user
         const data = await fetchProductOrders(user.uid);
-        setOrders([...orders, data]);
+        setOrders(data);
         const rdata = await fetchRentalOrders(user.uid);
         setOrders([...orders, rdata]);
       } catch (e) {

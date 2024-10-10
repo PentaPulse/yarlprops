@@ -81,6 +81,7 @@ export const fetchProductOrders = async(cid)=>{
     try{
         const qsnapshot = await getDocs(q)
         const productOrders = qsnapshot.docs.map((doc)=>doc.data())
+        if(productOrders.length===0) return []
         return productOrders;
     }catch(e){
         console.log(e)

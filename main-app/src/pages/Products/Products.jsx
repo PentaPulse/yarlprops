@@ -11,6 +11,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import Filters from '../../components/Filters/Filters';
+import { useAuth } from '../../api/AuthContext';
 
 function Products() {
   return (
@@ -134,15 +135,16 @@ const ProductsContents = () => {
   );
 };
 
-export function ProductPage() {
+export function ProductPage({setSignin,setSignup}) {
   const [product, setProduct] = React.useState(null);
   const [merchant, setMerchant] = React.useState(null)
   const [selectedImageIndex, setSelectedImageIndex] = React.useState(0); // Track the index of the selected image
-  const [startIndex, setStartIndex] = React.useState(0); 
+  const [startIndex, setStartIndex] = React.useState(0);
   const visibleImagesCount = 3; // Number of images to display at a time
   const { id } = useParams();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { user } = useAuth()
   //const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
 
 
@@ -174,175 +176,188 @@ export function ProductPage() {
     return <CircularProgress />;
   }
 
-    const handlePrevious = () => {
-      if(startIndex > 0){
-        setStartIndex(startIndex - 1);
-        setSelectedImageIndex(startIndex - 1);
-      } else {
-        setStartIndex(product.images.length - visibleImagesCount);
-        setSelectedImageIndex(product.images.length - 1);
-      }
-    };
-  
-    const handleNext = () => {
-      if(startIndex + visibleImagesCount < product.images.length){
-        setStartIndex(startIndex + 1);
-        setSelectedImageIndex(startIndex + 1);
-      } else {
-        setStartIndex(0);
-        setSelectedImageIndex(0);
-      }
-    };
+  const handlePrevious = () => {
+    if (startIndex > 0) {
+      setStartIndex(startIndex - 1);
+      setSelectedImageIndex(startIndex - 1);
+    } else {
+      setStartIndex(product.images.length - visibleImagesCount);
+      setSelectedImageIndex(product.images.length - 1);
+    }
+  };
 
-    return (
-      <Container maxWidth="lg" sx={{ backgroundColor: theme.palette.background.default }}>
-        <Grid container spacing={4}>
-          <Grid item xs={12} md={6}>
-            {/* Main Product Image */}
-            <Card sx={{ boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }}>
-              <CardMedia
-                component="img"
-                image={product.images[selectedImageIndex]}  // Display the selected image as the main product image
-                alt={product.name}
-                sx={{ borderRadius: '0px', width: '100%', height: { xs: '300px', sm:'550px', md: '430px', lg: '445px'}, minHeight:'300px', objectFit: 'cover' }}
-              />
-            </Card>
-  
-            {/* Small Images Grid */}
-            <Grid container spacing={2} sx={{ mt: 2, alignItems: 'center', justifyContent:'center'}}>
-              <Grid item xs={1} sm={1} md={1} lg={1} sx={{ display: 'flex', justifyContent: 'center'}}>
-                <IconButton 
-                  onClick={handlePrevious}
-                  sx={{ fontSize: { xs:'1.5rem', sm: '2rem' }}}
-                >
-                  <ArrowBackIosIcon />
-                </IconButton>
+  const handleNext = () => {
+    if (startIndex + visibleImagesCount < product.images.length) {
+      setStartIndex(startIndex + 1);
+      setSelectedImageIndex(startIndex + 1);
+    } else {
+      setStartIndex(0);
+      setSelectedImageIndex(0);
+    }
+  };
+
+  const hanldeBuyNow=()=>{
+    
+  }
+
+  return (
+    <Container maxWidth="lg" sx={{ backgroundColor: theme.palette.background.default }}>
+      <Grid container spacing={4}>
+        <Grid item xs={12} md={6}>
+          {/* Main Product Image */}
+          <Card sx={{ boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }}>
+            <CardMedia
+              component="img"
+              image={product.images[selectedImageIndex]}  // Display the selected image as the main product image
+              alt={product.name}
+              sx={{ borderRadius: '0px', width: '100%', height: { xs: '300px', sm: '550px', md: '430px', lg: '445px' }, minHeight: '300px', objectFit: 'cover' }}
+            />
+          </Card>
+
+          {/* Small Images Grid */}
+          <Grid container spacing={2} sx={{ mt: 2, alignItems: 'center', justifyContent: 'center' }}>
+            <Grid item xs={1} sm={1} md={1} lg={1} sx={{ display: 'flex', justifyContent: 'center' }}>
+              <IconButton
+                onClick={handlePrevious}
+                sx={{ fontSize: { xs: '1.5rem', sm: '2rem' } }}
+              >
+                <ArrowBackIosIcon />
+              </IconButton>
+            </Grid>
+
+            {product.images.slice(startIndex, startIndex + visibleImagesCount).map((image, index) => (
+              <Grid item xs={3} key={index}>
+                <CardMedia
+                  component="img"
+                  image={image}
+                  alt={`image ${index}`}
+                  sx={{
+                    width: '100%',
+                    // height: isMobile ? '70px' : '100px',
+                    height: { xs: '70px', sm: '120px', md: '100px', lg: '100px' },
+                    borderRadius: '8px',
+                    objectFit: 'cover',
+                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+                    cursor: 'pointer',
+                    transition: 'transform 0.3s',
+                    border: selectedImageIndex === index + startIndex ? '3px solid blue' : 'none', // Highlight the selected image
+                    '&:hover': {
+                      transform: 'scale(1.1)',
+                    },
+                  }}
+                  onClick={() => setSelectedImageIndex(index + startIndex)}  // Update the main image on click
+                />
               </Grid>
-  
-              {product.images.slice(startIndex, startIndex + visibleImagesCount).map((image, index) => (
-                <Grid item xs={3} key={index}>
-                  <CardMedia
-                    component="img"
-                    image={image}
-                    alt={`image ${index}`}
-                    sx={{
-                      width: '100%',
-                      // height: isMobile ? '70px' : '100px',
-                      height: { xs: '70px', sm:'120px', md:'100px', lg:'100px'},
-                      borderRadius: '8px',
-                      objectFit: 'cover',
-                      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
-                      cursor: 'pointer',
-                      transition: 'transform 0.3s',
-                      border: selectedImageIndex === index + startIndex ? '3px solid blue' : 'none', // Highlight the selected image
-                      '&:hover': {
-                        transform: 'scale(1.1)',
-                      },
-                    }}
-                    onClick={() => setSelectedImageIndex(index + startIndex)}  // Update the main image on click
-                  />
-                </Grid>
-              ))}
-  
-              <Grid item xs={1} sm={1} md={1} lg={1} sx={{ display: 'flex', justifyContent: 'center'}}>
-                <IconButton 
-                  onClick={handleNext} 
-                  sx={{ fontSize: { xs: '1.5rem', sm: '2rem'}}}
-                >
-                  <ArrowForwardIosIcon />
-                </IconButton>
-              </Grid>
+            ))}
+
+            <Grid item xs={1} sm={1} md={1} lg={1} sx={{ display: 'flex', justifyContent: 'center' }}>
+              <IconButton
+                onClick={handleNext}
+                sx={{ fontSize: { xs: '1.5rem', sm: '2rem' } }}
+              >
+                <ArrowForwardIosIcon />
+              </IconButton>
             </Grid>
           </Grid>
-  
-          <Grid item xs={12} md={6}>
-            <Card sx={{ height: '100%', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }}>
-              <CardContent sx={{ my: '30px' }}>
-                {/* Product Details */}
-                <Typography variant={isMobile ? 'h5' : 'h4'} component="h2" sx={{ fontWeight: 'bold', textAlign: 'center', fontSize: isMobile ? '1.4rem' : '1.8rem' }}>{product.title}</Typography>
-                <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ fontWeight: 'bold', textAlign: 'center', fontStyle: 'italic' }}>
-                  Category: {product.category}
-                </Typography>
-                <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ fontWeight: 'bold', textAlign: 'center', fontStyle: 'italic' }}>
-                  Sub category: {product.subCategory}
-                </Typography>
-                <Typography sx={{ textAlign: 'center', fontStyle: 'italic' }} gutterBottom>
-                  {(product.status === "For Sale") ?
-                    (<Typography variant={isMobile ? 'h6' : 'h5'} sx={{ color: '#50C878', fontWeight: 'bold' }}>For Sale</Typography>)
-                    : ((product.status === "For Rent") ?
-                      (<Typography variant={isMobile ? 'h6' : 'h5'} sx={{ color: "darkorange", fontWeight: 'bold' }}>For Rent</Typography>)
-                      : (<Typography variant={isMobile ? 'h6' : 'h5'} sx={{ color: "red", fontWeight: 'bold' }}>Sold Out!</Typography>))}
-                </Typography>
-  
-                <Box 
-                  sx={{ 
-                    mx: { xs: '1rem', sm:'4rem', md:'3rem', lg:'3rem'},
-                    my: { xs: '0.5rem', sm:'0.7rem', md:'1rem', lg:'1.5rem'},
-                  }} /*sx={{ mt: { xs: 2, sm: 3 } }}*/>
-                  {/* <Typography variant={isMobile ? 'h6' : 'h5'} component="h4" sx={{ fontWeight: 'bold' }} gutterBottom>Description</Typography> */}
-                  <ul style={{ textAlign: 'justify', fontSize: '18px' }}>
+        </Grid>
 
-                    {product.description.map((item, index) => (
-                      <li key={index}><Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4">{item}</Typography></li>
-                    ))}
-                    <li><Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4">Quantity: {product.quantity}</Typography></li>
-                    {/* <li>Location: {product.location}</li> */}
-                  </ul>
-                  
-                </Box>
-                <Box sx={{ mx: '1rem', mt: '2.5rem' }}>
-                  {/* Seller Details */}
-                  <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
-                  <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center'}} gutterBottom><i className="fa-solid fa-user"></i> Name : {merchant && merchant.firstName + ' ' + merchant.lastName}</Typography>
-                  <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center'}} gutterBottom><i className="fa-solid fa-location-dot"></i> Location : {product.location}</Typography>
-                  <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center'}} gutterBottom><i className="fa-solid fa-phone"></i> Contact No : {merchant && merchant.phoneNumber}</Typography>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                  <Button
-                    variant="contained"
-                    component={Link}
-                    to=""
-                    size={isMobile ? "small" : "medium"}
-                    sx={{
-                      mt: '0.8rem',
-                      fontWeight: 'bold',
-                      backgroundColor: '#0d6efd',
-                      color: 'white',
-                      '&:hover': {
-                        backgroundColor: '#90caf9',
-                      }
-                    }}
-                  >
-                    Buy Now
-                  </Button>
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
+        <Grid item xs={12} md={6}>
+          <Card sx={{ height: '100%', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }}>
+            <CardContent sx={{ my: '30px' }}>
+              {/* Product Details */}
+              <Typography variant={isMobile ? 'h5' : 'h4'} component="h2" sx={{ fontWeight: 'bold', textAlign: 'center', fontSize: isMobile ? '1.4rem' : '1.8rem' }}>{product.title}</Typography>
+              <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ fontWeight: 'bold', textAlign: 'center', fontStyle: 'italic' }}>
+                Category: {product.category}
+              </Typography>
+              <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ fontWeight: 'bold', textAlign: 'center', fontStyle: 'italic' }}>
+                Sub category: {product.subCategory}
+              </Typography>
+              <Typography sx={{ textAlign: 'center', fontStyle: 'italic' }} gutterBottom>
+                {(product.status === "For Sale") ?
+                  (<Typography variant={isMobile ? 'h6' : 'h5'} sx={{ color: '#50C878', fontWeight: 'bold' }}>For Sale</Typography>)
+                  : ((product.status === "For Rent") ?
+                    (<Typography variant={isMobile ? 'h6' : 'h5'} sx={{ color: "darkorange", fontWeight: 'bold' }}>For Rent</Typography>)
+                    : (<Typography variant={isMobile ? 'h6' : 'h5'} sx={{ color: "red", fontWeight: 'bold' }}>Sold Out!</Typography>))}
+              </Typography>
+
+              <Box
+                sx={{
+                  mx: { xs: '1rem', sm: '4rem', md: '3rem', lg: '3rem' },
+                  my: { xs: '0.5rem', sm: '0.7rem', md: '1rem', lg: '1.5rem' },
+                }} /*sx={{ mt: { xs: 2, sm: 3 } }}*/>
+                {/* <Typography variant={isMobile ? 'h6' : 'h5'} component="h4" sx={{ fontWeight: 'bold' }} gutterBottom>Description</Typography> */}
+                <ul style={{ textAlign: 'justify', fontSize: '18px' }}>
+
+                  {product.description.map((item, index) => (
+                    <li key={index}><Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4">{item}</Typography></li>
+                  ))}
+                  <li><Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4">Quantity: {product.quantity}</Typography></li>
+                  {/* <li>Location: {product.location}</li> */}
+                </ul>
+
+              </Box>
+              <Box sx={{ mx: '1rem', mt: '2.5rem' }}>
+                {/* Seller Details */}
+                <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
+              </Box>
+              {user ?
+                <>
+                  <Box>
+                    <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }} gutterBottom><i className="fa-solid fa-user"></i> Name : {merchant && merchant.firstName + ' ' + merchant.lastName}</Typography>
+                    <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }} gutterBottom><i className="fa-solid fa-location-dot"></i> Location : {product.location}</Typography>
+                    <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }} gutterBottom><i className="fa-solid fa-phone"></i> Contact No : {merchant && merchant.phoneNumber}</Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Button
+                      variant="contained"
+                      component={Link}
+                      to=""
+                      size={isMobile ? "small" : "medium"}
+                      sx={{
+                        mt: '0.8rem',
+                        fontWeight: 'bold',
+                        backgroundColor: '#0d6efd',
+                        color: 'white',
+                        '&:hover': {
+                          backgroundColor: '#90caf9',
+                        }
+                      }}
+                      onClick={hanldeBuyNow}
+                    >
+                      Buy Now
+                    </Button>
+                  </Box>
+                </> :
+                <Box display={'flex'} justifyContent={'center'} alignItems={'center'}>
+                  <Typography> <Button onClick={setSignin}>Signin</Button> or <Button onClick={setSignup}>Signup</Button> to see Seller details</Typography>
+                </Box>}
+            </CardContent>
+          </Card>
         </Grid>
-        <Grid container spacing={1} sx={{ mt: '0.5rem' }}>
-          <Grid item>
-            <Button 
-              variant="contained"
-              component={Link}
-              to="/p/products"
-              startIcon={<ChevronLeftIcon />}
-              size={isMobile ? "small" : "medium"}
-              sx={{
-                backgroundColor: '#0d6efd',
-                color: 'white',
-                '&:hover': {
-                  backgroundColor: '#90caf9',
-                }
-              }}
-            >
-              Back
-            </Button>
-          </Grid>
+      </Grid>
+      <Grid container spacing={1} sx={{ mt: '0.5rem' }}>
+        <Grid item>
+          <Button
+            variant="contained"
+            component={Link}
+            to="/p/products"
+            startIcon={<ChevronLeftIcon />}
+            size={isMobile ? "small" : "medium"}
+            sx={{
+              backgroundColor: '#0d6efd',
+              color: 'white',
+              '&:hover': {
+                backgroundColor: '#90caf9',
+              }
+            }}
+          >
+            Back
+          </Button>
         </Grid>
-      </Container>
-    );
-  }
+      </Grid>
+    </Container>
+  );
+}
 
 {/* <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
   <Typography variant="subtitle1" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-user"></i> Name</Typography>

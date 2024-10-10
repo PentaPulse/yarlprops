@@ -10,9 +10,8 @@ import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { Button, useTheme, ButtonGroup, Modal, Fade, Backdrop,Drawer,Divider } from '@mui/material';
+import { Button, useTheme, ButtonGroup, Modal, Fade, Backdrop, Drawer, Divider } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../api/AuthContext';
 import { Login, Register } from '../Sign/Sign';
@@ -37,12 +36,10 @@ const style = {
     textAlign: "center"
 };
 
-export default function NavigationBar({ handleMode }) {
+export default function NavigationBar({ handleMode, signin, setSignin, signup, setSignup }) {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
     const theme = useTheme()
-    const [signin, setSignin] = React.useState(false);
-    const [signup, setSignup] = React.useState(false);
     const [isLogged, setIsLogged] = React.useState(false);
     const { user, logout } = useAuth()
     const navigate = useNavigate()
@@ -100,17 +97,8 @@ export default function NavigationBar({ handleMode }) {
             onClose={handleMobileMenuClose}
         >
             <MenuItem sx={{ [theme.breakpoints.up('md')]: { display: 'none' } }}>
-                <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-                    <Badge badgeContent={4} color="error">
-                        <MailIcon />
-                    </Badge>
-                </IconButton>
-                <Typography>Messages</Typography>
-            </MenuItem>
-            <MenuItem sx={{ [theme.breakpoints.up('md')]: { display: 'none' } }}>
                 <IconButton
                     size="large"
-                    aria-label="show 17 new notifications"
                     color="inherit"
                 >
                     <Badge badgeContent={17} color="error">
@@ -185,7 +173,7 @@ export default function NavigationBar({ handleMode }) {
                     }}
                 >
                     <Toolbar >
-                        <Box sx={{ [theme.breakpoints.up('lg')]:{display: 'none'},display:'flex' }}>
+                        <Box sx={{ [theme.breakpoints.up('lg')]: { display: 'none' }, display: 'flex' }}>
                             <IconButton aria-label="Menu button" onClick={handleOpenNavMenu}>
                                 <MenuIcon />
                             </IconButton>
@@ -204,12 +192,12 @@ export default function NavigationBar({ handleMode }) {
                                     </Box>
                                     <Divider sx={{ my: 3 }} />
                                     {pages.map((page) => (
-                                    <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                        <Button textAlign="center" onClick={() => navigate(page[1])} sx={{ textDecoration: 'none', color: theme.palette.primary.main }}>
-                                            {page[0]}
-                                        </Button>
-                                    </MenuItem>
-                                ))}
+                                        <MenuItem key={page} onClick={handleCloseNavMenu}>
+                                            <Button textAlign="center" onClick={() => navigate(page[1])} sx={{ textDecoration: 'none', color: theme.palette.primary.main }}>
+                                                {page[0]}
+                                            </Button>
+                                        </MenuItem>
+                                    ))}
                                     <MenuItem>
                                         <Button color="primary" variant="contained" fullWidth onClick={() => setSignup(true)}>
                                             Sign up
@@ -230,8 +218,8 @@ export default function NavigationBar({ handleMode }) {
                             href="/"
                             sx={{
                                 mr: 2,
-                                [theme.breakpoints.down('lg')]:{display:'none'},
-                                display: 'flex' ,
+                                [theme.breakpoints.down('lg')]: { display: 'none' },
+                                display: 'flex',
                                 fontFamily: 'monospace',
                                 fontWeight: 700,
                                 letterSpacing: '.2rem',
@@ -241,8 +229,10 @@ export default function NavigationBar({ handleMode }) {
                         >
                             YarlProps
                         </Typography>
-                        <Box sx={{ flexGrow: 1, [theme.breakpoints.down('lg')]:{display:'none'},
-                                display: 'flex' , }}>
+                        <Box sx={{
+                            flexGrow: 1, [theme.breakpoints.down('lg')]: { display: 'none' },
+                            display: 'flex',
+                        }}>
                             {pages.map((page) => (
                                 <Button
                                     key={page}
@@ -260,7 +250,7 @@ export default function NavigationBar({ handleMode }) {
                             <ProfileBox isLogged={isLogged} handleProfileClick={handleMobileMenuOpen} />
                         ) : (
                             <>
-                                <ButtonGroup variant="text" sx={{ [theme.breakpoints.down('lg')]:{display: 'none'} }}>
+                                <ButtonGroup variant="text" sx={{ [theme.breakpoints.down('lg')]: { display: 'none' } }}>
                                     <Button sx={{ color: theme.palette.primary }} onClick={() => setSignin(true)}>Sign In</Button>
                                     <Button sx={{ color: theme.palette.primary }} onClick={() => setSignup(true)}>Sign Up</Button>
                                 </ButtonGroup>
