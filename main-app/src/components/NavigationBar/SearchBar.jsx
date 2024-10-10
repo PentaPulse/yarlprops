@@ -55,7 +55,7 @@ export default function SearchBar() {
                 service:false
             })
         }
-    },[location.pathname])
+    })
         return (
         <Box
             sx={{
