@@ -297,6 +297,25 @@ export function ProductPage() {
                   <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center'}} gutterBottom><i className="fa-solid fa-location-dot"></i> Location : {product.location}</Typography>
                   <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center'}} gutterBottom><i className="fa-solid fa-phone"></i> Contact No : {merchant && merchant.phoneNumber}</Typography>
                 </Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                  <Button
+                    variant="contained"
+                    component={Link}
+                    to=""
+                    size={isMobile ? "small" : "medium"}
+                    sx={{
+                      mt: '0.8rem',
+                      fontWeight: 'bold',
+                      backgroundColor: '#0d6efd',
+                      color: 'white',
+                      '&:hover': {
+                        backgroundColor: '#90caf9',
+                      }
+                    }}
+                  >
+                    Buy Now
+                  </Button>
+                </Box>
               </CardContent>
             </Card>
           </Grid>
