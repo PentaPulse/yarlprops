@@ -6,21 +6,21 @@ import EmailIcon from '@mui/icons-material/Email';
 const messages = [
     {
         id: 1,
-        sender: 'John Doe',
+        sender: 'seller',
         subject: 'Rental Inquiry',
         date: '2024-09-01',
         read: false,
     },
     {
         id: 2,
-        sender: 'Alice Smith',
+        sender: 'renter name',
         subject: 'Payment Confirmation',
         date: '2024-08-28',
         read: true,
     },
     {
         id: 3,
-        sender: 'David Brown',
+        sender:'',
         subject: 'Service Feedback',
         date: '2024-08-25',
         read: false,

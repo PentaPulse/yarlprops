@@ -12,8 +12,8 @@ admin-app/node_modules
 
 # production
 /build
-/main-app/build
-/admin-app/build
+main-app/build
+admin-app/build
 /main
 /admin
 
