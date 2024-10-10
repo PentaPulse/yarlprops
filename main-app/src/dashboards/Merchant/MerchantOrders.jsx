@@ -16,6 +16,7 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -79,7 +80,7 @@ function ProductOrders() {
         <Table aria-label="collapsible table">
           <TableHead>
             <TableRow>
-              <StyledTableCell />
+              <StyledTableCell align='center'>Customer details</StyledTableCell>
               <StyledTableCell align="center">Title</StyledTableCell>
               <StyledTableCell align="center">Category</StyledTableCell>
               <StyledTableCell align="center">Type</StyledTableCell>
@@ -272,14 +273,17 @@ function Row(props) {
   return (
     <React.Fragment>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
-        <TableCell>
+        <TableCell align='center'>
+          <Tooltip title={'click here'}>
           <IconButton
             aria-label="expand row"
             size="small"
             onClick={() => setOpen(!open)}
+            
           >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
+          </Tooltip>
         </TableCell>
         <TableCell align="center">{row.title}</TableCell>
         <TableCell align="center">{row.category}</TableCell>

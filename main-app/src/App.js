@@ -110,16 +110,18 @@ function Routings({ handleMode }) {
 }
 
 function PageRoutes({ handleMode }) {
+  const [signin,setSignin]=React.useState(false)
+  const [signup,setSignup]=React.useState(false)
   return (
     <>
       <Box sx={{ marginTop: '12vh' }}>
-        <PageLayout handleMode={handleMode}>
+        <PageLayout handleMode={handleMode} signin={signin} setSignin={setSignin} signup={signup} setSignup={setSignup}>
         <Routes>
           <Route path="*" element={<Home />} />
           <Route path="products" element={<Products />} />
           <Route path="products/:cat" element={<Products />} />
           <Route path="products/:search" element={<Products />} />
-          <Route path="product/:id" element={<ProductPage />} />
+          <Route path="product/:id" element={<ProductPage setSignin={setSignin} setSignup={setSignup}/>} />
           <Route path="rentals" element={<Rentals />} />
           <Route path="rentals/:cat" element={<Rentals />} />
           <Route path="rentals/:search" element={<Rentals />} />
