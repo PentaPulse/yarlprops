@@ -1,5 +1,19 @@
 {
   "projects": {
     "default": "yarlprops"
-  }
+  },
+  "targets": {
+    "yarlprops": {
+      "hosting": {
+        "main": [
+          "yarlprops"
+        ],
+        "admin": [
+          "ypalog"
+        ]
+      }
+    }
+  },
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
 }
