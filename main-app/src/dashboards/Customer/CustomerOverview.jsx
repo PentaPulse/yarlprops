@@ -59,8 +59,19 @@ export default function CustomerOverview() {
 
             {/* Add more sections or summaries as needed */}
             <Box mt={4}>
+                <ProductGotOrders/>
+                <RentalGotOrders/>
+                <ServiceGotOrders/>
+            </Box>
+        </Container>
+    );
+};
 
-            <TableContainer component={Paper}>
+function ProductGotOrders(){
+    return(
+        <>
+        <Typography>Order histroy</Typography>
+        <TableContainer component={Paper} sx={{mt:4}}>
                 <Table>
                     <TableHead>
                         <TableRow>
@@ -86,7 +97,72 @@ export default function CustomerOverview() {
                     </TableBody>
                 </Table>
             </TableContainer>
-            </Box>
-        </Container>
-    );
-};
+        </>
+    )
+}
+function RentalGotOrders(){
+    return(
+        <>
+        <Typography>Rental histroy</Typography>
+        <TableContainer component={Paper} sx={{mt:4}}>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell sx={{ backgroundColor: 'black', color: 'white' }}>Rental ID</TableCell>
+                            <TableCell sx={{ backgroundColor: 'black', color: 'white' }} align="right">Product</TableCell>
+                            <TableCell sx={{ backgroundColor: 'black', color: 'white' }} align="right">Quantity</TableCell>
+                            <TableCell sx={{ backgroundColor: 'black', color: 'white' }} align="right">Price</TableCell>
+                            <TableCell sx={{ backgroundColor: 'black', color: 'white' }} align="right">Status</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        
+                            <TableRow >
+                                <TableCell component="th" scope="row">
+                                    {}
+                                </TableCell>
+                                <TableCell align="right">{}</TableCell>
+                                <TableCell align="right">{}</TableCell>
+                                <TableCell align="right">{}</TableCell>
+                                <TableCell align="right">{}</TableCell>
+                            </TableRow>
+                    
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </>
+    )
+}
+function ServiceGotOrders(){
+    return(
+        <>
+        <Typography>Service histroy</Typography>
+        <TableContainer component={Paper} sx={{mt:4}}>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell sx={{ backgroundColor: 'black', color: 'white' }}>Service ID</TableCell>
+                            <TableCell sx={{ backgroundColor: 'black', color: 'white' }} align="right">Service</TableCell>
+                            <TableCell sx={{ backgroundColor: 'black', color: 'white' }} align="right">Time</TableCell>
+                            <TableCell sx={{ backgroundColor: 'black', color: 'white' }} align="right">Price</TableCell>
+                            <TableCell sx={{ backgroundColor: 'black', color: 'white' }} align="right">Status</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        
+                            <TableRow >
+                                <TableCell component="th" scope="row">
+                                    {}
+                                </TableCell>
+                                <TableCell align="right">{}</TableCell>
+                                <TableCell align="right">{}</TableCell>
+                                <TableCell align="right">{}</TableCell>
+                                <TableCell align="right">{}</TableCell>
+                            </TableRow>
+                    
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </>
+    )
+}

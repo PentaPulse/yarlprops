@@ -91,5 +91,15 @@ export const countProducts = async () => {
     const productsSnapshot = await getDocs(productRef);
     return productsSnapshot.size;
 };
+export const fetchProductOrders = async(cid)=>{
+    const q = query(productRef,where('customers','==',cid))
+    try{
+        const qsnapshot = await getDocs(q)
+        const productOrders = qsnapshot.docs.map((doc)=>doc.data())
+        return productOrders;
+    }catch(e){
+        console.log(e)
+    }
+}
 
 export { addProduct, updateProduct, fetchProducts, fetchSelectedProduct };

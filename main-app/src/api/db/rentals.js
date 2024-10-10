@@ -53,6 +53,17 @@ export const fetchSelectedRental = async (rid) => {
     }
 };
 
+export const fetchRentalOrders = async(cid)=>{
+    const q = query(rentalRef,where('customers','==',cid))
+    try{
+        const qsnapshot = await getDocs(q)
+        const productOrders = qsnapshot.docs.map((doc)=>doc.data())
+        return productOrders;
+    }catch(e){
+        console.log(e)
+    }
+}
+
 export const countRentals = async () => {
     const productsSnapshot = await getDocs(rentalRef);
     return productsSnapshot.size;

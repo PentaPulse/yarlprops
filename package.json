@@ -52,7 +52,10 @@
     "emu-mith": "firebase emulators:start --import=./datamith",
     "export-mith": "firebase emulators:export ./datamith",
     "build:main":"cd main-app && npm run build && cp -r build/* ../main",
-    "build:admin":"cd admin-app && npm run build && cp -r build/* ../admin"
+    "build:admin":"cd admin-app && npm run build && cp -r build/* ../admin",
+    "start:main":"cd main-app && npm start",
+    "start:admin":"cd admin-app && npm start",
+    "install":"cd admin-app && npm install && cd ../main-app && npm install"
   },
   "eslintConfig": {
     "extends": [
