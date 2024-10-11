@@ -28,7 +28,7 @@ export default function MyOrders() {
         const pdata = await fetchProductOrders(user.uid);
         const rdata = await fetchRentalOrders(user.uid);
         const sdata = await fetchServiceOrders(user.uid);
-        setOrders((prevOrders) => [...prevOrders, ...pdata, ...rdata, ...sdata]);
+        setOrders( [ ...pdata, ...rdata, ...sdata]);
       } catch (e) {
         console.error("Error fetching product orders:", e);
       }
