@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Button, IconButton, styled, Paper, Typography, TextField, FormControl, FormLabel, RadioGroup, Radio, FormControlLabel, Grid, TableCell, tableCellClasses, TableRow, TableContainer, Table, TableHead, TableBody, TablePagination, CircularProgress, InputLabel, Select, MenuItem } from '@mui/material';
+import { Container, Button, IconButton, styled, Paper, Typography, TextField, FormControl, FormLabel, RadioGroup, Radio, FormControlLabel, Grid, TableCell, tableCellClasses, TableRow, TableContainer, Table, TableHead, TableBody, TablePagination, CircularProgress, InputLabel, Select, MenuItem, Box } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { addProduct, fetchSelectedProduct, updateProduct } from '../../api/db/products';
@@ -45,6 +45,7 @@ export default function MerchantProducts() {
 
   return (
     <>
+      <Grid item>
         <Button
           variant="contained"
           color="success"
@@ -54,18 +55,21 @@ export default function MerchantProducts() {
         >
           Add Product
         </Button>
+      </Grid>
+      <Grid item>
+        <Container>
+          {
+            showAddProduct ? (
+              <ProductForm pid={editingProductId} onSuccess={handleSuccess} onCancel={handleCancel} />
+            ) : viewingProductId ? (
+              <ProductDetail pid={viewingProductId} onBack={handleCancel} />
+            ) : (
+              <ProductList onEditProduct={handleEditProduct} onViewProduct={handleViewProduct} />
+            )
+          }
+        </Container>
+      </Grid>
 
-      <Container>
-        {
-          showAddProduct ? (
-            <ProductForm pid={editingProductId} onSuccess={handleSuccess} onCancel={handleCancel} />
-          ) : viewingProductId ? (
-            <ProductDetail pid={viewingProductId} onBack={handleCancel} />
-          ) : (
-            <ProductList onEditProduct={handleEditProduct} onViewProduct={handleViewProduct} />
-          )
-        }
-      </Container>
     </>
   );
 };
@@ -533,24 +537,31 @@ const ProductList = ({ onEditProduct, onViewProduct }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {products.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(product => (
-            <StyledTableRow key={product.pid}>
-              {/* <TableCell>{product.id}</TableCell> */}
-              <StyledTableCell align="center">{product.title}</StyledTableCell>
-              <StyledTableCell align="center">{product.category}</StyledTableCell>
-              <StyledTableCell align="center">{product.subCategory}</StyledTableCell>
-              <StyledTableCell align="justify">{product.description}</StyledTableCell>
-              <StyledTableCell align="center">{product.quantity}</StyledTableCell>
-              <StyledTableCell align="center">{product.location}</StyledTableCell>
-              <StyledTableCell align="center">{product.status}</StyledTableCell>
+          {products.length > 0 ?
+            products.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(product => (
+              <StyledTableRow key={product.pid}>
+                {/* <TableCell>{product.id}</TableCell> */}
+                <StyledTableCell align="center">{product.title}</StyledTableCell>
+                <StyledTableCell align="center">{product.category}</StyledTableCell>
+                <StyledTableCell align="center">{product.subCategory}</StyledTableCell>
+                <StyledTableCell align="justify">{product.description}</StyledTableCell>
+                <StyledTableCell align="center">{product.quantity}</StyledTableCell>
+                <StyledTableCell align="center">{product.location}</StyledTableCell>
+                <StyledTableCell align="center">{product.status}</StyledTableCell>
 
-              <StyledTableCell align="center">
-                <Button onClick={() => onViewProduct(product.pid)} variant="outlined" color="secondary" style={{ margin: '5px', width: '100%' }}>View</Button>
-                <Button onClick={() => onEditProduct(product.pid)} variant="outlined" color="success" style={{ margin: '5px', width: '100%' }}>Edit</Button>
-                <Button onClick={() => handleDelete(product.pid)} variant="outlined" color="error" style={{ margin: '5px', width: '100%' }}>Delete</Button>
-              </StyledTableCell>
-            </StyledTableRow>
-          ))}
+                <StyledTableCell align="center">
+                  <Button onClick={() => onViewProduct(product.pid)} variant="outlined" color="secondary" style={{ margin: '5px', width: '100%' }}>View</Button>
+                  <Button onClick={() => onEditProduct(product.pid)} variant="outlined" color="success" style={{ margin: '5px', width: '100%' }}>Edit</Button>
+                  <Button onClick={() => handleDelete(product.pid)} variant="outlined" color="error" style={{ margin: '5px', width: '100%' }}>Delete</Button>
+                </StyledTableCell>
+              </StyledTableRow>
+            )) : (
+              <TableRow>
+                <StyledTableCell colSpan={8} align="center">
+                  No services found.
+                </StyledTableCell>
+              </TableRow>
+            )}
         </TableBody>
       </Table>
       <TablePagination

@@ -4,12 +4,12 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Swal from 'sweetalert2';
-import { addService, fetchSelectedService,  updateService } from '../../api/db/services';
+import { addService, fetchSelectedService, updateService } from '../../api/db/services';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { db, storage } from '../../api/firebase';
 import { collection, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
 import { useAuth } from '../../api/AuthContext';
-import {  serviceFilters } from '../../components/menuLists';
+import { serviceFilters } from '../../components/menuLists';
 
 export default function MerchantServices() {
   const [showAddService, setShowAddService] = React.useState(false);
@@ -45,25 +45,28 @@ export default function MerchantServices() {
 
   return (
     <>
-      <Button
-        variant="contained"
-        color="success"
-        startIcon={<AddIcon />}
-        onClick={handleAddService}
-        style={{ margin: '20px' }}
-      >
-        Add Service
-      </Button>
-
-      <Container>
-        {showAddService ? (
-          <ServiceForm sid={editingServiceId} onSuccess={handleSuccess} onCancel={handleCancel} />
-        ) : viewingServiceId ? (
-          <ServiceDetail sid={viewingServiceId} onBack={handleCancel} />
-        ) : (
-          <ServiceList onEditService={handleEditService} onViewService={handleViewService} />
-        )}
-      </Container>
+      <Grid item>
+        <Button
+          variant="contained"
+          color="success"
+          startIcon={<AddIcon />}
+          onClick={handleAddService}
+          style={{ margin: '20px' }}
+        >
+          Add Service
+        </Button>
+      </Grid>
+      <Grid item>
+        <Container>
+          {showAddService ? (
+            <ServiceForm sid={editingServiceId} onSuccess={handleSuccess} onCancel={handleCancel} />
+          ) : viewingServiceId ? (
+            <ServiceDetail sid={viewingServiceId} onBack={handleCancel} />
+          ) : (
+            <ServiceList onEditService={handleEditService} onViewService={handleViewService} />
+          )}
+        </Container>
+      </Grid>
     </>
   );
 }
@@ -421,7 +424,7 @@ const ServiceList = ({ onEditService, onViewService }) => {
     };
 
     fetchData();
-  },[user.uid]);
+  }, [user.uid]);
 
   const handleDeleteService = async (serviceId) => {
     const result = await Swal.fire({

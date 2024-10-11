@@ -45,6 +45,7 @@ export default function MerchantRentals() {
 
   return (
     <>
+    <Grid item>
       <Button
         variant="contained"
         color="success"
@@ -54,7 +55,8 @@ export default function MerchantRentals() {
       >
         Add Rental
       </Button>
-
+      </Grid>
+      <Grid item>
       <Container>
         {
           showAddRental ? (
@@ -66,6 +68,7 @@ export default function MerchantRentals() {
           )
         }
       </Container>
+      </Grid>
     </>
   );
 };
@@ -494,7 +497,8 @@ const RentalList = ({ onEditrental, onViewrental }) => {
                   </TableRow>
               </TableHead>
               <TableBody>
-                  {rentals.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(rental => (
+                  {rentals.length>0?
+                  rentals.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(rental => (
                   <StyledTableRow key={rental.rid}>
                       {/* <TableCell>{rental.id}</TableCell> */}
                       <StyledTableCell align="center">{rental.title}</StyledTableCell>
@@ -511,7 +515,13 @@ const RentalList = ({ onEditrental, onViewrental }) => {
                           <Button onClick={() => handleDelete(rental.rid)} variant="outlined" color="error" style={{ margin: '5px', width: '100%' }}>Delete</Button>
                       </StyledTableCell>
                   </StyledTableRow>
-                 ))}
+                 )): (
+                  <TableRow>
+                    <StyledTableCell colSpan={8} align="center">
+                      No services found.
+                    </StyledTableCell>
+                  </TableRow>
+                )}
               </TableBody>
           </Table>
           <TablePagination

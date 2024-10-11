@@ -211,7 +211,7 @@ export function ServicePage({ setSignin, setSignup }) {
                                 {/* Seller Details */}
                                 <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
                             </Box>
-                            <Details setSignin={setSignin} setSignup={setSignup} item={service} merchant={merchant} />
+                            <Details setSignin={setSignin} setSignup={setSignup} itemType={'service'} itemId={service.sid} merchantId={merchant.uid} />
                         </CardContent>
                     </Card>
                 </Grid>

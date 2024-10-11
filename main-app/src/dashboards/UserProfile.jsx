@@ -278,7 +278,7 @@ const ProfileSettings = ({ setProfilePercentage }) => {
   React.useEffect(() => {
     const calculateCompletionPercentage = (data) => {
       const totalFields = 7; // Adjust based on your number of fields
-      const requiredFields = ["firstName", "lastName", "email","displayName","dateOfBirth","gender","address"];
+      const requiredFields = ["firstName", "lastName", "email", "displayName", "dateOfBirth", "gender", "address"];
       const filledFields = requiredFields.filter((field) => data[field] && data[field].trim() !== null).length;
 
       const percentage = (filledFields / totalFields) * 100;
@@ -423,22 +423,35 @@ const AccountSettings = ({ profilePercentage }) => {
 
   const changeRole = async () => {
     try {
-      if (profilePercentage !== 100 && !user.isMerchant) {
-        showAlerts2('Complete Your profile', 'warning')
-        return 0
+      if (user.isMerchant) {
+        if (user.myProducts.length > 0 || user.myRentals.length > 0 || user.myService.length > 0) {
+          showAlerts2('Remove ongoing items and try again', 'warning')
+        } else {
+          await updateDoc(doc(db, 'systemusers', user.uid), { 'isMerchant': false })
+          Swal.fire({
+            title: `Successfully changed to ${role}`,
+            icon: "success"
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.reload()
+            }
+          });
+        }
+      } else {
+        if (profilePercentage == 100) {
+          await updateDoc(doc(db, 'systemusers', user.uid), { 'isMerchant': true })
+          Swal.fire({
+            title: `Successfully changed to ${role}`,
+            icon: "success"
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.reload()
+            }
+          });
+        } else {
+          showAlerts2('Complete Your profile', 'warning')
+        }
       }
-
-      let isM = false;
-      if (user.isMerchant && (user.myProducts.length > 0 || user.myRentals.length > 0 || user.myService.length > 0) ) {
-        showAlerts2('Remove ongoing items and try again', 'warning')
-        return 0
-      }
-      else {
-        isM = false
-      }
-      await updateDoc(doc(db, 'systemusers', user.uid), { 'isMerchant': isM });
-
-      showAlerts2(`Successfully changed to ${role}`, 'success')
     } catch (error) {
       console.error('Error updating role:', error);
     }

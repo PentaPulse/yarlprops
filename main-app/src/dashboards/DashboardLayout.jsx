@@ -237,7 +237,7 @@ export default function DashboardLayout({ handleMode, children }) {
 
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={9} mt={3} ml={3} sx={{ pt: { xs: 10, sm: 10, md: 10, lg: 10 } }} >
-          <Grid container columns={12} columnSpacing={{ xs: 1, sm: 1, md: 2, lg: 2 }} rowSpacing={{ xs: 3, sm: 3, md: 2, lg: 2 }}>
+          <Grid container flexDirection={'column'} columns={12} columnSpacing={{ xs: 1, sm: 1, md: 2, lg: 2 }} rowSpacing={{ xs: 3, sm: 3, md: 2, lg: 2 }}>
             {children}
           </Grid>
         </Grid>

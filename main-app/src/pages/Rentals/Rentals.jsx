@@ -276,7 +276,7 @@ export function RentalsPage({ setSignin, setSignup }) {
                                 {/* Seller Details */}
                                 <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
                             </Box>
-                            <Details setSignin={setSignin} setSignup={setSignup} item={rental} merchant={merchant} />
+                            <Details setSignin={setSignin} setSignup={setSignup} itemType={'rental'} itemId={rental.rid} merchant={merchant} />
                         </CardContent>
                     </Card>
                 </Grid>
