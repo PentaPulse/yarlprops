@@ -22,7 +22,7 @@ import MerchantServices from "./dashboards/Merchant/MerchantServices";
 import MerchantOrders from "./dashboards/Merchant/MerchantOrders";
 import CustomerOrders from "./dashboards/Customer/CustomerOrders";
 import CustomerFeedback from "./dashboards/Customer/CustomerFeedback";
-import CustomerMsgCenter from "./dashboards/Customer/CustomerMsgCenter";
+
 import MerchantOverview from "./dashboards/Merchant/MerchantOverview";
 import Profile from "./dashboards/UserProfile";
 import CustomerOverview from './dashboards/Customer/CustomerOverview'
@@ -172,7 +172,7 @@ function DashboardRoutes({ handleMode }) {
           {/* Customer */}
           <Route path="orders" element={<CustomerOrders />} />
           <Route path="feedback" element={<CustomerFeedback />} />
-          <Route path="mcentre" element={<CustomerMsgCenter />} />
+         
         </Routes>
       </DashboardLayout>
     </>

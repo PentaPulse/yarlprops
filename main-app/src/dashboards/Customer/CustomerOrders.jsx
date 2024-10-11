@@ -105,14 +105,14 @@ export default function MyOrders() {
                       fontWeight: "bold",
                     }}
                   >
-                    Status: {order.status}
+                    Status: {order.orderstatus}
                   </Typography>
                 </CardContent>
                 <Box sx={{ textAlign: "center", pb: 2 }}>
                   <Button
                     variant="contained"
                     color={
-                      order.status === "Completed"
+                      order.orderstatus === "complete"
                         ? theme.palette.mode === "dark"
                           ? "success"
                           : "success"
@@ -121,7 +121,7 @@ export default function MyOrders() {
                           : "warning"
                     }
                   >
-                    {order.status === "Completed"
+                    {order.orderstatus === "complete"
                       ? "View Details"
                       : "Pending"}
                   </Button>
