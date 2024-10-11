@@ -1,6 +1,6 @@
 import "firebase/firestore";
 import { auth, db } from "../firebase";
-import { doc, setDoc, collection, getDoc, getDocs, where, query } from "firebase/firestore";
+import { doc, setDoc, collection, getDoc, getDocs, where, query, addDoc } from "firebase/firestore";
 import { updateProfile } from "firebase/auth";
 
 //reference
@@ -23,13 +23,13 @@ export const registerUser = async (uid, fname, lname, dname, email) => {
                 uid,
                 firstName: fname || '',
                 lastName: lname || '',
-                email:email,
+                email: email,
                 phoneNumber: '',
                 gender: '',
                 address: '',
-                isMerchant:false
+                isMerchant: false
             });
-            await updateProfile(auth.currentUser,{displayName:dname})
+            await updateProfile(auth.currentUser, { displayName: dname })
             console.log("User registered successfully");
             return { success: true, message: 'User registered successfully' };
         } else {
@@ -61,13 +61,13 @@ export const registerAdmin = async (uid, fname, lname, dname, email) => {
                 uid,
                 firstName: fname || '',
                 lastName: lname || '',
-                email:email,
+                email: email,
                 phoneNumber: '',
                 gender: '',
                 address: '',
-                approved:false
+                approved: false
             });
-            await updateProfile(auth.currentUser,{displayName:dname})
+            await updateProfile(auth.currentUser, { displayName: dname })
             console.log("User registered successfully");
             return { success: true, message: 'User registered successfully' };
         } else {
@@ -106,24 +106,14 @@ async function countUsersFromRef(Ref) {
     }
 }
 
-export const countAdmins=async()=>{
-    const q = query(collection(db,'admins'))
+export const countAdmins = async () => {
+    const q = query(collection(db, 'admins'))
     return await countUsersFromRef(q)
 }
 
 export const countUsers = async (isMerchant) => {
-    const q = query(collection(db, 'systemusers'),where('isMerchant','==',isMerchant));
+    const q = query(collection(db, 'systemusers'), where('isMerchant', '==', isMerchant));
     return await countUsersFromRef(q);
-};
-
-export const countSellers = async () => {
-    const userRef = query(collection(db, 'systemusers'), where('role', '==', 'seller'));
-    return await countUsersFromRef(userRef);
-};
-
-export const countRenters = async () => {
-    const userRef = query(collection(db, 'systemusers'), where('role', '==', 'renter'));
-    return await countUsersFromRef(userRef);
 };
 
 export const fetchMerchantProductDetails = async (pid) => {

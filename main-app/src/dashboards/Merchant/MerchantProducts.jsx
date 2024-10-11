@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Button, IconButton, styled, Paper, Typography, TextField, FormControl, FormLabel, RadioGroup, Radio, FormControlLabel, Grid, TableCell, tableCellClasses, TableRow, TableContainer, Table, TableHead, TableBody, TablePagination, CircularProgress, InputLabel, Select, MenuItem, Box } from '@mui/material';
+import { Container, Button, IconButton, styled, Paper, Typography, TextField, FormControl, FormLabel, RadioGroup, Radio, FormControlLabel, Grid, TableCell, tableCellClasses, TableRow, TableContainer, Table, TableHead, TableBody, TablePagination, CircularProgress, InputLabel, Select, MenuItem} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { addProduct, fetchSelectedProduct, updateProduct } from '../../api/db/products';
@@ -209,7 +209,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
         });
       } else {
         await addProduct({ ...product, images: allImageUrls });
-
+        //await addItemByMerchant(user,product,'product')
         Swal.fire({
           icon: 'success',
           title: 'Product saved , request sent to the admin panel for approval',

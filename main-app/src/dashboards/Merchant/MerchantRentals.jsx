@@ -156,7 +156,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
       return;
     }
 
-    if (rental.quantity <= 1) {
+    if (rental.quantity <= 0) {
       setValidationMessage('Quantity must be greater than 1 or equal to 1.');
       return;
     }
@@ -309,7 +309,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
           fullWidth
           margin="normal"
           required
-          inputProps={{ min:1 }}
+          inputProps={{ min:0 }}
         />
         <TextField
           label="Location"

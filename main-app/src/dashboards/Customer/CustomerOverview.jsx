@@ -3,7 +3,6 @@ import { Container, Typography, Grid, Paper, Box, Table, TableBody, TableCell, T
 import { useAuth } from '../../api/AuthContext';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import MessageIcon from '@mui/icons-material/Message';
 import FeedbackIcon from '@mui/icons-material/Feedback';
 import { fetchProductOrders } from "../../api/db/products"; 
 import { fetchRentalOrders } from "../../api/db/rentals";

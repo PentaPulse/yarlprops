@@ -1,5 +1,6 @@
 import { addDoc, arrayUnion, collection, doc, getDocs, query, serverTimestamp, setDoc, updateDoc, where } from "firebase/firestore";
 import { db } from "../firebase";
+import { addItemByMerchant } from "./logs";
 
 const rentalRef = collection(db,'rentals')
 
@@ -19,6 +20,7 @@ export const addRental = async ({merchantId, title, category, subCategory, descr
         });
         await setDoc(docRef, { rid: docRef.id }, { merge: true });
         await updateDoc(doc(db,'systemusers',merchantId),{myRentals:arrayUnion(docRef.id)})
+        await addItemByMerchant(merchantId,title,docRef.id,'product')
         return docRef.id;
     } catch (e) {
         console.error("Error adding rental:", e);

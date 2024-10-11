@@ -42,3 +42,36 @@ export async function resetLog(userId){
         console.log("error reset")
     }
 }
+
+export async function addItemByMerchant(merchId,title,itemId,itemType){
+    try{
+        const timestamp=new Date().toISOString();
+        const logDocRef=doc(collection(db,"logs",merchId,`${itemType}s`),timestamp);
+        await setDoc(logDocRef,{
+            addedTime:timestamp,
+            itemid:itemId,
+            itemName:title,
+            merchantId:merchId
+        })
+    }catch(e){
+        console.log("error occured in adding log additem : ",e)
+    }
+}
+
+/*
+export async function buyItemLog(userId,item){
+    try{
+        const timestamp = new Date().toISOString();
+        const logDocRef = doc(collection(db,"logs",userId,"boughtItems"),timestamp);
+        await setDoc(logDocRef,{
+            itemId:item.pid||item.rid||item.sid,
+            itemTitle:item.title,
+            timestamp:timestamp,
+            merchant:item.merchantId
+        })
+    }
+    catch(e){
+
+    }
+}
+    */

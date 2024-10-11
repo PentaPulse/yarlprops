@@ -1,23 +1,25 @@
 import "firebase/firestore";
 import { db } from "../firebase";
 import { doc, setDoc, collection, getDocs, query, where, addDoc, updateDoc,  arrayUnion, serverTimestamp } from "firebase/firestore";
+import { addItemByMerchant } from "./logs";
 
 // Reference
 const serviceRef = collection(db, "services");
 
 // Adding services
-export const addService= async ({ merchantId,serviceName, serviceDescription, serviceLocation, images }) => {
+export const addService= async ({ merchantId,title, description, location, images }) => {
     try {
         const docRef = await addDoc(serviceRef, {
             merchantId,
-            serviceName,
-            serviceDescription,
-            serviceLocation,
+            title,
+            description,
+            location,
             images,
             timestamp: serverTimestamp()
         });
         await setDoc(docRef, { sid: docRef.id }, { merge: true });
         await updateDoc(doc(db,'systemusers',merchantId),{myServices:arrayUnion(docRef.id)})
+        await addItemByMerchant(merchantId,title,docRef.id,'product')
         return docRef.id;
     } catch (e) {
         console.error("Error adding Service:", e);

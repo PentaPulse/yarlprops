@@ -10,9 +10,8 @@ import {
   Button,
   useTheme,
 } from "@mui/material";
-import { fetchProductOrders } from "../../api/db/products"; // Import the API function
-import { useAuth } from "../../api/AuthContext"; // For accessing authenticated user
-import { arrayUnion } from "firebase/firestore";
+import { fetchProductOrders } from "../../api/db/products"; 
+import { useAuth } from "../../api/AuthContext";
 import { fetchRentalOrders } from "../../api/db/rentals";
 import { fetchServiceOrders } from "../../api/db/services";
 

@@ -75,11 +75,11 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
   const { user } = useAuth();
   const [service, setService] = React.useState({
     merchantId: user.uid,
-    serviceName: '',
+    title: '',
     category: '',
     subCategory: '',
-    serviceDescription: [''],
-    serviceLocation: '',
+    description: [''],
+    location: '',
     images: [],
   });
 
@@ -108,18 +108,18 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
   };
 
   const handleDescriptionChange = (index, event) => {
-    const newServiceDescription = [...service.serviceDescription];
-    newServiceDescription[index] = event.target.value;
-    setService({ ...service, serviceDescription: newServiceDescription });
+    const newdescription = [...service.description];
+    newdescription[index] = event.target.value;
+    setService({ ...service, description: newdescription });
   };
 
   const addDescriptionLine = () => {
-    setService({ ...service, serviceDescription: [...service.serviceDescription, ''] });
+    setService({ ...service, description: [...service.description, ''] });
   };
 
   const handleRemoveDescriptionLine = (index) => {
-    const updatedDescriptions = service.serviceDescription.filter((_, i) => i !== index);
-    setService({ ...service, serviceDescription: updatedDescriptions });
+    const updatedDescriptions = service.description.filter((_, i) => i !== index);
+    setService({ ...service, description: updatedDescriptions });
   };
 
   const handleImageChange = (event) => {
@@ -173,11 +173,11 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
 
       setService({
         merchantId: user.uid,
-        serviceName: '',
+        title: '',
         category: '',
         subCategory: '',
-        serviceDescription: [''],
-        serviceLocation: '',
+        description: [''],
+        location: '',
         images: [],
       });
 
@@ -211,8 +211,8 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
       <form onSubmit={handleSubmit}>
         <TextField
           label="Service Name"
-          name="serviceName"
-          value={service.serviceName}
+          name="title"
+          value={service.title}
           onChange={handleChange}
           fullWidth
           margin="normal"
@@ -251,7 +251,7 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
           </Select>
         </FormControl>
 
-        {service.serviceDescription.map((description, index) => (
+        {service.description.map((description, index) => (
           <Grid container key={index} spacing={1} alignItems="center">
             <Grid item xs={11}>
               <TextField
@@ -283,8 +283,8 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
 
         <TextField
           label="Location"
-          name="serviceLocation"
-          value={service.serviceLocation}
+          name="location"
+          value={service.location}
           onChange={handleChange}
           fullWidth
           margin="normal"
@@ -374,7 +374,7 @@ const ServiceDetail = ({ sid, onBack }) => {
     <Paper style={{ padding: 16 }}>
       <Typography variant="h6">Service Details</Typography>
       <Typography variant="body1">
-        <strong>Name:</strong> {service.serviceName}
+        <strong>Name:</strong> {service.title}
       </Typography>
       <Typography variant="body1">
         <strong>Category:</strong> {service.category}
@@ -386,12 +386,12 @@ const ServiceDetail = ({ sid, onBack }) => {
         <strong>Description:</strong>
       </Typography>
       <ul>
-        {service.serviceDescription.map((desc, index) => (
+        {service.description.map((desc, index) => (
           <li key={index}>{desc}</li>
         ))}
       </ul>
       <Typography variant="body1">
-        <strong>Location:</strong> {service.serviceLocation}
+        <strong>Location:</strong> {service.location}
       </Typography>
       <Grid container spacing={1} style={{ marginTop: 16 }}>
         {service.images.map((url, index) => (
@@ -507,9 +507,9 @@ const ServiceList = ({ onEditService, onViewService }) => {
             ) : services.length > 0 ? (
               services.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(service => (
                 <StyledTableRow key={service.sid}>
-                  <StyledTableCell>{service.serviceName}</StyledTableCell>
-                  <StyledTableCell>{service.serviceDescription.join(', ')}</StyledTableCell>
-                  <StyledTableCell>{service.serviceLocation}</StyledTableCell>
+                  <StyledTableCell>{service.title}</StyledTableCell>
+                  <StyledTableCell>{service.description.join(', ')}</StyledTableCell>
+                  <StyledTableCell>{service.location}</StyledTableCell>
                   <StyledTableCell>
                     <Button onClick={() => onViewService(service.sid)} variant="outlined" color="secondary" style={{ margin: '5px', width: '100%' }}>View</Button>
                     <Button onClick={() => onEditService(service.sid)} variant="outlined" color="success" style={{ margin: '5px', width: '100%' }}>Edit</Button>

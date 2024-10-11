@@ -103,116 +103,118 @@ const Profile = () => {
           <LinearProgressWithLabel value={profilePercentage} />
         </Grid>
       }
-      <Grid item xs={12} sm={12} md={5} lg={4} >
-        <Paper
-          elevation={3}
-          sx={{
-            padding: 3,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          {/* User Name */}
-          <Typography variant="h5" textAlign="center" gutterBottom>
-            {user.displayName || 'User Name'}
-          </Typography>
+      <Grid container mt={3} ml={3} gap={5} display={'flex'}>
+        <Grid item xs={12} sm={12} md={5} lg={4} >
+          <Paper
+            elevation={3}
+            sx={{
+              padding: 3,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            {/* User Name */}
+            <Typography variant="h5" textAlign="center" gutterBottom>
+              {user.displayName || 'User Name'}
+            </Typography>
 
-          {/* User Avatar */}
-          <Avatar
-            alt="Profile Picture"
-            src={user.photoUrl || sessionStorage.getItem('pp') || ''}
-            sx={{ width: 150, height: 150, mb: 2 }}
-          />
-          <Box>
-            {!file ? (
-              <>
-                <input
-                  accept="file/*"
-                  style={{ display: 'none' }}
-                  id="contained-button-file"
-                  type="file"
-                  onChange={handleChangeFile}
-                />
-                <label htmlFor="contained-button-file">
-                  <Button variant="contained" component="span">
-                    Upload Profile Picture
+            {/* User Avatar */}
+            <Avatar
+              alt="Profile Picture"
+              src={user.photoUrl || sessionStorage.getItem('pp') || ''}
+              sx={{ width: 150, height: 150, mb: 2 }}
+            />
+            <Box>
+              {!file ? (
+                <>
+                  <input
+                    accept="file/*"
+                    style={{ display: 'none' }}
+                    id="contained-button-file"
+                    type="file"
+                    onChange={handleChangeFile}
+                  />
+                  <label htmlFor="contained-button-file">
+                    <Button variant="contained" component="span">
+                      Upload Profile Picture
+                    </Button>
+                  </label>
+                </>
+              ) : (
+                <>
+                  <TextField
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
+                    disabled
+                    value={file.name}
+                  />
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={uploadPP}
+                    disabled={loading}
+                    fullWidth
+                  >
+                    {loading ? <CircularProgress size={12} /> : 'Upload'}
                   </Button>
-                </label>
-              </>
-            ) : (
-              <>
-                <TextField
-                  variant="outlined"
-                  fullWidth
-                  margin="normal"
-                  disabled
-                  value={file.name}
-                />
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={uploadPP}
-                  disabled={loading}
-                  fullWidth
-                >
-                  {loading ? <CircularProgress size={12} /> : 'Upload'}
-                </Button>
-                {loading && <p>Uploading: {progress}%</p>}
-                {progress === 100 && (
-                  <div>
-                    <p>Profile Picture Uploaded Successfully</p>
-                  </div>
-                )}
-              </>
-            )}
-          </Box>
-          {/* User Details */}
-          <TextField
-            label="Name"
-            value={user.displayName || 'N/A'}
-            margin="normal"
-            fullWidth
-            InputProps={{
-              readOnly: true,
-            }}
-          />
-          <TextField
-            label="Email"
-            value={user.email || 'example@p5p.lk'}
-            margin="normal"
-            fullWidth
-            InputProps={{
-              readOnly: true,
-            }}
-          />
-          <TextField
-            label="Phone Number"
-            value={user.phone || '+94 12 345 6749'}
-            margin="normal"
-            fullWidth
-            InputProps={{
-              readOnly: true,
-            }}
-          />
-        </Paper>
-      </Grid>
+                  {loading && <p>Uploading: {progress}%</p>}
+                  {progress === 100 && (
+                    <div>
+                      <p>Profile Picture Uploaded Successfully</p>
+                    </div>
+                  )}
+                </>
+              )}
+            </Box>
+            {/* User Details */}
+            <TextField
+              label="Name"
+              value={user.displayName || 'N/A'}
+              margin="normal"
+              fullWidth
+              InputProps={{
+                readOnly: true,
+              }}
+            />
+            <TextField
+              label="Email"
+              value={user.email || 'example@p5p.lk'}
+              margin="normal"
+              fullWidth
+              InputProps={{
+                readOnly: true,
+              }}
+            />
+            <TextField
+              label="Phone Number"
+              value={user.phone || '+94 12 345 6749'}
+              margin="normal"
+              fullWidth
+              InputProps={{
+                readOnly: true,
+              }}
+            />
+          </Paper>
+        </Grid>
 
-      <Grid item xs={12} sm={12} md={7} lg={8}>
-        <Paper sx={{ width: '100%' }}>
-          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <Tabs variant='fullWidth' value={value} onChange={handleChange} aria-label="basic tabs example">
-              <Tab label="PROFILE SETTINGS" {...a11yProps(0)} />
-              <Tab label="ACCOUNT SETTINGS" {...a11yProps(1)} />
-            </Tabs>
-          </Box>
-          <CustomTabPanel value={value} index={0}>
-            <ProfileSettings setProfilePercentage={setProfilePercentage} />
-          </CustomTabPanel>
-          <CustomTabPanel value={value} index={1} >
-            <AccountSettings profilePercentage={profilePercentage} />
-          </CustomTabPanel>
-        </Paper>
+        <Grid item xs={12} sm={12} md={7} lg={7}>
+          <Paper sx={{ width: '100%' }}>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+              <Tabs variant='fullWidth' value={value} onChange={handleChange} aria-label="basic tabs example">
+                <Tab label="PROFILE SETTINGS" {...a11yProps(0)} />
+                <Tab label="ACCOUNT SETTINGS" {...a11yProps(1)} />
+              </Tabs>
+            </Box>
+            <CustomTabPanel value={value} index={0}>
+              <ProfileSettings setProfilePercentage={setProfilePercentage} />
+            </CustomTabPanel>
+            <CustomTabPanel value={value} index={1} >
+              <AccountSettings profilePercentage={profilePercentage} />
+            </CustomTabPanel>
+          </Paper>
+        </Grid>
       </Grid>
     </>
   );
@@ -438,7 +440,7 @@ const AccountSettings = ({ profilePercentage }) => {
           });
         }
       } else {
-        if (profilePercentage == 100) {
+        if (profilePercentage === 100) {
           await updateDoc(doc(db, 'systemusers', user.uid), { 'isMerchant': true })
           Swal.fire({
             title: `Successfully changed to ${role}`,

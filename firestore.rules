@@ -7,6 +7,10 @@ service cloud.firestore {
       allow read: if request.auth != null;
       allow update: if isUser(request.auth.uid);
       allow delete: if isAdmin(request.auth.uid);
+
+      match /orders/{orderId} {
+        allow read , write : if true;
+      }
     }
 
     match /admins/{aid}{
@@ -42,11 +46,23 @@ service cloud.firestore {
       allow write;
 
       match /signinlogs/{logId} {
-        allow read, write: if request.auth != null && request.auth.uid == userId;  // Apply the same rule for sub-collection
+        allow read, write: if request.auth != null ;  
       }
       match /signoutlogs/{logId} {
         allow read : if request.auth != null && request.auth.uid == userId;  // Apply the same rule for sub-collection
         allow write;
+      }
+      match /products/{logId}{
+        allow write: if request.auth != null;
+        allow read : if isAdmin(request.auth.uid)
+      }
+      match /rentals/{logId}{
+        allow write: if request.auth != null;
+        allow read : if isAdmin(request.auth.uid)
+      }
+      match /services/{logId}{
+        allow write: if request.auth != null;
+        allow read : if isAdmin(request.auth.uid)
       }
     }
 

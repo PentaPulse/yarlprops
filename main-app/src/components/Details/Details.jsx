@@ -4,41 +4,63 @@ import { Box } from '@mui/system';
 import React, { useEffect, useState } from 'react'
 import { useAuth } from '../../api/AuthContext';
 import { Link } from 'react-router-dom';
-import { collection, getDocs, where } from 'firebase/firestore';
+import { addDoc, collection,getDoc, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../../api/firebase';
+import Swal from 'sweetalert2';
 
-export default function Details({ setSignin,setSignup,itemType,itemId,merchantId}) {
-    const theme=useTheme()
+export default function Details({ setSignin, setSignup, itemType, itemId, merchantId }) {
+    const theme = useTheme()
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-    const {user}=useAuth()
-    const [item,setItem]=useState([])
-    const [merchant,setMerchant]=useState([])
+    const { user } = useAuth()
+    const [item, setItem] = useState([])
+    const [merchant, setMerchant] = useState({ uid: 'abc' })
 
-    useEffect(()=>{
-        const fetchItem =async()=>{
-            try{
-                const itemData = await getDocs(collection(db,`${itemType}s`),where(`${itemType.charAt(0)}id`,'==',itemId))
-                setItem(itemData)
-            }catch(e){
-                console.log('error getting item dets : ',e)
+    useEffect(() => {
+        const fetchItem = async () => {
+            const q = query(collection(db, `${itemType}s`), where(`${itemType[0]}id`, '==', itemId));
+            try {
+                const qSnapshot = await getDocs(q);
+                    const product = qSnapshot.docs[0];
+                    setItem(product.data() );
+            } catch (e) {
+                console.log('error getting item dets : ', e)
             }
         }
-        const fetchMerchant=async()=>{
-            try{
-                const merchantData=await getDocs(collection(db,'systemusers'),where('uid','==',merchantId))
+        const fetchMerchant = async () => {
+            try {
+                const merchantData = await getDocs(collection(db, 'systemusers'), where('uid', '==', merchantId))
                 setMerchant(merchantData)
             }
-            catch(e){
-                console.log('error getting m dets : ',e)
+            catch (e) {
+                console.log('error getting m dets : ', e)
             }
         }
         fetchItem()
+        console.log(item)
         fetchMerchant()
-    },[])
+    }, [itemId])
 
-    const hanldeBuyNow = () => {
-
-    }
+    const handleOrderNow = async () => {
+        // Reference to the orders subcollection for the authenticated user
+        const ordersCollectionRef = collection(db, 'systemusers', user.uid, 'orders');
+        
+        try {
+            await addDoc(ordersCollectionRef, {
+                title: item.title,
+                price: item.price,
+                quantity: item.quantity,
+                merchantId: item.merchantId,
+                orderstatus: 'pending'
+            });
+            Swal.fire({
+                title: 'Your order request was sent to the merchant',
+                icon: 'success'
+            });
+        } catch (e) {
+            console.log(e);
+        }
+    };
+    
     if (user) {
         return (
             <>
@@ -62,7 +84,7 @@ export default function Details({ setSignin,setSignup,itemType,itemId,merchantId
                                 backgroundColor: '#90caf9',
                             }
                         }}
-                        onClick={hanldeBuyNow}
+                        onClick={handleOrderNow}
                     >
                         Order Now
                     </Button>
@@ -77,3 +99,4 @@ export default function Details({ setSignin,setSignup,itemType,itemId,merchantId
         )
     }
 }
+
