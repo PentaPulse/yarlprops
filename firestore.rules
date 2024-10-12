@@ -11,6 +11,9 @@ service cloud.firestore {
       match /orders/{orderId} {
         allow read , write : if true;
       }
+      match /notifications/{notificationId}{
+        allow read,write :if true;
+      }
     }
 
     match /admins/{aid}{

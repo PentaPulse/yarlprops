@@ -1,6 +1,6 @@
 import { addDoc, arrayUnion, collection, doc, getDocs, query, serverTimestamp, setDoc, updateDoc, where } from "firebase/firestore";
 import { db } from "../firebase";
-import { addItemByMerchant } from "./logs";
+import { addItemByMerchant } from "./logsManager";
 
 const rentalRef = collection(db,'rentals')
 

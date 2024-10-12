@@ -5,7 +5,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { registerUser } from './db/users';
 import { useNavigate } from 'react-router-dom';
 import { useAlerts } from './AlertService';
-import { signinLog, signoutLog } from './db/logs';
+import { signinLog, signoutLog } from './db/logsManager';
 
 const AuthContext = React.createContext();
 

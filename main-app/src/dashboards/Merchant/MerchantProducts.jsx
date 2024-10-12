@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Button, IconButton, styled, Paper, Typography, TextField, FormControl, FormLabel, RadioGroup, Radio, FormControlLabel, Grid, TableCell, tableCellClasses, TableRow, TableContainer, Table, TableHead, TableBody, TablePagination, CircularProgress, InputLabel, Select, MenuItem} from '@mui/material';
+import { Container, Button, IconButton, styled, Paper, Typography, TextField, FormControl, FormLabel, RadioGroup, Radio, FormControlLabel, Grid, TableCell, tableCellClasses, TableRow, TableContainer, Table, TableHead, TableBody, TablePagination, CircularProgress, InputLabel, Select, MenuItem } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { addProduct, fetchSelectedProduct, updateProduct } from '../../api/db/products';
@@ -10,6 +10,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useAuth } from '../../api/AuthContext';
 import { collection, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
 import { productFilters } from '../../components/menuLists';
+import NotificationsManager from '../../api/db/notificationsManager';
 
 export default function MerchantProducts() {
   const [showAddProduct, setShowAddProduct] = useState(false);
@@ -94,8 +95,13 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
   const [existingImages, setExistingImages] = React.useState([]);
   const [newImages, setNewImages] = React.useState([]);
   const [validationMessage, setValidationMessage] = React.useState('');
+  const [notificationManager,setNotificationManager]=React.useState(null)
 
   React.useEffect(() => {
+    if(user){
+      const manager=new NotificationsManager(user)
+      setNotificationManager(manager)
+    }
     if (pid) {
       const fetchProduct = async () => {
         const fetchedProduct = await fetchSelectedProduct(pid);
@@ -108,7 +114,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
       };
       fetchProduct();
     }
-  }, [pid]);
+  }, [pid,user]);
 
   const handleChange = (event) => {
     setProduct({
@@ -201,6 +207,12 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
       if (pid) {
         console.log(product)
         await updateProduct(pid, { ...product, images: allImageUrls });
+        if(notificationManager){
+          await notificationManager.addNotification(
+            `ProductId ${pid} updated by ${user.uid}`,
+            '/d/products'
+          )
+        }
         Swal.fire({
           icon: 'success',
           title: 'Product updated successfully',
@@ -210,6 +222,12 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
       } else {
         await addProduct({ ...product, images: allImageUrls });
         //await addItemByMerchant(user,product,'product')
+        if(notificationManager){
+          await notificationManager.addNotification(
+            `ProductId ${pid} added by ${user.displayName}`,
+            '/d/products'
+          )
+        }
         Swal.fire({
           icon: 'success',
           title: 'Product saved , request sent to the admin panel for approval',

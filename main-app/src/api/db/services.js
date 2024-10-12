@@ -1,7 +1,7 @@
 import "firebase/firestore";
 import { db } from "../firebase";
 import { doc, setDoc, collection, getDocs, query, where, addDoc, updateDoc,  arrayUnion, serverTimestamp } from "firebase/firestore";
-import { addItemByMerchant } from "./logs";
+import { addItemByMerchant } from "./logsManager";
 
 // Reference
 const serviceRef = collection(db, "services");
