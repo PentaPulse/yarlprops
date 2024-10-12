@@ -8,7 +8,7 @@ import { db, storage } from '../../api/firebase';
 import Swal from 'sweetalert2';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useAuth } from '../../api/AuthContext';
-import { collection, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
+import { arrayRemove, collection, deleteDoc, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { productFilters } from '../../components/menuLists';
 import NotificationsManager from '../../api/db/notificationsManager';
 
@@ -489,6 +489,9 @@ const ProductList = ({ onEditProduct, onViewProduct }) => {
 
       if (result.isConfirmed) {
         await deleteDoc(doc(db, 'products', id));
+        await updateDoc(doc(db,'systemusers',user.uid),{
+          myProducts:arrayRemove(id)
+        })
         setProducts(products.filter(product => product.id !== id));
 
         Swal.fire({

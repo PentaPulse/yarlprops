@@ -7,7 +7,7 @@ import { db, storage } from '../../api/firebase';
 import Swal from 'sweetalert2';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useAuth } from '../../api/AuthContext';
-import { collection, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
+import { arrayRemove, collection, deleteDoc, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { addRental, fetchSelectedRental, updateRental } from '../../api/db/rentals';
 import { rentalFilters } from '../../components/menuLists';
 
@@ -434,6 +434,9 @@ const RentalList = ({ onEditrental, onViewrental }) => {
 
       if (result.isConfirmed) {
         await deleteDoc(doc(db, 'rentals', id));
+        await updateDoc(doc(db,'systemusers',user.uid),{
+          myRentals:arrayRemove(id)
+        })
         setRentals(rentals.filter(rental => rental.id !== id));
 
         Swal.fire({

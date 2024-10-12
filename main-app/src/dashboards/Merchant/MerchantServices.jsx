@@ -7,7 +7,7 @@ import Swal from 'sweetalert2';
 import { addService, fetchSelectedService, updateService } from '../../api/db/services';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { db, storage } from '../../api/firebase';
-import { collection, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
+import { arrayRemove, collection, deleteDoc, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { useAuth } from '../../api/AuthContext';
 import { serviceFilters } from '../../components/menuLists';
 
@@ -442,6 +442,9 @@ const ServiceList = ({ onEditService, onViewService }) => {
     if (result.isConfirmed) {
       try {
         await deleteDoc(doc(db, 'services', serviceId));
+        await updateDoc(doc(db,'systemusers',user.uid),{
+          myServices:arrayRemove(serviceId)
+        })
         setServices(services.filter(service => service.sid !== serviceId));
 
         Swal.fire(
