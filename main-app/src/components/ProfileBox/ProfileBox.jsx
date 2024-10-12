@@ -1,24 +1,14 @@
-import { Avatar, Badge, Box, IconButton, Tooltip, useTheme } from "@mui/material";
-import MailIcon from '@mui/icons-material/Mail';
-import NotificationsIcon from '@mui/icons-material/Notifications';
+import { Avatar,  Box, IconButton, Tooltip} from "@mui/material";
+import Notifications from "../Notifications/Notifications";
+import React from "react";
 
 
 export default function ProfileBox({ handleProfileClick }) {
-    const theme = useTheme();
-
+    //const theme = useTheme();
     return (
         <>
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                <IconButton
-                    size="large"
-                    aria-label="show 17 new notifications"
-                    color={theme.palette.primary.main}
-                    sx={{[theme.breakpoints.down('md')]:{display:'none'}}}
-                >
-                    <Badge badgeContent={17} color="error">
-                        <NotificationsIcon />
-                    </Badge>
-                </IconButton>
+                <Notifications  />
             </Box>
             <Box sx={{ flexGrow: 0, display: 'block' }}>
                 <Tooltip title="Open dashboard">

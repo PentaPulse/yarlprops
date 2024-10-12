@@ -81,6 +81,7 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
     description: [''],
     location: '',
     images: [],
+    visibitlty:'not'
   });
 
   const [existingImages, setExistingImages] = React.useState([]);
@@ -179,6 +180,7 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
         description: [''],
         location: '',
         images: [],
+        visibility:'not'
       });
 
       setExistingImages([]);

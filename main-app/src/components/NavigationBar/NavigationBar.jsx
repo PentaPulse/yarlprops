@@ -43,7 +43,7 @@ export default function NavigationBar({ handleMode, signin, setSignin, signup, s
     const [isLogged, setIsLogged] = React.useState(false);
     const { user, logout } = useAuth()
     const navigate = useNavigate()
-    const [page,setPage]=React.useState('Home')
+    const [page,setPage]=React.useState('Home');
 
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 

@@ -7,9 +7,9 @@ import { db, storage } from '../../api/firebase';
 import Swal from 'sweetalert2';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useAuth } from '../../api/AuthContext';
-import {  collection, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
 import { addRental, fetchSelectedRental, updateRental } from '../../api/db/rentals';
-import {  rentalFilters } from '../../components/menuLists';
+import { rentalFilters } from '../../components/menuLists';
 
 export default function MerchantRentals() {
   const [showAddRental, setShowAddRental] = React.useState(false);
@@ -45,29 +45,29 @@ export default function MerchantRentals() {
 
   return (
     <>
-    <Grid item>
-      <Button
-        variant="contained"
-        color="success"
-        startIcon={<AddIcon />}
-        onClick={handleAddRental}
-        style={{ margin: '20px' }}
-      >
-        Add Rental
-      </Button>
+      <Grid item>
+        <Button
+          variant="contained"
+          color="success"
+          startIcon={<AddIcon />}
+          onClick={handleAddRental}
+          style={{ margin: '20px' }}
+        >
+          Add Rental
+        </Button>
       </Grid>
       <Grid item>
-      <Container>
-        {
-          showAddRental ? (
-            <RentalForm rid={editingRentalId} onSuccess={handleSuccess} onCancel={handleCancel} />
-          ) : viewingRentalId ? (
-            <RentalDetail rid={viewingRentalId} onBack={handleCancel} />
-          ) : (
-            <RentalList onEditrental={handleEditRental} onViewrental={handleViewRental} />
-          )
-        }
-      </Container>
+        <Container>
+          {
+            showAddRental ? (
+              <RentalForm rid={editingRentalId} onSuccess={handleSuccess} onCancel={handleCancel} />
+            ) : viewingRentalId ? (
+              <RentalDetail rid={viewingRentalId} onBack={handleCancel} />
+            ) : (
+              <RentalList onEditrental={handleEditRental} onViewrental={handleViewRental} />
+            )
+          }
+        </Container>
       </Grid>
     </>
   );
@@ -83,10 +83,9 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
     description: [''],
     quantity: '',
     location: '',
-    status: '',
-    images: [
-
-    ],
+    status: 'For rent',
+    images: [],
+    visibility: 'not'
   });
 
   const [existingImages, setExistingImages] = React.useState([]);
@@ -112,7 +111,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
     const { name, value } = event.target;
     setRental({ ...rental, [name]: value });
   };
-  
+
   const handleDescriptionChange = (index, event) => {
     const newRentDescription = [...rental.description];
     newRentDescription[index] = event.target.value;
@@ -199,6 +198,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
         quantity: '',
         location: '',
         status: '',
+        visibility: 'not',
         images: []
       });
       setExistingImages([]);
@@ -225,7 +225,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
     whiteSpace: 'nowrap',
     width: 1,
   });
-  
+
   return (
     <Paper style={{ padding: 16 }}>
       <Typography variant="h6">{rid ? 'Edit Rental' : 'Add Rental'}</Typography>
@@ -309,7 +309,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
           fullWidth
           margin="normal"
           required
-          inputProps={{ min:0 }}
+          inputProps={{ min: 0 }}
         />
         <TextField
           label="Location"
@@ -331,7 +331,10 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
             onChange={handleStatusChange}
             required
           >
-            <FormControlLabel value="For Rent" control={<Radio checked/>} label="For Rent" />
+            <FormControlLabel
+              value="For Rent"
+              control={<Radio checked />}
+              label="For Rent" />
             <FormControlLabel
               value="Sold Out"
 
@@ -407,133 +410,133 @@ const RentalList = ({ onEditrental, onViewrental }) => {
   const [rentals, setRentals] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const {user}=useAuth();  
-  
+  const { user } = useAuth();
+
   React.useEffect(() => {
-      const fetchRentalList = async () => {
-          const q = await getDocs(query(collection(db,'rentals'),where('merchantId','==',user.uid)))
-          const fetchedRentals = q.docs.map(doc=>doc.data()) 
-          setRentals(fetchedRentals);
-      };
-      fetchRentalList();
+    const fetchRentalList = async () => {
+      const q = await getDocs(query(collection(db, 'rentals'), where('merchantId', '==', user.uid)))
+      const fetchedRentals = q.docs.map(doc => doc.data())
+      setRentals(fetchedRentals);
+    };
+    fetchRentalList();
   }, [user.uid]);
 
   const handleDelete = async (id) => {
-      try {
-          const result = await Swal.fire({
-              icon: 'warning',
-              title: 'Are you sure?',
-              text: "You won't be able to revert this!",
-              showCancelButton: true,
-              confirmButtonText: 'Yes, delete it!',
-              cancelButtonText: 'No, cancel!',
-          });
+    try {
+      const result = await Swal.fire({
+        icon: 'warning',
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'No, cancel!',
+      });
 
-          if (result.isConfirmed){
-              await deleteDoc(doc(db, 'rentals', id));
-              setRentals(rentals.filter(rental => rental.id !== id));
+      if (result.isConfirmed) {
+        await deleteDoc(doc(db, 'rentals', id));
+        setRentals(rentals.filter(rental => rental.id !== id));
 
-              Swal.fire({
-                  icon: 'success',
-                  title: 'Deleted!',
-                  text: `The rental has been deleted.`,
-                  showConfirmButton: false,
-                  timer: 1500,
-              });
-          }
-      } catch (error) {
-          console.error("Error deleting rental: ", error);
-          Swal.fire({
-              icon: 'error',
-              title: 'Error!',
-              text: 'There was an error deleting the rental.',
-          });
+        Swal.fire({
+          icon: 'success',
+          title: 'Deleted!',
+          text: `The rental has been deleted.`,
+          showConfirmButton: false,
+          timer: 1500,
+        });
       }
+    } catch (error) {
+      console.error("Error deleting rental: ", error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'There was an error deleting the rental.',
+      });
+    }
   };
 
   const handleChangePage = (event, newPage) => {
-      setPage(newPage);
+    setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (event) => {
-      setRowsPerPage(+event.target.value);
-      setPage(0);
+    setRowsPerPage(+event.target.value);
+    setPage(0);
   };
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
-      [`&.${tableCellClasses.head}`]: {
-        backgroundColor: theme.palette.common.black,
-        color: theme.palette.common.white,
-      },
-      [`&.${tableCellClasses.body}`]: {
-        fontSize: 14,
-      },
-    }));
-    
-    const StyledTableRow = styled(TableRow)(({ theme }) => ({
-      '&:nth-of-type(odd)': {
-        backgroundColor: theme.palette.action.hover,
-      },
-      // hide last border
-      '&:last-child td, &:last-child th': {
-        border: 0,
-      },
-    }));
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    '&:last-child td, &:last-child th': {
+      border: 0,
+    },
+  }));
 
   return (
-      <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 700 }} aria-label="customized table">
-              <TableHead>
-                  <TableRow>
-                      {/* <TableCell>ID</TableCell> */}
-                      <StyledTableCell align="center">Title</StyledTableCell>
-                      <StyledTableCell align="center">Category</StyledTableCell>
-                      <StyledTableCell align="center">Sub category</StyledTableCell>
-                      <StyledTableCell align="center">Description</StyledTableCell>
-                      <StyledTableCell align="center">Quantity</StyledTableCell>
-                      <StyledTableCell align="center">Location</StyledTableCell>
-                      <StyledTableCell align="center">Current Status</StyledTableCell>
-                      <StyledTableCell align="center">Actions</StyledTableCell>
-                  </TableRow>
-              </TableHead>
-              <TableBody>
-                  {rentals.length>0?
-                  rentals.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(rental => (
-                  <StyledTableRow key={rental.rid}>
-                      {/* <TableCell>{rental.id}</TableCell> */}
-                      <StyledTableCell align="center">{rental.title}</StyledTableCell>
-                      <StyledTableCell align="center">{rental.category}</StyledTableCell>
-                      <StyledTableCell align="center">{rental.subCategory}</StyledTableCell>
-                      <StyledTableCell align="justify">{rental.description}</StyledTableCell>
-                      <StyledTableCell align="center">{rental.quantity}</StyledTableCell>
-                      <StyledTableCell align="center">{rental.location}</StyledTableCell>
-                      <StyledTableCell align="center">{rental.status}</StyledTableCell>
-                      
-                      <StyledTableCell align="center">
-                          <Button onClick={() => onViewrental(rental.rid)} variant="outlined" color="secondary" style={{ margin: '5px', width: '100%' }}>View</Button>
-                          <Button onClick={() => onEditrental(rental.rid)} variant="outlined" color="success" style={{ margin: '5px', width: '100%' }}>Edit</Button>
-                          <Button onClick={() => handleDelete(rental.rid)} variant="outlined" color="error" style={{ margin: '5px', width: '100%' }}>Delete</Button>
-                      </StyledTableCell>
-                  </StyledTableRow>
-                 )): (
-                  <TableRow>
-                    <StyledTableCell colSpan={8} align="center">
-                      No services found.
-                    </StyledTableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-          </Table>
-          <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={rentals.length} 
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-      </TableContainer>    
+    <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 700 }} aria-label="customized table">
+        <TableHead>
+          <TableRow>
+            {/* <TableCell>ID</TableCell> */}
+            <StyledTableCell align="center">Title</StyledTableCell>
+            <StyledTableCell align="center">Category</StyledTableCell>
+            <StyledTableCell align="center">Sub category</StyledTableCell>
+            <StyledTableCell align="center">Description</StyledTableCell>
+            <StyledTableCell align="center">Quantity</StyledTableCell>
+            <StyledTableCell align="center">Location</StyledTableCell>
+            <StyledTableCell align="center">Current Status</StyledTableCell>
+            <StyledTableCell align="center">Actions</StyledTableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rentals.length > 0 ?
+            rentals.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(rental => (
+              <StyledTableRow key={rental.rid}>
+                {/* <TableCell>{rental.id}</TableCell> */}
+                <StyledTableCell align="center">{rental.title}</StyledTableCell>
+                <StyledTableCell align="center">{rental.category}</StyledTableCell>
+                <StyledTableCell align="center">{rental.subCategory}</StyledTableCell>
+                <StyledTableCell align="justify">{rental.description}</StyledTableCell>
+                <StyledTableCell align="center">{rental.quantity}</StyledTableCell>
+                <StyledTableCell align="center">{rental.location}</StyledTableCell>
+                <StyledTableCell align="center">{rental.status}</StyledTableCell>
+
+                <StyledTableCell align="center">
+                  <Button onClick={() => onViewrental(rental.rid)} variant="outlined" color="secondary" style={{ margin: '5px', width: '100%' }}>View</Button>
+                  <Button onClick={() => onEditrental(rental.rid)} variant="outlined" color="success" style={{ margin: '5px', width: '100%' }}>Edit</Button>
+                  <Button onClick={() => handleDelete(rental.rid)} variant="outlined" color="error" style={{ margin: '5px', width: '100%' }}>Delete</Button>
+                </StyledTableCell>
+              </StyledTableRow>
+            )) : (
+              <TableRow>
+                <StyledTableCell colSpan={8} align="center">
+                  No services found.
+                </StyledTableCell>
+              </TableRow>
+            )}
+        </TableBody>
+      </Table>
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 25]}
+        component="div"
+        count={rentals.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+    </TableContainer>
   );
 };
 

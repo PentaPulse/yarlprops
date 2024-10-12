@@ -29,7 +29,7 @@ const appCheck = initializeAppCheck(app, {
 });
 */
 
-if (window.location.hostname === "localhost" || window.location.hostname === '127.0.0.1' || window.location.hostname === '192.168.70.247') {
+if (window.location.hostname === "localhost" || window.location.hostname === '127.0.0.1' || window.location.hostname === '192.168.147.145') {
   connectFirestoreEmulator(db, '127.0.0.1', 8080);
   connectAuthEmulator(auth, "http://127.0.0.1:9099");
   connectStorageEmulator(storage, '127.0.0.1', 9199);
