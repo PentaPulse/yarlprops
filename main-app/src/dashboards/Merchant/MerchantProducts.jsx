@@ -86,7 +86,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
     quantity: '',
     location: '',
     status: 'For Sale',
-    visibility: 'not',
+    visibility:false,
     images: [
 
     ],
@@ -206,7 +206,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
       // Add or update product with the combined image URLs
       if (pid) {
         console.log(product)
-        await updateProduct(pid, { ...product, images: allImageUrls });
+        await updateProduct(pid, { ...product, images: allImageUrls ,visibility:false});
         if(notificationManager){
           await notificationManager.addNotification(
             `ProductId ${pid} updated by ${user.uid}`,
@@ -220,11 +220,11 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
           timer: 1500,
         });
       } else {
-        await addProduct({ ...product, images: allImageUrls });
+        await addProduct({ ...product, images: allImageUrls,visibility:false });
         //await addItemByMerchant(user,product,'product')
         if(notificationManager){
           await notificationManager.addNotification(
-            `ProductId ${pid} added by ${user.displayName}`,
+            `ProductId ${pid} \n added by ${user.displayName}`,
             '/d/products'
           )
         }
@@ -245,8 +245,8 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
         quantity: '',
         location: '',
         status: '',
-        visibility: '',
-        images: []
+        images: [],
+        visibility:false,
       });
       setExistingImages([]);
       setNewImages([]);

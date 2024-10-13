@@ -25,7 +25,7 @@ export default class NotificationsManager {
   }
 
   // Add a notification to Firestore and local store
-  async addNotification(message, path) {
+  async addNotification(message, path                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ) {
     const newNotification = {
       message,
       path,

@@ -24,7 +24,7 @@ const addProduct = async ({ merchantId, title, category, subCategory, descriptio
         });
         await setDoc(docRef, { pid: docRef.id }, { merge: true });
         await updateDoc(doc(db, 'systemusers', merchantId), { myProducts: arrayUnion(docRef.id) })
-        await addItemByMerchant(merchantId,title,docRef.id,'product')
+        await addItemByMerchant(merchantId, title, docRef.id, 'product')
         return docRef.id;
     } catch (e) {
         console.error("Error adding product:", e);
@@ -47,7 +47,7 @@ const updateProduct = async (id, updatedProduct) => {
 const fetchProducts = async () => {
     try {
         //if()
-        const qSnapshot = await getDocs(productRef);
+        const qSnapshot = await getDocs(productRef, where('visibility', '==', true));
         const productList = qSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         return productList;
     } catch (e) {
@@ -78,14 +78,14 @@ export const countProducts = async () => {
     const productsSnapshot = await getDocs(productRef);
     return productsSnapshot.size;
 };
-export const fetchProductOrders = async(cid)=>{
-    const q = query(productRef,where('customers','==',cid))
-    try{
+export const fetchProductOrders = async (cid) => {
+    const q = query(productRef, where('customers', '==', cid))
+    try {
         const qsnapshot = await getDocs(q)
-        const productOrders = qsnapshot.docs.map((doc)=>doc.data())
-        if(productOrders.length===0) return []
+        const productOrders = qsnapshot.docs.map((doc) => doc.data())
+        if (productOrders.length === 0) return []
         return productOrders;
-    }catch(e){
+    } catch (e) {
         console.log(e)
     }
 }
