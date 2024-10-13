@@ -12,62 +12,32 @@ function SlideShow() {
 
   return (
    <Carousel>
-      <Carousel.Item>
+      {/* <Carousel.Item>
         <img style={{ height: carouselHeight }} className="d-block w-100" src="/slideshow/rent_img.jpg" alt="First slide" />
         <Carousel.Caption>
-          {/* <Typography 
-            varient='h3' 
-            sx={{ 
-              fontWeight: 'bold',
-              textAlign: 'center',
-              fontSize: {xs:'1.5rem', sm:'2rem', md:'3rem', lg:'4rem'},
-              lineHeight: 1.2,
-            }}>
-              RENTING BORDING HOUSES & ROOMS
-            </Typography> */}
           <h3 style={{ fontSize: FontSize, fontWeight: 'bold', textAlign: 'center', lineHeight: 1.2 }}>RENTING BORDING HOUSES & ROOMS</h3>
           <p style={{ fontSize: FontSize, lineHeight: 1.2, fontStyle: 'italic' }}>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
         </Carousel.Caption>
-      </Carousel.Item>
+      </Carousel.Item> */}
 
-      <Carousel.Item>
+      {/* <Carousel.Item>
         <img style={{ height: carouselHeight }} className="d-block w-100" src="/slideshow/food-delivery.jpg" alt="Second slide" />
         <Carousel.Caption>
-        {/* <Typography 
-            varient='h3' 
-            sx={{ 
-              fontWeight: 'bold',
-              textAlign: 'center',
-              fontSize: { xs:'0.8rem', sm:'1rem', md:'1.2rem', lg:'1.4rem' },
-              lineHeight: 1.2,
-            }}>
-            FOOD DELIVERY
-          </Typography> */}
           <h3 style={{ fontSize: FontSize, fontWeight: 'bold', textAlign: 'center', lineHeight: 1.2 }}>FOOD DELIVERY</h3>
           <p style={{ fontSize: FontSize, lineHeight: 1.2, fontStyle: 'italic' }}>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
         </Carousel.Caption>
-      </Carousel.Item>
+      </Carousel.Item> */}
 
-      <Carousel.Item>
+      {/* <Carousel.Item>
         <img style={{ height: carouselHeight }} className="d-block w-100" src="/slideshow/Saloon2.jpg" alt="Third slide" />
         <Carousel.Caption>
-          {/* <Typography 
-            varient='h3' 
-            sx={{ 
-              fontWeight: 'bold',
-              textAlign: 'center',
-              fontSize: { xs:'0.8rem', sm:'1rem', md:'1.2rem', lg:'1.4rem' },
-              lineHeight: 1.2,
-            }}>
-            SALOON FOR BOYS
-          </Typography> */}
           <h3 style={{ fontSize: FontSize, fontWeight: 'bold', textAlign: 'center', lineHeight: 1.2 }}>SALOON FOR BOYS</h3>
           <p style={{ fontSize: FontSize, lineHeight: 1.2, fontStyle: 'italic' }}>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
         </Carousel.Caption>
-      </Carousel.Item>
+      </Carousel.Item> */}
 
       <Carousel.Item>
-        <img style={{ height: carouselHeight }} className="d-block w-100" src="/slideshow/rentbike2.jpg" alt="Fourth slide" />
+        <img style={{ height: carouselHeight }} className="d-block w-100" src="/slideshow/bikerentcosta.jpg" alt="Fourth slide" />
         <Carousel.Caption>
           {/* <Typography 
             varient='h3' 
@@ -80,7 +50,17 @@ function SlideShow() {
             MOTORBIKES FOR RENT
           </Typography> */}
           <h3 style={{ fontSize: FontSize, fontWeight: 'bold', textAlign: 'center', lineHeight: 1.2 }}>MOTORBIKES FOR RENT</h3>
-          <p style={{ fontSize: FontSize, lineHeight: 1.2, fontStyle: 'italic' }}>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+          {/* <p style={{ fontSize: FontSize, lineHeight: 1.2, fontStyle: 'italic' }}>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p> */}
+        </Carousel.Caption>
+      </Carousel.Item>
+
+      <Carousel.Item>
+        <video style={{ width: '100%', height: carouselHeight }} className='d-block w-100' controls autoPlay loop muted>
+            <source src="/slideshow/KKSALOON.mp4" type="video/mp4" />
+        </video>
+        <Carousel.Caption>
+          <h3 style={{ fontSize: FontSize, fontWeight: 'bold', textAlign: 'center', lineHeight: 1.2 }}>KK SALOON</h3>
+          <p style={{ fontSize: FontSize, lineHeight: 1.2, fontStyle: 'italic' }}>Make your appointment.</p>
         </Carousel.Caption>
       </Carousel.Item>
       
