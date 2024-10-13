@@ -57,9 +57,9 @@ export default class NotificationsManager {
     };
     try {
       //sent to admins
-      const adocRef = await addDoc(collection(db, 'admins', 'notifications', 'items'), { ...newNotification, topic: `${itemType} ${action} request` })
+      const adocRef = await addDoc(collection(db, 'admins', 'notifications', 'items'), { ...newNotification, id: adocRef.id,topic: `${itemType} ${action} request` })
       //sent to user
-      const sdocRef = await addDoc(collection(db, 'systemusers', this.user.uid, 'notifications'), { ...newNotification, topic: `Request sent to ADMINS` })
+      const sdocRef = await addDoc(collection(db, 'systemusers', this.user.uid, 'notifications'), { ...newNotification,id: sdocRef.id, topic: `Request sent to ADMINS` })
       //save in memory
       this.notifications.push({ ...newNotification, id: sdocRef.id, topic: `Request sent to ADMINS` })
       return sdocRef.id

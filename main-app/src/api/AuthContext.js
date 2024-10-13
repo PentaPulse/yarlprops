@@ -12,7 +12,6 @@ const AuthContext = React.createContext();
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = React.useState(null);
     const [loading, setLoading] = React.useState(true);
-    const [ok, setOk] = React.useState(false)
     const navigate = useNavigate()
     const { showAlerts } = useAlerts();
 
@@ -38,14 +37,16 @@ export const AuthProvider = ({ children }) => {
         });
 
         return () => unsubscribe();
-    }, [ok]);
+    }, []);
 
     const checkUserExistence = async (userId) => {
         const userDocRef = doc(db, 'systemusers', userId);
         const userDoc = await getDoc(userDocRef);
         if (userDoc.exists()) {
+            console.log("user existed")
             return true
         } else {
+            console.log("user not existed")
             return false
         }
     }
@@ -56,11 +57,7 @@ export const AuthProvider = ({ children }) => {
         .then((result) => {
             const user = result.user;
             if (!checkUserExistence(user.uid)) {
-                registerUser(user.uid, '', '', user.displayName, user.email).then((result) => {
-                    if (result.success) {
-                        setOk(true)
-                    }
-                })
+                registerUser(user.uid, '', '', user.displayName, user.email)
             }
             signinLog(user.uid, { method: 'google' });
             sessionStorage.setItem('pp', user.photoURL);

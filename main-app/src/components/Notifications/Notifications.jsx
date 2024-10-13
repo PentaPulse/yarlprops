@@ -14,8 +14,10 @@ export default function Notifications() {
     const { user } = useAuth();
     const theme = useTheme()
 
+
+    const manager = new NotificationsManager(user);
+
     useEffect(() => {
-        const manager = new NotificationsManager(user);
 
         const fetchNotifications = async () => {
             const fetchedNotifications = await manager.syncNotifications();
@@ -52,51 +54,59 @@ export default function Notifications() {
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                 transformOrigin={{ vertical: 'top', horizontal: 'right' }}
             >
+                <Typography fontWeight={'bold'} align='center'>NOTIFICATIONS</Typography>
                 {notifications.length > 0 ? (
                     notifications.map((notification, index) => (
-                        <Box
-                            sx={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                justifyContent: 'space-between',
-                                width: '300px',
-                                padding: '16px',
-                                boxShadow: 2,
-                                borderRadius: 2,
-                                backgroundColor: theme.palette.background,
-                                position: 'relative',
-                            }}
-                        >
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                                <DoneAllIcon sx={{ color: 'green' }} />
-                                <IconButton size="small" onClick={handleClose}>
-                                    <CloseIcon />
-                                </IconButton>
-                            </Box>
-                            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                                <Typography variant="body1" fontWeight="bold">{notification.topic} </Typography>
-                            </Box>
+                        notification.isItem ?
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    justifyContent: 'space-between',
+                                    width: '300px',
+                                    padding: '16px',
+                                    boxShadow: 2,
+                                    borderRadius: 2,
+                                    backgroundColor: theme.palette.background,
+                                    position: 'relative',
+                                }}
+                            >
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                                    <IconButton onClick={()=>manager.markAsRead(notification.id)}>
+                                        <DoneAllIcon sx={{ color: 'green' }} />
+                                    </IconButton>
+                                    <IconButton size="small" onClick={handleClose}>
+                                        <CloseIcon />
+                                    </IconButton>
+                                </Box>
+                                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                                    <Typography variant="body1" fontWeight="bold">{notification.topic} </Typography>
+                                </Box>
 
-                            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                <Box>
-                                    <img src={notification.itemImage} width={80} />
-                                </Box>
-                                <Box>
-                                    <Typography variant="body1" fontWeight="bold">
-                                        Item : {notification.itemName}
-                                    </Typography>
-                                    <Typography variant="body2" color="textSecondary">
-                                        Type : {notification.itemType}
-                                    </Typography>
-                                    <Typography variant="body2" color="textSecondary">
-                                        {notification.merchantName}
-                                    </Typography>
-                                    <Typography variant="body2" color="primary" sx={{ mt: 1 }}>
-                                        {notification.action}
-                                    </Typography>
+                                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                    <Box>
+                                        <img src={notification.itemImage} width={70} />
+                                    </Box>
+                                    <Box ml={3}>
+                                        <Typography variant="body1" fontWeight="bold">
+                                            Item : {notification.itemName}
+                                        </Typography>
+                                        <Typography variant="body2" color="textSecondary">
+                                            Type : {notification.itemType}
+                                        </Typography>
+                                        <Typography variant="body2" color="textSecondary">
+                                            Merchant : {notification.merchantName}
+                                        </Typography>
+                                        <Typography variant="body2" color="primary" sx={{ mt: 1 }}>
+                                            Action : {notification.action} {notification.itemType}
+                                        </Typography>
+                                    </Box>
                                 </Box>
                             </Box>
-                        </Box>
+                            :
+                            <Box>
+
+                            </Box>
                     ))
                 ) : (
                     <MenuItem disabled>
