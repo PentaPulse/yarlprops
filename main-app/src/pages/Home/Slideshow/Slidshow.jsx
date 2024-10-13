@@ -67,7 +67,7 @@ function SlideShow() {
       </Carousel.Item>
 
       <Carousel.Item>
-        <img style={{ height: carouselHeight }} className="d-block w-100" src="/slideshow/rentbike2.jpg" alt="Fourth slide" />
+        <img style={{ height: carouselHeight }} className="d-block w-100" src="/slideshow/bikerentcosta.jpg" alt="Fourth slide" />
         <Carousel.Caption>
           {/* <Typography 
             varient='h3' 
@@ -80,7 +80,17 @@ function SlideShow() {
             MOTORBIKES FOR RENT
           </Typography> */}
           <h3 style={{ fontSize: FontSize, fontWeight: 'bold', textAlign: 'center', lineHeight: 1.2 }}>MOTORBIKES FOR RENT</h3>
-          <p style={{ fontSize: FontSize, lineHeight: 1.2, fontStyle: 'italic' }}>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+          {/* <p style={{ fontSize: FontSize, lineHeight: 1.2, fontStyle: 'italic' }}>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p> */}
+        </Carousel.Caption>
+      </Carousel.Item>
+
+      <Carousel.Item>
+        <video style={{ width: '100%', height: carouselHeight }} className='d-block w-100' controls autoPlay loop muted>
+            <source src="/slideshow/KKSALOON.mp4" type="video/mp4" />
+        </video>
+        <Carousel.Caption>
+          <h3 style={{ fontSize: FontSize, fontWeight: 'bold', textAlign: 'center', lineHeight: 1.2 }}>KK SALOON</h3>
+          <p style={{ fontSize: FontSize, lineHeight: 1.2, fontStyle: 'italic' }}>Make your appointment.</p>
         </Carousel.Caption>
       </Carousel.Item>
       
