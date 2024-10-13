@@ -25,7 +25,7 @@ export default class NotificationsManager {
   }
 
   // Add a notification to Firestore and local store
-  async addNotification(message, path                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ) {
+  async addNotification(message, path) {
     const newNotification = {
       message,
       path,
@@ -40,6 +40,31 @@ export default class NotificationsManager {
       return docRef.id;
     } catch (e) {
       console.log('Error adding notification: ', e);
+    }
+  }
+
+  async addItemNotification(item, itemType, merchant, action) {
+    const newNotification = {
+      itemName: item.title,
+      itemType: itemType,
+      itemImage:item.images[0],
+      merchantName: merchant.displayName,
+      action: action,
+      path: ``,
+      isItem: true,
+      timestamp: new Date().toISOString(),
+      read: false
+    };
+    try {
+      //sent to admins
+      const adocRef = await addDoc(collection(db, 'admins', 'notifications', 'items'), { ...newNotification, topic: `${itemType} ${action} request` })
+      //sent to user
+      const sdocRef = await addDoc(collection(db, 'systemusers', this.user.uid, 'notifications'), { ...newNotification, topic: `Request sent to ADMINS` })
+      //save in memory
+      this.notifications.push({ ...newNotification, id: sdocRef.id, topic: `Request sent to ADMINS` })
+      return sdocRef.id
+    } catch (e) {
+      console.log("error adding notification: ", e)
     }
   }
 

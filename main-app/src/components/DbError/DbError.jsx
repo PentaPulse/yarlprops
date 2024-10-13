@@ -20,7 +20,7 @@ export default function DbError({ home }) {
                 setCount(4)
             }
             else{
-                setCount(6)
+                setCount(8)
             }
         }
     }, [isMobile, isTablet,home])

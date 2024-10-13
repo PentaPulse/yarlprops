@@ -12,7 +12,6 @@ import { fetchServiceOrders } from "../../api/db/services";
 
 export default function CustomerOverview() {
     const { user } = useAuth();
-    console.log(user);
 
     return (
         <Container>

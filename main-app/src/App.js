@@ -55,6 +55,15 @@ const darkTheme = createTheme({
 });
 
 export default function App() {
+  if (typeof ResizeObserver !== 'undefined') {
+    const observerErrorHandler = (error) => {
+      if (error.message !== "ResizeObserver loop completed with undelivered notifications.") {
+        throw error;
+      }
+    };
+  
+    window.addEventListener('error', observerErrorHandler);
+  }
   return (
     <>
       <Themed />

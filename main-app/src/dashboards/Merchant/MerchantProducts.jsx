@@ -207,12 +207,11 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
       if (pid) {
         console.log(product)
         await updateProduct(pid, { ...product, images: allImageUrls ,visibility:false});
-        if(notificationManager){
           await notificationManager.addNotification(
             `ProductId ${pid} updated by ${user.uid}`,
             '/d/products'
           )
-        }
+        
         Swal.fire({
           icon: 'success',
           title: 'Product updated successfully',
@@ -222,12 +221,8 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
       } else {
         await addProduct({ ...product, images: allImageUrls,visibility:false });
         //await addItemByMerchant(user,product,'product')
-        if(notificationManager){
-          await notificationManager.addNotification(
-            `ProductId ${pid} \n added by ${user.displayName}`,
-            '/d/products'
-          )
-        }
+          await notificationManager.addItemNotification(product,'product',user,'add')
+        
         Swal.fire({
           icon: 'success',
           title: 'Product saved , request sent to the admin panel for approval',

@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { Avatar, Box, CssBaseline, Divider, Grid, IconButton,  MenuItem, MenuList, Toolbar, Tooltip, Typography, useTheme, styled } from '@mui/material'
+import { Avatar, Box, CssBaseline, Divider, Grid, IconButton, MenuItem, MenuList, Toolbar, Tooltip, Typography, useTheme, styled } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { useAuth } from '../api/AuthContext'
-import {  merchMenu, userMenu } from '../components/menuLists';
+import { merchMenu, userMenu } from '../components/menuLists';
 import { useNavigate } from 'react-router-dom';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../api/firebase';
@@ -14,6 +14,7 @@ import SupportRoundedIcon from '@mui/icons-material/SupportRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
+import Notifications from '../components/Notifications/Notifications';
 
 const drawerWidth = 240;
 const openedMixin = (theme) => ({
@@ -83,6 +84,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 export default function DashboardLayout({ handleMode, children }) {
   const [open, setOpen] = React.useState(false);
   const [merchantList, setMerchantList] = React.useState([]);
+  const [customerList, setCustomerList] = React.useState([]);
   const { user, logout } = useAuth()
   const theme = useTheme();
   const navigate = useNavigate();
@@ -102,9 +104,12 @@ export default function DashboardLayout({ handleMode, children }) {
   React.useEffect(() => {
     const fetchMerchantList = async () => {
       try {
-        const q = await getDocs(query(collection(db, 'systemusers'), where('isMerchant', '==', true)))
-        const list = q.docs.map((doc) => doc.data().uid)
-        setMerchantList(list)
+        const mq = await getDocs(query(collection(db, 'systemusers'), where('isMerchant', '==', true)))
+        const mlist = mq.docs.map((doc) => doc.data().uid)
+        setMerchantList(mlist)
+        const cq = await getDocs(query(collection(db, 'systemusers'), where('isMerchant', '==', false)))
+        const clist = cq.docs.map((doc) => doc.data().uid)
+        setCustomerList(clist)
       } catch (e) {
 
       }
@@ -133,9 +138,13 @@ export default function DashboardLayout({ handleMode, children }) {
             '--MuiMenuItem-insetStart': '30px',
           }}
         >
-          {(merchantList.includes(user.uid) ? merchMenu : userMenu).map((text, index) => (
-            <MenuItem onClick={() => handleNavigation(text[2])}>{text[1]} {text[0]}</MenuItem>
-          ))}
+          {(merchantList.includes(user.uid) ? merchMenu : customerList.includes(user.uid) ? userMenu : [])
+            .map((text, index) => (
+              <MenuItem key={index} onClick={() => handleNavigation(text[2])}>
+                {text[1]} {text[0]}
+              </MenuItem>
+            ))}
+
         </MenuList>
 
         <MenuList
@@ -146,7 +155,10 @@ export default function DashboardLayout({ handleMode, children }) {
             '--MuiMenuItem-insetStart': '30px',
             gap: 0.5,
           }}
-        >
+        ><MenuItem onClick={() => handleNavigation('/d/profile')}>
+            <SupportRoundedIcon />
+            <Typography variant="body1">Notifications</Typography>
+          </MenuItem>
           <MenuItem onClick={() => handleNavigation('/d/profile')}>
             <SupportRoundedIcon />
             <Typography variant="body1">Profile</Typography>
@@ -205,10 +217,11 @@ export default function DashboardLayout({ handleMode, children }) {
               </Typography>
             </Box>
             <Box sx={{ flexGrow: 1 }} />
-            <Box display={'flex'} gap={1} >
+            <Box display={'flex'} gap={1} >              
               <Tooltip title={`${theme.palette.mode} mode`}>
                 <ModeSwitch handleMode={handleMode} />
               </Tooltip>
+              <Notifications/>
             </Box>
           </Toolbar >
         </AppBar >
@@ -230,7 +243,7 @@ export default function DashboardLayout({ handleMode, children }) {
             flexShrink: 0,
             [`& .MuiDrawer-paper`]: { boxSizing: 'border-box' },
           }} variant="permanent" open >
-            <DrawerHeader sx={{zIndex:theme.zIndex.appBar-1}}/>
+            <DrawerHeader sx={{ zIndex: theme.zIndex.appBar - 1 }} />
             <Divider />
             {drawer}
           </Drawer >
