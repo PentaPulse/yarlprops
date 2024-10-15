@@ -11,6 +11,7 @@ import { useAuth } from '../../api/AuthContext';
 import { arrayRemove, collection, deleteDoc, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { productFilters } from '../../components/menuLists';
 import NotificationsManager from '../../api/db/notificationsManager';
+import { addItemByMerchant } from '../../api/db/logsManager';
 
 export default function MerchantProducts() {
   const [showAddProduct, setShowAddProduct] = useState(false);
@@ -86,20 +87,19 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
     quantity: '',
     location: '',
     status: 'For Sale',
-    visibility:false,
-    images: [
-
-    ],
+    visibility: false,
+    images: [],
   });
 
   const [existingImages, setExistingImages] = React.useState([]);
   const [newImages, setNewImages] = React.useState([]);
   const [validationMessage, setValidationMessage] = React.useState('');
-  const [notificationManager,setNotificationManager]=React.useState(null)
+  const [notificationManager, setNotificationManager] = React.useState(null)
 
   React.useEffect(() => {
-    if(user){
-      const manager=new NotificationsManager(user)
+    console.log(pid)
+    if (user) {
+      const manager = new NotificationsManager(user)
       setNotificationManager(manager)
     }
     if (pid) {
@@ -114,7 +114,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
       };
       fetchProduct();
     }
-  }, [pid,user]);
+  }, [pid, user]);
 
   const handleChange = (event) => {
     setProduct({
@@ -206,12 +206,8 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
       // Add or update product with the combined image URLs
       if (pid) {
         console.log(product)
-        await updateProduct(pid, { ...product, images: allImageUrls ,visibility:false});
-          await notificationManager.addNotification(
-            `ProductId ${pid} updated by ${user.uid}`,
-            '/d/products'
-          )
-        
+        await updateProduct(pid, { ...product, images: allImageUrls, visibility: false });
+        await notificationManager.itemNotification(product, 'product', 'update')
         Swal.fire({
           icon: 'success',
           title: 'Product updated successfully',
@@ -219,10 +215,9 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
           timer: 1500,
         });
       } else {
-        await addProduct({ ...product, images: allImageUrls,visibility:false });
-        //await addItemByMerchant(user,product,'product')
-          await notificationManager.addItemNotification(product,'product',user,'add')
-        
+        await addProduct({ ...product, images: allImageUrls, visibility: false });
+        await addItemByMerchant(user, product, 'product')
+        await notificationManager.itemNotification(product, 'product', 'add')
         Swal.fire({
           icon: 'success',
           title: 'Product saved , request sent to the admin panel for approval',
@@ -241,7 +236,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
         location: '',
         status: '',
         images: [],
-        visibility:false,
+        visibility: false,
       });
       setExistingImages([]);
       setNewImages([]);
@@ -484,10 +479,10 @@ const ProductList = ({ onEditProduct, onViewProduct }) => {
 
       if (result.isConfirmed) {
         await deleteDoc(doc(db, 'products', id));
-        await updateDoc(doc(db,'systemusers',user.uid),{
-          myProducts:arrayRemove(id)
+        await updateDoc(doc(db, 'systemusers', user.uid), {
+          myProducts: arrayRemove(id)
         })
-        setProducts(products.filter(product => product.id !== id));
+        setProducts(products.filter(product => product.pid !== id));
 
         Swal.fire({
           icon: 'success',

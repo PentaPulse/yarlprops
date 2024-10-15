@@ -155,7 +155,7 @@ export default function DashboardLayout({ handleMode, children }) {
             '--MuiMenuItem-insetStart': '30px',
             gap: 0.5,
           }}
-        ><MenuItem onClick={() => handleNavigation('/d/profile')}>
+        ><MenuItem onClick={() => handleNavigation('/d/notifications')}>
             <SupportRoundedIcon />
             <Typography variant="body1">Notifications</Typography>
           </MenuItem>

@@ -1,4 +1,4 @@
-import { collection, getDocs, query, addDoc, doc, deleteDoc, updateDoc } from "firebase/firestore";
+import { collection, getDocs, query, addDoc, doc, deleteDoc, updateDoc, orderBy } from "firebase/firestore";
 import { db } from "../firebase";
 
 export default class NotificationsManager {
@@ -9,14 +9,14 @@ export default class NotificationsManager {
 
   // Sync notifications from Firestore
   async syncNotifications() {
-    const q = query(collection(db, 'systemusers', this.user.uid, 'notifications'));
+    const q = query(collection(db, 'systemusers', this.user.uid, 'notifications'),orderBy('timestamp','desc'));
     try {
       const qSnapshot = await getDocs(q);
       const nData = qSnapshot.docs.map((doc) => ({
         ...doc.data(),
-        id: doc.id // Preserve document ID
+        id: doc.id
       }));
-      this.notifications = nData; // Sync notifications with local array
+      this.notifications = nData;
       return this.notifications;
     } catch (e) {
       console.log('Error retrieving notifications: ', e);
@@ -24,50 +24,44 @@ export default class NotificationsManager {
     }
   }
 
-  // Add a notification to Firestore and local store
-  async addNotification(message, path) {
-    const newNotification = {
-      message,
-      path,
-      timestamp: new Date().toISOString(),
-      read: false,
-    };
-    try {
-      // Add the notification to Firestore
-      const docRef = await addDoc(collection(db, 'systemusers', this.user.uid, 'notifications'), newNotification);
-      // Add notification to local store with the Firestore doc ID
-      this.notifications.push({ ...newNotification, id: docRef.id });
-      return docRef.id;
-    } catch (e) {
-      console.log('Error adding notification: ', e);
-    }
-  }
-
-  async addItemNotification(item, itemType, merchant, action) {
-    const newNotification = {
+  //item notifications  
+  //add,update,remove
+  async itemNotification(item, itemType,  action) {
+    const notification = {
       itemName: item.title,
       itemType: itemType,
-      itemImage:item.images[0],
-      merchantName: merchant.displayName,
+      itemImage: item.images[0],
+      merchantName: this.user.displayName,
       action: action,
       path: ``,
       isItem: true,
       timestamp: new Date().toISOString(),
-      read: false
+      read: false,
+      done:false
     };
     try {
-      //sent to admins
-      const adocRef = await addDoc(collection(db, 'admins', 'notifications', 'items'), { ...newNotification, id: adocRef.id,topic: `${itemType} ${action} request` })
       //sent to user
-      const sdocRef = await addDoc(collection(db, 'systemusers', this.user.uid, 'notifications'), { ...newNotification,id: sdocRef.id, topic: `Request sent to ADMINS` })
+      const docRef = await addDoc(collection(db, 'systemusers', this.user.uid, 'notifications'), { ...notification,  topic: `Request ${notification.done?"accepted by":"sent to"} ADMINS` })
+      //sent to admins
+      await addDoc(collection(db, 'admins', 'notifications', 'items'), { ...notification,  topic: `${itemType} ${action} request` })
       //save in memory
-      this.notifications.push({ ...newNotification, id: sdocRef.id, topic: `Request sent to ADMINS` })
-      return sdocRef.id
+      this.notifications.push({ ...notification, id: docRef.id, topic: `Request sent to ADMINS` })
+      return docRef.id
     } catch (e) {
       console.log("error adding notification: ", e)
     }
   }
 
+  //user notifications
+  async welcomeNotification(user){
+    const welcome = {
+      topic:`Welcome to Yarlprops ${user.displayName}`      
+    }
+    try{
+      const docRef=await addDoc(collection(db,'systemusers',user.uid,'notifications'),welcome)
+      this.notifications.push({...welcome,id:docRef.id})
+    }catch(e){}
+  }
   // Remove a notification from Firestore and local store
   async removeNotification(notificationId) {
     try {

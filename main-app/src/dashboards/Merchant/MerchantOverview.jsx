@@ -19,8 +19,8 @@ const createPieData = (sold, available) => ({
 });
 
 // Data for Bar Chart (Popular Times)
-const popularTimesData = {
-  labels: ['9am-12pm', '12pm-3pm', '3pm-6pm', '6pm-9pm'],
+const popularRatingsData = {
+  labels: ['5', '4', '3', '2','1'],
   datasets: [
     {
       label: 'Products',
@@ -42,38 +42,41 @@ const popularTimesData = {
 
 const MerchantOverview = () => {
   const theme=useTheme()
-  const [availableProductCount, setAvailbleProductCount] = useState(0)
+  const [availableProductCount, setAvailableProductCount] = useState(0)
   const [soldProductCount,setSoldProductCount]=useState(0)
-  const rentedRentals = 100;
-  const availableRentals = 200;
+  const [availableRentalCount,setAvailableRentalCount]=useState(0)
+  const [soldRentalCount,setSoldRentalCount]=useState(0)
   const soldServices = 90;
   const availableServices = 110;
   const { user } = useAuth();
 
   useEffect(() => {
-    const fetchAvailableProductCount = async () => {
-      const q = query(collection(db, "products"), where("merchantId", "==", user.uid),where("status","==","For Sale"))
+    const fetchItemCounts = async (itemType, available, status) => {
+      const operator = available ? '==' : '!=';
+      const q = query(
+        collection(db, `${itemType}s`),
+        where('merchantId', '==', user.uid),
+        where('status', operator, status)
+      );
+  
       try {
-        const qSnapshot = await getDocs(q)
-        setAvailbleProductCount(qSnapshot.size)
+        const snapshot = await getDocs(q);
+        return snapshot.size;
       } catch (e) {
-        //console.error(e)
+        console.error("Error fetching item counts:", e);
+        return 0;
       }
-    }
-
-    fetchAvailableProductCount()
-    const fetchSoldProductCount = async () => {
-      const q = query(collection(db, "products"), where("merchantId", "==", user.uid),where("status","!=","For Sale"))
-      try {
-        const qSnapshot = await getDocs(q)
-        setSoldProductCount(qSnapshot.size)
-      } catch (e) {
-        //console.error(e)
-      }
-    }
-
-    fetchSoldProductCount()
-  },[availableProductCount,soldProductCount,user.uid])
+    };
+  
+    const updateitemCounts = async () => {
+      setAvailableProductCount(await fetchItemCounts('product', true, 'For Sale'));
+      setSoldProductCount(await fetchItemCounts('product',false,'For Sale'))
+      setAvailableRentalCount(await fetchItemCounts('rental',true,'For Rent'))
+      setSoldRentalCount(await fetchItemCounts('rental',false,'For Rent'))
+    };
+  
+    updateitemCounts();
+  }, [user.uid]);
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
@@ -97,7 +100,7 @@ const MerchantOverview = () => {
             <Typography variant="h6" align="center" color={'inherit'}>
               Rentals (Rented vs Available)
             </Typography>
-            <Pie data={createPieData(rentedRentals, availableRentals)} />
+            <Pie data={createPieData(soldRentalCount, availableRentalCount)} />
           </Paper>
         </Grid>
 
@@ -114,14 +117,14 @@ const MerchantOverview = () => {
         <Grid item xs={12}>
           <Paper elevation={3} sx={{ padding: 2, backgroundColor: theme.palette.background }}>
             <Typography variant="h6" align="center" color={'inherit'}>
-              Most Popular Times for Products, Rentals, and Services
+              Most Popular Products, Rentals, and Services
             </Typography>
-            <Bar data={popularTimesData} />
+            <Bar data={popularRatingsData} />
           </Paper>
         </Grid>
 
         {/* Summary and Comparisons */}
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={6} lg={4}>
           <Paper elevation={3} sx={{ padding: 2, backgroundColor: theme.palette.background }}>
             <Typography variant="h6" align="center" color={'inherit'}>
               Products Summary
@@ -133,19 +136,19 @@ const MerchantOverview = () => {
           </Paper>
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={6} lg={4}>
           <Paper elevation={3} sx={{ padding: 2, backgroundColor: theme.palette.background }}>
             <Typography variant="h6" align="center" color={'inherit'}>
               Rentals Summary
             </Typography>
             <Box sx={{ p: 2 }}>
-              <Typography>Total Rentals Rented: {rentedRentals}</Typography>
-              <Typography>Total Rentals Available: {availableRentals}</Typography>
+              <Typography>Total Rentals Rented: {soldRentalCount}</Typography>
+              <Typography>Total Rentals Available: {availableRentalCount}</Typography>
             </Box>
           </Paper>
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={6} lg={4}>
           <Paper elevation={3} sx={{ padding: 2, backgroundColor: theme.palette.background }}>
             <Typography variant="h6" align="center" color={'inherit'}>
               Services Summary

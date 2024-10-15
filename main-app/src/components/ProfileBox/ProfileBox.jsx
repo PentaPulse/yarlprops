@@ -8,7 +8,7 @@ export default function ProfileBox({ handleProfileClick }) {
     return (
         <>
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                <Notifications  />
+                {/*<Notifications  />*/}
             </Box>
             <Box sx={{ flexGrow: 0, display: 'block' }}>
                 <Tooltip title="Open dashboard">

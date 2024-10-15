@@ -28,6 +28,7 @@ import Profile from "./dashboards/UserProfile";
 import CustomerOverview from './dashboards/Customer/CustomerOverview'
 import Guide from "./pages/Guide/Guide";
 import PageLayout from "./pages/PageLayout";
+import NotificationsPanel from "./dashboards/NotificationsPanel";
 
 const lightTheme = createTheme({
   palette: {
@@ -38,6 +39,10 @@ const lightTheme = createTheme({
     background: {
       default: "#E3E1D9",
     },
+    notification:{
+      beforeread:"#ffffff",
+      afterread:"#E3E1D9"
+    }
   },
 
 });
@@ -51,6 +56,10 @@ const darkTheme = createTheme({
     background: {
       default: "#00072d",
     },
+    notification:{
+      beforeread:"#000000",
+      afterread:"#00072d"
+    }
   },
 });
 
@@ -171,6 +180,7 @@ function DashboardRoutes({ handleMode }) {
           {/* Common */}
           <Route path="overview" element={(merchantList.includes(user.uid) ? <MerchantOverview /> : <CustomerOverview />)} />
           <Route path="profile" element={<Profile />} />
+          <Route path="notifications" element={<NotificationsPanel/>}/>
 
           {/* Merch */}
           <Route path="myproducts" element={<MerchantProducts />} />

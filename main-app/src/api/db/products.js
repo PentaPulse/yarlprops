@@ -20,7 +20,7 @@ const addProduct = async ({ merchantId, title, category, subCategory, descriptio
             status,
             images,
             merchantId,
-            timestamp: new Date().toISOString()
+            createdAt: new Date().toISOString()
         });
         await setDoc(docRef, { pid: docRef.id }, { merge: true });
         await updateDoc(doc(db, 'systemusers', merchantId), { myProducts: arrayUnion(docRef.id) })
@@ -36,7 +36,7 @@ const addProduct = async ({ merchantId, title, category, subCategory, descriptio
 const updateProduct = async (id, updatedProduct) => {
     try {
         const productDocRef = doc(db, 'products', id);
-        await updateDoc(productDocRef, updatedProduct);
+        await updateDoc(productDocRef, {...updatedProduct,id:id,updatedAt:new Date().toISOString()});
     } catch (e) {
         console.error("Error updating product:", e);
         throw new Error("Error updating product: " + e.message);
