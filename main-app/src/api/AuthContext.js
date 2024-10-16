@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { GoogleAuthProvider, createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth';
+import { GoogleAuthProvider, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth';
 import { db, auth } from './firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { registerUser } from './db/users';
@@ -53,19 +53,32 @@ export const AuthProvider = ({ children }) => {
 
     //login    
     const provider = new GoogleAuthProvider();
-    const google = () => signInWithPopup(auth, provider)
-        .then((result) => {
-            const user = result.user;
-            if (!checkUserExistence(user.uid)) {
-                registerUser(user.uid, '', '', user.displayName, user.email)
-            }
-            signinLog(user.uid, { method: 'google' });
-            sessionStorage.setItem('pp', user.photoURL);
-            sessionStorage.setItem('displayName', user.displayName);
-        })
-        .catch(() => {
-            showAlerts('Error occured , Try again with different gmail', 'error')
-        })
+
+    const google = () => {
+        signInWithPopup(auth, provider)
+            .then(async (result) => {
+                const user = result.user;
+
+                // Check if the user exists in the database
+                const userExists = await checkUserExistence(user.uid);
+                if (!userExists) {
+                    // Register the user if not already present
+                    await registerUser(user.uid, '', '', user.displayName, user.email);
+                }
+
+                // Log the sign-in method
+                await signinLog(user.uid, { method: 'google' });
+
+                // Store user data in sessionStorage
+                sessionStorage.setItem('pp', user.photoURL);
+                sessionStorage.setItem('displayName', user.displayName);
+                showAlerts('Successfully logged', 'success')
+            })
+            .catch((error) => {
+                console.error('Google sign-in error:', error);
+                showAlerts('Error occurred. Try again with a different Gmail.', 'error');
+            });
+    };
 
     const login = (email, password) => signInWithEmailAndPassword(auth, email, password)
         .then((result) => {

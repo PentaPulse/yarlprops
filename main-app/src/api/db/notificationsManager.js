@@ -9,7 +9,7 @@ export default class NotificationsManager {
 
   // Sync notifications from Firestore
   async syncNotifications() {
-    const q = query(collection(db, 'systemusers', this.user.uid, 'notifications'),orderBy('timestamp','desc'));
+    const q = query(collection(db, 'systemusers', this.user.uid, 'notifications'), orderBy('timestamp', 'desc'));
     try {
       const qSnapshot = await getDocs(q);
       const nData = qSnapshot.docs.map((doc) => ({
@@ -26,7 +26,7 @@ export default class NotificationsManager {
 
   //item notifications  
   //add,update,remove
-  async itemNotification(item, itemType,  action) {
+  async itemNotification(item, itemType, action) {
     const notification = {
       itemName: item.title,
       itemType: itemType,
@@ -37,13 +37,13 @@ export default class NotificationsManager {
       isItem: true,
       timestamp: new Date().toISOString(),
       read: false,
-      done:false
+      done: false
     };
     try {
       //sent to user
-      const docRef = await addDoc(collection(db, 'systemusers', this.user.uid, 'notifications'), { ...notification,  topic: `Request ${notification.done?"accepted by":"sent to"} ADMINS` })
+      const docRef = await addDoc(collection(db, 'systemusers', this.user.uid, 'notifications'), { ...notification, topic: `Request ${notification.done ? "accepted by" : "sent to"} ADMINS` })
       //sent to admins
-      await addDoc(collection(db, 'admins', 'notifications', 'items'), { ...notification,  topic: `${itemType} ${action} request` })
+      await addDoc(collection(db, 'admins', 'notifications', 'items'), { ...notification, userDocId: docRef.id, topic: `${itemType} ${action} request` })
       //save in memory
       this.notifications.push({ ...notification, id: docRef.id, topic: `Request sent to ADMINS` })
       return docRef.id
@@ -53,15 +53,16 @@ export default class NotificationsManager {
   }
 
   //user notifications
-  async welcomeNotification(user){
+  async welcomeNotification(user) {
     const welcome = {
-      topic:`Welcome to Yarlprops ${user.displayName}`      
+      topic: `Welcome to Yarlprops ${user.displayName}`
     }
-    try{
-      const docRef=await addDoc(collection(db,'systemusers',user.uid,'notifications'),welcome)
-      this.notifications.push({...welcome,id:docRef.id})
-    }catch(e){}
+    try {
+      const docRef = await addDoc(collection(db, 'systemusers', user.uid, 'notifications'), welcome)
+      this.notifications.push({ ...welcome, id: docRef.id })
+    } catch (e) { }
   }
+
   // Remove a notification from Firestore and local store
   async removeNotification(notificationId) {
     try {
