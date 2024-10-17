@@ -20,17 +20,20 @@ export default function Notifications() {
     useEffect(() => {
         let isMounted = true;
 
-        const fetchNotifications = async () => {
-            const fetchedNotifications = await manager.syncNotifications();
-            if (isMounted) {
-                setNotifications(fetchedNotifications);
-            }
+        const fetchNotifications = () => {
+            // Sync notifications and set state on snapshot update
+            manager.syncNotifications((syncedNotifications) => {
+                if (isMounted) {
+                    setNotifications(syncedNotifications);
+                }
+            });
         };
 
         fetchNotifications();
-
+        
         return () => {
-            isMounted = false; // Cleanup to avoid state updates on unmounted component
+            isMounted = false; // Cleanup flag to prevent state updates on unmounted component
+            manager.unsubscribeNotifications(); // Unsubscribe from Firestore listener when component unmounts
         };
     }, [manager]);
 
@@ -44,7 +47,9 @@ export default function Notifications() {
 
     const handleNotificationClick = (path) => {
         handleClose();
-        navigate(path);
+        if (path) {
+            navigate(path);
+        }
     };
 
     return (
@@ -67,6 +72,7 @@ export default function Notifications() {
                     notifications.map((notification, index) => (
                         notification.isItem ? (
                             <Box
+                                key={notification.id} // Add key for the mapped element
                                 sx={{
                                     display: 'flex',
                                     flexDirection: 'column',
@@ -75,28 +81,30 @@ export default function Notifications() {
                                     padding: '16px',
                                     boxShadow: 2,
                                     borderRadius: 2,
-                                    backgroundColor: notification.read?theme.palette.notification.afterread:theme.palette.notification.beforeread,
+                                    backgroundColor: notification.read ? theme.palette.notification.afterread : theme.palette.notification.beforeread,
                                     position: 'relative',
+                                    mb: 2,
                                 }}
                             >
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
                                     <IconButton onClick={() => manager.markAsRead(notification.id)}>
-                                        <DoneAllIcon sx={{ color: 'green' }} /><Typography>mark as read</Typography> 
+                                        <DoneAllIcon sx={{ color: 'green' }} />
+                                        <Typography>Mark as read</Typography>
                                     </IconButton>
                                     <IconButton size="small" onClick={handleClose}>
                                         <CloseIcon />
                                     </IconButton>
                                 </Box>
                                 <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                                    <Typography variant="body1" fontWeight="bold">{notification.topic} </Typography>
+                                    <Typography variant="body1" fontWeight="bold">{notification.topic}</Typography>
                                 </Box>
 
                                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                                     <Box>
-                                        <img 
-                                            src={notification.itemImage} 
-                                            width={70} 
-                                            height={70} // Set fixed height and width to prevent layout shifts
+                                        <img
+                                            src={notification.itemImage}
+                                            width={70}
+                                            height={70}
                                             alt={notification.itemName}
                                         />
                                     </Box>
@@ -116,21 +124,28 @@ export default function Notifications() {
                                     </Box>
                                 </Box>
                             </Box>
-                        ) :<Box
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'space-between',
-                            width: '300px',
-                            padding: '16px',
-                            boxShadow: 2,
-                            borderRadius: 2,
-                            backgroundColor: theme.palette.background,
-                            position: 'relative',
-                        }}
-                    >
-
-                    </Box>
+                        ) :
+                            notification.userNoticeLevel === 'welcome' ? (
+                                <Box
+                                    key={notification.id} // Add key here
+                                    sx={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        justifyContent: 'space-between',
+                                        width: '300px',
+                                        padding: '16px',
+                                        boxShadow: 2,
+                                        borderRadius: 2,
+                                        backgroundColor: theme.palette.background,
+                                        position: 'relative',
+                                    }}
+                                >
+                                    <Typography variant="body1" fontWeight="bold">{notification.topic}</Typography>
+                                    <Typography variant="body2" color="textSecondary">
+                                        Welcome to our platform!
+                                    </Typography>
+                                </Box>
+                            ) : null
                     ))
                 ) : (
                     <MenuItem disabled>
@@ -140,4 +155,4 @@ export default function Notifications() {
             </Menu>
         </>
     );
-};
+}

@@ -8,7 +8,7 @@ import { addDoc, collection,getDoc, getDocs, query, where } from 'firebase/fires
 import { db } from '../../api/firebase';
 import Swal from 'sweetalert2';
 
-export default function Details({ setSignin, setSignup, itemType, itemId, merchantId }) {
+export default function Details({ setSignin, setSignup, itemType, itemId }) {
     const theme = useTheme()
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const { user } = useAuth()
@@ -20,24 +20,16 @@ export default function Details({ setSignin, setSignup, itemType, itemId, mercha
             const q = query(collection(db, `${itemType}s`), where(`${itemType[0]}id`, '==', itemId));
             try {
                 const qSnapshot = await getDocs(q);
-                    const product = qSnapshot.docs[0];
-                    setItem(product.data() );
+                    const product = qSnapshot.docs[0].map((doc)=>doc.data());
+                    setItem(product );
+                    const merchantData = await getDocs(collection(db, 'systemusers'), where('uid', '==', item.merchantId))
+                    setMerchant(merchantData)
             } catch (e) {
                 console.log('error getting item dets : ', e)
             }
         }
-        const fetchMerchant = async () => {
-            try {
-                const merchantData = await getDocs(collection(db, 'systemusers'), where('uid', '==', merchantId))
-                setMerchant(merchantData)
-            }
-            catch (e) {
-                console.log('error getting m dets : ', e)
-            }
-        }
         fetchItem()
         console.log(item)
-        fetchMerchant()
     }, [itemId])
 
     const handleOrderNow = async () => {
@@ -65,7 +57,7 @@ export default function Details({ setSignin, setSignup, itemType, itemId, mercha
         return (
             <>
                 <Box>
-                    <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }} gutterBottom><i className="fa-solid fa-user"></i> Name : {merchant && merchant.firstName + ' ' + merchant.lastName}</Typography>
+                    <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }} gutterBottom><i className="fa-solid fa-user"></i> Name : {merchant && merchant.displayName}</Typography>
                     <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }} gutterBottom><i className="fa-solid fa-location-dot"></i> Location : {item.location}</Typography>
                     <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }} gutterBottom><i className="fa-solid fa-phone"></i> Contact No : {merchant && merchant.phoneNumber}</Typography>
                 </Box>

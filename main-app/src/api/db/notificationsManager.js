@@ -1,26 +1,44 @@
-import { collection, getDocs, query, addDoc, doc, deleteDoc, updateDoc, orderBy } from "firebase/firestore";
+import { collection, query, addDoc, doc, deleteDoc, updateDoc, orderBy, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase";
 
 export default class NotificationsManager {
   constructor(user) {
     this.user = user; // Store user object
     this.notifications = []; // In-memory notification store
+    this.unsubscribe = null; // For real-time listener
   }
 
-  // Sync notifications from Firestore
-  async syncNotifications() {
+  // Sync notifications with real-time updates and pass them to a callback
+  syncNotifications(callback) {
     const q = query(collection(db, 'systemusers', this.user.uid, 'notifications'), orderBy('timestamp', 'desc'));
+
+    // Clear existing listener before adding a new one (if needed)
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
+
     try {
-      const qSnapshot = await getDocs(q);
-      const nData = qSnapshot.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id
-      }));
-      this.notifications = nData;
-      return this.notifications;
+      this.unsubscribe = onSnapshot(q, (qSnapshot) => {
+        const nData = qSnapshot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id
+        }));
+        this.notifications = nData;
+        console.log("Synced notifications: ", this.notifications);
+
+        // Pass the notifications array to the provided callback
+        callback(this.notifications);
+      });
     } catch (e) {
-      console.log('Error retrieving notifications: ', e);
-      return [];
+      console.log('Error syncing notifications: ', e);
+      callback([]); // Send empty array on error
+    }
+  }
+
+  // Unsubscribe from notifications when no longer needed
+  unsubscribeNotifications() {
+    if (this.unsubscribe) {
+      this.unsubscribe(); // Unsubscribe from Firestore listener
     }
   }
 
@@ -55,7 +73,11 @@ export default class NotificationsManager {
   //user notifications
   async welcomeNotification(user) {
     const welcome = {
-      topic: `Welcome to Yarlprops ${user.displayName}`
+      topic: `Welcome to Yarlprops ${user.displayName}`,
+
+      userNoticeLevel: 'welcome',
+      isItem: false,
+      createdAt: new Date().toISOString()
     }
     try {
       const docRef = await addDoc(collection(db, 'systemusers', user.uid, 'notifications'), welcome)
