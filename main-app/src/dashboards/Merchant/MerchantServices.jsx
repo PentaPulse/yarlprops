@@ -10,7 +10,7 @@ import { db, storage } from '../../api/firebase';
 import { arrayRemove, collection, deleteDoc, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { useAuth } from '../../api/AuthContext';
 import { serviceFilters } from '../../components/menuLists';
-import NotificationsManager from '../../api/db/notificationsManager';
+import { itemNotification } from '../../api/db/notificationsManager';
 
 export default function MerchantServices() {
   const [showAddService, setShowAddService] = React.useState(false);
@@ -88,13 +88,8 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
   const [existingImages, setExistingImages] = React.useState([]);
   const [newImages, setNewImages] = React.useState([]);
   const [validationMessage, setValidationMessage] = React.useState('');
-  const [notificationManager,setNotificationManager]=React.useState(null)
 
   React.useEffect(() => {
-    if(user){
-      const manager = new NotificationsManager(user)
-      setNotificationManager(manager)
-    }
     if (sid) {
       const fetchServiceData = async () => {
         const fetchedService = await fetchSelectedService(sid);
@@ -167,20 +162,10 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
 
       if (sid) {
         await updateService(sid, { ...service, images: allImageUrls });
-        if(notificationManager){
-          await notificationManager.addNotification(
-            `ServiceId ${sid} updated by ${user.uid}`,
-            '/d/products'
-          )
-        }
+        await itemNotification(user,service,'service','update')
       } else {
         await addService({ ...service, images: allImageUrls });
-        if(notificationManager){
-          await notificationManager.addNotification(
-            `Service ${service.title} added by ${user.uid}`,
-            '/d/products'
-          )
-        }
+        await itemNotification(user,service,'service','add')
       }
 
       Swal.fire({

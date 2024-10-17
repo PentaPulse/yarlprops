@@ -1,24 +1,14 @@
 import React, { useState } from 'react';
-import { Container, Typography, Grid, Card, CardContent, TextField, Button, Box, useTheme } from '@mui/material';
+import { 
+    Container, Typography, Grid, Card, CardContent, TextField, 
+    Button, Box, useTheme, MenuItem, Select, InputLabel, FormControl 
+} from '@mui/material';
 import FeedbackIcon from '@mui/icons-material/Feedback';
 
-// Example feedback data (replace with actual data)
-const feedbacks = [
-    {
-        id: 1,
-        title: 'Great Service!',
-        content: 'I loved the bicycle rental service. It was quick and convenient!',
-        date: '2024-09-01',
-    },
-    {
-        id: 2,
-        title: 'Good Quality Furniture',
-        content: 'The furniture rental was excellent, and delivery was fast.',
-        date: '2024-08-25',
-    },
-];
-
 export default function FeedbackPage() {
+    // Start with an empty feedback list
+    const [feedbacks, setFeedbacks] = useState([]);
+
     const [feedback, setFeedback] = useState({
         title: '',
         content: '',
@@ -26,7 +16,7 @@ export default function FeedbackPage() {
 
     const theme = useTheme(); // Access theme to handle dark/light mode
 
-    // Handle form input changes
+    // Handle input changes
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFeedback((prevFeedback) => ({
@@ -35,17 +25,27 @@ export default function FeedbackPage() {
         }));
     };
 
-    // Handle form submission (replace with actual submission logic)
+    // Handle form submission and update feedback list
     const handleSubmit = () => {
-        console.log('Feedback submitted:', feedback);
-        setFeedback({ title: '', content: '' });
+        const newFeedback = {
+            id: feedbacks.length + 1, // Generate a unique ID
+            title: feedback.title,
+            content: feedback.content,
+            date: new Date().toISOString().split('T')[0], // Use current date
+        };
+
+        setFeedbacks((prevFeedbacks) => [newFeedback, ...prevFeedbacks]); // Add new feedback
+        setFeedback({ title: '', content: '' }); // Reset form fields
     };
+
+    // Check if both fields are filled to enable the submit button
+    const isFormValid = feedback.title && feedback.content;
 
     return (
         <Container>
             {/* Page Title */}
             <Typography variant="h4" gutterBottom>
-                Feedback
+                Customer Feedback
             </Typography>
 
             {/* Feedback Form */}
@@ -53,65 +53,93 @@ export default function FeedbackPage() {
                 <Typography variant="h6" gutterBottom>
                     Submit Your Feedback
                 </Typography>
+
+                {/* Dropdown for Feedback Title */}
+                <FormControl fullWidth sx={{ mb: 2 }} required>
+                    <InputLabel>Feedback Type</InputLabel>
+                    <Select
+                        name="title"
+                        value={feedback.title}
+                        onChange={handleInputChange}
+                        label="Feedback Type"
+                    >
+                        <MenuItem value="Service Feedback">Service Feedback</MenuItem>
+                        <MenuItem value="Product Feedback">Product Feedback</MenuItem>
+                        <MenuItem value="Rental Feedback">Rental Feedback</MenuItem>
+                    </Select>
+                </FormControl>
+
+                {/* Content Field */}
                 <TextField
+                    required
                     fullWidth
-                    label="Title"
-                    name="title"
-                    value={feedback.title}
-                    onChange={handleInputChange}
-                    sx={{ mb: 2 }}
-                    InputLabelProps={{ style: { color: theme.palette.text.primary } }} // Adjust label color
-                />
-                <TextField
-                    fullWidth
-                    label="Content"
+                    label="Feedback Content"
                     name="content"
                     value={feedback.content}
                     onChange={handleInputChange}
                     multiline
                     rows={4}
                     sx={{ mb: 2 }}
-                    InputLabelProps={{ style: { color: theme.palette.text.primary } }} // Adjust label color
+                    InputLabelProps={{ style: { color: theme.palette.text.primary } }}
                 />
+
                 <Button
                     variant="contained"
                     color="primary"
                     onClick={handleSubmit}
+                    disabled={!isFormValid} // Disable button if form is not valid
                     sx={{ display: 'block', margin: '0 auto' }}
                 >
                     Submit Feedback
                 </Button>
             </Box>
 
-            {/* Previous Feedbacks */}
-            <Grid container spacing={4}>
-                {feedbacks.map((fb) => (
-                    <Grid item xs={12} sm={6} key={fb.id}>
-                        <Card sx={{ 
-                            maxWidth: 345, 
-                            backgroundColor: theme.palette.mode === 'dark' ? '#424242' : '#e3f2fd', // Darker background for dark mode
-                            color: theme.palette.mode === 'dark' ? '#fff' : '#000', // Adjust text color based on mode
-                        }}>
-                            <CardContent>
-                                <Box display="flex" alignItems="center" mb={2}>
-                                    <FeedbackIcon sx={{ 
-                                        color: theme.palette.mode === 'dark' ? '#bbdefb' : '#1976d2', 
-                                        fontSize: 40, 
-                                        marginRight: 2 
-                                    }} />
-                                    <Box>
-                                        <Typography variant="h6">{fb.title}</Typography>
-                                        <Typography variant="body2" sx={{ color: theme.palette.text.secondary }}>
-                                            {fb.date}
-                                        </Typography>
+            {/* Feedback Cards */}
+            {feedbacks.length > 0 ? (
+                <Grid container spacing={4}>
+                    {feedbacks.map((fb) => (
+                        <Grid item xs={12} sm={6} key={fb.id}>
+                            <Card
+                                sx={{
+                                    maxWidth: 345,
+                                    backgroundColor: theme.palette.mode === 'dark' 
+                                        ? '#424242' 
+                                        : '#e3f2fd',
+                                    color: theme.palette.mode === 'dark' ? '#fff' : '#000',
+                                }}
+                            >
+                                <CardContent>
+                                    <Box display="flex" alignItems="center" mb={2}>
+                                        <FeedbackIcon
+                                            sx={{
+                                                color: theme.palette.mode === 'dark' 
+                                                    ? '#bbdefb' 
+                                                    : '#1976d2',
+                                                fontSize: 40,
+                                                marginRight: 2,
+                                            }}
+                                        />
+                                        <Box>
+                                            <Typography variant="h6">{fb.title}</Typography>
+                                            <Typography
+                                                variant="body2"
+                                                sx={{ color: theme.palette.text.secondary }}
+                                            >
+                                                {fb.date}
+                                            </Typography>
+                                        </Box>
                                     </Box>
-                                </Box>
-                                <Typography variant="body1">{fb.content}</Typography>
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                ))}
-            </Grid>
+                                    <Typography variant="body1">{fb.content}</Typography>
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                    ))}
+                </Grid>
+            ) : (
+                <Typography variant="body1" sx={{ textAlign: 'center', mt: 4 }}>
+                    No feedback available. Be the first to submit your feedback!
+                </Typography>
+            )}
         </Container>
     );
 }

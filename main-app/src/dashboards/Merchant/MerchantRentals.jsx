@@ -10,7 +10,7 @@ import { useAuth } from '../../api/AuthContext';
 import { arrayRemove, collection, deleteDoc, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { addRental, fetchSelectedRental, updateRental } from '../../api/db/rentals';
 import { rentalFilters } from '../../components/menuLists';
-import NotificationsManager from '../../api/db/notificationsManager';
+import { itemNotification } from '../../api/db/notificationsManager';
 
 export default function MerchantRentals() {
   const [showAddRental, setShowAddRental] = React.useState(false);
@@ -92,13 +92,8 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
   const [existingImages, setExistingImages] = React.useState([]);
   const [newImages, setNewImages] = React.useState([]);
   const [validationMessage, setValidationMessage] = React.useState('');
-  const [notificationManager,setNotificationManager]=React.useState(null)
 
   React.useEffect(() => {
-    if(user){
-      const manager=new NotificationsManager(user)
-      setNotificationManager(manager)
-    }
     if (rid) {//rid = rentalId
       const fetchRental = async () => {
         const fetchedRental = await fetchSelectedRental(rid);
@@ -182,22 +177,12 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
       // Add or update rental with the combined image URLs
       if (rid) {
         await updateRental(rid, { ...rental, images: allImageUrls ,visibility:false});
-        // if(notificationManager){
-        //   await notificationManager.addNotification(
-        //     `RentalId ${rid} updated by ${user.uid}`,
-        //     '/d/products'
-        //   )
-        // }
+        await itemNotification(user,rental,'rental','update')
       } else {
         console.log("Stage 2", rental)
 
         await addRental({ ...rental, images: allImageUrls,visibility:false});      }
-        // if(notificationManager){
-        //   await notificationManager.addNotification(
-        //     `Rental ${rental.title} added by ${user.uid}`,
-        //     '/d/products'
-        //   )
-        // }
+        await itemNotification(user,rental,'rental','add')
 
       Swal.fire({
         icon: 'success',
