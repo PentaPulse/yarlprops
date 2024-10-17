@@ -203,12 +203,14 @@ export function RentalsPage({ setSignin, setSignup }) {
                     <Grid container spacing={2} sx={{ mt: 2, alignItems: 'center', justifyContent: 'center' }}>
                         <Grid item xs={1} sm={1} md={1} lg={1} sx={{ display: 'flex', justifyContent: 'center' }}>
                             <IconButton
-                                onClick={handlePrevious}>
+                                onClick={handlePrevious}
+                                sx={{ fontSize: { xs: '1.5rem', sm: '2rem' }}}
+                            >
                                 <ArrowBackIosIcon />
                             </IconButton>
                         </Grid>
 
-                        {rental.images.map((image, index) => (
+                        {rental.images.slice(startIndex, startIndex + visibleImagesCount).map((image, index) => (
                             <Grid item xs={3} key={index}>
                                 <CardMedia
                                     component="img"
@@ -222,18 +224,21 @@ export function RentalsPage({ setSignin, setSignup }) {
                                         boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
                                         cursor: 'pointer',
                                         transition: 'transform 0.3s',
-                                        border: selectedImageIndex === index ? '3px solid blue' : 'none', // Highlight the selected image
+                                        border: selectedImageIndex === index + startIndex ? '3px solid blue' : 'none', // Highlight the selected image
                                         '&:hover': {
                                             transform: 'scale(1.1)',
                                         },
                                     }}
-                                    onClick={() => setSelectedImageIndex(index)}  // Update the main image on click
+                                    onClick={() => setSelectedImageIndex(index + startIndex)}  // Update the main image on click
                                 />
                             </Grid>
                         ))}
 
                         <Grid item xs={1} sm={1} md={1} lg={1} sx={{ display: 'flex', justifyContent: 'center' }}>
-                            <IconButton onClick={handleNext}>
+                            <IconButton 
+                                onClick={handleNext}
+                                sx={{ fontSize: { xs: '1.5rem', sm: '2rem' }}}
+                            >
                                 <ArrowForwardIosIcon />
                             </IconButton>
                         </Grid>
