@@ -82,7 +82,7 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
     description: [''],
     location: '',
     images: [],
-    visibitlty:'not'
+    visibitlty: false
   });
 
   const [existingImages, setExistingImages] = React.useState([]);
@@ -92,7 +92,7 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
 
   React.useEffect(() => {
     if(user){
-      const manager=new NotificationsManager(user)
+      const manager = new NotificationsManager(user)
       setNotificationManager(manager)
     }
     if (sid) {
@@ -198,7 +198,7 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
         description: [''],
         location: '',
         images: [],
-        visibility:'not'
+        visibility: false
       });
 
       setExistingImages([]);
@@ -207,7 +207,7 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
     } catch (e) {
       Swal.fire({
         icon: 'error',
-        title: 'Error saving service!',
+        title: 'Error saving service',
         text: e.message,
       });
     }
