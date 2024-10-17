@@ -4,6 +4,9 @@ import InventoryIcon from '@mui/icons-material/Inventory';
 import StoreIcon from '@mui/icons-material/Store';
 import MiscellaneousServicesIcon from '@mui/icons-material/MiscellaneousServices';
 import CarRentalIcon from '@mui/icons-material/CarRental';
+import FeedbackIcon from '@mui/icons-material/Feedback';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+
 
 export const merchMenu = [
     ['Overview', <DashboardIcon />, 'overview'],
@@ -14,8 +17,8 @@ export const merchMenu = [
 ]
 export const userMenu = [
     ['Overview', <DashboardIcon />, 'overview'],
-    ['My Orders',<StoreIcon/>,'orders'],
-    ['Feedbacks',<StoreIcon/>,'feedback'],
+    ['My Orders',< ShoppingCartIcon/>,'orders'],
+    ['Feedbacks',<FeedbackIcon/>,'feedback'],
    
 ]
 
