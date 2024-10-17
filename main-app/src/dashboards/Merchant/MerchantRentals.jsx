@@ -84,9 +84,9 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
     description: [''],
     quantity: '',
     location: '',
-    status: 'For rent',
+    status: 'For Rent',
     images: [],
-    visibility: 'not'
+    visibility: false,
   });
 
   const [existingImages, setExistingImages] = React.useState([]);
@@ -161,7 +161,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
       return;
     }
 
-    if (rental.quantity <= 0) {
+    if (rental.quantity < 1) {
       setValidationMessage('Quantity must be greater than 1 or equal to 1.');
       return;
     }
@@ -182,22 +182,22 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
       // Add or update rental with the combined image URLs
       if (rid) {
         await updateRental(rid, { ...rental, images: allImageUrls ,visibility:false});
-        if(notificationManager){
-          await notificationManager.addNotification(
-            `RentalId ${rid} updated by ${user.uid}`,
-            '/d/products'
-          )
-        }
+        // if(notificationManager){
+        //   await notificationManager.addNotification(
+        //     `RentalId ${rid} updated by ${user.uid}`,
+        //     '/d/products'
+        //   )
+        // }
       } else {
         console.log("Stage 2", rental)
 
         await addRental({ ...rental, images: allImageUrls,visibility:false});      }
-        if(notificationManager){
-          await notificationManager.addNotification(
-            `Rental ${rental.title} added by ${user.uid}`,
-            '/d/products'
-          )
-        }
+        // if(notificationManager){
+        //   await notificationManager.addNotification(
+        //     `Rental ${rental.title} added by ${user.uid}`,
+        //     '/d/products'
+        //   )
+        // }
 
       Swal.fire({
         icon: 'success',
@@ -215,8 +215,8 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
         quantity: '',
         location: '',
         status: '',
-        visibility: 'not',
-        images: []
+        images: [],
+        visibility: false,
       });
       setExistingImages([]);
       setNewImages([]);
@@ -326,7 +326,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
           fullWidth
           margin="normal"
           required
-          inputProps={{ min: 0 }}
+          inputProps={{ min: 1 }}
         />
         <TextField
           label="Location"
@@ -350,7 +350,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
           >
             <FormControlLabel
               value="For Rent"
-              control={<Radio checked />}
+              control={<Radio />}
               label="For Rent" />
             <FormControlLabel
               value="Sold Out"
@@ -512,10 +512,11 @@ const RentalList = ({ onEditrental, onViewrental }) => {
             <StyledTableCell align="center">Title</StyledTableCell>
             <StyledTableCell align="center">Category</StyledTableCell>
             <StyledTableCell align="center">Sub category</StyledTableCell>
-            <StyledTableCell align="center">Description</StyledTableCell>
+            {/* <StyledTableCell align="center">Description</StyledTableCell>
             <StyledTableCell align="center">Quantity</StyledTableCell>
-            <StyledTableCell align="center">Location</StyledTableCell>
+            <StyledTableCell align="center">Location</StyledTableCell> */}
             <StyledTableCell align="center">Current Status</StyledTableCell>
+            <StyledTableCell align="center">Visibility On Site</StyledTableCell>
             <StyledTableCell align="center">Actions</StyledTableCell>
           </TableRow>
         </TableHead>
@@ -527,10 +528,12 @@ const RentalList = ({ onEditrental, onViewrental }) => {
                 <StyledTableCell align="center">{rental.title}</StyledTableCell>
                 <StyledTableCell align="center">{rental.category}</StyledTableCell>
                 <StyledTableCell align="center">{rental.subCategory}</StyledTableCell>
-                <StyledTableCell align="justify">{rental.description}</StyledTableCell>
+                {/* <StyledTableCell align="justify">{rental.description}</StyledTableCell>
                 <StyledTableCell align="center">{rental.quantity}</StyledTableCell>
-                <StyledTableCell align="center">{rental.location}</StyledTableCell>
+                <StyledTableCell align="center">{rental.location}</StyledTableCell> */}
                 <StyledTableCell align="center">{rental.status}</StyledTableCell>
+                <StyledTableCell align="center">{(rental.visibility === false) ? 'No':'Yes'}</StyledTableCell>
+
 
                 <StyledTableCell align="center">
                   <Button onClick={() => onViewrental(rental.rid)} variant="outlined" color="secondary" style={{ margin: '5px', width: '100%' }}>View</Button>
@@ -594,14 +597,21 @@ const RentalDetail = ({ rid, onBack }) => {
       <Typography variant="h4">{rental.title}</Typography>
       <Typography variant="subtitle1">Category: {rental.category}</Typography>
       <Typography variant="subtitle1">Sub category: {rental.subCategory}</Typography>
-      <Typography variant="body1">Description: {rental.description}</Typography>
+      <Typography variant="body1">Description:</Typography>
+      <ul>
+      {rental.description.map((item, index) => (
+        // <Typography key={index} variant="body1">{item}</Typography>
+        <li key={index}><Typography variant='body1'>{item}</Typography></li>
+      ))}
+      </ul>
       <Typography variant="body1">Quantity: {rental.quantity}</Typography>
       <Typography variant="body1">Location: {rental.location}</Typography>
       <Typography variant="body1">Status: {rental.status}</Typography>
-      <Grid container spacing={2} style={{ marginTop: 16 }}>
+      <Typography variant="body1">Visibility: {(rental.visibility === false) ? 'No':'Yes'}</Typography>
+      <Grid container spacing={2} style={{ marginTop: 10, marginBottom: 10 }}>
         {rental.images && rental.images.map((src, index) => (
           <Grid item key={index}>
-            <Image src={src} alt={`rental ${index}`} />
+            <Image src={src} alt={`rental ${index}`} style={{ width: '185px', height: '175px', objectFit: 'cover', borderRadius: '10px'}}/>
           </Grid>
         ))}
       </Grid>

@@ -371,7 +371,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
           >
             <FormControlLabel
               value="For Sale"
-              control={<Radio checked />}
+              control={<Radio />}
               label="For Sale"
             />
             <FormControlLabel
@@ -540,10 +540,11 @@ const ProductList = ({ onEditProduct, onViewProduct }) => {
             <StyledTableCell align="center">Title</StyledTableCell>
             <StyledTableCell align="center">Category</StyledTableCell>
             <StyledTableCell align="center">Sub category</StyledTableCell>
-            <StyledTableCell align="center">Description</StyledTableCell>
+            {/* <StyledTableCell align="center">Description</StyledTableCell>
             <StyledTableCell align="center">Quantity</StyledTableCell>
-            <StyledTableCell align="center">Location</StyledTableCell>
+            <StyledTableCell align="center">Location</StyledTableCell> */}
             <StyledTableCell align="center">Current Status</StyledTableCell>
+            <StyledTableCell align="center">Visibility On Site</StyledTableCell>
             <StyledTableCell align="center">Actions</StyledTableCell>
           </TableRow>
         </TableHead>
@@ -555,10 +556,11 @@ const ProductList = ({ onEditProduct, onViewProduct }) => {
                 <StyledTableCell align="center">{product.title}</StyledTableCell>
                 <StyledTableCell align="center">{product.category}</StyledTableCell>
                 <StyledTableCell align="center">{product.subCategory}</StyledTableCell>
-                <StyledTableCell align="justify">{product.description}</StyledTableCell>
+                {/* <StyledTableCell align="justify">{product.description}</StyledTableCell>
                 <StyledTableCell align="center">{product.quantity}</StyledTableCell>
-                <StyledTableCell align="center">{product.location}</StyledTableCell>
+                <StyledTableCell align="center">{product.location}</StyledTableCell> */}
                 <StyledTableCell align="center">{product.status}</StyledTableCell>
+                <StyledTableCell align="center">{(product.visibility === false) ? 'No':'Yes'}</StyledTableCell>
 
                 <StyledTableCell align="center">
                   <Button onClick={() => onViewProduct(product.pid)} variant="outlined" color="secondary" style={{ margin: '5px', width: '100%' }}>View</Button>
@@ -622,14 +624,20 @@ const ProductDetail = ({ pid, onBack }) => {
       <Typography variant="h4">{product.title}</Typography>
       <Typography variant="subtitle1">Category: {product.category}</Typography>
       <Typography variant="subtitle1">Sub category: {product.subCategory}</Typography>
-      <Typography variant="body1">Description: {product.description}</Typography>
+      <Typography variant="body1">Description:</Typography>
+      <ul>
+        {product.description.map((item, index) => (
+        <li key={index}><Typography variant='body1'>{item}</Typography></li>
+      ))}
+      </ul>
       <Typography variant="body1">Quantity: {product.quantity}</Typography>
       <Typography variant="body1">Location: {product.location}</Typography>
       <Typography variant="body1">Status: {product.status}</Typography>
-      <Grid container spacing={2} style={{ marginTop: 16 }}>
+      <Typography variant="body1">Visibility: {(product.visibility === false) ? 'No':'Yes'}</Typography>
+      <Grid container spacing={2} style={{ marginTop: 10, marginBottom: 10 }}>
         {product.images && product.images.map((src, index) => (
           <Grid item key={index}>
-            <Image src={src} alt={`Product ${index}`} />
+            <Image src={src} alt={`Product ${index}`} style={{ width: '185px', height: '175px', objectFit: 'cover', borderRadius: '10px' }}/>
           </Grid>
         ))}
       </Grid>
