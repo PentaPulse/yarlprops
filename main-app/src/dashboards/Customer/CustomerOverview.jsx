@@ -7,11 +7,32 @@ import FeedbackIcon from '@mui/icons-material/Feedback';
 import { fetchProductOrders } from "../../api/db/products"; 
 import { fetchRentalOrders } from "../../api/db/rentals";
 import { fetchServiceOrders } from "../../api/db/services";
+import { collection } from 'firebase/firestore';
+import { db } from '../../api/firebase';
+import { fetchCount } from '../../api/db/orders';
+
+
 
 
 
 export default function CustomerOverview() {
     const { user } = useAuth();
+    const [completedCount, setCompletedCount] = useState(0);
+  const [pendingCount, setPendingCount] = useState(0);
+  const [feedbackCount, setFeedBackCount] = useState(0);
+
+  useEffect(() => {
+    const fetchOrdersCount = async () => {
+      try {
+        setCompletedCount(await fetchCount(user.uid, "orderstatus", "==", "completed"));
+        setPendingCount(await fetchCount(user.uid, "orderstatus", "==", "pending"));
+        setFeedBackCount(await fetchCount(user.uid, "orderstatus", "==", "true"));
+      } catch (error) {
+        console.error("Error fetching order counts:", error);
+      }
+    };
+    fetchOrdersCount();
+  }, [user.uid]);
 
     return (
         <Container>
@@ -27,8 +48,8 @@ export default function CustomerOverview() {
                 <Grid item xs={12} sm={6} md={3}>
                     <Paper elevation={3} sx={{ padding: 2, textAlign: 'center' }}>
                         <ShoppingCartIcon fontSize="large" />
-                        <Typography variant="h6">Complete orders</Typography>
-                        <Typography variant="h5">5</Typography> {/* Replace with dynamic value */}
+                        <Typography variant="h6">Completed orders</Typography>
+                        <Typography variant="h5">{completedCount}</Typography> {/* Replace with dynamic value */}
                     </Paper>
                 </Grid>
 
@@ -37,7 +58,7 @@ export default function CustomerOverview() {
                     <Paper elevation={3} sx={{ padding: 2, textAlign: 'center' }}>
                         <AssignmentIcon fontSize="large" />
                         <Typography variant="h6">Pending Orders</Typography>
-                        <Typography variant="h5">2</Typography> {/* Replace with dynamic value */}
+                        <Typography variant="h5">{pendingCount}</Typography> {/* Replace with dynamic value */}
                     </Paper>
                 </Grid>
 
@@ -54,8 +75,8 @@ export default function CustomerOverview() {
                 <Grid item xs={12} sm={6} md={3}>
                     <Paper elevation={3} sx={{ padding: 2, textAlign: 'center' }}>
                         <FeedbackIcon fontSize="large" />
-                        <Typography variant="h6">Feedback</Typography>
-                        <Typography variant="h5">1</Typography> {/* Replace with dynamic value */}
+                        <Typography variant="h6">Feedbacks</Typography>
+                        <Typography variant="h5">{feedbackCount}</Typography> {/* Replace with dynamic value */}
                     </Paper>
                 </Grid>
             </Grid>
