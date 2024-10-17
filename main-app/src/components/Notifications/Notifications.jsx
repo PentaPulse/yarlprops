@@ -1,11 +1,13 @@
 import { Badge, IconButton, ListItemText, Menu, MenuItem, useTheme, Box, Typography } from '@mui/material';
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useAuth } from '../../api/AuthContext';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import CloseIcon from '@mui/icons-material/Close';
-import NotificationsManager from '../../api/db/notificationsManager'; // Import your Notifications class
+
+// Import the refactored notification functions
+import { syncNotifications, unsubscribeNotifications, markAsRead } from '../../api/db/notificationsManager';
 
 export default function Notifications() {
     const [anchorEl, setAnchorEl] = useState(null);
@@ -14,28 +16,21 @@ export default function Notifications() {
     const { user } = useAuth();
     const theme = useTheme();
 
-    // Memoize the NotificationsManager to avoid re-instantiating it on every render
-    const manager = useMemo(() => new NotificationsManager(user), [user]);
-
     useEffect(() => {
-        let isMounted = true;
 
-        const fetchNotifications = () => {
+        const fetchNotifications = async() => {
             // Sync notifications and set state on snapshot update
-            manager.syncNotifications((syncedNotifications) => {
-                if (isMounted) {
-                    setNotifications(syncedNotifications);
-                }
-            });
+            try{
+            setNotifications(await syncNotifications(user))
+
+            console.log(notifications)
+            }catch(e){
+                console.log(e)
+            }
         };
 
         fetchNotifications();
-        
-        return () => {
-            isMounted = false; // Cleanup flag to prevent state updates on unmounted component
-            manager.unsubscribeNotifications(); // Unsubscribe from Firestore listener when component unmounts
-        };
-    }, [manager]);
+    }, [user]);
 
     const handleOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -87,7 +82,7 @@ export default function Notifications() {
                                 }}
                             >
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                                    <IconButton onClick={() => manager.markAsRead(notification.id)}>
+                                    <IconButton onClick={() => markAsRead(user, notification.id)}>
                                         <DoneAllIcon sx={{ color: 'green' }} />
                                         <Typography>Mark as read</Typography>
                                     </IconButton>

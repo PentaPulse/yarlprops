@@ -10,8 +10,8 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useAuth } from '../../api/AuthContext';
 import { arrayRemove, collection, deleteDoc, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { productFilters } from '../../components/menuLists';
-import NotificationsManager from '../../api/db/notificationsManager';
 import { addItemByMerchant } from '../../api/db/logsManager';
+import { itemNotification } from '../../api/db/notificationsManager';
 
 export default function MerchantProducts() {
   const [showAddProduct, setShowAddProduct] = useState(false);
@@ -94,14 +94,8 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
   const [existingImages, setExistingImages] = React.useState([]);
   const [newImages, setNewImages] = React.useState([]);
   const [validationMessage, setValidationMessage] = React.useState('');
-  const [notificationManager, setNotificationManager] = React.useState(null)
 
   React.useEffect(() => {
-    console.log(pid)
-    if (user) {
-      const manager = new NotificationsManager(user)
-      setNotificationManager(manager)
-    }
     if (pid) {
       const fetchProduct = async () => {
         const fetchedProduct = await fetchSelectedProduct(pid);
@@ -207,7 +201,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
       if (pid) {
         console.log(product)
         await updateProduct(pid, { ...product, images: allImageUrls, visibility: false });
-        await notificationManager.itemNotification(product, 'product', 'update')
+        await itemNotification(user,product,'product','update')
         Swal.fire({
           icon: 'success',
           title: 'Product updated successfully',
@@ -217,7 +211,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
       } else {
         await addProduct({ ...product, images: allImageUrls, visibility: false });
         await addItemByMerchant(user, product, 'product')
-        await notificationManager.itemNotification(product, 'product', 'add')
+        await itemNotification(user,product,'product','add')
         Swal.fire({
           icon: 'success',
           title: 'Product saved , request sent to the admin panel for approval',
