@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { GoogleAuthProvider, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth';
+import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth';
 import { db, auth } from './firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { registerUser } from './db/users';
 import { useNavigate } from 'react-router-dom';
 import { useAlerts } from './AlertService';
 import { signinLog, signoutLog } from './db/logsManager';
+import { welcomeNotification } from './db/notificationsManager';
 
 const AuthContext = React.createContext();
 
@@ -49,6 +50,41 @@ export const AuthProvider = ({ children }) => {
             console.log("user not existed")
             return false
         }
+    }
+
+    //register
+    const register = async (email, password, firstName, lastName, displayName) => {
+        await createUserWithEmailAndPassword(auth, email, password)
+            .then((result) => {
+                const user = result.user;
+                updateProfile(user, { displayName: displayName })
+                    .then(() => {
+                        registerUser(user.uid, firstName, lastName, displayName, email).then((result) => {
+                            if (result.success) {
+                                sessionStorage.setItem('pp', user.photoURL);
+                                sessionStorage.setItem('displayName', user.displayName);
+                            }
+                        })
+                    })
+                welcomeNotification(user)
+                showAlerts('Account created , wait a little ', 'success', 'top-center')
+            })
+            .catch((error) => {
+                //showAlerts('ww' + error, 'error')
+                if (email === '' || password === '' || firstName === '' || lastName === '') {
+                    if (error.code === 'auth/invalid-email' || error.code === 'auth/missing-password') {
+                        showAlerts('Enter details', 'warning')
+                    }
+                } else if (error.code === 'auth/invalid-email') {
+                    showAlerts('Try different email', 'warning')
+                }
+                if (error.code === 'auth/email-already-in-use') {
+                    showAlerts('Try different email', 'warning')
+                }
+                if (error.code === 'auth/weak-password') {
+                    showAlerts('Try different password', 'warning')
+                }
+            });
     }
 
     //login    
@@ -161,7 +197,7 @@ export const AuthProvider = ({ children }) => {
         }
     */
     return (
-        <AuthContext.Provider value={{ user, login, logout, reset, google, home }}>
+        <AuthContext.Provider value={{ user, register, login, logout, reset, google, home }}>
             {loading ? '' : children}
         </AuthContext.Provider>
     );
