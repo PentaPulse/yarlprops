@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth';
+import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth';
 import { db, auth } from './firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { registerUser } from './db/users';
@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAlerts } from './AlertService';
 import { signinLog, signoutLog } from './db/logsManager';
 import { welcomeNotification } from './db/notificationsManager';
+import { Button } from '@mui/material';
 
 const AuthContext = React.createContext();
 
@@ -68,6 +69,7 @@ export const AuthProvider = ({ children }) => {
                     })
                 welcomeNotification(user)
                 showAlerts('Account created , wait a little ', 'success', 'top-center')
+                signinLog(user.uid, { method: 'signup' })
             })
             .catch((error) => {
                 //showAlerts('ww' + error, 'error')
@@ -163,41 +165,26 @@ export const AuthProvider = ({ children }) => {
         navigate('/')
     }
 
-    /*
-        React.useEffect(() => {
-            const unsubscribe = onAuthStateChanged(auth, (user) => {
-                if (user && !user.emailVerified) {
-                    showAlerts(
-                        <>
-                            Verify your email <VerifyEmail />
-                        </>,
-                        'error',
-                        'top-center'
-                    );
-                }
-            });
-            return () => unsubscribe();
-        });
-    
-        const VerifyEmail = () => {
-            const verify = () => {
-                sendEmailVerification(auth.currentUser)
-                    .then(() => {
-                        showAlerts('Check your email inbox');
-                    })
-                    .catch((e) => {
-                        console.log(e)
-                    })
-            }
-            return (
-                <>
-                    <Button onClick={verify}>Verify now!</Button>
-                </>
-            )
+
+    const VerifyEmail = () => {
+        const verify = () => {
+            sendEmailVerification(auth.currentUser)
+                .then(() => {
+                    showAlerts('Check your email inbox');
+                })
+                .catch((e) => {
+                    console.log(e)
+                })
         }
-    */
+        return (
+            <>
+                <Button onClick={verify}>Verify now!</Button>
+            </>
+        )
+    }
+
     return (
-        <AuthContext.Provider value={{ user, register, login, logout, reset, google, home }}>
+        <AuthContext.Provider value={{ user, register, login, logout, reset, google, home ,VerifyEmail}}>
             {loading ? '' : children}
         </AuthContext.Provider>
     );
