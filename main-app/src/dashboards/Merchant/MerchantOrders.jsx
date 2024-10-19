@@ -18,9 +18,12 @@ import {
   TableRow,
   Tooltip,
   Typography,
+  Button,
+  Dialog, DialogTitle
 } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import PropTypes from 'prop-types';
 
 export default function MerchantOrders() {
   return (
@@ -248,7 +251,7 @@ function ServiceOrders() {
             {services
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((service) => (
-                <Row key={service.sid} row={service} />
+                <Row row={service} itemType='service' />
               ))}
           </TableBody>
         </Table>
@@ -267,8 +270,25 @@ function ServiceOrders() {
 }
 
 function Row(props) {
-  const { row } = props;
+  const { row, itemType } = props;
   const [open, setOpen] = React.useState(false);
+  const { user } = useAuth()
+  const [orders, setOrders] = React.useState([])
+
+  React.useEffect(() => {
+    const fetchCustomerOrders = async () => {
+      try {
+        const qSnapshot = await getDocs(collection(db, "systemusers", user.uid, "customerorders"), where('itemType', '==', itemType))
+        const codata = qSnapshot.docs.map((doc) => doc.data())
+        setOrders(codata)
+      } catch (e) { console.log(e) }
+    }
+    fetchCustomerOrders()
+  }, [])
+
+  const handleApproval = () => {
+
+  }
 
   return (
     <React.Fragment>
@@ -306,18 +326,20 @@ function Row(props) {
                     <TableCell align="right">Quantity</TableCell>
                     <TableCell align="right">Price</TableCell>
                     <TableCell align="right">Status</TableCell>
+                    <TableCell align="right">Action</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row.orders?.map((order, index) => (
+                  {orders?.map((order, index) => (
                     <TableRow key={index}>
                       <TableCell component="th" scope="row">
-                        {order.orderDate}
+                        {order.date}
                       </TableCell>
                       <TableCell>{order.customerName}</TableCell>
-                      <TableCell align="right">{order.quantity}</TableCell>
-                      <TableCell align="right">${order.price}</TableCell>
-                      <TableCell align="right">{order.status}</TableCell>
+                      <TableCell align="center">{order.quantity}</TableCell>
+                      <TableCell align="center">Rs {order.price}</TableCell>
+                      <TableCell align="center">{order.status}</TableCell>
+                      <TableCell align="center"><Button onClick={() => handleApproval()}>Approval</Button></TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -329,3 +351,29 @@ function Row(props) {
     </React.Fragment>
   );
 }
+
+
+function OrderDetails(props) {
+  const { onClose, selectedValue, open } = props;
+
+  const handleClose = () => {
+    onClose(selectedValue);
+  };
+
+  const handleListItemClick = (value) => {
+    onClose(value);
+  };
+
+  return (
+    <Dialog onClose={handleClose} open={open}>
+      <DialogTitle>Set backup account</DialogTitle>
+
+    </Dialog>
+  );
+}
+
+OrderDetails.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  selectedValue: PropTypes.string.isRequired,
+};

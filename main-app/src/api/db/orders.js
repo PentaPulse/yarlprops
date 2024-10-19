@@ -1,4 +1,4 @@
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase";
 
 export const fetchCount = async (userid, fieldkey, equal, fieldvalue) => {
@@ -15,3 +15,20 @@ export const fetchCount = async (userid, fieldkey, equal, fieldvalue) => {
     return 0;
   }
 };
+
+export const addOrder=async(user,itemId,itemTitle,itemType,merchantId,merchantName)=>{
+  try{
+    const order = {
+      itemId,itemTitle,itemType,merchantId,merchantName
+    }
+    const docRef=await addDoc(collection(db,"systemusers",user.uid,"orders"),{...order,id:docRef.id})
+    await addDoc(collection(db,"systemusers",merchantId,"customerorders"),{
+      orderDate:new Date().toISOString(),
+      customerName:user.displayName,
+      //quantity:
+      orderStatus:'pending'
+    })
+  }catch(e){
+    console.log("add order error:-",e)
+  }
+}

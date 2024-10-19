@@ -70,6 +70,7 @@ export const AuthProvider = ({ children }) => {
                     })
                 welcomeNotification(user)
                 showAlerts('Account created , wait a little ', 'success', 'top-center')
+                
             })
             .catch((error) => {
                 //showAlerts('ww' + error, 'error')

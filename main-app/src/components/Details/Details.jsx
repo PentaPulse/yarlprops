@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { addDoc, collection,getDoc, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../../api/firebase';
 import Swal from 'sweetalert2';
+import { addOrder } from '../../api/db/orders';
 
 export default function Details({ setSignin, setSignup, itemType, itemId }) {
     const theme = useTheme()
@@ -32,18 +33,9 @@ export default function Details({ setSignin, setSignup, itemType, itemId }) {
         console.log(item)
     }, [itemId])
 
-    const handleOrderNow = async () => {
-        // Reference to the orders subcollection for the authenticated user
-        const ordersCollectionRef = collection(db, 'systemusers', user.uid, 'orders');
-        
-        try {
-            await addDoc(ordersCollectionRef, {
-                title: item.title,
-                price: item.price,
-                quantity: item.quantity,
-                merchantId: item.merchantId,
-                orderstatus: 'pending'
-            });
+    const handleOrderNow = async () => {        
+        try {            
+            addOrder(user,itemId,item.title,itemType,item.merchantId,merchant.displayName)
             Swal.fire({
                 title: 'Your order request was sent to the merchant',
                 icon: 'success'

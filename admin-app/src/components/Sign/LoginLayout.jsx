@@ -10,6 +10,7 @@ import { registerAdmin } from '../../api/db/users';
 import { Link, useNavigate } from "react-router-dom"
 import MuiCard from '@mui/material/Card';
 import PropTypes from 'prop-types';
+import { useAuth } from '../../api/AuthContext';
 
 export function LoginLayout({ handleMode }) {
     const [signin,setSignin]=useState(true)
@@ -107,7 +108,7 @@ function SignIn({signin,setSignin}) {
         if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
             setEmailError(true);
             setEmailErrorMessage('Please enter a valid email address.');
-            setIsValid(false)
+            isValid = false;
         } else {
             setEmailError(false);
             setEmailErrorMessage('');
@@ -116,7 +117,7 @@ function SignIn({signin,setSignin}) {
         if (!password.value || password.value.length < 6) {
             setPasswordError(true);
             setPasswordErrorMessage('Password must be at least 6 characters long.');
-            setIsValid(false)
+            isValid = false;
         } else {
             setPasswordError(false);
             setPasswordErrorMessage('');
@@ -335,17 +336,19 @@ function SignUp({signin,setSignin}) {
     const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
     const [passwordError, setPasswordError] = React.useState(false);
     const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
-    const [isValid,setIsValid]=React.useState(true)
+    const {register}=useAuth()
 
     const validateInputs = () => {
         const email = document.getElementById('email');
         const password = document.getElementById('password');
         const name = document.getElementById('name');
 
+        let isValid=true;
+
         if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
             setEmailError(true);
             setEmailErrorMessage('Please enter a valid email address.');
-            setIsValid(false)
+            isValid = false;
         } else {
             setEmailError(false);
             setEmailErrorMessage('');
@@ -354,7 +357,7 @@ function SignUp({signin,setSignin}) {
         if (!password.value || password.value.length < 6) {
             setPasswordError(true);
             setPasswordErrorMessage('Password must be at least 6 characters long.');
-            setIsValid(false)
+            isValid = false;
         } else {
             setPasswordError(false);
             setPasswordErrorMessage('');
@@ -363,7 +366,7 @@ function SignUp({signin,setSignin}) {
         if (!name.value || name.value.length < 1) {
             setNameError(true);
             setNameErrorMessage('Name is required.');
-            setIsValid(false)
+            isValid = false;
         } else {
             setNameError(false);
             setNameErrorMessage('');
@@ -378,11 +381,7 @@ function SignUp({signin,setSignin}) {
             return;
         }
         const data = new FormData(event.currentTarget);
-        await createUserWithEmailAndPassword(auth,data.email,data.password)
-        .then((result)=>{
-            const user = result.user;
-            
-        })
+        register('', '', data.name, data.email, data.password)
     };
 
     return (
