@@ -9,11 +9,11 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import { Button, styled, Typography, Container, CircularProgress, TextField, ButtonGroup, Divider } from '@mui/material';
 import { tableCellClasses } from '@mui/material/TableCell';
-import { fetchSelectedRequest } from '../../api/db/contactus';
+import { fetchSelectedRequest } from '../api/db/contactus';
 import Swal from 'sweetalert2';
-import { db } from '../../api/firebase';
+import { db } from '../api/firebase';
 import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
-import { useAuth } from '../../api/AuthContext';
+import { useAuth } from '../api/AuthContext';
 
 export default function ContactusRequests() {
   const [viewingResponseId, setViewingResponseId] = React.useState(null);

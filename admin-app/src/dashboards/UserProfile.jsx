@@ -32,7 +32,7 @@ LinearProgressWithLabel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-const Profile = () => {
+export default function Profile() {
   const { user } = useAuth();
   const [file, setFile] = useState(null)
   const [loading, setLoading] = useState(false);
@@ -278,7 +278,7 @@ const ProfileSettings = ({ setProfilePercentage }) => {
   React.useEffect(() => {
     const calculateCompletionPercentage = (data) => {
       const totalFields = 7; // Adjust based on your number of fields
-      const requiredFields = ["firstName", "lastName", "email","displayName","dateOfBirth","gender","address"];
+      const requiredFields = ["firstName", "lastName", "email", "displayName", "dateOfBirth", "gender", "address"];
       const filledFields = requiredFields.filter((field) => data[field] && data[field].trim() !== null).length;
 
       const percentage = (filledFields / totalFields) * 100;
@@ -429,7 +429,7 @@ const AccountSettings = ({ profilePercentage }) => {
       }
 
       let isM = false;
-      if (user.isMerchant && (user.myProducts.length > 0 || user.myRentals.length > 0 || user.myService.length > 0) ) {
+      if (user.isMerchant && (user.myProducts.length > 0 || user.myRentals.length > 0 || user.myService.length > 0)) {
         showAlerts2('Remove ongoing items and try again', 'warning')
         return 0
       }
@@ -598,8 +598,6 @@ const AccountSettings = ({ profilePercentage }) => {
     </>
   );
 };
-
-export default Profile;
 
 
 function CustomTabPanel(props) {

@@ -3,50 +3,9 @@ import { auth, db } from "../firebase";
 import { doc, setDoc, collection, getDoc, getDocs, where, query } from "firebase/firestore";
 import { updateProfile } from "firebase/auth";
 
-//reference
-const userRef = collection(db, "admin")
-
 //functions
-//register user
-export const registerUser = async (uid, fname, lname, dname, email) => {
-    try {
-        // Ensure all required fields are provided
-        if (!uid || !email) {
-            throw new Error('Missing required user information');
-        }
-
-        const newUserRef = doc(db, "admin", uid);
-        const userSnap = await getDoc(newUserRef);
-
-        if (!userSnap.exists()) {
-            await setDoc(newUserRef, {
-                uid,
-                firstName: fname || '',
-                lastName: lname || '',
-                email:email,
-                phoneNumber: '',
-                gender: '',
-                address: '',
-                isMerchant:false
-            });
-            await updateProfile(auth.currentUser,{displayName:dname})
-            console.log("User registered successfully");
-            return { success: true, message: 'User registered successfully' };
-        } else {
-            console.log("User already exists");
-            return { success: false, message: 'User already exists' };
-        }
-    } catch (e) {
-        const eMsg = e.message;
-        const eCode = e.code || 'unknown_error';
-
-        console.log(`${eCode}: ${eMsg}`);
-        return { success: false, message: `${eCode}: ${eMsg}` };
-    }
-};
-
 //register admin
-export const registerAdmin = async (uid, fname, lname, dname, email) => {
+export const registerAdmin= async (uid, fname, lname, dname, email) => {
     try {
         // Ensure all required fields are provided
         if (!uid || !email) {
@@ -61,13 +20,13 @@ export const registerAdmin = async (uid, fname, lname, dname, email) => {
                 uid,
                 firstName: fname || '',
                 lastName: lname || '',
-                email:email,
+                email: email,
                 phoneNumber: '',
                 gender: '',
                 address: '',
-                approved:false
+                isMerchant: false
             });
-            await updateProfile(auth.currentUser,{displayName:dname})
+            await updateProfile(auth.currentUser, { displayName: dname })
             console.log("User registered successfully");
             return { success: true, message: 'User registered successfully' };
         } else {
@@ -85,7 +44,7 @@ export const registerAdmin = async (uid, fname, lname, dname, email) => {
 // fetching lists
 export const fetchUserList = async () => {
     try {
-        const querySnapshot = await getDocs(userRef);
+        const querySnapshot = await getDocs(collection(db,'systemusers'));
         const usersList = querySnapshot.docs.map(doc => doc.data());
         return usersList;
     } catch (error) {

@@ -1,8 +1,8 @@
 import { collection, deleteDoc, doc, getDocs, query, updateDoc, where } from 'firebase/firestore'
 import * as React from 'react'
-import { db } from '../../api/firebase'
+import { db } from '../api/firebase'
 import { Box, Button, ButtonGroup, FormControl, Grid, InputLabel, MenuItem, Modal, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material';
-import { useAuth } from '../../api/AuthContext';
+import { useAuth } from '../api/AuthContext';
 
 export default function Admins() {
     const { user } = useAuth()

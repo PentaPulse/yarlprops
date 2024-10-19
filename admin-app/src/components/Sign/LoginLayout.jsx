@@ -1,30 +1,28 @@
-import React, { useState } from 'react'
-import NavigationBar from '../NavigationBar/NavigationBar';
-import { Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, FormControl, FormControlLabel, FormLabel, Grid, IconButton, InputAdornment, InputLabel, OutlinedInput, Stack, styled, SvgIcon, TextField, Typography } from '@mui/material';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import React, { useState } from 'react';
+import {
+    Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, FormControl,
+    FormControlLabel, FormLabel, Grid, OutlinedInput, Stack, styled, SvgIcon, TextField, Typography
+} from '@mui/material';
+import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { auth } from '../../api/firebase';
-import { useAlerts } from '../../api/AlertService';
-import { registerAdmin } from '../../api/db/users';
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate } from 'react-router-dom';
 import MuiCard from '@mui/material/Card';
 import PropTypes from 'prop-types';
 import { useAuth } from '../../api/AuthContext';
+import NavigationBar from '../NavigationBar/NavigationBar';
 
 export function LoginLayout({ handleMode }) {
-    const [signin,setSignin]=useState(true)
+    const [signin, setSignin] = useState(true);
+
     return (
-        <>
-            <Box>
-                <NavigationBar handleMode={handleMode} />
-                <Grid container mt={10} justifyContent='space-around' alignItems='center'>
-                    <SignIn signin={signin} setSignin={()=>setSignin(false)}/>
-                    <SignUp signin={signin} setSignin={()=>setSignin(true)}/>
-                </Grid>
-            </Box>
-        </>
-    )
+        <Box>
+            <NavigationBar handleMode={handleMode} />
+            <Grid container mt={10} justifyContent="space-around" alignItems="center">
+                <SignIn signin={signin} setSignin={() => setSignin(false)} />
+                <SignUp signin={signin} setSignin={() => setSignin(true)} />
+            </Grid>
+        </Box>
+    );
 }
 
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -40,10 +38,6 @@ const Card = styled(MuiCard)(({ theme }) => ({
     },
     boxShadow:
         'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
-    ...theme.applyStyles('dark', {
-        boxShadow:
-            'hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px',
-    }),
 }));
 
 const SignInContainer = styled(Stack)(({ theme }) => ({
@@ -58,178 +52,90 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
         position: 'absolute',
         zIndex: -1,
         inset: 0,
-        backgroundImage:
-            'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
-        backgroundRepeat: 'no-repeat',
-        ...theme.applyStyles('dark', {
-            backgroundImage:
-                'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))',
-        }),
+        backgroundImage: 'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
     },
 }));
 
-function SignIn({signin,setSignin}) {
-    const [emailError, setEmailError] = React.useState(false);
-    const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
-    const [passwordError, setPasswordError] = React.useState(false);
-    const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
-    const [open, setOpen] = React.useState(false);
+const SignUpContainer = styled(Stack)(({ theme }) => ({
+    minHeight: '100%',
+    padding: theme.spacing(2),
+    [theme.breakpoints.up('sm')]: {
+        padding: theme.spacing(4),
+    },
+    '&::before': {
+        content: '""',
+        display: 'block',
+        position: 'absolute',
+        zIndex: -1,
+        inset: 0,
+        backgroundImage: 'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
+    },
+}));
+
+function SignIn({ signin, setSignin }) {
+    const [open, setOpen] = useState(false);
     const navigate = useNavigate();
-    const [isValid,setIsValid]=React.useState(true)
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
+    const handleClickOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
 
-    const handleClose = () => {
-        setOpen(false);
-    };
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+        const email = data.get('email');
+        const password = data.get('password');
 
-    const handleSubmit = (event) => {
-        if (emailError || passwordError) {
-            event.preventDefault();
+        if (!email || !/\S+@\S+\.\S+/.test(email)) {
+            alert('Please enter a valid email.');
             return;
         }
-        const data = new FormData(event.currentTarget);
-        signInWithEmailAndPassword(auth, data.get('email'), data.get('password'))
 
-
-    };
-    const provider = new GoogleAuthProvider()
-    const handleGoogleLogin = () => signInWithPopup(auth, provider)
-        .then((result) => {
-            navigate("/overview")
-        })
-
-    const validateInputs = () => {
-        const email = document.getElementById('email');
-        const password = document.getElementById('password');
-
-        if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
-            setEmailError(true);
-            setEmailErrorMessage('Please enter a valid email address.');
-            isValid = false;
-        } else {
-            setEmailError(false);
-            setEmailErrorMessage('');
+        if (!password || password.length < 6) {
+            alert('Password must be at least 6 characters long.');
+            return;
         }
 
-        if (!password.value || password.value.length < 6) {
-            setPasswordError(true);
-            setPasswordErrorMessage('Password must be at least 6 characters long.');
-            isValid = false;
-        } else {
-            setPasswordError(false);
-            setPasswordErrorMessage('');
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+            navigate('/overview');
+        } catch (error) {
+            console.error(error);
+            alert('Failed to sign in. Please check your credentials.');
         }
-
-        return isValid;
     };
+
+    const provider = new GoogleAuthProvider();
+    const handleGoogleLogin = () =>
+        signInWithPopup(auth, provider).then(() => {
+            navigate('/overview');
+        }).catch((error) => {
+            console.error(error);
+            alert('Google sign-in failed.');
+        });
 
     return (
-        <SignInContainer display={signin?"flex":"none"} direction="column" justifyContent="space-between">
+        <SignInContainer display={signin ? 'flex' : 'none'} direction="column" justifyContent="space-between">
             <Card variant="outlined">
-                <Typography
-                    component="h1"
-                    variant="h4"
-                    sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
-                >
-                    Sign in
-                </Typography>
-                <Box
-                    component="form"
-                    onSubmit={handleSubmit}
-                    noValidate
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        width: '100%',
-                        gap: 2,
-                    }}
-                >
+                <Typography component="h1" variant="h4" sx={{ fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}>Sign in</Typography>
+                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                     <FormControl>
                         <FormLabel htmlFor="email">Email</FormLabel>
-                        <TextField
-                            error={emailError}
-                            helperText={emailErrorMessage}
-                            id="email"
-                            type="email"
-                            name="email"
-                            placeholder="your@email.com"
-                            autoComplete="email"
-                            autoFocus
-                            required
-                            fullWidth
-                            variant="outlined"
-                            color={emailError ? 'error' : 'primary'}
-                            sx={{ ariaLabel: 'email' }}
-                        />
+                        <TextField type="email" name="email" placeholder="your@email.com" autoComplete="email" autoFocus required fullWidth variant="outlined" />
                     </FormControl>
                     <FormControl>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                             <FormLabel htmlFor="password">Password</FormLabel>
-                            <Link
-                                component="button"
-                                type="button"
-                                onClick={handleClickOpen}
-                                variant="body2"
-                                sx={{ alignSelf: 'baseline' }}
-                            >
-                                Forgot your password?
-                            </Link>
+                            <Link component="button" onClick={handleClickOpen} variant="body2">Forgot your password?</Link>
                         </Box>
-                        <TextField
-                            error={passwordError}
-                            helperText={passwordErrorMessage}
-                            name="password"
-                            placeholder="••••••"
-                            type="password"
-                            id="password"
-                            autoComplete="current-password"
-                            autoFocus
-                            required
-                            fullWidth
-                            variant="outlined"
-                            color={passwordError ? 'error' : 'primary'}
-                        />
+                        <TextField name="password" placeholder="••••••" type="password" autoComplete="current-password" required fullWidth variant="outlined" />
                     </FormControl>
-                    <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" />}
-                        label="Remember me"
-                    />
+                    <FormControlLabel control={<Checkbox color="primary" />} label="Remember me" />
                     <ForgotPassword open={open} handleClose={handleClose} />
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        onClick={validateInputs}
-                    >
-                        Sign in
-                    </Button>
-                    <Typography sx={{ textAlign: 'center' }}>
-                        Don&apos;t have an account?{' '}
-                        <span>
-                            <Button
-                            onClick={setSignin}
-                                variant="body2"
-                                sx={{ alignSelf: 'center' }}
-                            >
-                                Sign up
-                            </Button>
-                        </span>
-                    </Typography>
+                    <Button type="submit" fullWidth variant="contained">Sign in</Button>
+                    <Typography sx={{ textAlign: 'center' }}>Don't have an account? <Button onClick={setSignin}>Sign up</Button></Typography>
                 </Box>
                 <Divider>or</Divider>
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                    <Button
-                        fullWidth
-                        variant="outlined"
-                        onClick={handleGoogleLogin}
-                        startIcon={<GoogleIcon />}
-                    >
-                        Sign in with Google
-                    </Button>
-                </Box>
+                <Button fullWidth variant="outlined" onClick={handleGoogleLogin} startIcon={<GoogleIcon />}>Sign in with Google</Button>
             </Card>
         </SignInContainer>
     );
@@ -237,42 +143,15 @@ function SignIn({signin,setSignin}) {
 
 function ForgotPassword({ open, handleClose }) {
     return (
-        <Dialog
-            open={open}
-            onClose={handleClose}
-            PaperProps={{
-                component: 'form',
-                onSubmit: (event) => {
-                    event.preventDefault();
-                    handleClose();
-                },
-            }}
-        >
+        <Dialog open={open} onClose={handleClose} PaperProps={{ component: 'form', onSubmit: (e) => { e.preventDefault(); handleClose(); } }}>
             <DialogTitle>Reset password</DialogTitle>
-            <DialogContent
-                sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}
-            >
-                <DialogContentText>
-                    Enter your account&apos;s email address, and we&apos;ll send you a link to
-                    reset your password.
-                </DialogContentText>
-                <OutlinedInput
-                    autoFocus
-                    required
-                    margin="dense"
-                    id="email"
-                    name="email"
-                    label="Email address"
-                    placeholder="Email address"
-                    type="email"
-                    fullWidth
-                />
+            <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <DialogContentText>Enter your account's email address, and we'll send you a link to reset your password.</DialogContentText>
+                <OutlinedInput autoFocus required margin="dense" id="email" name="email" type="email" fullWidth />
             </DialogContent>
-            <DialogActions sx={{ pb: 3, px: 3 }}>
+            <DialogActions>
                 <Button onClick={handleClose}>Cancel</Button>
-                <Button variant="contained" type="submit">
-                    Continue
-                </Button>
+                <Button variant="contained" type="submit">Continue</Button>
             </DialogActions>
         </Dialog>
     );
@@ -281,6 +160,75 @@ function ForgotPassword({ open, handleClose }) {
 ForgotPassword.propTypes = {
     handleClose: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
+};
+
+function SignUp({ signin, setSignin }) {
+    const { register } = useAuth();
+    const [firstname, setFirstname] = useState('');
+    const [lastname, setLastname] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+
+        if (!email || !/\S+@\S+\.\S+/.test(email)) {
+            alert('Please enter a valid email.');
+            return;
+        }
+
+        if (!password || password.length < 6) {
+            alert('Password must be at least 6 characters long.');
+            return;
+        }
+
+        try {
+            await register(firstname, lastname, `${firstname} ${lastname}`, email, password);
+        } catch (error) {
+            console.error(error);
+            alert('Sign up failed.');
+        }
+    };
+
+    return (
+        <SignUpContainer display={!signin ? 'flex' : 'none'} direction="column" justifyContent="space-between">
+            <Card variant="outlined">
+                <Typography component="h1" variant="h4">Sign up</Typography>
+                <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                    <FormControl>
+                        <FormLabel>First name</FormLabel>
+                        <TextField required placeholder="Jon" fullWidth onChange={(e) => setFirstname(e.target.value)} />
+                    </FormControl>
+                    <FormControl>
+                        <FormLabel>Last name</FormLabel>
+                        <TextField required placeholder="Snow" fullWidth onChange={(e) => setLastname(e.target.value)} />
+                    </FormControl>
+                    <FormControl>
+                        <FormLabel>Email</FormLabel>
+                        <TextField required placeholder="your@email.com" fullWidth onChange={(e) => setEmail(e.target.value)} />
+                    </FormControl>
+                    <FormControl>
+                        <FormLabel>Password</FormLabel>
+                        <TextField required type="password" placeholder="••••••" fullWidth onChange={(e) => setPassword(e.target.value)} />
+                    </FormControl>
+                    <Button type="submit" fullWidth variant="contained">Sign up</Button>
+                    <Typography sx={{ textAlign: 'center' }}>Already have an account? <Button onClick={setSignin}>Sign in</Button></Typography>
+                </Box>
+                <Divider>or</Divider>
+                <Button fullWidth variant="outlined" onClick={() => alert('Sign up with Google')} startIcon={<GoogleIcon />}>Sign up with Google</Button>
+            </Card>
+        </SignUpContainer>
+    );
+}
+
+SignIn.propTypes = {
+    signin: PropTypes.bool.isRequired,
+    setSignin: PropTypes.func.isRequired,
+};
+
+SignUp.propTypes = {
+    signin: PropTypes.bool.isRequired,
+    setSignin: PropTypes.func.isRequired,
 };
 
 function GoogleIcon() {
@@ -313,242 +261,3 @@ function GoogleIcon() {
         </SvgIcon>
     );
 }
-
-const SignUpContainer = styled(Stack)(({ theme }) => ({
-    minHeight: '100%',
-    padding: theme.spacing(2),
-    [theme.breakpoints.up('sm')]: {
-        padding: theme.spacing(4),
-    },
-    backgroundImage:
-        'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
-    backgroundRepeat: 'no-repeat',
-    ...theme.applyStyles('dark', {
-        backgroundImage:
-            'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))',
-    }),
-}));
-
-function SignUp({signin,setSignin}) {
-    const [nameError, setNameError] = React.useState(false);
-    const [nameErrorMessage, setNameErrorMessage] = React.useState('');
-    const [emailError, setEmailError] = React.useState(false);
-    const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
-    const [passwordError, setPasswordError] = React.useState(false);
-    const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
-    const {register}=useAuth()
-
-    const validateInputs = () => {
-        const email = document.getElementById('email');
-        const password = document.getElementById('password');
-        const name = document.getElementById('name');
-
-        let isValid=true;
-
-        if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
-            setEmailError(true);
-            setEmailErrorMessage('Please enter a valid email address.');
-            isValid = false;
-        } else {
-            setEmailError(false);
-            setEmailErrorMessage('');
-        }
-
-        if (!password.value || password.value.length < 6) {
-            setPasswordError(true);
-            setPasswordErrorMessage('Password must be at least 6 characters long.');
-            isValid = false;
-        } else {
-            setPasswordError(false);
-            setPasswordErrorMessage('');
-        }
-
-        if (!name.value || name.value.length < 1) {
-            setNameError(true);
-            setNameErrorMessage('Name is required.');
-            isValid = false;
-        } else {
-            setNameError(false);
-            setNameErrorMessage('');
-        }
-
-        return isValid;
-    };
-
-    const handleSubmit = async(event) => {
-        if (nameError || emailError || passwordError) {
-            event.preventDefault();
-            return;
-        }
-        const data = new FormData(event.currentTarget);
-        register('', '', data.name, data.email, data.password)
-    };
-
-    return (
-        <SignUpContainer display={!signin?"flex":"none"} direction="column" justifyContent="space-between">
-            <Card variant="outlined">
-                <Typography
-                    component="h1"
-                    variant="h4"
-                    sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
-                >
-                    Sign up
-                </Typography>
-                <Box
-                    component="form"
-                    onSubmit={handleSubmit}
-                    sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
-                >
-                    <FormControl>
-                        <FormLabel htmlFor="name">Full name</FormLabel>
-                        <TextField
-                            autoComplete="name"
-                            name="name"
-                            required
-                            fullWidth
-                            id="name"
-                            placeholder="Jon Snow"
-                            error={nameError}
-                            helperText={nameErrorMessage}
-                            color={nameError ? 'error' : 'primary'}
-                        />
-                    </FormControl>
-                    <FormControl>
-                        <FormLabel htmlFor="email">Email</FormLabel>
-                        <TextField
-                            required
-                            fullWidth
-                            id="email"
-                            placeholder="your@email.com"
-                            name="email"
-                            autoComplete="email"
-                            variant="outlined"
-                            error={emailError}
-                            helperText={emailErrorMessage}
-                            color={passwordError ? 'error' : 'primary'}
-                        />
-                    </FormControl>
-                    <FormControl>
-                        <FormLabel htmlFor="password">Password</FormLabel>
-                        <TextField
-                            required
-                            fullWidth
-                            name="password"
-                            placeholder="••••••"
-                            type="password"
-                            id="password"
-                            autoComplete="new-password"
-                            variant="outlined"
-                            error={passwordError}
-                            helperText={passwordErrorMessage}
-                            color={passwordError ? 'error' : 'primary'}
-                        />
-                    </FormControl>
-                    <FormControlLabel
-                        control={<Checkbox value="allowExtraEmails" color="primary" />}
-                        label="I want to receive updates via email."
-                    />
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        onClick={validateInputs}
-                    >
-                        Sign up
-                    </Button>
-                    <Typography sx={{ textAlign: 'center' }}>
-                        Already have an account?{' '}
-                        <span>
-                            <Button
-                            onClick={setSignin}
-                                variant="body2"
-                                sx={{ alignSelf: 'center' }}
-                            >
-                                Sign in
-                            </Button>
-                        </span>
-                    </Typography>
-                </Box>
-                <Divider>
-                    <Typography sx={{ color: 'text.secondary' }}>or</Typography>
-                </Divider>
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                    <Button
-                        fullWidth
-                        variant="outlined"
-                        onClick={() => alert('Sign up with Google')}
-                        startIcon={<GoogleIcon />}
-                    >
-                        Sign up with Google
-                    </Button>
-                </Box>
-            </Card>
-        </SignUpContainer>
-    );
-}
-
-
-function AdminRegister() {
-    const [remail, setrEmail] = React.useState('')
-    const [showPassword, setShowPassword] = React.useState(false)
-    const [rpassword, setrPassword] = React.useState('')
-    const [firstName, setFirstName] = React.useState('')
-    const [lastName, setLastName] = React.useState('')
-    const [displayName, setDisplayName] = React.useState('')
-    const { showAlerts2 } = useAlerts()
-
-    const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault();
-    };
-
-    const handleRegister = () => createUserWithEmailAndPassword(auth, remail, rpassword)
-        .then((result) => {
-            const admin = result.user;
-            registerAdmin(admin.uid, firstName, lastName, displayName, remail);
-            sessionStorage.setItem('pp', admin.photoURL);
-            sessionStorage.setItem('displayName', admin.displayName);
-            showAlerts2('Successfully logged', 'success')
-        })
-        .catch(() => {
-            showAlerts2('Error occured , Try again with different credentials', 'error')
-        })
-
-    return (
-        <>
-            <Grid item display='flex' flexDirection='column' >
-                <Typography>REGISTER</Typography>
-                <TextField label="First name" value={firstName} onChange={(e) => { setFirstName(e.target.value); setDisplayName(e.target.value + " " + lastName); }} required />
-                <TextField label="Last name" value={lastName} onChange={(e) => { setLastName(e.target.value); setDisplayName(firstName + " " + e.target.value); }} required />
-                <TextField label="Display name" value={displayName} onChange={(e) => setDisplayName(e.target.value)} />
-                <TextField label="Email" type='email' value={remail} onChange={(e) => setrEmail(e.target.value)} required />
-                <FormControl variant="outlined">
-                    <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-                    <OutlinedInput
-                        id="outlined-adornment-password"
-                        type={showPassword ? 'text' : 'password'}
-                        value={rpassword}
-                        onChange={(e) => setrPassword(e.target.value)}
-                        endAdornment={
-                            <InputAdornment position="end">
-                                <IconButton
-                                    aria-label="toggle password visibility"
-                                    onClick={handleClickShowPassword}
-                                    onMouseDown={handleMouseDownPassword}
-                                    edge="end"
-                                >
-                                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                                </IconButton>
-                            </InputAdornment>
-                        }
-                        label="Password"
-                    />
-                </FormControl>
-                <Button onClick={handleRegister}>Admin Register</Button>
-            </Grid>
-        </>
-    )
-}
-
-export default AdminRegister;

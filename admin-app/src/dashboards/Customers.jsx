@@ -1,10 +1,10 @@
-import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Grid, Modal, Typography } from "@mui/material";
+import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Modal, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "../../api/firebase";
-import { useAuth } from "../../api/AuthContext";
+import { db } from "../api/firebase";
+import { useAuth } from "../api/AuthContext";
 
-export default function AdminMerchants() {
+export default function Customers() {
     const columns = [
         { id: 'id', name: 'Id' },
         { id: 'name', name: 'Name' },
@@ -23,7 +23,7 @@ export default function AdminMerchants() {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
-    const [merchants, setMerchanr] = useState([])
+    const [customers, setCustomers] = useState([])
     const { user } = useAuth()
     const [rows, setRows] = useState([]);
     const [page, setPage] = useState(0);
@@ -60,20 +60,20 @@ export default function AdminMerchants() {
     };
 
 
-    const fetchMerchants = async () => {
+    const fetchCustomers = async () => {
         try {
-            const q = query(collection(db, "systemusers"),where('isMerchant','==',true))
+            const q = query(collection(db, "systemusers"),where('isMerchant','==',false))
             const qSnapshot = await getDocs(q)
             if (!qSnapshot.empty) {
                 const userList = qSnapshot.docs.map(doc => doc.data());
-                setMerchanr(userList)
+                setCustomers(userList)
             }
         } catch (e) {
             //console.log(e)
         }
     }
     useEffect(() => {
-        fetchMerchants()
+        fetchCustomers()
     }, [])
 
     const handleAssign = () => {
@@ -93,7 +93,7 @@ export default function AdminMerchants() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {user.approved ? merchants.map((user, index) => (
+                            {user.approved ? customers.map((user, index) => (
                                 <TableRow>
                                     <TableCell>
                                         {index + 1}

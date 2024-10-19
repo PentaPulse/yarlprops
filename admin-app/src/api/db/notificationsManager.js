@@ -4,7 +4,7 @@ import { db } from "../firebase";
 
 export const getNotifications = async (user) => {
   try {
-    const snapshot = await getDocs(collection(db, 'systemusers', user.uid, 'notifications'), orderBy('timestamp', 'desc'))
+    const snapshot = await getDocs(collection(db, 'notifications'), orderBy('timestamp', 'desc'))
     const data = snapshot.docs.map((doc) => doc.data())
     return data
   } catch (e) {
@@ -14,7 +14,7 @@ export const getNotifications = async (user) => {
 
 export const getNewNotifications = async (user) => {
   try {
-    const snapshot = await getDocs(collection(db, 'systemusers', user.uid, 'notifications'), where('read', '==', false))
+    const snapshot = await getDocs(collection(db, 'notifications'), where('read', '==', false))
     const data = snapshot.docs.map((doc) => doc.data())
     return data
   } catch (e) {
@@ -37,7 +37,7 @@ export const itemNotification = async (user, item, itemType, action) => {
   };
   try {
     // Sent to user
-    const docRef = await addDoc(collection(db, 'systemusers', user.uid, 'notifications'), {
+    const docRef = await addDoc(collection(db, 'notifications'), {
       ...notification,
       topic: `Request ${notification.done ? "accepted by" : "sent to"} ADMINS`,
     });
@@ -60,7 +60,7 @@ export const welcomeNotification = async (user) => {
     timestamp: new Date().toISOString(),
   };
   try {
-    await addDoc(collection(db, 'systemusers', user.uid, 'notifications'), welcome);
+    await addDoc(collection(db, 'notifications'), welcome);
   } catch (e) {
     console.log("Error adding welcome notification: ", e);
   }
@@ -68,7 +68,7 @@ export const welcomeNotification = async (user) => {
 
 export const removeNotification = async (user, notificationId) => {
   try {
-    await deleteDoc(doc(db, 'systemusers', user.uid, 'notifications', notificationId));
+    await deleteDoc(doc(db, 'notifications', notificationId));
     console.log(`Notification with ID ${notificationId} removed.`);
   } catch (e) {
     console.log('Error removing notification: ', e);
@@ -78,7 +78,7 @@ export const removeNotification = async (user, notificationId) => {
 export const markAsRead = async (user, notificationId) => {
   try {
     // Update in Firestore
-    await updateDoc(doc(db, 'systemusers', user.uid, 'notifications', notificationId), {
+    await updateDoc(doc(db, 'notifications', notificationId), {
       read: true,
     });
     console.log(`Notification with ID ${notificationId} marked as read.`);
