@@ -74,6 +74,7 @@ function SignIn({signin,setSignin}) {
     const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
     const [open, setOpen] = React.useState(false);
     const navigate = useNavigate();
+    const [isValid,setIsValid]=React.useState(true)
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -103,12 +104,10 @@ function SignIn({signin,setSignin}) {
         const email = document.getElementById('email');
         const password = document.getElementById('password');
 
-        let isValid = true;
-
         if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
             setEmailError(true);
             setEmailErrorMessage('Please enter a valid email address.');
-            isValid = false;
+            setIsValid(false)
         } else {
             setEmailError(false);
             setEmailErrorMessage('');
@@ -117,7 +116,7 @@ function SignIn({signin,setSignin}) {
         if (!password.value || password.value.length < 6) {
             setPasswordError(true);
             setPasswordErrorMessage('Password must be at least 6 characters long.');
-            isValid = false;
+            setIsValid(false)
         } else {
             setPasswordError(false);
             setPasswordErrorMessage('');
@@ -336,18 +335,17 @@ function SignUp({signin,setSignin}) {
     const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
     const [passwordError, setPasswordError] = React.useState(false);
     const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
+    const [isValid,setIsValid]=React.useState(true)
 
     const validateInputs = () => {
         const email = document.getElementById('email');
         const password = document.getElementById('password');
         const name = document.getElementById('name');
 
-        let isValid = true;
-
         if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
             setEmailError(true);
             setEmailErrorMessage('Please enter a valid email address.');
-            isValid = false;
+            setIsValid(false)
         } else {
             setEmailError(false);
             setEmailErrorMessage('');
@@ -356,7 +354,7 @@ function SignUp({signin,setSignin}) {
         if (!password.value || password.value.length < 6) {
             setPasswordError(true);
             setPasswordErrorMessage('Password must be at least 6 characters long.');
-            isValid = false;
+            setIsValid(false)
         } else {
             setPasswordError(false);
             setPasswordErrorMessage('');
@@ -365,7 +363,7 @@ function SignUp({signin,setSignin}) {
         if (!name.value || name.value.length < 1) {
             setNameError(true);
             setNameErrorMessage('Name is required.');
-            isValid = false;
+            setIsValid(false)
         } else {
             setNameError(false);
             setNameErrorMessage('');

@@ -6,6 +6,7 @@ import { registerUser } from './db/users';
 import { useNavigate } from 'react-router-dom';
 import { useAlerts } from './AlertService';
 import { signinLog, signoutLog } from './db/logs';
+import { welcomeNotification } from './db/notificationsManager';
 
 const AuthContext = React.createContext();
 
@@ -14,7 +15,7 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = React.useState(true);
     const [ok, setOk] = React.useState(false)
     const navigate = useNavigate()
-    const {showAlerts} = useAlerts();
+    const { showAlerts } = useAlerts();
 
     React.useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -45,9 +46,9 @@ export const AuthProvider = ({ children }) => {
         const adminDoc = await getDoc(adminDocRef)
         const userDocRef = doc(db, 'systemusers', userId);
         const userDoc = await getDoc(userDocRef);
-        if (adminDoc.exists()||userDoc.exists()) {
+        if (adminDoc.exists() || userDoc.exists()) {
             return true
-        }else{
+        } else {
             return false
         }
     }
@@ -59,17 +60,15 @@ export const AuthProvider = ({ children }) => {
                 const user = result.user;
                 updateProfile(user, { displayName: dname })
                     .then(() => {
-                        registerUser(user.uid,fname, lname, dname, email).then((result) => {
+                        registerUser(user.uid, fname, lname, dname, email).then((result) => {
                             if (result.success) {
                                 sessionStorage.setItem('pp', user.photoURL);
                                 sessionStorage.setItem('displayName', user.displayName);
                                 setOk(true)
                             }
                         })
-                    })/*
-                    .catch((error) => {
-                        console.error("Error updating profile:", error);
-                    });*/
+                    })
+                welcomeNotification(user)
                 showAlerts('Account created , wait a little ', 'success', 'top-center')
             })
             .catch((error) => {
@@ -96,13 +95,13 @@ export const AuthProvider = ({ children }) => {
         .then((result) => {
             const user = result.user;
             if (!checkUserExistence(user.uid)) {
-                registerUser(user.uid,'', '', user.displayName, user.email).then((result) => {
+                registerUser(user.uid, '', '', user.displayName, user.email).then((result) => {
                     if (result.success) {
                         setOk(true)
                     }
                 })
             }
-            signinLog(user.uid,{method:'google'});
+            signinLog(user.uid, { method: 'google' });
             sessionStorage.setItem('pp', user.photoURL);
             sessionStorage.setItem('displayName', user.displayName);
         })
