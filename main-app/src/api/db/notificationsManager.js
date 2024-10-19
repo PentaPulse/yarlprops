@@ -1,24 +1,28 @@
-import { collection, query, addDoc, doc, deleteDoc, updateDoc, orderBy, onSnapshot, getDocs } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs, orderBy, updateDoc, where } from "firebase/firestore";
 import { db } from "../firebase";
 
-// In-memory notification store and listener reference
-let notifications = [];
 
-// Sync notifications with real-time updates and pass them to a callback
-export async function syncNotifications(user) {
-  const q = query(collection(db, 'systemusers', user.uid, 'notifications'), orderBy('timestamp', 'desc'));
-  
+export const getNotifications = async (user) => {
   try {
-    const snapsot = await getDocs(q)
-    const nData = snapsot.docs.map((doc)=>doc.data())
-    return nData
+    const snapshot = await getDocs(collection(db, 'systemusers', user.uid, 'notifications'), orderBy('timestamp', 'desc'))
+    const data = snapshot.docs.map((doc) => doc.data())
+    return data
   } catch (e) {
-    console.log('Error syncing notifications: ', e);
+    return []
   }
 }
 
-// Add a new item-related notification for the user and admins
-export async function itemNotification(user, item, itemType, action) {
+export const getNewNotifications = async (user) => {
+  try {
+    const snapshot = await getDocs(collection(db, 'systemusers', user.uid, 'notifications'), where('read', '==', false))
+    const data = snapshot.docs.map((doc) => doc.data())
+    return data
+  } catch (e) {
+    return []
+  }
+}
+
+export const itemNotification = async (user, item, itemType, action) => {
   const notification = {
     itemName: item.title,
     itemType: itemType,
@@ -43,62 +47,43 @@ export async function itemNotification(user, item, itemType, action) {
       userDocId: docRef.id,
       topic: `${itemType} ${action} request`,
     });
-    // Save in memory
-    notifications.push({ ...notification, id: docRef.id, topic: `Request sent to ADMINS` });
-    return docRef.id;
   } catch (e) {
     console.log("Error adding notification: ", e);
   }
 }
 
-// Add a welcome notification for the user
-export async function welcomeNotification(user) {
+export const welcomeNotification = async (user) => {
   const welcome = {
     topic: `Welcome to Yarlprops ${user.displayName}`,
     userNoticeLevel: 'welcome',
     isItem: false,
-    createdAt: new Date().toISOString(),
+    timestamp: new Date().toISOString(),
   };
   try {
-    const docRef = await addDoc(collection(db, 'systemusers', user.uid, 'notifications'), welcome);
-    notifications.push({ ...welcome, id: docRef.id });
+    await addDoc(collection(db, 'systemusers', user.uid, 'notifications'), welcome);
   } catch (e) {
     console.log("Error adding welcome notification: ", e);
   }
 }
 
-// Remove a notification from Firestore and local store
-export async function removeNotification(user, notificationId) {
+export const removeNotification = async (user, notificationId) => {
   try {
-    // Remove from Firestore
     await deleteDoc(doc(db, 'systemusers', user.uid, 'notifications', notificationId));
-    // Remove from local store
-    notifications = notifications.filter((notification) => notification.id !== notificationId);
     console.log(`Notification with ID ${notificationId} removed.`);
   } catch (e) {
     console.log('Error removing notification: ', e);
   }
 }
 
-// Mark a notification as read in Firestore and local store
-export async function markAsRead(user, notificationId) {
-  const notification = notifications.find((notification) => notification.id === notificationId);
-  if (notification && !notification.read) {
-    try {
-      // Update in Firestore
-      await updateDoc(doc(db, 'systemusers', user.uid, 'notifications', notificationId), {
-        read: true,
-      });
-      // Update local store
-      notification.read = true;
-      console.log(`Notification with ID ${notificationId} marked as read.`);
-    } catch (e) {
-      console.log('Error marking notification as read: ', e);
-    }
+export const markAsRead = async (user, notificationId) => {
+  try {
+    // Update in Firestore
+    await updateDoc(doc(db, 'systemusers', user.uid, 'notifications', notificationId), {
+      read: true,
+    });
+    console.log(`Notification with ID ${notificationId} marked as read.`);
+  } catch (e) {
+    console.log('Error marking notification as read: ', e);
   }
-}
 
-// Get all notifications (from local store)
-export function getUserNotifications() {
-  return notifications;
 }

@@ -4,9 +4,6 @@ import { useAuth } from "../../api/AuthContext";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useAlerts } from "../../api/AlertService";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from "../../api/firebase";
-import { registerUser } from "../../api/db/users";
 function GoogleIcon() {
     return (
         <SvgIcon>
@@ -169,6 +166,7 @@ export function Register({ closeBox }) {
     const [password, setPassword] = React.useState('');
     const [showPassword, setShowPassword] = React.useState(false);
     const { showAlerts } = useAlerts()
+    const {register}=useAuth()
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -181,44 +179,8 @@ export function Register({ closeBox }) {
         if (!firstName || !lastName || !displayName || !email || !password) {
             return showAlerts('Enter details to Register', 'warning')
         } else {
-            try {
-                await createUserWithEmailAndPassword(auth, email, password)
-                    .then((result) => {
-                        const user = result.user;
-                        updateProfile(user, { displayName: displayName })
-                            .then(() => {
-                                registerUser(user.uid, firstName, lastName, displayName, email).then((result) => {
-                                    if (result.success) {
-                                        sessionStorage.setItem('pp', user.photoURL);
-                                        sessionStorage.setItem('displayName', user.displayName);
-                                    }
-                                })
-                            })
-                        const manager = new Notification(user)
-                        manager.welcomeNotification(user)
-                        showAlerts('Account created , wait a little ', 'success', 'top-center')
-                    })
-                    .catch((error) => {
-                        //showAlerts('ww' + error, 'error')
-                        if (email === '' || password === '' || firstName === '' || lastName === '') {
-                            if (error.code === 'auth/invalid-email' || error.code === 'auth/missing-password') {
-                                showAlerts('Enter details', 'warning')
-                            }
-                        } else if (error.code === 'auth/invalid-email') {
-                            showAlerts('Try different email', 'warning')
-                        }
-                        if (error.code === 'auth/email-already-in-use') {
-                            showAlerts('Try different email', 'warning')
-                        }
-                        if (error.code === 'auth/weak-password') {
-                            showAlerts('Try different password', 'warning')
-                        }
-                    });
-                closeBox()
-            } catch (error) {
-                console.error(error);
-                throw error
-            }
+            await register(email,password,firstName,lastName,displayName)
+            closeBox()
         }
     }
 
@@ -243,7 +205,6 @@ export function Register({ closeBox }) {
                         endAdornment={
                             <InputAdornment position="end">
                                 <IconButton
-                                    aria-label="toggle password visibility"
                                     onClick={handleClickShowPassword}
                                     onMouseDown={handleMouseDownPassword}
                                     edge="end"

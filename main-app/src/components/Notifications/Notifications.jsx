@@ -1,36 +1,31 @@
 import { Badge, IconButton, ListItemText, Menu, MenuItem, useTheme, Box, Typography } from '@mui/material';
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { useAuth } from '../../api/AuthContext';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import CloseIcon from '@mui/icons-material/Close';
-
-// Import the refactored notification functions
-import { syncNotifications, unsubscribeNotifications, markAsRead } from '../../api/db/notificationsManager';
+import { useAuth } from '../../api/AuthContext';
+import { getNewNotifications, getNotifications } from '../../api/db/notificationsManager'
 
 export default function Notifications() {
     const [anchorEl, setAnchorEl] = useState(null);
-    const [notifications, setNotifications] = useState([]);
-    const navigate = useNavigate();
-    const { user } = useAuth();
     const theme = useTheme();
+    const [notifications, setNotifications] = useState([])
+    const [newNotificationCount,setNewNotificationCount]=useState(0)
+    const { user } = useAuth()
 
     useEffect(() => {
-
-        const fetchNotifications = async() => {
-            // Sync notifications and set state on snapshot update
-            try{
-            setNotifications(await syncNotifications(user))
-
-            console.log(notifications)
-            }catch(e){
-                console.log(e)
+        const fecthNotifications = async () => {
+            try {
+                const data = await getNotifications(user)
+                setNotifications(data)
+                const nData = await getNewNotifications(user)
+                setNewNotificationCount(nData.length)
+            } catch (e) {
+                setNotifications([])
             }
-        };
-
-        fetchNotifications();
-    }, [user]);
+        }
+        fecthNotifications()
+    }, [])
 
     const handleOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -40,17 +35,10 @@ export default function Notifications() {
         setAnchorEl(null);
     };
 
-    const handleNotificationClick = (path) => {
-        handleClose();
-        if (path) {
-            navigate(path);
-        }
-    };
-
     return (
         <>
             <IconButton color={theme.palette.primary.default} onClick={handleOpen}>
-                <Badge badgeContent={notifications.length} color="error">
+                <Badge badgeContent={newNotificationCount} color="error">
                     <NotificationsIcon />
                 </Badge>
             </IconButton>
@@ -63,11 +51,10 @@ export default function Notifications() {
                 transformOrigin={{ vertical: 'top', horizontal: 'right' }}
             >
                 <Typography fontWeight="bold" align="center">NOTIFICATIONS</Typography>
-                {notifications.length > 0 ? (
+                {notifications.length !== 0 ?
                     notifications.map((notification, index) => (
-                        notification.isItem ? (
+                        notification.isItem ?
                             <Box
-                                key={notification.id} // Add key for the mapped element
                                 sx={{
                                     display: 'flex',
                                     flexDirection: 'column',
@@ -76,13 +63,13 @@ export default function Notifications() {
                                     padding: '16px',
                                     boxShadow: 2,
                                     borderRadius: 2,
-                                    backgroundColor: notification.read ? theme.palette.notification.afterread : theme.palette.notification.beforeread,
+                                    backgroundColor: notification.read?theme.palette.notification.afterread: theme.palette.notification.beforeread,
                                     position: 'relative',
                                     mb: 2,
                                 }}
                             >
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                                    <IconButton onClick={() => markAsRead(user, notification.id)}>
+                                    <IconButton >
                                         <DoneAllIcon sx={{ color: 'green' }} />
                                         <Typography>Mark as read</Typography>
                                     </IconButton>
@@ -119,34 +106,32 @@ export default function Notifications() {
                                     </Box>
                                 </Box>
                             </Box>
-                        ) :
-                            notification.userNoticeLevel === 'welcome' ? (
-                                <Box
-                                    key={notification.id} // Add key here
-                                    sx={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        justifyContent: 'space-between',
-                                        width: '300px',
-                                        padding: '16px',
-                                        boxShadow: 2,
-                                        borderRadius: 2,
-                                        backgroundColor: theme.palette.background,
-                                        position: 'relative',
-                                    }}
-                                >
-                                    <Typography variant="body1" fontWeight="bold">{notification.topic}</Typography>
-                                    <Typography variant="body2" color="textSecondary">
-                                        Welcome to our platform!
-                                    </Typography>
-                                </Box>
-                            ) : null
+                            :
+
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    justifyContent: 'space-between',
+                                    width: '300px',
+                                    padding: '16px',
+                                    boxShadow: 2,
+                                    borderRadius: 2,
+                                    backgroundColor: theme.palette.background,
+                                    position: 'relative',
+                                }}
+                            >
+                                <Typography variant="body1" fontWeight="bold">{'notification.topic'}</Typography>
+                                <Typography variant="body2" color="textSecondary">
+                                    Welcome to our platform!
+                                </Typography>
+                            </Box>
                     ))
-                ) : (
+                    :
                     <MenuItem disabled>
                         <ListItemText primary="No new notifications" />
                     </MenuItem>
-                )}
+                }
             </Menu>
         </>
     );
