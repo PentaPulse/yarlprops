@@ -1,22 +1,45 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
     Container, Typography, Grid, Card, CardContent, TextField, 
     Button, Box, useTheme, MenuItem, Select, InputLabel, FormControl 
 } from '@mui/material';
 import FeedbackIcon from '@mui/icons-material/Feedback';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '../../api/firebase'; // Import your Firebase config
 
 export default function FeedbackPage() {
-    // Start with an empty feedback list
     const [feedbacks, setFeedbacks] = useState([]);
-
+    const [orderList, setOrderList] = useState([]);
     const [feedback, setFeedback] = useState({
         title: '',
         content: '',
+        merchantName: '',
+        productName: '',
     });
 
-    const theme = useTheme(); // Access theme to handle dark/light mode
+    const theme = useTheme();
 
-    // Handle input changes
+    // Fetching orders from Firestore
+    useEffect(() => {
+        const fetchOrderList = async () => {
+            try {
+                const q = query(
+                    collection(db, "systemusers", "user_uid", "orders"), // Replace with user.uid
+                    where('review', '==', false)
+                );
+                const qSnapshot = await getDocs(q);
+                const data = qSnapshot.docs.map((doc) => ({
+                    id: doc.id,
+                    ...doc.data(),
+                }));
+                setOrderList(data);
+            } catch (e) {
+                console.log(e);
+            }
+        };
+        fetchOrderList();
+    }, []);
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFeedback((prevFeedback) => ({
@@ -25,51 +48,75 @@ export default function FeedbackPage() {
         }));
     };
 
-    // Handle form submission and update feedback list
     const handleSubmit = () => {
         const newFeedback = {
-            id: feedbacks.length + 1, // Generate a unique ID
+            id: feedbacks.length + 1,
             title: feedback.title,
             content: feedback.content,
-            date: new Date().toISOString().split('T')[0], // Use current date
+            merchantName: feedback.merchantName,
+            productName: feedback.productName,
+            date: new Date().toISOString().split('T')[0],
         };
 
-        setFeedbacks((prevFeedbacks) => [newFeedback, ...prevFeedbacks]); // Add new feedback
-        setFeedback({ title: '', content: '' }); // Reset form fields
+        setFeedbacks((prevFeedbacks) => [newFeedback, ...prevFeedbacks]);
+        setFeedback({ title: '', content: '', merchantName: '', productName: '' });
     };
 
-    // Check if both fields are filled to enable the submit button
-    const isFormValid = feedback.title && feedback.content;
+    const isFormValid = feedback.title && feedback.content && feedback.merchantName && feedback.productName;
 
     return (
         <Container>
-            {/* Page Title */}
             <Typography variant="h4" gutterBottom>
                 Customer Feedback
             </Typography>
 
-            {/* Feedback Form */}
-            <Box sx={{ mb: 4 }}>
+            <Box
+                sx={{
+                    mb: 4,
+                    p: 4,
+                    borderRadius: 4,
+                    background: 'rgba(255, 255, 255, 0.2)',
+                    boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
+                    backdropFilter: 'blur(10px)',
+                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                }}
+            >
                 <Typography variant="h6" gutterBottom>
                     Submit Your Feedback
                 </Typography>
 
-                {/* Dropdown for Feedback Title */}
                 <FormControl fullWidth sx={{ mb: 2 }} required>
-                    <InputLabel>Feedback Type</InputLabel>
+                    <InputLabel>Merchant Name</InputLabel>
                     <Select
-                        name="title"
-                        value={feedback.title}
+                        name="merchantName"
+                        value={feedback.merchantName}
                         onChange={handleInputChange}
-                        label="Feedback Type"
+                        label="Merchant Name"
                     >
-                        <MenuItem value="Service Feedback">Service Feedback</MenuItem>
-                        <MenuItem value="Product Feedback">Product Feedback</MenuItem>
-                        <MenuItem value="Rental Feedback">Rental Feedback</MenuItem>
+                        {orderList.map((order) => (
+                            <MenuItem key={order.id} value={order.merchantName}>
+                                {order.merchantName}
+                            </MenuItem>
+                        ))}
                     </Select>
                 </FormControl>
 
-                {/* Content Field */}
+                <FormControl fullWidth sx={{ mb: 2 }} required>
+                    <InputLabel>Product Name</InputLabel>
+                    <Select
+                        name="productName"
+                        value={feedback.productName}
+                        onChange={handleInputChange}
+                        label="Product Name"
+                    >
+                        {orderList.map((order) => (
+                            <MenuItem key={order.id} value={order.itemTitle}>
+                                {order.itemTitle}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+
                 <TextField
                     required
                     fullWidth
@@ -80,21 +127,28 @@ export default function FeedbackPage() {
                     multiline
                     rows={4}
                     sx={{ mb: 2 }}
-                    InputLabelProps={{ style: { color: theme.palette.text.primary } }}
                 />
 
                 <Button
                     variant="contained"
                     color="primary"
                     onClick={handleSubmit}
-                    disabled={!isFormValid} // Disable button if form is not valid
-                    sx={{ display: 'block', margin: '0 auto' }}
+                    disabled={!isFormValid}
+                    sx={{
+                        display: 'block',
+                        margin: '0 auto',
+                        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                        color: '#000',
+                        backdropFilter: 'blur(8px)',
+                        '&:hover': {
+                            backgroundColor: 'rgba(255, 255, 255, 0.4)',
+                        },
+                    }}
                 >
                     Submit Feedback
                 </Button>
             </Box>
 
-            {/* Feedback Cards */}
             {feedbacks.length > 0 ? (
                 <Grid container spacing={4}>
                     {feedbacks.map((fb) => (
@@ -102,33 +156,35 @@ export default function FeedbackPage() {
                             <Card
                                 sx={{
                                     maxWidth: 345,
-                                    backgroundColor: theme.palette.mode === 'dark' 
-                                        ? '#424242' 
-                                        : '#e3f2fd',
-                                    color: theme.palette.mode === 'dark' ? '#fff' : '#000',
+                                    background: 'rgba(255, 255, 255, 0.1)',
+                                    backdropFilter: 'blur(12px)',
+                                    boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
+                                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                                    color: theme.palette.text.primary,
                                 }}
                             >
                                 <CardContent>
                                     <Box display="flex" alignItems="center" mb={2}>
                                         <FeedbackIcon
                                             sx={{
-                                                color: theme.palette.mode === 'dark' 
-                                                    ? '#bbdefb' 
-                                                    : '#1976d2',
+                                                color: '#1976d2',
                                                 fontSize: 40,
                                                 marginRight: 2,
                                             }}
                                         />
                                         <Box>
                                             <Typography variant="h6">{fb.title}</Typography>
-                                            <Typography
-                                                variant="body2"
-                                                sx={{ color: theme.palette.text.secondary }}
-                                            >
+                                            <Typography variant="body2" color="textSecondary">
                                                 {fb.date}
                                             </Typography>
                                         </Box>
                                     </Box>
+                                    <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                                        Merchant: {fb.merchantName}
+                                    </Typography>
+                                    <Typography variant="body2" sx={{ mb: 1 }}>
+                                        Product: {fb.productName}
+                                    </Typography>
                                     <Typography variant="body1">{fb.content}</Typography>
                                 </CardContent>
                             </Card>

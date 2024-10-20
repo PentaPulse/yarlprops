@@ -10,16 +10,19 @@ import {
   Button,
   useTheme,
 } from "@mui/material";
-import { fetchProductOrders } from "../../api/db/products"; 
+import { fetchProductOrders } from "../../api/db/products";
 import { useAuth } from "../../api/AuthContext";
 import { fetchRentalOrders } from "../../api/db/rentals";
 import { fetchServiceOrders } from "../../api/db/services";
+import { useNavigate } from "react-router-dom"; // Add navigation hook
+import { Link } from "react-router-dom"; // Correct import from react-router-dom
 
 
 export default function MyOrders() {
   const theme = useTheme();
   const [orders, setOrders] = useState([]);
   const { user } = useAuth();
+  const navigate = useNavigate(); // Initialize navigation
 
   useEffect(() => {
     const fetchOdata = async () => {
@@ -27,7 +30,7 @@ export default function MyOrders() {
         const pdata = await fetchProductOrders(user.uid);
         const rdata = await fetchRentalOrders(user.uid);
         const sdata = await fetchServiceOrders(user.uid);
-        setOrders( [ ...pdata, ...rdata, ...sdata]);
+        setOrders([...pdata, ...rdata, ...sdata]);
       } catch (e) {
         console.error("Error fetching product orders:", e);
       }
@@ -35,17 +38,19 @@ export default function MyOrders() {
     fetchOdata();
   }, [user.uid]);
 
+  const handleFeedbackClick = (order) => {
+    navigate("/d/feedback", { state: { order } }); // Navigate to feedback page
+  };
+
   return (
     <Container>
-      {/* Page Title */}
       <Typography variant="h4" gutterBottom>
         My Orders
       </Typography>
 
-      {/* Orders Grid */}
       <Grid container spacing={4}>
-        {orders.length > 0
-          ? orders.map((order) => (
+        {orders.length > 0 ? (
+          orders.map((order) => (
             <Grid item xs={12} sm={6} md={4} key={order.pid}>
               <Card
                 sx={{
@@ -56,14 +61,14 @@ export default function MyOrders() {
                         ? "#1e1e1e"
                         : "#333333"
                       : order.status === "Completed"
-                        ? "#e8f5e9"
-                        : "#ffebee",
+                      ? "#e8f5e9"
+                      : "#ffebee",
                 }}
               >
                 <CardMedia
                   component="img"
                   height="140"
-                  image={order.images[0]} 
+                  image={order.images[0]}
                   alt={order.title}
                 />
                 <CardContent>
@@ -85,7 +90,7 @@ export default function MyOrders() {
                         theme.palette.mode === "dark" ? "#b0bec5" : "#616161",
                     }}
                   >
-                    Quantity: {order.title}
+                    Quantity: {order.quantity}
                   </Typography>
                   <Typography
                     variant="body2"
@@ -107,28 +112,53 @@ export default function MyOrders() {
                     Status: {order.orderstatus}
                   </Typography>
                 </CardContent>
-                <Box sx={{ textAlign: "center", pb: 2 }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-around",
+                    alignItems: "center",
+                    pb: 2,
+                  }}
+                >
                   <Button
                     variant="contained"
                     color={
                       order.orderstatus === "complete"
-                        ? theme.palette.mode === "dark"
-                          ? "success"
-                          : "success"
-                        : theme.palette.mode === "dark"
-                          ? "warning"
-                          : "warning"
+                        ? "success"
+                        : "warning"
                     }
                   >
                     {order.orderstatus === "complete"
-                      ? "View Details"
+                      ? "Completed"
                       : "Pending"}
                   </Button>
+                  {/* <Link to="/d/feedback"> */}
+                  {order.orderstatus === "complete" && (
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      onClick={() => handleFeedbackClick(order)}
+                      sx={{
+                        borderColor: "black",
+                        color: "#ff4081",
+                        "&:hover": {
+                          backgroundColor: "#ff4081",
+                          color: "#ffffff",
+                        },
+                      }}
+                    >
+                      Send Feedback
+                    </Button>
+                    
+                  )}
+                  {/* </Link> */}
                 </Box>
               </Card>
             </Grid>
           ))
-          : "No orders to show"}
+        ) : (
+          <Typography>No orders to show</Typography>
+        )}
       </Grid>
     </Container>
   );
