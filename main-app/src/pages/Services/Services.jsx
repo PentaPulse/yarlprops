@@ -102,7 +102,7 @@ function ServicesContents() {
                                     />
                                     <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                         <Typography gutterBottom variant={isMobile ? 'subtitle1' : 'h6'} component='div' color='inherit'>
-                                            {service.serviceName}
+                                            {service.title}
                                         </Typography>
                                     </CardContent>
                                 </CardActionArea>

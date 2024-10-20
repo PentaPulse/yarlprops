@@ -1,4 +1,4 @@
-import { Box,Grid2 as  Grid,  List, ListItem, Paper, Typography } from '@mui/material'
+import { Box, Grid,  List, ListItem, Paper, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { getNotifications, markAsRead } from '../api/db/notificationsManager';
 import { useAuth } from '../api/AuthContext';
@@ -22,6 +22,7 @@ export default function NotificationsPanel() {
         setNotifications([])
       }
     }
+    
     fecthNotifications()
   }, [])
 

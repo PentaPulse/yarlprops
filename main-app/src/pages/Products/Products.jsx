@@ -314,7 +314,7 @@ export function ProductPage({ setSignin, setSignup }) {
               backgroundColor: '#0d6efd',
               color: 'white',
               '&:hover': {
-                backgroundColor: '#90caf9',
+                backgroundColor: '#018ABD',
               }
             }}
           >

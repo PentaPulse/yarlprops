@@ -516,7 +516,7 @@ const ServiceList = ({ onEditService, onViewService }) => {
               services.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(service => (
                 <StyledTableRow key={service.sid}>
                   <StyledTableCell>{service.title}</StyledTableCell>
-                  <StyledTableCell>{service.description.join(', ')}</StyledTableCell>
+                  <StyledTableCell>{service.description}</StyledTableCell>
                   <StyledTableCell>{service.location}</StyledTableCell>
                   <StyledTableCell>
                     <Button onClick={() => onEditService(service.sid)} variant="outlined" color="success" style={{ margin: '5px', width: '100%' }}>Edit</Button>
