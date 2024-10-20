@@ -98,7 +98,7 @@ function ServicesContents() {
                                     <CardMedia
                                         sx={{ height: isMobile ? '14rem' : isTablet ? '18rem' : '20rem', objectFit: 'cover' }}
                                         image={service.images && service.images[0] ? service.images[0] : 'https://picsum.photos/id/11/200/300'}
-                                        title={service.serviceName}
+                                        title={service.title}
                                     />
                                     <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                         <Typography gutterBottom variant={isMobile ? 'subtitle1' : 'h6'} component='div' color='inherit'>
@@ -192,9 +192,12 @@ export function ServicePage({ setSignin, setSignup }) {
                         }}>
                         <CardContent sx={{ my: '30px' }}>
                             {/* Service Details */}
-                            <Typography variant={isMobile ? 'h5' : 'h4'} component="h2" sx={{ fontWeight: 'bold', textAlign: 'center', fontSize: isMobile ? '1.4rem' : '1.8rem' }}>{service.serviceName}</Typography>
-                            <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ fontWeight: 'bold', textAlign: 'center', fontStyle: 'italic' }} gutterBottom>
+                            <Typography variant={isMobile ? 'h5' : 'h4'} component="h2" sx={{ fontWeight: 'bold', textAlign: 'center', fontSize: isMobile ? '1.4rem' : '1.8rem' }} gutterBottom>{service.title}</Typography>
+                            <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ fontWeight: 'bold', textAlign: 'center', fontStyle: 'italic' }}>
                                 Category: {service.category}
+                            </Typography>
+                            <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ fontWeight: 'bold', textAlign: 'center', fontStyle: 'italic' }} gutterBottom>
+                                Sub Category: {service.subCategory}
                             </Typography>
                             <Box sx={{
                                 mx: { xs: '1rem', sm: '5rem', md: '3.5rem', lg: '3rem' },
@@ -202,7 +205,7 @@ export function ServicePage({ setSignin, setSignup }) {
                             }}>
                                 {/* <Typography variant="h6" component="h4" sx={{ fontWeight: 'bold' }}>Description</Typography> */}
                                 <ul style={{ textAlign: 'justify', fontSize: '18px' }}>
-                                    {service.serviceDescription.map((description, index) => (
+                                    {service.description.map((description, index) => (
                                         <li key={index}><Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4">{description}</Typography></li>
                                     ))}
                                 </ul>

@@ -358,7 +358,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
           startIcon={<CloudUploadIcon />}
           style={{ marginTop: '15px', marginBottom: '25px' }}
         >
-          Upload file
+          Upload Images
           <VisuallyHiddenInput type="file" />
         </Button>
 
@@ -366,7 +366,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
           {existingImages.map((src, index) => (
             <Grid item key={index}>
               <div style={{ position: 'relative' }}>
-                <img src={src} alt={`Existing Preview ${index}`} style={{ width: 150, height: 100, objectFit: 'cover' }} />
+                <img src={src} alt={`Existing Preview ${index}`} style={{ width: 150, height: 120, borderRadius: 5 ,objectFit: 'cover' }} />
                 <Button
                   onClick={() => handleRemoveImage(index, 'existing')}
                   variant="contained"
@@ -382,7 +382,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
           {newImages.map((file, index) => (
             <Grid item key={index + existingImages.length}>
               <div style={{ position: 'relative' }}>
-                <img src={URL.createObjectURL(file)} alt={`New Preview ${index}`} style={{ width: 150, height: 120, objectFit: 'cover' }} />
+                <img src={URL.createObjectURL(file)} alt={`New Preview ${index}`} style={{ width: 150, height: 120, borderRadius: 5 ,objectFit: 'cover' }} />
                 <Button
                   onClick={() => handleRemoveImage(index, 'new')}
                   variant="contained"
@@ -576,9 +576,6 @@ const RentalDetail = ({ rid, onBack }) => {
 
   return (
     <Paper style={{ padding: 16 }}>
-      <Button variant="contained" color="primary" onClick={onBack} style={{ marginBottom: 16 }}>
-        Back to rental List
-      </Button>
       <Typography variant="h4">{rental.title}</Typography>
       <Typography variant="subtitle1">Category: {rental.category}</Typography>
       <Typography variant="subtitle1">Sub category: {rental.subCategory}</Typography>
@@ -600,6 +597,9 @@ const RentalDetail = ({ rid, onBack }) => {
           </Grid>
         ))}
       </Grid>
+      <Button variant="contained" color="primary" onClick={onBack} style={{ marginTop: 16 }}>
+        Back
+      </Button>
     </Paper>
   );
 };

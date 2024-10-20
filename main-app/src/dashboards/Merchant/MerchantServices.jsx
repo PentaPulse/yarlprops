@@ -258,7 +258,7 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
 
         {service.description.map((description, index) => (
           <Grid container key={index} spacing={1} alignItems="center">
-            <Grid item xs={11}>
+            <Grid item xs={11.5}>
               <TextField
                 label={`Description Line ${index + 1}`}
                 value={description}
@@ -316,10 +316,45 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
           </Typography>
         )}
 
-        <Grid container spacing={1}>
+        <Grid container spacing={2}>
+          {existingImages.map((src, index) => (
+            <Grid item key={index}>
+              <div style={{ position: 'relative' }}>
+                <img src={src} alt={`Existing Preview ${index}`} style={{ width: 150, height: 120, borderRadius: 5 ,objectFit: 'cover' }} />
+                <Button
+                  onClick={() => handleRemoveImage(index, 'existing')}
+                  variant="contained"
+                  color="error"
+                  size="small"
+                  style={{ position: 'absolute', top: 0, right: 0 }}
+                >
+                  X
+                </Button>
+              </div>
+            </Grid>
+          ))}
+          {newImages.map((file, index) => (
+            <Grid item key={index + existingImages.length}>
+              <div style={{ position: 'relative' }}>
+                <img src={URL.createObjectURL(file)} alt={`New Preview ${index}`} style={{ width: 150, height: 120, borderRadius: 5 , objectFit: 'cover' }} />
+                <Button
+                  onClick={() => handleRemoveImage(index, 'new')}
+                  variant="contained"
+                  color="error"
+                  size="small"
+                  style={{ position: 'absolute', top: 0, right: 0 }}
+                >
+                  X
+                </Button>
+              </div>
+            </Grid>
+          ))}
+        </Grid>
+
+        {/* <Grid container spacing={1}>
           {existingImages.map((url, index) => (
             <Grid item key={index}>
-              <img src={url} alt={`Service  ${index + 1}`} style={{ height: 100, margin: 5 }} />
+              <img src={url} alt={`Service  ${index + 1}`} style={{ width: 150, height: 120, borderRadius: 5 ,objectFit: 'cover' }} />
               <Button onClick={() => handleRemoveImage(index, 'existing')} color="secondary">
                 Remove
               </Button>
@@ -327,13 +362,13 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
           ))}
           {newImages.map((image, index) => (
             <Grid item key={index}>
-              <img src={URL.createObjectURL(image)} alt={`New  ${index + 1}`} style={{ height: 100, margin: 5 }} />
+              <img src={URL.createObjectURL(image)} alt={`New  ${index + 1}`} style={{ width: 150, height: 120, borderRadius: 5 ,objectFit: 'cover' }} />
               <Button onClick={() => handleRemoveImage(index, 'new')} color="secondary">
                 Remove
               </Button>
             </Grid>
           ))}
-        </Grid>
+        </Grid> */}
 
         <Grid container justifyContent="flex-end" spacing={2} style={{ marginTop: 20 }}>
           <Grid item>
@@ -377,35 +412,34 @@ const ServiceDetail = ({ sid, onBack }) => {
 
   return (
     <Paper style={{ padding: 16 }}>
-      <Typography variant="h6">Service Details</Typography>
-      <Typography variant="body1">
-        <strong>Name:</strong> {service.title}
+      <Typography variant="h4" gutterBottom>
+        {service.title}
+      </Typography>
+      <Typography variant="subtitle1">
+        Category: {service.category}
+      </Typography>
+      <Typography variant="subtitle1">
+        Sub category: {service.subCategory}
       </Typography>
       <Typography variant="body1">
-        <strong>Category:</strong> {service.category}
-      </Typography>
-      <Typography variant="body1">
-        <strong>Sub category:</strong> {service.subCategory}
-      </Typography>
-      <Typography variant="body1">
-        <strong>Description:</strong>
+        Description:
       </Typography>
       <ul>
         {service.description.map((desc, index) => (
-          <li key={index}>{desc}</li>
+          <li key={index}><Typography variant='body1'>{desc}</Typography></li>
         ))}
       </ul>
       <Typography variant="body1">
         <strong>Location:</strong> {service.location}
       </Typography>
-      <Grid container spacing={1} style={{ marginTop: 16 }}>
+      <Grid container spacing={2} style={{ marginTop: 10, marginBottom: 10 }}>
         {service.images.map((url, index) => (
           <Grid item key={index}>
-            <img src={url} alt={`Service  ${index + 1}`} style={{ height: 100 }} />
+            <img src={url} alt={`Service  ${index + 1}`} style={{ width: '185px', height: '175px', objectFit: 'cover', borderRadius: '10px' }} />
           </Grid>
         ))}
       </Grid>
-      <Button variant="contained" onClick={onBack} style={{ marginTop: 20 }}>
+      <Button variant="contained" onClick={onBack} style={{ marginTop: 16 }}>
         Back
       </Button>
     </Paper>
@@ -499,10 +533,12 @@ const ServiceList = ({ onEditService, onViewService }) => {
         <Table aria-label="customized table">
           <TableHead>
             <TableRow>
-              <StyledTableCell>Name</StyledTableCell>
-              <StyledTableCell>Description</StyledTableCell>
-              <StyledTableCell>Location</StyledTableCell>
-              <StyledTableCell>Actions</StyledTableCell>
+              <StyledTableCell align="center">Name</StyledTableCell>
+              <StyledTableCell align="center">Category</StyledTableCell>
+              <StyledTableCell align="center">Sub Category</StyledTableCell>
+              {/* <StyledTableCell>Description</StyledTableCell> */}
+              <StyledTableCell align="center">Location</StyledTableCell>
+              <StyledTableCell align="center">Actions</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -515,9 +551,11 @@ const ServiceList = ({ onEditService, onViewService }) => {
             ) : services.length > 0 ? (
               services.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(service => (
                 <StyledTableRow key={service.sid}>
-                  <StyledTableCell>{service.title}</StyledTableCell>
-                  <StyledTableCell>{service.description}</StyledTableCell>
-                  <StyledTableCell>{service.location}</StyledTableCell>
+                  <StyledTableCell align="center">{service.title}</StyledTableCell>
+                  <StyledTableCell align="center">{service.category}</StyledTableCell>
+                  <StyledTableCell align="center">{service.subCategory}</StyledTableCell>
+                  {/* <StyledTableCell>{service.description}</StyledTableCell> */}
+                  <StyledTableCell align="center">{service.location}</StyledTableCell>
                   <StyledTableCell>
                     <Button onClick={() => onEditService(service.sid)} variant="outlined" color="success" style={{ margin: '5px', width: '100%' }}>Edit</Button>
                     <Button onClick={() => onViewService(service.sid)} variant="outlined" color="secondary" style={{ margin: '5px', width: '100%' }}>View</Button>

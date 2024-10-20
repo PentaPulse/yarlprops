@@ -305,7 +305,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
 
         {product.description.map((des, index) => (
           <Grid container key={index} spacing={1} alignItems="center">
-            <Grid item xs={11}>
+            <Grid item xs={11.5}>
               <TextField
                 label={`Description Line ${index + 1}`}
                 value={des}
@@ -389,7 +389,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
           startIcon={<CloudUploadIcon />}
           style={{ marginTop: '15px', marginBottom: '25px' }}
         >
-          Upload file
+          Upload Images
           <VisuallyHiddenInput type="file" />
         </Button>
 
@@ -403,7 +403,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
           {existingImages.map((src, index) => (
             <Grid item key={index}>
               <div style={{ position: 'relative' }}>
-                <img src={src} alt={`Existing Preview ${index}`} style={{ width: 150, height: 100, objectFit: 'cover' }} />
+                <img src={src} alt={`Existing Preview ${index}`} style={{ width: 150, height: 120, borderRadius: 5 ,objectFit: 'cover' }} />
                 <Button
                   onClick={() => handleRemoveImage(index, 'existing')}
                   variant="contained"
@@ -419,7 +419,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
           {newImages.map((file, index) => (
             <Grid item key={index + existingImages.length}>
               <div style={{ position: 'relative' }}>
-                <img src={URL.createObjectURL(file)} alt={`New Preview ${index}`} style={{ width: 150, height: 120, objectFit: 'cover' }} />
+                <img src={URL.createObjectURL(file)} alt={`New Preview ${index}`} style={{ width: 150, height: 120, borderRadius: 5 , objectFit: 'cover' }} />
                 <Button
                   onClick={() => handleRemoveImage(index, 'new')}
                   variant="contained"
@@ -612,10 +612,7 @@ const ProductDetail = ({ pid, onBack }) => {
 
   return (
     <Paper style={{ padding: 16 }}>
-      <Button variant="contained" color="primary" onClick={onBack} style={{ marginBottom: 16 }}>
-        Back to Product List
-      </Button>
-      <Typography variant="h4">{product.title}</Typography>
+      <Typography variant="h4" gutterBottom>{product.title}</Typography>
       <Typography variant="subtitle1">Category: {product.category}</Typography>
       <Typography variant="subtitle1">Sub category: {product.subCategory}</Typography>
       <Typography variant="body1">Description:</Typography>
@@ -635,6 +632,9 @@ const ProductDetail = ({ pid, onBack }) => {
           </Grid>
         ))}
       </Grid>
+      <Button variant="contained" color="primary" onClick={onBack} style={{ marginTop: 16 }}>
+        Back
+      </Button>
     </Paper>
   );
 };
