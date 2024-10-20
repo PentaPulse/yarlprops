@@ -19,8 +19,7 @@ import {
   Tooltip,
   Typography,
   Button,
-  Dialog,
-  DialogTitle
+  Dialog, DialogTitle
 } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
@@ -29,34 +28,34 @@ import PropTypes from 'prop-types';
 export default function MerchantOrders() {
   return (
     <>
-      <ItemOrders itemType={'product'} />
-      <ItemOrders itemType={'rental'} />
-      <ItemOrders itemType={'service'} />
+      <ProductOrders />
+      <RentalOrders />
+      <ServiceOrders />
     </>
-  );
+  )
 }
 
-function ItemOrders({ itemType }) {
-  const [items, setItems] = React.useState([]);
+function ProductOrders() {
+  const [products, setProducts] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const { user } = useAuth();
 
   React.useEffect(() => {
-    const fetchItemList = async () => {
+    const fetchProductList = async () => {
       if (user?.uid) {
         const q = await getDocs(
-          query(collection(db, `${itemType}s`), where('merchantId', '==', user.uid))
+          query(collection(db, 'products'), where('merchantId', '==', user.uid))
         );
-        const fetchedItems = q.docs.map((doc) => ({
+        const fetchedProducts = q.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
-        setItems(fetchedItems);
+        setProducts(fetchedProducts);
       }
     };
-    fetchItemList();
-  }, [user?.uid, itemType]);
+    fetchProductList();
+  }, [user?.uid]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -79,7 +78,7 @@ function ItemOrders({ itemType }) {
 
   return (
     <>
-      <Typography variant="h6">MY {itemType.toUpperCase()} ORDERS</Typography>
+      <Typography variant="h6">MY PRODUCT ORDERS</Typography>
       <TableContainer component={Paper}>
         <Table aria-label="collapsible table">
           <TableHead>
@@ -88,24 +87,178 @@ function ItemOrders({ itemType }) {
               <StyledTableCell align="center">Title</StyledTableCell>
               <StyledTableCell align="center">Category</StyledTableCell>
               <StyledTableCell align="center">Type</StyledTableCell>
-              {itemType !== 'service' && (
-                <StyledTableCell align="center">Quantity</StyledTableCell>
-              )}
+              <StyledTableCell align="center">Quantity</StyledTableCell>
               <StyledTableCell align="center">Current Status</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {items
+            {products
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((item) => (
-                <Row key={item.id} row={item} itemType={itemType} />
+              .map((product) => (
+                <Row key={product.id} row={product} itemId={product.pid} />
               ))}
           </TableBody>
         </Table>
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={items.length}
+          count={products.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </TableContainer>
+    </>
+  );
+}
+
+function RentalOrders() {
+  const [rentals, setRentals] = React.useState([]);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const { user } = useAuth();
+
+  React.useEffect(() => {
+    const fetchRentalList = async () => {
+      if (user?.uid) {
+        const q = await getDocs(
+          query(collection(db, 'rentals'), where('merchantId', '==', user.uid))
+        );
+        const fetchedRentals = q.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setRentals(fetchedRentals);
+      }
+    };
+    fetchRentalList();
+  }, [user?.uid]);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+
+  return (
+    <>
+      <Typography variant="h6">MY RENTAL ORDERS</Typography>
+      <TableContainer component={Paper}>
+        <Table aria-label="collapsible table">
+          <TableHead>
+            <TableRow>
+              <StyledTableCell align='center'>Customer details</StyledTableCell>
+              <StyledTableCell align="center">Title</StyledTableCell>
+              <StyledTableCell align="center">Category</StyledTableCell>
+              <StyledTableCell align="center">Type</StyledTableCell>
+              <StyledTableCell align="center">Quantity</StyledTableCell>
+              <StyledTableCell align="center">Current Status</StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rentals
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((rental) => (
+                <Row key={rental.rid} row={rental} itemId={rental.rid} />
+              ))}
+          </TableBody>
+        </Table>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={rentals.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </TableContainer>
+    </>
+  );
+}
+
+function ServiceOrders() {
+  const [services, setServices] = React.useState([]);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const { user } = useAuth();
+
+  React.useEffect(() => {
+    const fetchServiceList = async () => {
+      if (user?.uid) {
+        const q = await getDocs(
+          query(collection(db, 'services'), where('merchantId', '==', user.uid))
+        );
+        const fetchedServices = q.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setServices(fetchedServices);
+      }
+    };
+    fetchServiceList();
+  }, [user?.uid]);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+
+  return (
+    <>
+      <Typography variant="h6">MY SERVICE ORDERS</Typography>
+      <TableContainer component={Paper}>
+        <Table aria-label="collapsible table">
+          <TableHead>
+            <TableRow>
+              <StyledTableCell align='center'>Customer details</StyledTableCell>
+              <StyledTableCell align="center">Title</StyledTableCell>
+              <StyledTableCell align="center">Category</StyledTableCell>
+              <StyledTableCell align="center">Type</StyledTableCell>
+              <StyledTableCell align="center">Quantity</StyledTableCell>
+              <StyledTableCell align="center">Current Status</StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {services
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((service) => (
+                <Row row={service} itemType='service' itemId={service.sid} />
+              ))}
+          </TableBody>
+        </Table>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={services.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
@@ -119,41 +272,43 @@ function ItemOrders({ itemType }) {
 function Row(props) {
   const { row, itemType } = props;
   const [open, setOpen] = React.useState(false);
-  const { user } = useAuth();
   const [orders, setOrders] = React.useState([]);
 
-  React.useEffect(() => {
-    const fetchCustomerOrders = async () => {
-      try {
-        const qSnapshot = await getDocs(
-          query(
-            collection(db, 'orders'),
-            where('itemType', '==', itemType),
-            where('itemId', '==', row.id) // Fetch orders by itemId
-          )
-        );
-        const codata = qSnapshot.docs.map((doc) => doc.data());
-        setOrders(codata);
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    fetchCustomerOrders();
-  }, [itemType, row.id]);
+  const fetchCustomerOrders = async () => {
+    const itemId = itemType==='products'?row.pid:(itemType==='rentals'?row.rid:row.sid)
+    try {
+      const qSnapshot = await getDocs(
+          collection(db, "orders"),
+          where('itemType', '==', itemType),
+          where('itemId', '==', itemId)        
+      );
+      const codata = qSnapshot.docs.map((doc) => doc.data());
+      setOrders(codata);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const handleClick = () => {
+    setOpen(!open);
+    if (!open) {
+      fetchCustomerOrders(); // Fetch orders only when expanding
+    }
+  };
 
   const handleApproval = () => {
-    // Add approval logic here
+    // Add logic for handling approval
   };
 
   return (
     <React.Fragment>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
-        <TableCell align='center'>
-          <Tooltip title={'Click here'}>
+        <TableCell align="center">
+          <Tooltip title={'click here'}>
             <IconButton
               aria-label="expand row"
               size="small"
-              onClick={() => setOpen(!open)}
+              onClick={handleClick}
             >
               {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
             </IconButton>
@@ -162,9 +317,7 @@ function Row(props) {
         <TableCell align="center">{row.title}</TableCell>
         <TableCell align="center">{row.category}</TableCell>
         <TableCell align="center">{row.subCategory}</TableCell>
-        {itemType !== 'service' && (
-          <TableCell align="center">{row.quantity || '-'}</TableCell>
-        )}
+        <TableCell align="center">{row.quantity}</TableCell>
         <TableCell align="center">{row.status}</TableCell>
       </TableRow>
       <TableRow>
@@ -192,8 +345,8 @@ function Row(props) {
                         {order.date}
                       </TableCell>
                       <TableCell>{order.custName}</TableCell>
-                      <TableCell align="center">{order.quantity || '-'}</TableCell>
-                      <TableCell align="center">Rs {order.price || '-'}</TableCell>
+                      <TableCell align="center">{order.quantity}</TableCell>
+                      <TableCell align="center">Rs {order.price}</TableCell>
                       <TableCell align="center">{order.status}</TableCell>
                       <TableCell align="center">
                         <Button onClick={handleApproval}>Approval</Button>
@@ -210,7 +363,27 @@ function Row(props) {
   );
 }
 
-Row.propTypes = {
-  row: PropTypes.object.isRequired,
-  itemType: PropTypes.string.isRequired,
+function OrderDetails(props) {
+  const { onClose, selectedValue, open } = props;
+
+  const handleClose = () => {
+    onClose(selectedValue);
+  };
+
+  const handleListItemClick = (value) => {
+    onClose(value);
+  };
+
+  return (
+    <Dialog onClose={handleClose} open={open}>
+      <DialogTitle>Set backup account</DialogTitle>
+
+    </Dialog>
+  );
+}
+
+OrderDetails.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  selectedValue: PropTypes.string.isRequired,
 };
