@@ -327,11 +327,11 @@ function ServicesList() {
                   <CardMedia
                     sx={{ height: '230px', objectFit: 'cover' }}
                     image={service.images[0] || 'https://picsum.photos/id/11/200/300'}
-                    title={service.name}
+                    title={service.title}
                   />
                   <CardContent sx={{ padding: '16px' }}>
                     <Typography gutterBottom variant='h6' component='div'>
-                      {service.serviceName}
+                      {service.title}
                     </Typography>
                   </CardContent>
                 </CardActionArea>

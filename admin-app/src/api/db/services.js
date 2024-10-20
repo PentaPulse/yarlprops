@@ -6,13 +6,13 @@ import { doc, setDoc, collection, getDocs, query, where, addDoc, updateDoc,  arr
 const serviceRef = collection(db, "services");
 
 // Adding services
-export const addService= async ({ merchantId,serviceName, serviceDescription, serviceLocation, images }) => {
+export const addService= async ({ merchantId, title, description, location, images }) => {
     try {
         const docRef = await addDoc(serviceRef, {
             merchantId,
-            serviceName,
-            serviceDescription,
-            serviceLocation,
+            title,
+            description,
+            location,
             images,
             timestamp: serverTimestamp()
         });
