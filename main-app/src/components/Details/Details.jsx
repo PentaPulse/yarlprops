@@ -5,7 +5,7 @@ import { useAuth } from '../../api/AuthContext';
 import { Link } from 'react-router-dom';
 import { addOrder } from '../../api/db/orders';
 import { useAlerts } from '../../api/AlertService';
-import { collection, getDocs, where } from 'firebase/firestore';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../../api/firebase';
 
 export default function Details({ setSignin, setSignup, itemType, itemId, itemTitle, merchantId}) {
@@ -13,25 +13,31 @@ export default function Details({ setSignin, setSignup, itemType, itemId, itemTi
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const { user } = useAuth();
     const {showAlerts}=useAlerts()
-    const [merchantName,setMerchantName]=useState('')
+    const [merchant,setMerchant]=useState('')
 
     useEffect(()=>{
-        const fetchMerchantName=async()=>{
-            try{
-                const q = await getDocs(collection(db,'systemusers'),where('uid','==',merchantId))
-                const name = q.docs.map((doc)=>doc.data().displayName)
-                setMerchantName(name)
-            }catch(e){
-                console.log(e)
+        const fetchMerchant = async () => {
+            try {
+              const q = await getDocs(
+                query(collection(db, 'systemusers'), where('uid', '==', merchantId))
+              );
+              
+              if (!q.empty) {
+                const data = q.docs[0].data()
+                setMerchant(data); 
+              } else {
+                setMerchant(null);
+              }
+            } catch (e) {
             }
-        }
-        fetchMerchantName()
+          };
+        fetchMerchant()
 
     },[])
 
     const handleOrderNow = async () => {
         try {
-            await addOrder(user, itemId, itemTitle, itemType, merchantId, merchantName).then((result)=>{
+            await addOrder(user, itemId, itemTitle, itemType, merchantId, merchant.displayName).then((result)=>{
                 if(result.success){
                     showAlerts('Your order request was sent to the merchant','success')
                 }
@@ -40,7 +46,6 @@ export default function Details({ setSignin, setSignup, itemType, itemId, itemTi
                 }
             })
         } catch (e) {
-            console.log('Error placing order: ', e);
         }
     };
 
@@ -49,7 +54,7 @@ export default function Details({ setSignin, setSignup, itemType, itemId, itemTi
             <>
                 <Box>
                     <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }} gutterBottom>
-                        <i className="fa-solid fa-user"></i> Name: {merchantName}
+                        <i className="fa-solid fa-user"></i> Name: {merchant.displayName}
                     </Typography>
                     <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }} gutterBottom>
                         <i className="fa-solid fa-location-dot"></i> Location: *******
