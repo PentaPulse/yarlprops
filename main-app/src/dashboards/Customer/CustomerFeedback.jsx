@@ -75,11 +75,10 @@ export default function FeedbackPage() {
     };
 
     setFeedbacks((prevFeedbacks) => [newFeedback, ...prevFeedbacks]);
-    setFeedback({ title: "", content: "", merchantName: "", productName: "" });
+    setFeedback({  content: "", merchantName: "", productName: "" });
   };
 
   const isFormValid =
-    feedback.title &&
     feedback.content &&
     feedback.merchantName &&
     feedback.productName;
