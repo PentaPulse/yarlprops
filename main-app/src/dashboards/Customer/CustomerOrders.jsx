@@ -10,12 +10,9 @@ import {
   Button,
   useTheme,
 } from "@mui/material";
-import { fetchProductOrders } from "../../api/db/products";
 import { useAuth } from "../../api/AuthContext";
-import { fetchRentalOrders } from "../../api/db/rentals";
-import { fetchServiceOrders } from "../../api/db/services";
 import { useNavigate } from "react-router-dom"; // Add navigation hook
-import { Link } from "react-router-dom"; // Correct import from react-router-dom
+import { fetchOrders } from "../../api/db/orders";
 
 
 export default function MyOrders() {
@@ -27,10 +24,8 @@ export default function MyOrders() {
   useEffect(() => {
     const fetchOdata = async () => {
       try {
-        const pdata = await fetchProductOrders(user.uid);
-        const rdata = await fetchRentalOrders(user.uid);
-        const sdata = await fetchServiceOrders(user.uid);
-        setOrders([...pdata, ...rdata, ...sdata]);
+        const data = await fetchOrders(user.uid)
+        setOrders(data);
       } catch (e) {
         console.error("Error fetching product orders:", e);
       }
@@ -68,7 +63,7 @@ export default function MyOrders() {
                 <CardMedia
                   component="img"
                   height="140"
-                  image={order.images[0]}
+                  image={order.images}
                   alt={order.title}
                 />
                 <CardContent>
@@ -109,7 +104,7 @@ export default function MyOrders() {
                       fontWeight: "bold",
                     }}
                   >
-                    Status: {order.orderstatus}
+                    Status: {order.status}
                   </Typography>
                 </CardContent>
                 <Box
@@ -123,17 +118,17 @@ export default function MyOrders() {
                   <Button
                     variant="contained"
                     color={
-                      order.orderstatus === "complete"
+                      order.status === "completed"
                         ? "success"
                         : "warning"
                     }
                   >
-                    {order.orderstatus === "complete"
+                    {order.status === "completed"
                       ? "Completed"
                       : "Pending"}
                   </Button>
                   {/* <Link to="/d/feedback"> */}
-                  {order.orderstatus === "complete" && (
+                  {order.status === "completed" && (
                     <Button
                       variant="outlined"
                       color="primary"

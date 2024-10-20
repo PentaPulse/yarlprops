@@ -61,7 +61,7 @@ export const fetchMerchantDets=async(uid)=>{
     try{
         const qsnapshot = await getDocs(userRef,where('uid','==',uid))
         const data = qsnapshot.docs.map((doc)=>doc.data())
-        return data;
+        return data[0];
     }catch(e){
         return ['error']
     }
