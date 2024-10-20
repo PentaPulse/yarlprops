@@ -34,7 +34,10 @@ export default function MyOrders() {
   }, [user.uid]);
 
   const handleFeedbackClick = (order) => {
-    navigate("/d/feedback", { state: { order } }); // Navigate to feedback page
+    navigate("/d/feedback", { state: {
+        merchantName:order.merchantId,
+        productName:order.title
+     } }); // Navigate to feedback page
   };
 
   return (
@@ -117,6 +120,7 @@ export default function MyOrders() {
                 >
                   <Button
                     variant="contained"
+                    sx={{ color: theme.palette.mode === "dark" ? "#ffffff" : "#ffffff", }}
                     color={
                       order.status === "completed"
                         ? "success"
@@ -130,15 +134,14 @@ export default function MyOrders() {
                   {/* <Link to="/d/feedback"> */}
                   {order.status === "completed" && (
                     <Button
-                      variant="outlined"
+                      variant="contained"
                       color="primary"
                       onClick={() => handleFeedbackClick(order)}
                       sx={{
-                        borderColor: "black",
-                        color: "#ff4081",
+                        color: theme.palette.mode === "dark" ? "#ffffff" : "#ffffff", // Adjust color based on theme
+                        backgroundColor: theme.palette.mode === "dark" ? "#1565c0" : "#1976d2", // Dark blue for dark mode
                         "&:hover": {
-                          backgroundColor: "#ff4081",
-                          color: "#ffffff",
+                          backgroundColor: theme.palette.mode === "dark" ? "#0d47a1" : "#115293", // Adjust hover color
                         },
                       }}
                     >
