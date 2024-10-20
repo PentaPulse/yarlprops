@@ -88,11 +88,9 @@ export const countUsers = async (isMerchant) => {
     return await countUsersFromRef(q);
 };
 
-export const fetchMerchantProductDetails = async (pid) => {
+export const fetchMerchantDetails = async (merchId) => {
     const q = query(
-        collection(db, 'systemusers'),
-        where('isMerchant', '==', true),
-        where('myProducts', 'array-contains', pid)
+        collection(db, 'systemusers'),where('uid','==',merchId)
     );
 
     try {

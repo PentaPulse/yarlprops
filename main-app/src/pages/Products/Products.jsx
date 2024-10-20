@@ -6,7 +6,7 @@ import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../../api/firebase';
 import { fetchProducts, fetchSelectedProduct } from '../../api/db/products';
 import DbError from '../../components/DbError/DbError';
-import { fetchMerchantProductDetails } from '../../api/db/users';
+import { fetchMerchantDetails, fetchMerchantProductDetails } from '../../api/db/users';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -153,23 +153,15 @@ export function ProductPage({ setSignin, setSignup }) {
       try {
         const productData = await fetchSelectedProduct(id);
         setProduct(productData);
+        const merchantData = await fetchMerchantDetails(product.merchantId);
+        setMerchant(merchantData)
         setSelectedImageIndex(0); // Start with the first image
+        console.log(merchant)
       } catch (error) {
         //console.error("Error fetching product:", error);
       }
     };
     fetchProduct();
-
-    const fetchMerchant = async () => {
-      try {
-        const merchantData = await fetchMerchantProductDetails(id);
-        setMerchant(merchantData)
-      } catch (error) {
-        //console.error("Error fetching merchant:", error);
-      }
-    }
-
-    fetchMerchant();
   }, [id]);
 
   if (!product) {
@@ -296,7 +288,7 @@ export function ProductPage({ setSignin, setSignup }) {
                 {/* Seller Details */}
                 <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
               </Box>
-              <Details setSignin={setSignin} setSignup={setSignup} itemType={'products'} itemId={product.pid} itemTitle={product.title} merchantId={product.merchantId} merchantName={merchant.displayName} />
+              <Details setSignin={setSignin} setSignup={setSignup} itemType={'products'} itemId={product.pid} itemTitle={product.title} merchantId={product.merchantId} merchantName={'merchant.displayName'} />
             </CardContent>
           </Card>
         </Grid>

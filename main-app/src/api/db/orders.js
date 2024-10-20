@@ -45,9 +45,9 @@ export const fetchOrders = async (custid) => {
 }
 
 //FOR MERCHANTS
-export const fetchCustomerOrder=async(merchid)=>{
+export const fetchCustOrders=async(merchid,itemType)=>{
   try{
-    const q = await getDocs(collection(db,'orders'),where('merchid','==',merchid))
+    const q = await getDocs(collection(db,'orders'),where('merchid','==',merchid),where('itemType','==',itemType))
     const data = q.docs.map((doc)=>doc.data())
     return data
   }catch(e){
