@@ -13,7 +13,7 @@ export const merchMenu = [
     ['My Products', <InventoryIcon />, 'myproducts'],
     ['My Rentals', <CarRentalIcon />, 'myrentals'],
     ['My Services', <MiscellaneousServicesIcon />, 'myservices'],
-    ['My Orders', <StoreIcon />, 'myorders'],
+    ['Customer Orders', <StoreIcon />, 'custorders'],
 ]
 export const userMenu = [
     ['Overview', <DashboardIcon />, 'overview'],

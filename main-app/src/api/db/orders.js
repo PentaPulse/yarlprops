@@ -1,11 +1,13 @@
 import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase";
 
-export const fetchOrderCount = async (userid, status) => {
+//FOR CUSTOMERS
+export const fetchOrderCount = async (custId, status) => {
   try {
     const q = query(
-      collection(db, "systemusers", userid, "orders"),
-      where('status','==',status)
+      collection(db, "orders"),
+      where('custId','==',custId),
+      where('status', '==', status)
     );
 
     const snapshot = await getDocs(q);
@@ -16,11 +18,12 @@ export const fetchOrderCount = async (userid, status) => {
   }
 };
 
-export const fetchFeedbackCount = async (userid) => {
+export const fetchFeedbackCount = async (custid) => {
   try {
     const q = query(
-      collection(db, "systemusers", userid, "orders"),
-      where('review','==',false)
+      collection(db, "orders"),
+      where('custid','==',custid),
+      where('review', '==', false)
     );
 
     const snapshot = await getDocs(q);
@@ -31,30 +34,57 @@ export const fetchFeedbackCount = async (userid) => {
   }
 };
 
-export const fetchOrders =async(userid)=>{
-  try{
-    const q = await getDocs(collection(db,'systemusers',userid,'orders'))
-    const data = q.docs.map((doc)=>doc.data())
+export const fetchOrders = async (custid) => {
+  try {
+    const q = await getDocs(collection(db,  'orders'),where('custId','==',custid))
+    const data = q.docs.map((doc) => doc.data())
     return data;
-  }catch(e){
-    console.log('error fetch o hist :- ',e)
+  } catch (e) {
+    console.log('error fetch o hist :- ', e)
   }
 }
 
-export const addOrder = async (user, itemId, itemTitle, itemType, merchantId) => {
-  try {
-    const order = {
-      itemId, itemTitle, itemType, merchantId,status:'pending'
-    }
-    const docRef = await addDoc(collection(db, "systemusers", user.uid, "orders"), order)
-    await addDoc(collection(db, "systemusers", merchantId, "customerorders"), {
-      orderDate: new Date().toISOString(),
-      customerName: user.displayName,
-      //quantity:
-      orderstatus: 'pending',
-      custorderid: docRef.id
-    })
-  } catch (e) {
-    console.log("add order error:-", e)
+//FOR MERCHANTS
+export const fetchCustomerOrder=async(merchid)=>{
+  try{
+    const q = await getDocs(collection(db,'orders'),where('merchid','==',merchid))
+    const data = q.docs.map((doc)=>doc.data())
+    return data
+  }catch(e){
+    console.log('error fetching merch orders :- ',e)
   }
 }
+
+//FOR BOTH CUSTS AND MERCHANTS
+export const addOrder = async (cust, itemId, title, itemType, merchId,merchName) => {
+  try {
+    const ordersRef = collection(db, "orders");
+    const q = query(
+      ordersRef,
+      where("custId", "==", cust.uid),
+      where("itemId", "==", itemId)
+    );
+
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      return {success:false};      
+    }
+    const order = {
+      itemId,
+      title,
+      itemType,
+      merchId,
+      merchName,
+      status: "pending",
+      custId: cust.uid,
+      custName: cust.displayName,
+      date: new Date().toISOString(),
+    };
+
+    const docRef = await addDoc(collection(db, "orders"), order);
+    return {success:true}
+  } catch (e) {
+    console.log("add order error: ", e);
+  }
+};
