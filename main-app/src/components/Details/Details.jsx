@@ -1,16 +1,33 @@
 import { Button, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { Box } from '@mui/system';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../api/AuthContext';
 import { Link } from 'react-router-dom';
 import { addOrder } from '../../api/db/orders';
 import { useAlerts } from '../../api/AlertService';
+import { collection, getDocs, where } from 'firebase/firestore';
+import { db } from '../../api/firebase';
 
-export default function Details({ setSignin, setSignup, itemType, itemId, itemTitle, merchantId, merchantName }) {
+export default function Details({ setSignin, setSignup, itemType, itemId, itemTitle, merchantId}) {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const { user } = useAuth();
     const {showAlerts}=useAlerts()
+    const [merchantName,setMerchantName]=useState('')
+
+    useEffect(()=>{
+        const fetchMerchantName=async()=>{
+            try{
+                const q = await getDocs(collection(db,'systemusers'),where('uid','==',merchantId))
+                const name = q.docs.map((doc)=>doc.data().displayName)
+                setMerchantName(name)
+            }catch(e){
+                console.log(e)
+            }
+        }
+        fetchMerchantName()
+
+    },[])
 
     const handleOrderNow = async () => {
         try {
