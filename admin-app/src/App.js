@@ -6,17 +6,18 @@ import AlertProvider from "./api/AlertService";
 import { AuthProvider } from "./api/AuthContext";
 import PrivateRoute from "./api/PrivateRoute";
 import { LoginLayout } from "./components/Sign/LoginLayout";
-import DashboardLayout from "./dashboards/DashboardLayout";
-import Admins from "./dashboards/Admins";
-import Products from "./dashboards/Products";
-import Rentals from "./dashboards/Rentals";
-import Services from "./dashboards/Services";
-import ContactusRequests from "./dashboards/ContactusReqs";
-import Overview from "./dashboards/Overview";
-import Profile from "./dashboards/UserProfile";
-import Customers from "./dashboards/Customers";
-import Merchants from "./dashboards/Merchants";
-import NotificationsPanel from "./dashboards/NotificationsPanel";
+import DashboardLayout from "./dashboard/DashboardLayout";
+import Admins from "./dashboard/Admins";
+import Products from "./dashboard/Products";
+import Rentals from "./dashboard/Rentals";
+import Services from "./dashboard/Services";
+import ContactusRequests from "./dashboard/ContactusReqs";
+import Overview from "./dashboard/Overview";
+import Profile from "./dashboard/Profile";
+import Customers from "./dashboard/Customers";
+import Merchants from "./dashboard/Merchants";
+import NotificationsPanel from "./dashboard/NotificationsPanel";
+import SiteManager from "./dashboard/SiteManager";
 
 const lightTheme = createTheme({
   palette: {
@@ -112,6 +113,7 @@ function DashboardRoutes({ handleMode }) {
           <Route path="rentallist" element={<Rentals />} />
           <Route path="servicelist" element={<Services />} />
           <Route path="contactreqs" element={<ContactusRequests />} />
+          <Route path="site" element={<SiteManager/>} />
         </Routes>
       </DashboardLayout>
     </>

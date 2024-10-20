@@ -7,13 +7,7 @@ import FeedbackIcon from '@mui/icons-material/Feedback';
 import { fetchProductOrders } from "../../api/db/products"; 
 import { fetchRentalOrders } from "../../api/db/rentals";
 import { fetchServiceOrders } from "../../api/db/services";
-import { collection } from 'firebase/firestore';
-import { db } from '../../api/firebase';
 import { fetchCount } from '../../api/db/orders';
-
-
-
-
 
 export default function CustomerOverview() {
     const { user } = useAuth();

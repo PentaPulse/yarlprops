@@ -10,7 +10,7 @@ import CarRentalIcon from '@mui/icons-material/CarRental';
 
 export const adminMenu = [
     ['Overview', <DashboardIcon />, 'overview'],
-    ['Site Manager',<CommentIcon/>,'amsgs'],
+    ['Site Manager',<CommentIcon/>,'site'],
     ['Admins', <AdminPanelSettingsIcon />, 'adminlist'],
     ['Merchants',<StoreIcon/>,'merchantlist'],
     ['Customers', <GroupIcon />, 'customerlist'],

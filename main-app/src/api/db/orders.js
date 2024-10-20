@@ -16,19 +16,20 @@ export const fetchCount = async (userid, fieldkey, equal, fieldvalue) => {
   }
 };
 
-export const addOrder=async(user,itemId,itemTitle,itemType,merchantId,merchantName)=>{
-  try{
+export const addOrder = async (user, itemId, itemTitle, itemType, merchantId) => {
+  try {
     const order = {
-      itemId,itemTitle,itemType,merchantId,merchantName
+      itemId, itemTitle, itemType, merchantId
     }
-    const docRef=await addDoc(collection(db,"systemusers",user.uid,"orders"),{...order,id:docRef.id})
-    await addDoc(collection(db,"systemusers",merchantId,"customerorders"),{
-      orderDate:new Date().toISOString(),
-      customerName:user.displayName,
+    const docRef = await addDoc(collection(db, "systemusers", user.uid, "orders"), order)
+    await addDoc(collection(db, "systemusers", merchantId, "customerorders"), {
+      orderDate: new Date().toISOString(),
+      customerName: user.displayName,
       //quantity:
-      orderStatus:'pending'
+      orderstatus: 'pending',
+      custorderid: docRef.id
     })
-  }catch(e){
-    console.log("add order error:-",e)
+  } catch (e) {
+    console.log("add order error:-", e)
   }
 }

@@ -1,6 +1,6 @@
 import "firebase/firestore";
 import { auth, db } from "../firebase";
-import { doc, setDoc, collection, getDoc, getDocs, where, query, addDoc } from "firebase/firestore";
+import { doc, setDoc, collection, getDoc, getDocs, where, query } from "firebase/firestore";
 import { updateProfile } from "firebase/auth";
 
 //reference
@@ -57,6 +57,15 @@ export const fetchUserList = async () => {
     }
 }
 
+export const fetchMerchantDets=async(uid)=>{
+    try{
+        const qsnapshot = await getDocs(userRef,where('uid','==',uid))
+        const data = qsnapshot.docs.map((doc)=>doc.data())
+        return data;
+    }catch(e){
+        return ['error']
+    }
+}
 
 //counts
 async function countUsersFromRef(Ref) {

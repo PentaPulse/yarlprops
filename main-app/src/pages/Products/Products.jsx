@@ -297,7 +297,7 @@ export function ProductPage({ setSignin, setSignup }) {
                 {/* Seller Details */}
                 <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
               </Box>
-              <Details setSignin={setSignin} setSignup={setSignup} itemType={'product'} itemId={product.pid}/>
+              <Details setSignin={setSignin} setSignup={setSignup} itemType={'products'} itemId={product.pid} merchantId={product.merchantId}/>
             </CardContent>
           </Card>
         </Grid>
