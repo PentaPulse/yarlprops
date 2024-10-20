@@ -1,4 +1,4 @@
-import { Box, Grid, Grid2, List, ListItem, Paper, Typography } from '@mui/material'
+import { Box, Grid,  List, ListItem, Paper, Typography } from '@mui/material'
 import React, { useState } from 'react'
 
 export default function NotificationsPanel() {

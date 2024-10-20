@@ -1,14 +1,14 @@
 import React from 'react';
 import { Grid, Paper, Typography, Table, TableHead, TableRow, TableCell, TableBody, TableContainer, Button } from '@mui/material';
-import { countAdmins, countUsers, fetchUserList } from '../../api/db/users';
-import { countProducts } from '../../api/db/products';
-import { countservices } from '../../api/db/services';
-import { countRentals } from '../../api/db/rentals';
+import { countAdmins, countUsers, fetchUserList } from '../api/db/users';
+import { countProducts } from '../api/db/products';
+import { countservices } from '../api/db/services';
+import { countRentals } from '../api/db/rentals';
 import { collection, getDocs, limit, orderBy, query, where } from 'firebase/firestore';
-import { db } from '../../api/firebase';
-import { useAuth } from '../../api/AuthContext';
+import { db } from '../api/firebase';
+import { useAuth } from '../api/AuthContext';
 
-export default function AdminOverview() {
+export default function Overview() {
     const [adminCount, setadminCount] = React.useState(0);
     const [merchantCount, setmerchantCount] = React.useState(0);
     const [customerCount, setcustomerCount] = React.useState(0);
@@ -133,7 +133,6 @@ function UsersTable() {
 
 function ContactResponsesTable() {
     const [responses, setResponses] = React.useState([]);
-    const [error, setError] = React.useState(null);
 
     React.useEffect(() => {
         async function fetchData() {
@@ -187,11 +186,6 @@ function ContactResponsesTable() {
                     </Table>
                 </TableContainer>
             </Paper>
-            {error && (
-                <Typography color="error">
-                    Error fetching data: {error}
-                </Typography>
-            )}
         </>
     );
 }

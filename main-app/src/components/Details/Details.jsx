@@ -1,72 +1,104 @@
-
 import { Button, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../api/AuthContext';
 import { Link } from 'react-router-dom';
-import { addDoc, collection,getDoc, getDocs, query, where } from 'firebase/firestore';
+import {  collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../../api/firebase';
 import Swal from 'sweetalert2';
+import { addOrder } from '../../api/db/orders';
+import { fetchMerchantDets } from '../../api/db/users';
 
-export default function Details({ setSignin, setSignup, itemType, itemId }) {
-    const theme = useTheme()
+export default function Details({ setSignin, setSignup, itemType, itemId, merchantId }) {
+    const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-    const { user } = useAuth()
-    const [item, setItem] = useState([])
-    const [merchant, setMerchant] = useState({ uid: 'abc' })
+    const { user } = useAuth();
+    const [item, setItem] = useState(null);
+    const [merchant, setMerchant] = useState(null);
+    const [iid, setIId] = useState('pid');
 
     useEffect(() => {
         const fetchItem = async () => {
-            const q = query(collection(db, `${itemType}s`), where(`${itemType[0]}id`, '==', itemId));
-            try {
-                const qSnapshot = await getDocs(q);
-                    const product = qSnapshot.docs[0].map((doc)=>doc.data());
-                    setItem(product );
-                    const merchantData = await getDocs(collection(db, 'systemusers'), where('uid', '==', item.merchantId))
-                    setMerchant(merchantData)
-            } catch (e) {
-                console.log('error getting item dets : ', e)
+            switch (itemType) {
+                case 'products':
+                    setIId('pid');
+                    break;
+                case 'rentals':
+                    setIId('rid')
+                    break;
+
+                case 'services':
+                    setIId('sid');
+                    break;
+                default:
+                    console.log('Unknown item type');
+                    return;
             }
-        }
-        fetchItem()
+
+            try {
+                const itemQuery = query(collection(db, itemType), where(iid, '==', itemId));
+                const qSnapshot = await getDocs(itemQuery);
+                const product = qSnapshot.docs.map((doc) => doc.data());
+                setItem(product[0]); // Assuming only one item is returned
+            } catch (e) {
+                console.log('Error getting item details: ', e);
+            }
+        };
+
+        const fetchMerchant = async () => {
+            try {
+                const data = await fetchMerchantDets(merchantId);
+                setMerchant(data);
+            } catch (e) {
+                console.log('Error getting merchant details: ', e);
+            }
+        };
+
+        fetchItem();
+        fetchMerchant();
         console.log(item)
-    }, [itemId])
+        console.log(merchant)
+    }, []);
 
     const handleOrderNow = async () => {
-        // Reference to the orders subcollection for the authenticated user
-        const ordersCollectionRef = collection(db, 'systemusers', user.uid, 'orders');
-        
         try {
-            await addDoc(ordersCollectionRef, {
-                title: item.title,
-                price: item.price,
-                quantity: item.quantity,
-                merchantId: item.merchantId,
-                orderstatus: 'pending'
-            });
-            Swal.fire({
-                title: 'Your order request was sent to the merchant',
-                icon: 'success'
-            });
+            if (item && merchant) {
+                await addOrder(user, itemId, item.title, itemType, merchantId);
+                Swal.fire({
+                    title: 'Your order request was sent to the merchant',
+                    icon: 'success',
+                });
+            } else {
+                Swal.fire({
+                    title: 'Item or merchant information is missing',
+                    icon: 'error',
+                });
+            }
         } catch (e) {
-            console.log(e);
+            console.log('Error placing order: ', e);
         }
     };
-    
+
     if (user) {
         return (
             <>
                 <Box>
-                    <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }} gutterBottom><i className="fa-solid fa-user"></i> Name : {merchant && merchant.displayName}</Typography>
-                    <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }} gutterBottom><i className="fa-solid fa-location-dot"></i> Location : {item.location}</Typography>
-                    <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }} gutterBottom><i className="fa-solid fa-phone"></i> Contact No : {merchant && merchant.phoneNumber}</Typography>
+                    <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }} gutterBottom>
+                        <i className="fa-solid fa-user"></i> Name: {merchant?.displayName}
+                    </Typography>
+                    <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }} gutterBottom>
+                        <i className="fa-solid fa-location-dot"></i> Location: {item?.location}
+                    </Typography>
+                    <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }} gutterBottom>
+                        <i className="fa-solid fa-phone"></i> Contact No: {merchant?.phoneNumber}
+                    </Typography>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <Button
                         variant="contained"
                         component={Link}
                         to=""
-                        size={isMobile ? "small" : "medium"}
+                        size={isMobile ? 'small' : 'medium'}
                         sx={{
                             mt: '0.8rem',
                             fontWeight: 'bold',
@@ -74,21 +106,22 @@ export default function Details({ setSignin, setSignup, itemType, itemId }) {
                             color: 'white',
                             '&:hover': {
                                 backgroundColor: '#90caf9',
-                            }
+                            },
                         }}
                         onClick={handleOrderNow}
                     >
                         Order Now
                     </Button>
                 </Box>
-            </>)
-    }
-    else {
+            </>
+        );
+    } else {
         return (
             <Box display={'flex'} justifyContent={'center'} alignItems={'center'}>
-                <Typography> <Button onClick={setSignin}>Signin</Button> or <Button onClick={setSignup}>Signup</Button> to see Seller details</Typography>
+                <Typography>
+                    <Button onClick={setSignin}>Sign in</Button> or <Button onClick={setSignup}>Sign up</Button> to see seller details
+                </Typography>
             </Box>
-        )
+        );
     }
 }
-

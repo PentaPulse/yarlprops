@@ -2,7 +2,7 @@ import * as React from 'react';
 import { GoogleAuthProvider, createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth';
 import { db, auth } from './firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import { registerUser } from './db/users';
+import { registerAdmin } from './db/users';
 import { useNavigate } from 'react-router-dom';
 import { useAlerts } from './AlertService';
 import { signinLog, signoutLog } from './db/logs';
@@ -13,7 +13,6 @@ const AuthContext = React.createContext();
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = React.useState(null);
     const [loading, setLoading] = React.useState(true);
-    const [ok, setOk] = React.useState(false)
     const navigate = useNavigate()
     const { showAlerts } = useAlerts();
 
@@ -39,7 +38,7 @@ export const AuthProvider = ({ children }) => {
         });
 
         return () => unsubscribe();
-    }, [ok]);
+    }, []);
 
     const checkUserExistence = async (userId) => {
         const adminDocRef = doc(db, 'admins', userId);
@@ -54,26 +53,26 @@ export const AuthProvider = ({ children }) => {
     }
 
     //registering
-    const register = async (fname, lname, dname, email, password) => {
+    const register = async ( firstName, lastName, displayName,email, password) => {
         await createUserWithEmailAndPassword(auth, email, password)
             .then((result) => {
                 const user = result.user;
-                updateProfile(user, { displayName: dname })
+                updateProfile(user, { displayName: displayName })
                     .then(() => {
-                        registerUser(user.uid, fname, lname, dname, email).then((result) => {
+                        registerAdmin(user.uid, firstName, lastName, displayName, email).then((result) => {
                             if (result.success) {
                                 sessionStorage.setItem('pp', user.photoURL);
                                 sessionStorage.setItem('displayName', user.displayName);
-                                setOk(true)
                             }
                         })
                     })
                 welcomeNotification(user)
                 showAlerts('Account created , wait a little ', 'success', 'top-center')
+                signinLog(user.uid, { method: 'signup' })
             })
             .catch((error) => {
                 //showAlerts('ww' + error, 'error')
-                if (email === '' || password === '' || fname === '' || lname === '') {
+                if (email === '' || password === '' || firstName === '' || lastName === '') {
                     if (error.code === 'auth/invalid-email' || error.code === 'auth/missing-password') {
                         showAlerts('Enter details', 'warning')
                     }
@@ -95,11 +94,7 @@ export const AuthProvider = ({ children }) => {
         .then((result) => {
             const user = result.user;
             if (!checkUserExistence(user.uid)) {
-                registerUser(user.uid, '', '', user.displayName, user.email).then((result) => {
-                    if (result.success) {
-                        setOk(true)
-                    }
-                })
+                registerAdmin(user.uid, '', '', user.displayName, user.email)
             }
             signinLog(user.uid, { method: 'google' });
             sessionStorage.setItem('pp', user.photoURL);

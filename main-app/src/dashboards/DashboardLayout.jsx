@@ -4,7 +4,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { useAuth } from '../api/AuthContext'
-import { merchMenu, userMenu } from '../components/menuLists';
+import { additionalMenu, merchMenu, userMenu } from '../components/menuLists';
 import { useNavigate } from 'react-router-dom';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../api/firebase';
@@ -85,6 +85,7 @@ export default function DashboardLayout({ handleMode, children }) {
   const [open, setOpen] = React.useState(false);
   const [merchantList, setMerchantList] = React.useState([]);
   const [customerList, setCustomerList] = React.useState([]);
+  const [orderList,setOrderList]=React.useState([])
   const { user, logout } = useAuth()
   const theme = useTheme();
   const navigate = useNavigate();
@@ -115,6 +116,13 @@ export default function DashboardLayout({ handleMode, children }) {
       }
     }
     fetchMerchantList()
+    const fetchOrderLists=async()=>{
+      try{
+        const qsnapshot = await getDocs(collection(db,"systemusers",user.uid,'orders'))
+        setOrderList(qsnapshot.size>0?true:false)
+      }catch(e){}
+    }
+    fetchOrderLists()
   }, [])
 
   const drawer = (
@@ -138,7 +146,7 @@ export default function DashboardLayout({ handleMode, children }) {
             '--MuiMenuItem-insetStart': '30px',
           }}
         >
-          {(merchantList.includes(user.uid) ? merchMenu : customerList.includes(user.uid) ? userMenu : [])
+          {(merchantList.includes(user.uid) ? [...merchMenu,...(orderList?additionalMenu:[])] : customerList.includes(user.uid) ? userMenu : [])
             .map((text, index) => (
               <MenuItem key={index} onClick={() => handleNavigation(text[2])}>
                 {text[1]} {text[0]}

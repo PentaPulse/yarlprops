@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Button,IconButton, styled, Paper, Typography, TextField, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Grid, TableCell, TableRow, tableCellClasses, TableContainer, Table, TableHead, TableBody, TablePagination, CircularProgress, Select, InputLabel, MenuItem } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { addProduct, fetchProducts, fetchSelectedProduct, updateProduct } from '../../api/db/products';
+import { addProduct, fetchProducts, fetchSelectedProduct, updateProduct } from '../api/db/products';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { db, storage } from '../../api/firebase';
+import { db, storage } from '../api/firebase';
 import Swal from 'sweetalert2';
 import { deleteDoc, doc } from 'firebase/firestore';
-import { useAuth } from '../../api/AuthContext';
-import { productFilters } from '../../components/menuLists';
+import { useAuth } from '../api/AuthContext';
+import { productFilters } from '../components/menuLists';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-const AdminProducts = () => {
+export default function Products(){
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [editingProductId, setEditingProductId] = useState(null);
   const [viewingProductId, setViewingProductId] = useState(null);
@@ -52,8 +52,6 @@ const AdminProducts = () => {
     </>
   );
 };
-
-export default AdminProducts;
 
 const ProductForm = ({ pid, onSuccess, onCancel }) => {
   const {user}=useAuth()

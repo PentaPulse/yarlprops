@@ -1,15 +1,12 @@
 import * as React from 'react';
-import { Avatar, Box, CssBaseline, Divider, Grid, IconButton, Input, MenuItem, MenuList, Toolbar, Tooltip, Typography, useTheme, styled } from '@mui/material'
+import { Avatar, Box, CssBaseline, Divider,  Grid, IconButton, MenuItem, MenuList, Toolbar, Tooltip, Typography, useTheme, styled } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { useAuth } from '../api/AuthContext'
-import { adminMenu, merchMenu, userMenu } from '../components/menuLists';
+import { adminMenu } from '../components/menuLists';
 import { useNavigate } from 'react-router-dom';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import { db } from '../api/firebase';
 import ModeSwitch from '../components/ModeHandler/ModeSwitch';
-import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import SupportRoundedIcon from '@mui/icons-material/SupportRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import MuiDrawer from '@mui/material/Drawer';
@@ -82,7 +79,6 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 export default function DashboardLayout({ handleMode, children }) {
   const [open, setOpen] = React.useState(false);
-  const [adminList, setAdminList] = React.useState([]);
   const { user, logout } = useAuth()
   const theme = useTheme();
   const navigate = useNavigate();
@@ -99,18 +95,6 @@ export default function DashboardLayout({ handleMode, children }) {
     navigate(path)
     setOpen(false)
   }
-  React.useEffect(() => {
-    const fetchAdminList = async () => {
-      try {
-        const q = await getDocs(query(collection(db, 'admins')))
-        const list = q.docs.map((doc) => doc.data().uid)
-        setAdminList(list);
-      } catch (e) {
-
-      }
-    }
-    fetchAdminList()
-  }, [])
 
   const drawer = (
     <>
@@ -147,6 +131,10 @@ export default function DashboardLayout({ handleMode, children }) {
             gap: 0.5,
           }}
         >
+          <MenuItem onClick={() => handleNavigation('/d/notifications')}>
+            <SupportRoundedIcon />
+            <Typography variant="body1">Notifications</Typography>
+          </MenuItem>
           <MenuItem onClick={() => handleNavigation('/d/profile')}>
             <SupportRoundedIcon />
             <Typography variant="body1">Profile</Typography>
@@ -177,7 +165,6 @@ export default function DashboardLayout({ handleMode, children }) {
       </Box>
     </>
   )
-  const isMobile = theme.breakpoints.down('lg')
   return (
     <>
       <Grid container columns={12}>

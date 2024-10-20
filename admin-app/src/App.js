@@ -6,17 +6,18 @@ import AlertProvider from "./api/AlertService";
 import { AuthProvider } from "./api/AuthContext";
 import PrivateRoute from "./api/PrivateRoute";
 import { LoginLayout } from "./components/Sign/LoginLayout";
-import DashboardLayout from "./dashboards/DashboardLayout";
-import Admins from "./dashboards/Admin/Admins";
-import AdminProducts from "./dashboards/Admin/AdminProducts";
-import AdminRentals from "./dashboards/Admin/AdminRentals";
-import AdminServices from "./dashboards/Admin/AdminServices";
-import ContactusRequests from "./dashboards/Admin/ContactusReqs";
-import AdminOverview from "./dashboards/Admin/AdminOverview";
-import Profile from "./dashboards/UserProfile";
-import AdminCustomers from "./dashboards/Admin/AdminCustomers";
-import AdminMerchants from "./dashboards/Admin/AdminMerchants";
-import { AdminMessages } from "./dashboards/Admin/AdminMessages";
+import DashboardLayout from "./dashboard/DashboardLayout";
+import Admins from "./dashboard/Admins";
+import Products from "./dashboard/Products";
+import Rentals from "./dashboard/Rentals";
+import Services from "./dashboard/Services";
+import ContactusRequests from "./dashboard/ContactusReqs";
+import Overview from "./dashboard/Overview";
+import Profile from "./dashboard/Profile";
+import Customers from "./dashboard/Customers";
+import Merchants from "./dashboard/Merchants";
+import NotificationsPanel from "./dashboard/NotificationsPanel";
+import SiteManager from "./dashboard/SiteManager";
 
 const lightTheme = createTheme({
   palette: {
@@ -25,7 +26,7 @@ const lightTheme = createTheme({
       main: "#000000",
     },
     background: {
-      default: "#E3E1D9",
+      default: "#3D52A0",
     },
   },
 
@@ -89,7 +90,7 @@ function Routings({ handleMode }) {
     <>
       <AuthProvider>
         <Routes>
-          <Route path="/" element={<LoginLayout handleMode={handleMode}/>}/>
+          <Route path="/" element={<LoginLayout handleMode={handleMode} />} />
           <Route path="/*" element={<PrivateRoute><DashboardRoutes handleMode={handleMode} /></PrivateRoute>} />
         </Routes>
       </AuthProvider>
@@ -102,20 +103,17 @@ function DashboardRoutes({ handleMode }) {
     <>
       <DashboardLayout handleMode={handleMode}>
         <Routes>
-          {/* Common */}
-          <Route path="overview" element={<AdminOverview />} />
+          <Route path="overview" element={<Overview />} />
           <Route path="profile" element={<Profile />} />
-
-          {/* Admin */}
-          <Route path="adminlist" element={<Admins />} />
-          <Route path="amsgs" element={<AdminMessages />} />
-          <Route path="merchantlist" element={<AdminMerchants />} />
-          <Route path="customerlist" element={<AdminCustomers />} />
-          <Route path="productlist" element={<AdminProducts />} />
-          <Route path="rentallist" element={<AdminRentals />} />
-          <Route path="servicelist" element={<AdminServices />} />
+          <Route path="notifications" element={<NotificationsPanel />} />
+          <Route path="admins" element={<Admins />} />
+          <Route path="merchantlist" element={<Merchants />} />
+          <Route path="customerlist" element={<Customers />} />
+          <Route path="productlist" element={<Products />} />
+          <Route path="rentallist" element={<Rentals />} />
+          <Route path="servicelist" element={<Services />} />
           <Route path="contactreqs" element={<ContactusRequests />} />
-
+          <Route path="site" element={<SiteManager/>} />
         </Routes>
       </DashboardLayout>
     </>

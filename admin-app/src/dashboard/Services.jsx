@@ -3,14 +3,14 @@ import { Container, Button, styled, Paper, Typography, TextField,  Grid, TableCe
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import AddIcon from '@mui/icons-material/Add';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { db, storage } from '../../api/firebase';
-import {fetchSelectedService,updateService,addService,fetchServices}from '../../api/db/services'
+import { db, storage } from '../api/firebase';
+import {fetchSelectedService,updateService,addService,fetchServices}from '../api/db/services'
 import Swal from 'sweetalert2';
 import { deleteDoc, doc } from 'firebase/firestore';
-import {useAuth} from '../../api/AuthContext'
+import {useAuth} from '../api/AuthContext'
 import DeleteIcon from '@mui/icons-material/Delete';
 
-const AdminServices = () => {
+export default function Services () {
   const [showAddService, setShowAddService] = useState(false);
   const [editingServiceId, setEditingServiceId] = useState(null);
   const [viewingServiceId, setViewingServiceId] = useState(null);
@@ -51,8 +51,6 @@ const AdminServices = () => {
     </>
   );
 };
-
-export default AdminServices;
 
 const ServicesForm =  ({ sid, onSuccess, onCancel }) => {
   const [service, setService] = useState({
