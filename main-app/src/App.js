@@ -190,7 +190,7 @@ function DashboardRoutes({ handleMode }) {
           <Route path="myproducts" element={<MerchantProducts />} />
           <Route path="myrentals" element={<MerchantRentals />} />
           <Route path="myservices" element={<MerchantServices />} />
-          <Route path="myorders" element={<MerchantOrders />} />
+          <Route path="custorders" element={<MerchantOrders />} />
 
           {/* Customer */}
           <Route path="orders" element={<CustomerOrders />} />

@@ -1,79 +1,27 @@
 import { Button, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useAuth } from '../../api/AuthContext';
 import { Link } from 'react-router-dom';
-import {  collection, getDocs, query, where } from 'firebase/firestore';
-import { db } from '../../api/firebase';
-import Swal from 'sweetalert2';
 import { addOrder } from '../../api/db/orders';
-import { fetchMerchantDets } from '../../api/db/users';
+import { useAlerts } from '../../api/AlertService';
 
-export default function Details({ setSignin, setSignup, itemType, itemId, merchantId }) {
+export default function Details({ setSignin, setSignup, itemType, itemId, itemTitle, merchantId, merchantName }) {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const { user } = useAuth();
-    const [item, setItem] = useState(null);
-    const [merchant, setMerchant] = useState(null);
-    const [iid, setIId] = useState('pid');
-
-    useEffect(() => {
-        const fetchItem = async () => {
-            switch (itemType) {
-                case 'products':
-                    setIId('pid');
-                    break;
-                case 'rentals':
-                    setIId('rid')
-                    break;
-
-                case 'services':
-                    setIId('sid');
-                    break;
-                default:
-                    console.log('Unknown item type');
-                    return;
-            }
-
-            try {
-                const itemQuery = query(collection(db, itemType), where(iid, '==', itemId));
-                const qSnapshot = await getDocs(itemQuery);
-                const product = qSnapshot.docs.map((doc) => doc.data());
-                setItem(product[0]); // Assuming only one item is returned
-            } catch (e) {
-                console.log('Error getting item details: ', e);
-            }
-        };
-
-        const fetchMerchant = async () => {
-            try {
-                const data = await fetchMerchantDets(merchantId);
-                setMerchant(data);
-            } catch (e) {
-                console.log('Error getting merchant details: ', e);
-            }
-        };
-
-        fetchItem();
-        fetchMerchant();
-        console.log(item)
-        console.log(merchant)
-    }, []);
+    const {showAlerts}=useAlerts()
 
     const handleOrderNow = async () => {
         try {
-            if (item && merchant) {
-                await addOrder(user, itemId, item.title, itemType, merchantId);
-                Swal.fire({
-                    title: 'Your order request was sent to the merchant',
-                    icon: 'success',
-                });
-            } else {
-                Swal.fire({
-                    title: 'Item or merchant information is missing',
-                    icon: 'error',
-                });
-            }
+            await addOrder(user, itemId, itemTitle, itemType, merchantId, merchantName).then((result)=>{
+                if(result.success){
+                    showAlerts('Your order request was sent to the merchant','success')
+                }
+                else{
+                    showAlerts('Please wait for previous order done!!!','warning')
+                }
+            })
         } catch (e) {
             console.log('Error placing order: ', e);
         }
@@ -84,13 +32,13 @@ export default function Details({ setSignin, setSignup, itemType, itemId, mercha
             <>
                 <Box>
                     <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }} gutterBottom>
-                        <i className="fa-solid fa-user"></i> Name: {merchant?.displayName}
+                        <i className="fa-solid fa-user"></i> Name: {merchantName}
                     </Typography>
                     <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }} gutterBottom>
-                        <i className="fa-solid fa-location-dot"></i> Location: {item?.location}
+                        <i className="fa-solid fa-location-dot"></i> Location: *******
                     </Typography>
                     <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }} gutterBottom>
-                        <i className="fa-solid fa-phone"></i> Contact No: {merchant?.phoneNumber}
+                        <i className="fa-solid fa-phone"></i> Contact No: +94 #########
                     </Typography>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
