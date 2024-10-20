@@ -576,7 +576,7 @@ const RentalDetail = ({ rid, onBack }) => {
 
   return (
     <Paper style={{ padding: 16 }}>
-      <Typography variant="h4">{rental.title}</Typography>
+      <Typography variant="h4" gutterBottom>{rental.title}</Typography>
       <Typography variant="subtitle1">Category: {rental.category}</Typography>
       <Typography variant="subtitle1">Sub category: {rental.subCategory}</Typography>
       <Typography variant="body1">Description:</Typography>
