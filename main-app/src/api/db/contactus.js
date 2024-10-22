@@ -20,7 +20,7 @@ export const sendMessage = async (fname, lname, email, message) => {
     await setDoc(docRef, { id: docRef.id }, { merge: true });
   } catch (error) {
     console.error("Error sending message:", error);
-    throw error; // Rethrow error to be handled in the component
+    throw error;
   }
 };
 

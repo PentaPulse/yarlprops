@@ -131,11 +131,11 @@ export default function DashboardLayout({ handleMode, children }) {
             gap: 0.5,
           }}
         >
-          <MenuItem onClick={() => handleNavigation('/d/notifications')}>
+          <MenuItem onClick={() => handleNavigation('/notifications')}>
             <SupportRoundedIcon />
             <Typography variant="body1">Notifications</Typography>
           </MenuItem>
-          <MenuItem onClick={() => handleNavigation('/d/profile')}>
+          <MenuItem onClick={() => handleNavigation('/profile')}>
             <SupportRoundedIcon />
             <Typography variant="body1">Profile</Typography>
           </MenuItem>

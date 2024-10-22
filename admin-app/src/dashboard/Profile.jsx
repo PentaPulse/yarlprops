@@ -411,9 +411,6 @@ const AccountSettings = ({ profilePercentage }) => {
   const [email, setEmail] = useState({ old: '', new: '', confirm: '' });
   const [phoneNumber, setPhoneNumber] = useState({ old: '', new: '', confirm: '' });
   const [password, setPassword] = useState({ old: '', new: '', confirm: '' });
-  const [role, setRole] = useState('')
-  //const theme = useTheme()
-  const { showAlerts2 } = useAlerts()
 
   const handleInputChange = (setter) => (e) => {
     const { name, value } = e.target;
@@ -423,42 +420,7 @@ const AccountSettings = ({ profilePercentage }) => {
     }));
   };
 
-  const changeRole = async () => {
-    try {
-      if (user.isMerchant) {
-        if (user.myProducts.length > 0 || user.myRentals.length > 0 || user.myService.length > 0) {
-          showAlerts2('Remove ongoing items and try again', 'warning')
-        } else {
-          await updateDoc(doc(db, 'systemusers', user.uid), { 'isMerchant': false })
-          Swal.fire({
-            title: `Successfully changed to ${role}`,
-            icon: "success"
-          }).then((result) => {
-            if (result.isConfirmed) {
-              window.location.reload()
-            }
-          });
-        }
-      } else {
-        if (profilePercentage === 100) {
-          await updateDoc(doc(db, 'systemusers', user.uid), { 'isMerchant': true })
-          Swal.fire({
-            title: `Successfully changed to ${role}`,
-            icon: "success"
-          }).then((result) => {
-            if (result.isConfirmed) {
-              window.location.reload()
-            }
-          });
-        } else {
-          showAlerts2('Complete Your profile', 'warning')
-        }
-      }
-    } catch (error) {
-      console.error('Error updating role:', error);
-    }
-  };
-  const changeEmail = async () => {
+    const changeEmail = async () => {
     if (email.new !== email.confirm) {
       alert("New email and confirm email do not match");
       return;
@@ -499,9 +461,6 @@ const AccountSettings = ({ profilePercentage }) => {
       console.error("Error updating password: ", error);
     }
   };
-  const handleSelectChange = (e) => {
-    setRole(e.target.value)
-  };
 
   return (
     <>
@@ -512,27 +471,7 @@ const AccountSettings = ({ profilePercentage }) => {
         }}
         noValidate
         autoComplete="off"
-      >
-        <Box>
-          <Typography variant='h6'>Change role</Typography>
-          <Typography>I am currently a {user.isMerchant ? 'Merchant' : 'Customer'} in Yarlprops and I want to be a </Typography>
-          <FormControl sx={{ m: 1 }} fullWidth>
-            <InputLabel>Role</InputLabel>
-            <Select
-              disabled={user.adminid}
-              value={role}
-              onChange={handleSelectChange}
-              label="Role"
-            >
-              {['Merchant', 'Customer'].map((roleOption, index) => (
-                <MenuItem key={index} value={roleOption}>{roleOption}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <Container sx={{ display: 'flex', justifyContent: 'end', marginTop: '20px' }}>
-            <Button variant="contained" fullWidth color="primary" onClick={changeRole}>Change Role</Button>
-          </Container>
-        </Box>
+      >        
         <Box>
           <Typography variant="h6">Change Email</Typography>
           <TextField

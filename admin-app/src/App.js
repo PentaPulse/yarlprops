@@ -106,7 +106,7 @@ function DashboardRoutes({ handleMode }) {
           <Route path="overview" element={<Overview />} />
           <Route path="profile" element={<Profile />} />
           <Route path="notifications" element={<NotificationsPanel />} />
-          <Route path="admins" element={<Admins />} />
+          <Route path="adminlist" element={<Admins />} />
           <Route path="merchantlist" element={<Merchants />} />
           <Route path="customerlist" element={<Customers />} />
           <Route path="productlist" element={<Products />} />
