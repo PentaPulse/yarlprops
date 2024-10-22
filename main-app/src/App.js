@@ -64,7 +64,7 @@ const darkTheme = createTheme({
 });
 
 export default function App() {
-  if (typeof ResizeObserver !== 'undefined') {
+  if (typeof ResizeObserver !== null) {
     const ro = new ResizeObserver(() => {
       // Suppress ResizeObserver errors for undelivered notifications
       try {
@@ -76,6 +76,7 @@ export default function App() {
   
     // Observe changes in the body element
     ro.observe(document.body);
+    ro.disconnect()
   }
   return (
     <>

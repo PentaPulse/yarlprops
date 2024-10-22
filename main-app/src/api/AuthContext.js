@@ -16,6 +16,7 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = React.useState(true);
     const navigate = useNavigate()
     const { showAlerts } = useAlerts();
+    const [ok,setOk]=React.useState()
 
     React.useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -39,7 +40,7 @@ export const AuthProvider = ({ children }) => {
         });
 
         return () => unsubscribe();
-    }, []);
+    }, [ok]);
 
     const checkUserExistence = async (userId) => {
         const userDocRef = doc(db, 'systemusers', userId);
@@ -64,6 +65,7 @@ export const AuthProvider = ({ children }) => {
                             if (result.success) {
                                 sessionStorage.setItem('pp', user.photoURL);
                                 sessionStorage.setItem('displayName', user.displayName);
+                                setOk(true)
                             }
                         })
                     })

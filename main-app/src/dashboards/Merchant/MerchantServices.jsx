@@ -76,6 +76,7 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
   const { user } = useAuth();
   const [service, setService] = React.useState({
     merchantId: user.uid,
+    merchantName:user.displayName,
     title: '',
     category: '',
     subCategory: '',

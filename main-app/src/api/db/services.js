@@ -15,7 +15,7 @@ export const addService= async ({ merchantId,title, description, location, image
             description,
             location,
             images,
-            timestamp: serverTimestamp()
+            createdAt: new Date().toISOString()
         });
         await setDoc(docRef, { sid: docRef.id }, { merge: true });
         await updateDoc(doc(db,'systemusers',merchantId),{myServices:arrayUnion(docRef.id)})
