@@ -16,8 +16,10 @@ export default function Footer() {
   
   const footerBackground = isDarkMode ? '#222' : '#f7f7f7';
   const footerTextColor = isDarkMode ? '#ddd' : '#333';
-  const linkColor = isDarkMode ? '#90caf9' : '#0d6efd';
-  const iconColor = isDarkMode ? '#90caf9' : '#0d6efd';
+  // const linkColor = isDarkMode ? '#90caf9' : '#0d6efd';
+  // const iconColor = isDarkMode ? '#90caf9' : '#0d6efd';
+  const linkColor = isDarkMode ? '#018ABD' : '#004581';
+  const iconColor = isDarkMode ? '#018ABD' : '#004581';
   const paperBackground = isDarkMode ? '#333' : '#e9ecef';
   const paperTextColor = isDarkMode ? '#aaa' : '#666';
 

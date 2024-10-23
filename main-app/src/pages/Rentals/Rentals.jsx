@@ -295,10 +295,11 @@ export function RentalsPage({ setSignin, setSignup }) {
                         startIcon={<ChevronLeftIcon />}
                         size={isMobile ? "small" : "medium"}
                         sx={{
-                            backgroundColor: '#0d6efd',
+                            fontWeight: 'bold',
+                            backgroundColor: '#018ABD',
                             color: 'white',
                             '&:hover': {
-                                backgroundColor: '#90caf9',
+                                backgroundColor: '#004581',
                             }
                         }}
                     >
