@@ -14,6 +14,9 @@ export const merchMenu = [
     ['My Rentals', <CarRentalIcon />, 'myrentals'],
     ['My Services', <MiscellaneousServicesIcon />, 'myservices'],
     ['Customer Orders', <StoreIcon />, 'custorders'],
+    ['Feedback Center', <FeedbackIcon />, 'Fcenter'],
+
+
 ]
 export const userMenu = [
     ['Overview', <DashboardIcon />, 'overview'],
