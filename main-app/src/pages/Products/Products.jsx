@@ -302,10 +302,11 @@ export function ProductPage({ setSignin, setSignup }) {
             startIcon={<ChevronLeftIcon />}
             size={isMobile ? "small" : "medium"}
             sx={{
-              backgroundColor: '#0d6efd',
+              fontWeight: 'bold',
+              backgroundColor: '#018ABD',
               color: 'white',
               '&:hover': {
-                backgroundColor: '#018ABD',
+                backgroundColor: '#004581',
               }
             }}
           >
