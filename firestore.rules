@@ -90,6 +90,15 @@ service cloud.firestore {
     match /site/{id}{
       allow read;
       allow write:if isAdmin(request.auth.uid)
+
+      match /customers/{id}{
+      allow read;
+      allow write : if isAdmin(request.auth.uid)
+      }
+      match /merchants/{id}{
+      allow read;
+      allow write : if isAdmin(request.auth.uid)
+      }
     }
 
     function isAdmin(userId) {

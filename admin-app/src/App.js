@@ -113,7 +113,7 @@ function DashboardRoutes({ handleMode }) {
           <Route path="rentallist" element={<Rentals />} />
           <Route path="servicelist" element={<Services />} />
           <Route path="contactreqs" element={<ContactusRequests />} />
-          <Route path="site" element={<SiteManager/>} />
+          <Route path="site" element={<SiteManager/>} />   
         </Routes>
       </DashboardLayout>
     </>
