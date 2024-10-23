@@ -323,4 +323,6 @@ export function ProductPage({ setSignin, setSignup }) {
   <Typography variant="subtitle1" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-location-dot"></i> Location</Typography>
   <Typography variant="body1">{product.location}</Typography>
   <Typography variant="subtitle1" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-phone"></i> Contact No</Typography>
-  <Typography variant="body1">{merchant && merchant.phoneNumber}</Typography> */}
+  <Typography variant="body1">{merchant && merchant.phoneNumber}</Typography> 
+  #0d6efd
+  */}
