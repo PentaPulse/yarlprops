@@ -78,6 +78,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
   const { user } = useAuth();
   const [rental, setRental] = useState({
     merchantId: user.uid,
+    merchantName:user.displayName,
     title: '',
     category: '',
     subCategory: '',

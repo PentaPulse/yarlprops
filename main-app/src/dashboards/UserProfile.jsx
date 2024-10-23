@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../api/AuthContext';
-import { Box, Button, Container, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Avatar, Paper, Typography, CircularProgress, Tab, Tabs, useTheme, LinearProgress } from '@mui/material';
+import { Box, Button, Container, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Avatar, Paper, Typography, CircularProgress, Tab, Tabs, useTheme, LinearProgress, IconButton, InputAdornment } from '@mui/material';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db, storage, auth } from '../api/firebase';
 import { updateEmail, updatePassword, updateProfile } from 'firebase/auth';
@@ -8,6 +8,7 @@ import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import PropTypes from 'prop-types';
 import Swal from 'sweetalert2';
 import { useAlerts } from '../api/AlertService';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 function LinearProgressWithLabel(props) {
   return (

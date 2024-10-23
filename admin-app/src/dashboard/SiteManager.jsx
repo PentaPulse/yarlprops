@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, TextField, Typography, Grid, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
-import { storage,db  } from '../api/firebase'; // Import your Firebase configurations
+import { Box, Button, TextField, Typography, Grid, FormControl, InputLabel, Select, MenuItem, ImageList, ImageListItem } from '@mui/material';
+import { storage, db } from '../api/firebase'; // Import your Firebase configurations
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { collection, addDoc, query, orderBy, getDocs, limit } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
@@ -27,7 +27,7 @@ const SiteManager = () => {
             setSlides(fetchedSlides);
             setLoading(false);
         };
-        
+
         fetchSlides();
     }, [filter]);
 
@@ -66,67 +66,62 @@ const SiteManager = () => {
     };
 
     return (
-        <Box sx={{ padding: 4 }}>
-            <Typography variant="h4">Manage Slideshow</Typography>
-            
-            {/* Filter controls */}
-            <FormControl fullWidth margin="normal">
-                <InputLabel id="filter-label">Filter Slides</InputLabel>
-                <Select
-                    labelId="filter-label"
-                    value={filter}
-                    onChange={(e) => setFilter(e.target.value)}
-                    label="Filter Slides"
-                >
-                    <MenuItem value="latest">Latest Items</MenuItem>
-                    <MenuItem value="popular">Popular Items</MenuItem>
-                </Select>
-            </FormControl>
-
-            {/* List of slides */}
-            <Box sx={{ margin: '20px 0' }}>
-                {loading ? (
-                    <Typography>Loading...</Typography>
-                ) : (
-                    slides.map((slide) => (
-                        <Box key={slide.id} sx={{ marginBottom: 2 }}>
-                            <Typography variant="h6">{slide.title}</Typography>
-                            <img src={slide.mediaUrl} alt={slide.title} style={{ width: '100%', height: 'auto' }} />
-                        </Box>
-                    ))
-                )}
+        <>
+            <Box sx={{ padding: 4 }}>
+                <Typography variant="h4">Manage Slideshow</Typography>
+                {/* Add new slide */}
+                <Typography variant="h5">Add New Slide</Typography>
+                <TextField
+                    label="Slide Title"
+                    fullWidth
+                    margin="normal"
+                    value={newSlideTitle}
+                    onChange={(e) => setNewSlideTitle(e.target.value)}
+                />
+                <FormControl fullWidth margin="normal">
+                    <InputLabel id="media-type-label">Media Type</InputLabel>
+                    <Select
+                        labelId="media-type-label"
+                        value={newSlideType}
+                        onChange={(e) => setNewSlideType(e.target.value)}
+                        label="Media Type"
+                    >
+                        <MenuItem value="image">Image</MenuItem>
+                        <MenuItem value="video">Video</MenuItem>
+                    </Select>
+                </FormControl>
+                <input
+                    type="file"
+                    accept={newSlideType === 'image' ? 'image/*' : 'video/*'}
+                    onChange={(e) => setNewSlideMedia(e.target.files[0])}
+                />
+                <Button variant="contained" onClick={handleAddSlide} disabled={loading}>
+                    {loading ? 'Adding...' : 'Add Slide'}
+                </Button>
             </Box>
-
-            {/* Add new slide */}
-            <Typography variant="h5">Add New Slide</Typography>
-            <TextField
-                label="Slide Title"
-                fullWidth
-                margin="normal"
-                value={newSlideTitle}
-                onChange={(e) => setNewSlideTitle(e.target.value)}
-            />
-            <FormControl fullWidth margin="normal">
-                <InputLabel id="media-type-label">Media Type</InputLabel>
-                <Select
-                    labelId="media-type-label"
-                    value={newSlideType}
-                    onChange={(e) => setNewSlideType(e.target.value)}
-                    label="Media Type"
-                >
-                    <MenuItem value="image">Image</MenuItem>
-                    <MenuItem value="video">Video</MenuItem>
-                </Select>
-            </FormControl>
-            <input
-                type="file"
-                accept={newSlideType === 'image' ? 'image/*' : 'video/*'}
-                onChange={(e) => setNewSlideMedia(e.target.files[0])}
-            />
-            <Button variant="contained" onClick={handleAddSlide} disabled={loading}>
-                {loading ? 'Adding...' : 'Add Slide'}
-            </Button>
-        </Box>
+            <ImageList sx={{ width: 500, height: 450 }} cols={3} rowHeight={164}>
+                {slides.map((slide, index) => (
+                    <ImageListItem key={index}>
+                        {slide.mediaType === 'image' &&
+                            <img src={slide.mediaUrl} alt={slide.title} style={{ width: '100%', height: 'auto' }} />
+                        }
+                        {slide.mediaType === 'video' &&
+                            <video
+                                src={slide.mediaUrl}
+                                alt={slide.title}
+                                style={{ width: '100%', height: 'auto' }}
+                                controls // Adds play, pause, volume, etc. controls to the video
+                                loop // Loops the video if you want it to repeat
+                                muted // Mutes the video if you want it silent by default
+                                playsInline // Ensures the video plays inline on mobile devices
+                            >
+                                Your browser does not support the video tag.
+                            </video>
+                        }
+                    </ImageListItem>
+                ))}
+            </ImageList>
+        </>
     );
 };
 

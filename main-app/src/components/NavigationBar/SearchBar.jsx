@@ -47,7 +47,7 @@ export default function SearchBar({ page }) {
                 marginRight: theme.spacing(2),
                 padding: theme.spacing(0.5),
                 [theme.breakpoints.up('lg')]: {
-                    width: 'auto',
+                    width: '800px',
                 },
                 [theme.breakpoints.down('lg')]: {
                     width: '100%',

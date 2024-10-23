@@ -23,6 +23,7 @@ export const registerUser = async (uid, fname, lname, dname, email) => {
                 uid,
                 firstName: fname || '',
                 lastName: lname || '',
+                displayName:dname||'',
                 email: email,
                 phoneNumber: '',
                 gender: '',

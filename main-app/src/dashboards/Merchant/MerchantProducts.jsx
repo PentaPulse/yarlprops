@@ -80,6 +80,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
   const { user } = useAuth();
   const [product, setProduct] = useState({
     merchantId: user.uid,
+    merchantName:user.displayName,
     title: '',
     category: '',
     subCategory: '',

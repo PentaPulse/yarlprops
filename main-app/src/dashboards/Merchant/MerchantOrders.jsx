@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useAuth } from '../../api/AuthContext';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../../api/firebase';
@@ -269,46 +269,54 @@ function ServiceOrders() {
   );
 }
 
-function Row(props) {
+const Row = (props) => {
   const { row, itemType } = props;
   const [open, setOpen] = React.useState(false);
   const [orders, setOrders] = React.useState([]);
+  const [loading, setLoading] = React.useState(false); 
+  const {user}=useAuth()
 
-  const fetchCustomerOrders = async () => {
-    const itemId = itemType==='products'?row.pid:(itemType==='rentals'?row.rid:row.sid)
+  const fetchCustomerOrders = async (itemId) => {
+    setLoading(true);  // Set loading to true when fetching
     try {
       const qSnapshot = await getDocs(
-          collection(db, "orders"),
-          where('itemType', '==', itemType),
-          where('itemId', '==', itemId)        
+        collection(db, "orders"),
+        where('itemType', '==', itemType),
+        where('itemId', '==', itemId),
+        where('merchId','==',user.uid)
       );
       const codata = qSnapshot.docs.map((doc) => doc.data());
       setOrders(codata);
     } catch (e) {
       console.log(e);
+    } finally {
+      setLoading(false);  // Set loading to false after fetching
     }
   };
 
   const handleClick = () => {
     setOpen(!open);
     if (!open) {
-      fetchCustomerOrders(); // Fetch orders only when expanding
+      fetchCustomerOrders((row.pid || row.rid || row.sid));  // Fetch orders only when expanding
     }
   };
 
-  const handleApproval = () => {
-    // Add logic for handling approval
+  const handleApproval = (orderId) => {
+    // Add logic to approve an order, e.g., update status in Firestore
+    console.log("Approve order:", orderId);
+    // You can dispatch an action or call a function to update Firestore.
   };
 
   return (
-    <React.Fragment>
+    <>
+      {/* Row Header */}
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
         <TableCell align="center">
-          <Tooltip title={'click here'}>
+          <Tooltip title={'Click to expand'}>
             <IconButton
               aria-label="expand row"
               size="small"
-              onClick={handleClick}
+              onClick={handleClick}  // Handle IDs properly
             >
               {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
             </IconButton>
@@ -320,6 +328,8 @@ function Row(props) {
         <TableCell align="center">{row.quantity}</TableCell>
         <TableCell align="center">{row.status}</TableCell>
       </TableRow>
+
+      {/* Expanded Row with Orders */}
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
@@ -327,41 +337,47 @@ function Row(props) {
               <Typography variant="h6" gutterBottom component="div">
                 Order Details
               </Typography>
-              <Table size="small" aria-label="order details">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Order Date</TableCell>
-                    <TableCell>Customer Name</TableCell>
-                    <TableCell align="right">Quantity</TableCell>
-                    <TableCell align="right">Price</TableCell>
-                    <TableCell align="right">Status</TableCell>
-                    <TableCell align="right">Action</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {orders?.map((order, index) => (
-                    <TableRow key={index}>
-                      <TableCell component="th" scope="row">
-                        {order.date}
-                      </TableCell>
-                      <TableCell>{order.custName}</TableCell>
-                      <TableCell align="center">{order.quantity}</TableCell>
-                      <TableCell align="center">Rs {order.price}</TableCell>
-                      <TableCell align="center">{order.status}</TableCell>
-                      <TableCell align="center">
-                        <Button onClick={handleApproval}>Approval</Button>
-                      </TableCell>
+
+              {/* Loading State */}
+              {loading ? (
+                <Typography>Loading orders...</Typography>
+              ) : (
+                <Table size="small" aria-label="order details">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Order Date</TableCell>
+                      <TableCell>Customer Name</TableCell>
+                      <TableCell align="right">Quantity</TableCell>
+                      <TableCell align="right">Price</TableCell>
+                      <TableCell align="right">Status</TableCell>
+                      <TableCell align="right">Action</TableCell>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHead>
+                  <TableBody>
+                    {orders?.map((order) => (
+                      <TableRow key={order.id}>  {/* Use a unique key here */}
+                        <TableCell component="th" scope="row">
+                          {order.date}
+                        </TableCell>
+                        <TableCell>{order.custName}</TableCell>
+                        <TableCell align="center">{order.quantity}</TableCell>
+                        <TableCell align="center">Rs {order.price}</TableCell>
+                        <TableCell align="center">{order.status}</TableCell>
+                        <TableCell align="center">
+                          <Button onClick={() => handleApproval(order.id)}>Approval</Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
             </Box>
           </Collapse>
         </TableCell>
       </TableRow>
-    </React.Fragment>
+    </>
   );
-}
+};
 
 function OrderDetails(props) {
   const { onClose, selectedValue, open } = props;
