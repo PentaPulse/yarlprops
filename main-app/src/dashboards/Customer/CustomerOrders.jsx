@@ -52,7 +52,10 @@ export default function MyOrders() {
             <Grid item xs={12} sm={6} md={4} key={order.pid}>
               <Card
                 sx={{
-                  maxWidth: 345,
+                  minWidth: '300px',
+                  maxHeight:'500px',
+                  width:'100%',
+                  height:'auto',
                   backgroundColor:
                     theme.palette.mode === "dark"
                       ? order.status === "Completed"
@@ -63,12 +66,22 @@ export default function MyOrders() {
                       : "#ffebee",
                 }}
               >
-                <CardMedia
-                  component="img"
-                  height="140"
-                  image={order.itemImage}
-                  alt={order.title}
-                />
+               <CardMedia
+  component="img"
+  image={order.itemImage}
+  alt={order.title}
+  sx={{
+    objectFit: 'cover',
+    height: {
+      xs: '17rem', // Smaller height for extra-small screens
+      sm: '18rem', // Slightly larger for small screens
+      md: '15rem', // Default height for medium screens and above
+      lg:'17rem'
+    },
+    width: '100%', // Ensure the image takes full width of the card
+  }}
+/>
+
                 <CardContent>
                   <Typography
                     gutterBottom
