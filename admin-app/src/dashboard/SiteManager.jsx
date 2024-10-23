@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, TextField, Typography, FormControl, InputLabel, Select, MenuItem, ImageList, ImageListItem, Stack, Tab, Tabs, Paper } from '@mui/material';
+import { Box, Button, TextField, Typography, FormControl, InputLabel, Select, MenuItem, ImageList, ImageListItem, Stack, Tab, Tabs, Paper, ListSubheader, ImageListItemBar, IconButton } from '@mui/material';
 import { storage, db } from '../api/firebase'; // Import your Firebase configurations
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { collection, addDoc, query, orderBy, getDocs } from 'firebase/firestore';
+import { collection, addDoc, query, orderBy, getDocs, setDoc } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
-import PropTypes, { func } from 'prop-types';
-import { addQuestions, getQuestions, getQuestionsFromContactus } from '../api/db/siteManager';
+import PropTypes from 'prop-types';
+import { addQuestions, getQuestions, getQuestionsFromContactus, removeSlide } from '../api/db/siteManager';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function SiteManager() {
     const [value, setValue] = React.useState(0);
@@ -71,13 +72,15 @@ export const SlideshowManagement = () => {
         try {
             const mediaUrl = await handleMediaUpload(newSlideMedia);
 
-            await addDoc(collection(db, 'site'), {
+            const docRef=await addDoc(collection(db, 'site'), {
                 title: newSlideTitle,
                 mediaUrl,
                 mediaType: newSlideType,
                 createdAt: new Date(),
                 popularity: 0, // set initial popularity
             });
+
+            await setDoc(docRef, { id: docRef.id }, { merge: true });
 
             alert('Slide added successfully!');
             setNewSlideTitle('');
@@ -90,6 +93,10 @@ export const SlideshowManagement = () => {
 
         setLoading(false);
     };
+
+    const handleRemoveSlide =async(id)=>{
+        await removeSlide(id);
+    }
 
     return (
         <Box sx={{ padding: 4, display: 'flex', flexDirection: 'row' }}>
@@ -126,8 +133,8 @@ export const SlideshowManagement = () => {
                 </Button>
             </Box>
             <ImageList sx={{ width: 500, height: 450 }} cols={3} rowHeight={164}>
-                {slides.map((slide, index) => (
-                    <ImageListItem key={index}>
+                {slides.map((slide) => (
+                    <ImageListItem >
                         {slide.mediaType === 'image' &&
                             <img src={slide.mediaUrl} alt={slide.title} style={{ width: '100%', height: 'auto' }} />
                         }
@@ -144,9 +151,21 @@ export const SlideshowManagement = () => {
                                 Your browser does not support the video tag.
                             </video>
                         }
+                        <ImageListItemBar
+                            title={slide.title}
+                            actionIcon={
+                                <IconButton
+                                    sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+                                    aria-label={`remove`}
+                                    onClick={()=>handleRemoveSlide(slide.id)}
+                                >
+                                    <DeleteIcon/>
+                                </IconButton>
+                            }
+                        />
                     </ImageListItem>
                 ))}
-            </ImageList>
+            </ImageList>            
         </Box>
     )
 }
@@ -156,7 +175,7 @@ export const GuideManagement = () => {
         for: '',
         question: '',
         answer: ''
-    });    
+    });
 
     const [questionsList, setQuestionsList] = useState({
         customers: [],
