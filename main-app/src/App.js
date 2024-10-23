@@ -30,6 +30,8 @@ import Guide from "./pages/Guide/Guide";
 import PageLayout from "./pages/PageLayout";
 import NotificationsPanel from "./dashboards/NotificationsPanel";
 
+import { blue } from '@mui/material/colors';
+
 const lightTheme = createTheme({
   palette: {
     mode: "light",
@@ -44,6 +46,66 @@ const lightTheme = createTheme({
       afterread:"#E3E1D9"
     }
   },
+  components: {
+    MuiAccordion: {
+      styleOverrides: {
+        root: {
+          marginBottom: '16px',
+          '&.MuiPaper-root': {
+            '&:before': {
+              display: 'none',
+            },
+          },
+        }
+      }
+    },
+    MuiAccordionSummary: {
+      styleOverrides: {
+        root: {
+          minHeight: 80,
+          '&.Mui-expanded': {
+            minHeight: 80,
+            backgroundColor: blue[50]
+          },
+          '&:hover': {
+            backgroundColor: blue[50]
+          }
+        },
+        content: {
+          margin: '20px 0',
+          '&.Mui-expanded': {
+            margin: '20px 0'
+          }
+        }
+      }
+    },
+    MuiAccordionDetails: {
+      styleOverrides: {
+        root: {
+          padding: '24px'
+        }
+      }
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          minWidth: '100px',
+          padding: '8px 16px'
+        }
+      }
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          '&.faq-section': {
+            padding: '24px',
+            border: '1px solid',
+            borderColor: 'rgba(0, 0, 0, 0.12)'
+          }
+        }
+      }
+    }
+  }
 
 });
 
@@ -61,6 +123,66 @@ const darkTheme = createTheme({
       afterread:"#00072d"
     }
   },
+  components: {
+    MuiAccordion: {
+      styleOverrides: {
+        root: {
+          marginBottom: '16px',
+          '&.MuiPaper-root': {
+            '&:before': {
+              display: 'none',
+            },
+          },
+        }
+      }
+    },
+    MuiAccordionSummary: {
+      styleOverrides: {
+        root: {
+          minHeight: 80,
+          '&.Mui-expanded': {
+            minHeight: 80,
+            backgroundColor: blue[50]
+          },
+          '&:hover': {
+            backgroundColor: blue[50]
+          }
+        },
+        content: {
+          margin: '20px 0',
+          '&.Mui-expanded': {
+            margin: '20px 0'
+          }
+        }
+      }
+    },
+    MuiAccordionDetails: {
+      styleOverrides: {
+        root: {
+          padding: '24px'
+        }
+      }
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          minWidth: '100px',
+          padding: '8px 16px'
+        }
+      }
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          '&.faq-section': {
+            padding: '24px',
+            border: '1px solid',
+            borderColor: 'rgba(0, 0, 0, 0.12)'
+          }
+        }
+      }
+    }
+  }
 });
 
 export default function App() {

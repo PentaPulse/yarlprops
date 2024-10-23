@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { 
-  Grid, 
-  Typography, 
-  Accordion, 
-  AccordionSummary, 
-  AccordionDetails, 
-  Button, 
+import {
+  Grid,
+  Typography,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Button,
   Paper,
   ThemeProvider,
   createTheme,
@@ -14,81 +14,8 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { blue } from '@mui/material/colors';
-
-const theme = createTheme({
-  components: {
-    MuiAccordion: {
-      styleOverrides: {
-        root: {
-          marginBottom: '16px',
-          '&.MuiPaper-root': {
-            '&:before': {
-              display: 'none',
-            },
-          },
-        }
-      }
-    },
-    MuiAccordionSummary: {
-      styleOverrides: {
-        root: {
-          minHeight: 80,
-          '&.Mui-expanded': {
-            minHeight: 80,
-            backgroundColor: blue[50]
-          },
-          '&:hover': {
-            backgroundColor: blue[50]
-          }
-        },
-        content: {
-          margin: '20px 0',
-          '&.Mui-expanded': {
-            margin: '20px 0'
-          }
-        }
-      }
-    },
-    MuiAccordionDetails: {
-      styleOverrides: {
-        root: {
-          padding: '24px'
-        }
-      }
-    },
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          minWidth: '100px',
-          padding: '8px 16px'
-        }
-      }
-    },
-    MuiPaper: {
-      styleOverrides: {
-        root: {
-          '&.faq-section': {
-            padding: '24px',
-            border: '1px solid',
-            borderColor: 'rgba(0, 0, 0, 0.12)'
-          }
-        }
-      }
-    }
-  }
-});
-
-const customerFAQs = [
-  { question: "How do I place an order?", answer: "You can place an order by...", helpful: 0, notHelpful: 0 },
-  { question: "What payment methods do you accept?", answer: "We accept credit cards, PayPal, and...", helpful: 0, notHelpful: 0 },
-  { question: "How long does shipping take?", answer: "Shipping typically takes 3-5 business days...", helpful: 0, notHelpful: 0 },
-];
-
-const merchantFAQs = [
-  { question: "How do I list my products?", answer: "To list your products, go to your dashboard and...", helpful: 0, notHelpful: 0 },
-  { question: "What are the seller fees?", answer: "Our seller fees are structured as follows...", helpful: 0, notHelpful: 0 },
-  { question: "How do I handle returns?", answer: "To process a return, please follow these steps...", helpful: 0, notHelpful: 0 },
-];
+import { useEffect } from 'react';
+import { getGuide } from '../../api/db/guide';
 
 const FAQSection = ({ title, faqs }) => {
   const [expanded, setExpanded] = useState(false);
@@ -110,9 +37,9 @@ const FAQSection = ({ title, faqs }) => {
   return (
     <Box px={{ xs: 2, sm: 3, md: 4 }}>
       <Paper elevation={0} className="faq-section">
-        <Typography 
-          variant="h5" 
-          sx={{ 
+        <Typography
+          variant="h5"
+          sx={{
             mb: 3,
             fontWeight: 600,
             color: blue[700]
@@ -186,9 +113,20 @@ const FAQSection = ({ title, faqs }) => {
   );
 };
 
-const Guide = () => {
+export default function Guide () {
+  const [customerFAQs,setCustomerFAQs]=useState([])
+  const [merchantFAQs,setMerchantFAQs]=useState([])
+
+  useEffect(()=>{
+    const fetchDetails=async()=>{
+      const cdata = await getGuide('customers')
+      setCustomerFAQs(cdata)
+      const mdata = await getGuide('merchants')
+      setMerchantFAQs(mdata)
+    }
+    fetchDetails()
+  },[])
   return (
-    <ThemeProvider theme={theme}>
       <Container maxWidth="xl">
         <Grid container spacing={{ xs: 2, sm: 3, md: 3 }}>
           <Grid item xs={12} sm={12} md={6}>
@@ -199,8 +137,5 @@ const Guide = () => {
           </Grid>
         </Grid>
       </Container>
-    </ThemeProvider>
   );
 };
-
-export default Guide;
