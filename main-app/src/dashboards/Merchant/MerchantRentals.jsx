@@ -276,7 +276,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
         </FormControl>
         {rental.description.map((des, index) => (
           <Grid container key={index} spacing={1} alignItems="center">
-            <Grid item xs={11}>
+            <Grid item xs={11.5}>
               <TextField
                 label={`Description Line ${index + 1}`}
                 value={des}
@@ -363,6 +363,10 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
           <VisuallyHiddenInput type="file" />
         </Button>
 
+        <Typography variant="body1" color="textSecondary" gutterBottom>
+          (Note:- Add high quality images.)
+        </Typography>
+
         <Grid container spacing={2}>
           {existingImages.map((src, index) => (
             <Grid item key={index}>
@@ -397,7 +401,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
             </Grid>
           ))}
         </Grid>
-        {validationMessage && <Typography color="error">{validationMessage}</Typography>}
+        {validationMessage && <Typography color="error" sx={{ mt: '1rem'}} gutterBottom>{validationMessage}</Typography>}
         <Button type="submit" variant="contained" color="success" style={{ marginTop: '25px' }}>
           Save
         </Button>
