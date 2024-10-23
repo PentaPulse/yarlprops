@@ -20,7 +20,7 @@ import MerchantProducts from "./dashboards/Merchant/MerchantProducts";
 import MerchantRentals from "./dashboards/Merchant/MerchantRentals";
 import MerchantServices from "./dashboards/Merchant/MerchantServices";
 import MerchantOrders from "./dashboards/Merchant/MerchantOrders";
-// import MerchantfeedBack from "./dashboards/Merchant/Merchantfeedback"
+import MerchantFeedback from "./dashboards/Merchant/MerchantFeedback";
 import CustomerOrders from "./dashboards/Customer/CustomerOrders";
 import CustomerFeedback from "./dashboards/Customer/CustomerFeedback";
 
@@ -315,7 +315,7 @@ function DashboardRoutes({ handleMode }) {
           <Route path="myrentals" element={<MerchantRentals />} />
           <Route path="myservices" element={<MerchantServices />} />
           <Route path="custorders" element={<MerchantOrders />} />
-           {/* <Route path="feedback" element={<Merchantfeedback />} />  */}
+          <Route path="mrfeedback" element={<MerchantFeedback />} />
 
 
           {/* Customer */}
