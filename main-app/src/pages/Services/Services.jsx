@@ -12,6 +12,7 @@ import { fetchMerchantServiceDetails } from '../../api/db/users';
 import { serviceFilters } from '../../components/menuLists';
 import Filters from '../../components/Filters/Filters';
 import Details from '../../components/Details/Details';
+import Rate from '../../components/Ratings/Ratings';
 
 
 export default function Services() {
@@ -210,6 +211,7 @@ export function ServicePage({ setSignin, setSignup }) {
                                     ))}
                                 </ul>
                             </Box>
+                            <Rate/>
                             <Box sx={{ mx: '1rem', mt: '2.5rem' }}>
                                 {/* Seller Details */}
                                 <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>

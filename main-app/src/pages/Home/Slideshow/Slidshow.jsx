@@ -54,7 +54,8 @@ function SlideShow() {
               <button
                 className='bounce-button'
                 style={{
-                  fontSize: FontSize
+                  fontSize: FontSize,
+                  backgroundColor: '#018ABD',
                 }}>
                 View Details
               </button>

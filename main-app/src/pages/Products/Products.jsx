@@ -13,6 +13,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import Filters from '../../components/Filters/Filters';
 import { useAuth } from '../../api/AuthContext';
 import Details from '../../components/Details/Details';
+import Rate from '../../components/Ratings/Ratings';
 
 function Products() {
   return (
@@ -284,6 +285,7 @@ export function ProductPage({ setSignin, setSignup }) {
                 </ul>
 
               </Box>
+              <Rate/>
               <Box sx={{ mx: '1rem', mt: '2.5rem' }}>
                 {/* Seller Details */}
                 <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
