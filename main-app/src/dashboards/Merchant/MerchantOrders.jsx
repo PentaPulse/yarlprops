@@ -1,405 +1,168 @@
-import React, { useEffect } from 'react';
-import { useAuth } from '../../api/AuthContext';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import { db } from '../../api/firebase';
-import {
-  Box,
-  Collapse,
-  IconButton,
-  Paper,
-  styled,
-  Table,
-  TableBody,
-  TableCell,
-  tableCellClasses,
-  TableContainer,
-  TableHead,
-  TablePagination,
-  TableRow,
-  Tooltip,
-  Typography,
-  Button,
-  Dialog, DialogTitle
-} from '@mui/material';
+import * as React from 'react';
+import PropTypes from 'prop-types';
+import Box from '@mui/material/Box';
+import Collapse from '@mui/material/Collapse';
+import IconButton from '@mui/material/IconButton';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import PropTypes from 'prop-types';
+import { fetchOrdersForItem, fetchProductsToOrders, fetchRentalsToOrders, fetchServicesToOrders } from '../../api/db/orders';
+import { Button } from '@mui/material';
 
-export default function MerchantOrders() {
-  return (
-    <>
-      <ProductOrders />
-      <RentalOrders />
-      <ServiceOrders />
-    </>
-  )
+function formatDate(isoString) {
+  const date = new Date(isoString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+  return `${year}-${month}-${day} ${hours}.${minutes}.${seconds}`;
 }
 
-function ProductOrders() {
-  const [products, setProducts] = React.useState([]);
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const { user } = useAuth();
-
-  React.useEffect(() => {
-    const fetchProductList = async () => {
-      if (user?.uid) {
-        const q = await getDocs(
-          query(collection(db, 'products'), where('merchantId', '==', user.uid))
-        );
-        const fetchedProducts = q.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setProducts(fetchedProducts);
-      }
-    };
-    fetchProductList();
-  }, [user?.uid]);
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
-
-  const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-    },
-  }));
-
-  return (
-    <>
-      <Typography variant="h6">MY PRODUCT ORDERS</Typography>
-      <TableContainer component={Paper}>
-        <Table aria-label="collapsible table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell align='center'>Customer details</StyledTableCell>
-              <StyledTableCell align="center">Title</StyledTableCell>
-              <StyledTableCell align="center">Category</StyledTableCell>
-              <StyledTableCell align="center">Type</StyledTableCell>
-              <StyledTableCell align="center">Quantity</StyledTableCell>
-              <StyledTableCell align="center">Current Status</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {products
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((product) => (
-                <Row key={product.id} row={product} itemId={product.pid} />
-              ))}
-          </TableBody>
-        </Table>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={products.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </TableContainer>
-    </>
-  );
-}
-
-function RentalOrders() {
-  const [rentals, setRentals] = React.useState([]);
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const { user } = useAuth();
-
-  React.useEffect(() => {
-    const fetchRentalList = async () => {
-      if (user?.uid) {
-        const q = await getDocs(
-          query(collection(db, 'rentals'), where('merchantId', '==', user.uid))
-        );
-        const fetchedRentals = q.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setRentals(fetchedRentals);
-      }
-    };
-    fetchRentalList();
-  }, [user?.uid]);
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
-
-  const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-    },
-  }));
-
-  return (
-    <>
-      <Typography variant="h6">MY RENTAL ORDERS</Typography>
-      <TableContainer component={Paper}>
-        <Table aria-label="collapsible table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell align='center'>Customer details</StyledTableCell>
-              <StyledTableCell align="center">Title</StyledTableCell>
-              <StyledTableCell align="center">Category</StyledTableCell>
-              <StyledTableCell align="center">Type</StyledTableCell>
-              <StyledTableCell align="center">Quantity</StyledTableCell>
-              <StyledTableCell align="center">Current Status</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rentals
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((rental) => (
-                <Row key={rental.rid} row={rental} itemId={rental.rid} />
-              ))}
-          </TableBody>
-        </Table>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={rentals.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </TableContainer>
-    </>
-  );
-}
-
-function ServiceOrders() {
-  const [services, setServices] = React.useState([]);
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const { user } = useAuth();
-
-  React.useEffect(() => {
-    const fetchServiceList = async () => {
-      if (user?.uid) {
-        const q = await getDocs(
-          query(collection(db, 'services'), where('merchantId', '==', user.uid))
-        );
-        const fetchedServices = q.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setServices(fetchedServices);
-      }
-    };
-    fetchServiceList();
-  }, [user?.uid]);
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
-
-  const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-    },
-  }));
-
-  return (
-    <>
-      <Typography variant="h6">MY SERVICE ORDERS</Typography>
-      <TableContainer component={Paper}>
-        <Table aria-label="collapsible table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell align='center'>Customer details</StyledTableCell>
-              <StyledTableCell align="center">Title</StyledTableCell>
-              <StyledTableCell align="center">Category</StyledTableCell>
-              <StyledTableCell align="center">Type</StyledTableCell>
-              <StyledTableCell align="center">Quantity</StyledTableCell>
-              <StyledTableCell align="center">Current Status</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {services
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((service) => (
-                <Row row={service} itemType='service' itemId={service.sid} />
-              ))}
-          </TableBody>
-        </Table>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={services.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </TableContainer>
-    </>
-  );
-}
-
-const Row = (props) => {
-  const { row, itemType } = props;
+function Row(props) {
+  const { row } = props;
   const [open, setOpen] = React.useState(false);
   const [orders, setOrders] = React.useState([]);
-  const [loading, setLoading] = React.useState(false); 
-  const {user}=useAuth()
 
-  const fetchCustomerOrders = async (itemId) => {
-    setLoading(true);  // Set loading to true when fetching
-    try {
-      const qSnapshot = await getDocs(
-        collection(db, "orders"),
-        where('itemType', '==', itemType),
-        where('itemId', '==', itemId),
-        where('merchId','==',user.uid)
-      );
-      const codata = qSnapshot.docs.map((doc) => doc.data());
-      setOrders(codata);
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setLoading(false);  // Set loading to false after fetching
-    }
-  };
-
-  const handleClick = () => {
-    setOpen(!open);
+  const handleRowClick = async () => {
     if (!open) {
-      fetchCustomerOrders((row.pid || row.rid || row.sid));  // Fetch orders only when expanding
+      const fetchedOrders = await fetchOrdersForItem(row.pid || row.rid || row.sid);
+      setOrders(fetchedOrders);
     }
-  };
-
-  const handleApproval = (orderId) => {
-    // Add logic to approve an order, e.g., update status in Firestore
-    console.log("Approve order:", orderId);
-    // You can dispatch an action or call a function to update Firestore.
+    setOpen(!open);
   };
 
   return (
-    <>
-      {/* Row Header */}
+    <React.Fragment>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
-        <TableCell align="center">
-          <Tooltip title={'Click to expand'}>
-            <IconButton
-              aria-label="expand row"
-              size="small"
-              onClick={handleClick}  // Handle IDs properly
-            >
-              {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-            </IconButton>
-          </Tooltip>
+        <TableCell>
+          <IconButton
+            aria-label="expand row"
+            size="small"
+            onClick={handleRowClick}
+          >
+            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
         </TableCell>
-        <TableCell align="center">{row.title}</TableCell>
-        <TableCell align="center">{row.category}</TableCell>
-        <TableCell align="center">{row.subCategory}</TableCell>
-        <TableCell align="center">{row.quantity}</TableCell>
-        <TableCell align="center">{row.status}</TableCell>
+        <TableCell component="th" scope="row">{row.title}</TableCell>
+        <TableCell>{row.category}</TableCell>
+        <TableCell>{row.subCategory}</TableCell>
+        {!row.sid &&
+          <TableCell align="right">{row.quantity}</TableCell>
+        }
+        <TableCell>{row.currentStatus}</TableCell>
       </TableRow>
-
-      {/* Expanded Row with Orders */}
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
               <Typography variant="h6" gutterBottom component="div">
-                Order Details
+                Orders for {row.title}
               </Typography>
-
-              {/* Loading State */}
-              {loading ? (
-                <Typography>Loading orders...</Typography>
-              ) : (
-                <Table size="small" aria-label="order details">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Order Date</TableCell>
-                      <TableCell>Customer Name</TableCell>
-                      <TableCell align="right">Quantity</TableCell>
-                      <TableCell align="right">Price</TableCell>
-                      <TableCell align="right">Status</TableCell>
-                      <TableCell align="right">Action</TableCell>
+              <Table size="small" aria-label="orders">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Order Date</TableCell>
+                    <TableCell>Customer Name</TableCell>
+                    <TableCell align="right">Quantity</TableCell>
+                    <TableCell>Status</TableCell>
+                    <TableCell>Action</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {orders.map((order, index) => (
+                    <TableRow key={index}>
+                      <TableCell component="th" scope="row">{formatDate(order.date)}</TableCell>
+                      <TableCell>{order.custName}</TableCell>
+                      <TableCell align="right">{order.quantity}</TableCell>
+                      <TableCell>{order.status}</TableCell>
+                      <TableCell><Button>Approval</Button></TableCell>
                     </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {orders?.map((order) => (
-                      <TableRow key={order.id}>  {/* Use a unique key here */}
-                        <TableCell component="th" scope="row">
-                          {order.date}
-                        </TableCell>
-                        <TableCell>{order.custName}</TableCell>
-                        <TableCell align="center">{order.quantity}</TableCell>
-                        <TableCell align="center">Rs {order.price}</TableCell>
-                        <TableCell align="center">{order.status}</TableCell>
-                        <TableCell align="center">
-                          <Button onClick={() => handleApproval(order.id)}>Approval</Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              )}
+                  ))}
+                </TableBody>
+              </Table>
             </Box>
           </Collapse>
         </TableCell>
       </TableRow>
-    </>
-  );
-};
-
-function OrderDetails(props) {
-  const { onClose, selectedValue, open } = props;
-
-  const handleClose = () => {
-    onClose(selectedValue);
-  };
-
-  const handleListItemClick = (value) => {
-    onClose(value);
-  };
-
-  return (
-    <Dialog onClose={handleClose} open={open}>
-      <DialogTitle>Set backup account</DialogTitle>
-
-    </Dialog>
+    </React.Fragment>
   );
 }
 
-OrderDetails.propTypes = {
-  onClose: PropTypes.func.isRequired,
-  open: PropTypes.bool.isRequired,
-  selectedValue: PropTypes.string.isRequired,
+Row.propTypes = {
+  row: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    category: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    quantity: PropTypes.number.isRequired,
+    currentStatus: PropTypes.string.isRequired,
+  }).isRequired,
 };
+
+export default function MerchantOrders() {
+  const [products, setProducts] = React.useState([])
+  const [rentals, setRentals] = React.useState([])
+  const [services, setServices] = React.useState([])
+
+  React.useEffect(() => {
+    const fetchProducts = async () => {
+      const data = await fetchProductsToOrders()
+      setProducts(data)
+    }
+    const fetchRentals = async () => {
+      const data = await fetchRentalsToOrders()
+      setRentals(data)
+    }
+    const fetchServices = async () => {
+      const data = await fetchServicesToOrders()
+      setServices(data)
+    }
+
+    fetchProducts()
+    fetchRentals()
+    fetchServices()
+  }, [])
+  return (
+    <>
+      <ItemOrders title={'Products'} rows={products} />
+      <ItemOrders title={'Rentals'} rows={rentals} />
+      <ItemOrders title={'Services'} rows={services} />
+    </>
+  )
+}
+
+function ItemOrders({ title, rows }) {
+  return (
+    <TableContainer component={Paper} sx={{mt:4,ml:3}}>
+      <Typography variant='h5' textAlign={'center'} mt={2}>{title}</Typography>
+      <Table aria-label="collapsible table">
+        <TableHead>
+          <TableRow>
+            <TableCell />
+            <TableCell>Title</TableCell>
+            <TableCell>Category</TableCell>
+            <TableCell>Type</TableCell>
+            {title !== 'Services' &&
+              <TableCell align="right">Quantity</TableCell>
+            }
+            <TableCell>Current Status</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows.map((row) => (
+            <Row row={row} />
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+}

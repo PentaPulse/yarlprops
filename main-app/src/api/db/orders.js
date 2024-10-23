@@ -6,7 +6,7 @@ export const fetchOrderCount = async (custId, status) => {
   try {
     const q = query(
       collection(db, "orders"),
-      where('custId','==',custId),
+      where('custId', '==', custId),
       where('status', '==', status)
     );
 
@@ -22,7 +22,7 @@ export const fetchFeedbackCount = async (custid) => {
   try {
     const q = query(
       collection(db, "orders"),
-      where('custid','==',custid),
+      where('custid', '==', custid),
       where('review', '==', false)
     );
 
@@ -36,7 +36,7 @@ export const fetchFeedbackCount = async (custid) => {
 
 export const fetchOrders = async (custid) => {
   try {
-    const q = await getDocs(collection(db,  'orders'),where('custId','==',custid))
+    const q = await getDocs(collection(db, 'orders'), where('custId', '==', custid))
     const data = q.docs.map((doc) => doc.data())
     return data;
   } catch (e) {
@@ -45,18 +45,18 @@ export const fetchOrders = async (custid) => {
 }
 
 //FOR MERCHANTS
-export const fetchCustomerOrders=async(merchid,itemType,itemId)=>{
-  try{
-    const q = await getDocs(collection(db,'orders'),where('merchid','==',merchid),where('itemType','==',itemType),where('itemId','==',itemId))
-    const data = q.docs.map((doc)=>doc.data())
+export const fetchCustomerOrders = async (merchid, itemType, itemId) => {
+  try {
+    const q = await getDocs(collection(db, 'orders'), where('merchid', '==', merchid), where('itemType', '==', itemType), where('itemId', '==', itemId))
+    const data = q.docs.map((doc) => doc.data())
     return data
-  }catch(e){
-    console.log('error fetching merch orders :- ',e)
+  } catch (e) {
+    console.log('error fetching merch orders :- ', e)
   }
 }
 
 //FOR BOTH CUSTS AND MERCHANTS
-export const addOrder = async (cust, itemId,itemImage, title, itemType, merchId,merchName) => {
+export const addOrder = async (cust, itemId, itemImage, title, itemType, merchId, merchName) => {
   try {
     const ordersRef = collection(db, "orders");
     const q = query(
@@ -68,7 +68,7 @@ export const addOrder = async (cust, itemId,itemImage, title, itemType, merchId,
     const querySnapshot = await getDocs(q);
 
     if (!querySnapshot.empty) {
-      return {success:false};      
+      return { success: false };
     }
     const order = {
       itemId,
@@ -84,8 +84,31 @@ export const addOrder = async (cust, itemId,itemImage, title, itemType, merchId,
     };
 
     const docRef = await addDoc(collection(db, "orders"), order);
-    return {success:true}
+    return { success: true }
   } catch (e) {
     console.log("add order error: ", e);
   }
 };
+
+export const fetchOrdersForItem = async (itemId) => {
+  const q = await getDocs(collection(db, 'orders'))
+  const orders = q.docs.map((doc) => doc.data())
+
+  return orders.filter(order => order.itemId === itemId);
+}
+
+export const fetchProductsToOrders=async()=>{
+  const q = await getDocs(collection(db,'products'))
+  const data = q.docs.map((doc)=>doc.data())
+  return data
+}
+export const fetchRentalsToOrders=async()=>{
+  const q = await getDocs(collection(db,'rentals'))
+  const data = q.docs.map((doc)=>doc.data())
+  return data
+}
+export const fetchServicesToOrders=async()=>{
+  const q = await getDocs(collection(db,'services'))
+  const data = q.docs.map((doc)=>doc.data())
+  return data
+}
