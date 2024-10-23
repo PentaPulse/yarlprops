@@ -1,213 +1,206 @@
-import React from 'react'
+import React, { useState } from 'react';
 import { 
-  Typography, 
-  Container, 
-  TextField, 
   Grid, 
-  Card, 
-  CardContent, 
-  Link,
-  Box,
-  InputAdornment,
-  Modal,
-  Backdrop,
-  Fade,
-  Button
+  Typography, 
+  Accordion, 
+  AccordionSummary, 
+  AccordionDetails, 
+  Button, 
+  Paper,
+  ThemeProvider,
+  createTheme,
+  Container,
+  Box
 } from '@mui/material';
-import { Search as SearchIcon, X as CloseIcon} from 'lucide-react';
-import { useState } from 'react';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import EmailIcon from '@mui/icons-material/Email';
-import SmsIcon from '@mui/icons-material/Sms';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { blue } from '@mui/material/colors';
 
-
-const guidData = [
-  {
-    question: "Can I purchase more than one of each item in the merch drops?",
-    answer: "During the first merch drop of the Retro Grimace Pool Float, fans are limited to one per person. For the Free & Easy Market, innisfree and Kid Cudi merch drops, there are...",
-    readMore: true,
-    icon: <AccountCircleIcon sx={{ fontSize: 40, color: '#1e3a8a' }} />
-  },
-  {
-    question: "Can I access the app using my smartwatch?",
-    answer: "The app is not currently compatible with smartwatches.",
-    readMore: true,
-    icon: <EmailIcon sx={{ fontSize: 40, color: '#1e3a8a' }} />
-  },
-  {
-    question: "I'm doing a paper. Can you answer some questions about yarlprops's for me?",
-    answer: "All the information about Yarlprops that can be shared is available on yarlprops corporate website.",
-    readMore: true,
-    icon: <SmsIcon sx={{ fontSize: 40, color: '#1e3a8a' }} />
-  },
-  {
-    question: "My promotion or discount was not applied?",
-    answer: "We’re sorry about that. To review your receipt with a customer service representative, first identify who was handling your delivery—Uber Eats, DoorDash or Grubhub. Check the bottom of the receipt in your email to find out the vendor.",
-    readMore: true,
-    icon: <AccountCircleIcon sx={{ fontSize: 40, color: '#1e3a8a' }} />
-  },
-  {
-    question: "Do I Need a Yarlprop's Login to Sign into Yarlprop's Wi-Fi?",
-    answer: "No, you will not need a special login for McDonald’s Wi-Fi. Simply accept the terms of agreement in order to sign into McDonald’s internet services.Visit the McDonald's Merchandise website Golden Arches Unlimited to order McDonald's apparel online. For in-store shopping call your local McDonald's by using the McDonald's Restaurant Locator to find a restaurant, and ask for product avail...",
-    readMore: true,
-    icon: <EmailIcon sx={{ fontSize: 40, color: '#1e3a8a' }} />
-  },
-  {
-    question: "Where can I buy Yarlprop's t-shirts/hats/gear?",
-    answer: "Visit the Yarlprop's Merchandise website Golden Arches Unlimited to order Yarlprop's apparel online. For in-store shopping call your local Yarlprop's by using the Yarlprop's Restaurant Locator to find a restaurant, and ask for product avail...",
-    readMore: true,
-    icon: <SmsIcon sx={{ fontSize: 40, color: '#1e3a8a' }} />
+const theme = createTheme({
+  components: {
+    MuiAccordion: {
+      styleOverrides: {
+        root: {
+          marginBottom: '16px',
+          '&.MuiPaper-root': {
+            '&:before': {
+              display: 'none',
+            },
+          },
+        }
+      }
+    },
+    MuiAccordionSummary: {
+      styleOverrides: {
+        root: {
+          minHeight: 80,
+          '&.Mui-expanded': {
+            minHeight: 80,
+            backgroundColor: blue[50]
+          },
+          '&:hover': {
+            backgroundColor: blue[50]
+          }
+        },
+        content: {
+          margin: '20px 0',
+          '&.Mui-expanded': {
+            margin: '20px 0'
+          }
+        }
+      }
+    },
+    MuiAccordionDetails: {
+      styleOverrides: {
+        root: {
+          padding: '24px'
+        }
+      }
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          minWidth: '100px',
+          padding: '8px 16px'
+        }
+      }
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          '&.faq-section': {
+            padding: '24px',
+            border: '1px solid',
+            borderColor: 'rgba(0, 0, 0, 0.12)'
+          }
+        }
+      }
+    }
   }
+});
+
+const customerFAQs = [
+  { question: "How do I place an order?", answer: "You can place an order by...", helpful: 0, notHelpful: 0 },
+  { question: "What payment methods do you accept?", answer: "We accept credit cards, PayPal, and...", helpful: 0, notHelpful: 0 },
+  { question: "How long does shipping take?", answer: "Shipping typically takes 3-5 business days...", helpful: 0, notHelpful: 0 },
 ];
 
+const merchantFAQs = [
+  { question: "How do I list my products?", answer: "To list your products, go to your dashboard and...", helpful: 0, notHelpful: 0 },
+  { question: "What are the seller fees?", answer: "Our seller fees are structured as follows...", helpful: 0, notHelpful: 0 },
+  { question: "How do I handle returns?", answer: "To process a return, please follow these steps...", helpful: 0, notHelpful: 0 },
+];
 
-const Guide = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [openModal, setOpenModal] = useState(false);
-  const [selectedFAQ, setSelectedFAQ] = useState(null);
+const FAQSection = ({ title, faqs }) => {
+  const [expanded, setExpanded] = useState(false);
+  const [feedback, setFeedback] = useState({});
 
-  const filteredFAQs = guidData.filter(faq => 
-    faq.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    faq.answer.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const handleOpenModal = (faq) => {
-    setSelectedFAQ(faq);
-    setOpenModal(true);
+  const handleChange = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
   };
 
-  const handleCloseModal = () => {
-    setOpenModal(false);
-    setSelectedFAQ(null);
+  const handleFeedback = (index, isUseful) => {
+    if (!feedback[index]) {
+      setFeedback(prev => ({
+        ...prev,
+        [index]: isUseful
+      }));
+    }
   };
-
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      
-      <Container maxWidth="lg" sx={{ mt: 4 }}>
-        <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 'bold'}}>
-          Get your questions answered
-        </Typography>
-        <Typography variant="body1" paragraph sx = {{fontSize: '1.1rem'}}>
-          Find answers to the most commonly asked questions below. Search for topics you're interested in or sort by category. If you still can't find the answer you are loocking for just  
-          <Link color="success" href="/contact" underline="hover" sx ={{fontStyle: 'italic'}}>
-             {' Contact Us'}
-          </Link> .
-        </Typography>
-        <TextField
-          fullWidth
-          variant="outlined"
-          placeholder="Search for a question"
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <SearchIcon />
-              </InputAdornment>
-            ),
+    <Box px={{ xs: 2, sm: 3, md: 4 }}>
+      <Paper elevation={0} className="faq-section">
+        <Typography 
+          variant="h5" 
+          sx={{ 
+            mb: 3,
+            fontWeight: 600,
+            color: blue[700]
           }}
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          sx={{ mb: 2 }}
-        />
-        <Typography variant="body2" sx={{ mb: 2 }}>
-          {filteredFAQs.length} results found
+        >
+          {title}
         </Typography>
-        <Grid container spacing={3}>
-          {filteredFAQs.map((faq, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index}>
-              <Card sx={{ height: 350 }}>
-                <CardContent sx={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <Box sx={{ mb: 2 }}>{faq.icon}</Box>
-                  <Typography variant="h5" component="h3" gutterBottom sx={{ fontSize: '1.4rem', fontWeight: 'bold'}}>
-                    {faq.question}
-                  </Typography>
-                  <Typography 
-                    variant="body2" 
-                    paragraph 
-                    sx={{ 
-                      flexGrow: 1, 
-                      overflow: 'auto',
-                      mb: 1,
-                      fontSize: '1.1rem',
-                      height: '150px',
-                      '&::-webkit-scrollbar': {
-                        width: '0.4em'
-                      },
-                      '&::-webkit-scrollbar-track': {
-                        boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
-                        webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)'
-                      },
-                      '&::-webkit-scrollbar-thumb': {
-                        backgroundColor: 'rgba(0,0,0,.1)',
-                        outline: '1px solid slategrey'
-                      }
-                    }}
-
-                  >
-                    {faq.answer}
-                  </Typography>
-                  {faq.readMore && (
-                    <Button 
-                      color="primary" 
-                      onClick={() => handleOpenModal(faq)}
-                      sx={{ alignSelf: 'flex-start' }}
-                    >
-                      Read more
-                    </Button>
-                  )}
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      </Container>
-      <Modal
-        open={openModal}
-        onClose={handleCloseModal}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={openModal}>
-          <Box sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: '80%',
-            maxWidth: 600,
-            bgcolor: 'background.paper',
-            boxShadow: 24,
-            p: 4,
-            borderRadius: 2,
-            maxHeight: '90vh',
-            overflow: 'auto'
-          }}>
-            <Button 
-              onClick={handleCloseModal}
-              sx={{ position: 'absolute', right: 8, top: 8 }}
+        {faqs.map((faq, index) => {
+          const isExpanded = expanded === `panel${index}`;
+          return (
+            <Accordion
+              key={index}
+              expanded={isExpanded}
+              onChange={handleChange(`panel${index}`)}
             >
-              <CloseIcon />
-            </Button>
-            {selectedFAQ && (
-              <>
-                <Box sx={{ mb: 2 }}>{selectedFAQ.icon}</Box>
-                <Typography variant="h4" component="h2" gutterBottom>
-                  {selectedFAQ.question}
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography sx={{ fontSize: '1.1rem', fontWeight: 500 }}>
+                  {faq.question}
                 </Typography>
-                <Typography variant="body1" sx={{fontSize: '1.2rem'}}>
-                  {selectedFAQ.answer}
-                </Typography>
-              </>
-            )}
-          </Box>
-        </Fade>
-      </Modal>
-
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography sx={{ mb: 3 }}>{faq.answer}</Typography>
+                {isExpanded && (
+                  <Grid container spacing={1}>
+                    <Grid item xs={12} sm={6} md={3}>
+                      <Button
+                        fullWidth
+                        variant={feedback[index] === true ? "contained" : "outlined"}
+                        sx={{
+                          backgroundColor: feedback[index] === true ? blue[700] : 'transparent',
+                          color: feedback[index] === true ? 'white' : blue[700],
+                          borderColor: blue[700],
+                          '&:hover': {
+                            backgroundColor: feedback[index] === true ? blue[800] : blue[50],
+                            borderColor: blue[700],
+                          },
+                        }}
+                        onClick={() => handleFeedback(index, true)}
+                        disabled={feedback[index] !== undefined}
+                      >
+                        Useful
+                      </Button>
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={3}>
+                      <Button
+                        fullWidth
+                        variant={feedback[index] === false ? "contained" : "outlined"}
+                        sx={{
+                          backgroundColor: feedback[index] === false ? blue[700] : 'transparent',
+                          color: feedback[index] === false ? 'white' : blue[700],
+                          borderColor: blue[700],
+                          '&:hover': {
+                            backgroundColor: feedback[index] === false ? blue[800] : blue[50],
+                            borderColor: blue[700],
+                          },
+                        }}
+                        onClick={() => handleFeedback(index, false)}
+                        disabled={feedback[index] !== undefined}
+                      >
+                        Not
+                      </Button>
+                    </Grid>
+                  </Grid>
+                )}
+              </AccordionDetails>
+            </Accordion>
+          );
+        })}
+      </Paper>
     </Box>
   );
 };
+
+const Guide = () => {
+  return (
+    <ThemeProvider theme={theme}>
+      <Container maxWidth="xl">
+        <Grid container spacing={{ xs: 2, sm: 3, md: 3 }}>
+          <Grid item xs={12} sm={12} md={6}>
+            <FAQSection title="Customer" faqs={customerFAQs} />
+          </Grid>
+          <Grid item xs={12} sm={12} md={6}>
+            <FAQSection title="Merchant" faqs={merchantFAQs} />
+          </Grid>
+        </Grid>
+      </Container>
+    </ThemeProvider>
+  );
+};
+
 export default Guide;

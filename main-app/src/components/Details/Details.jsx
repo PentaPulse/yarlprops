@@ -8,7 +8,7 @@ import { useAlerts } from '../../api/AlertService';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../../api/firebase';
 
-export default function Details({ setSignin, setSignup, itemType, itemId, itemTitle, merchantId}) {
+export default function Details({ setSignin, setSignup, itemType, itemId, itemTitle,itemImage, merchantId}) {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const { user } = useAuth();
@@ -37,7 +37,7 @@ export default function Details({ setSignin, setSignup, itemType, itemId, itemTi
 
     const handleOrderNow = async () => {
         try {
-            await addOrder(user, itemId, itemTitle, itemType, merchantId, merchant.displayName).then((result)=>{
+            await addOrder(user, itemId,itemImage, itemTitle, itemType, merchantId, merchant.displayName).then((result)=>{
                 if(result.success){
                     showAlerts('Your order request was sent to the merchant','success')
                 }
@@ -57,10 +57,10 @@ export default function Details({ setSignin, setSignup, itemType, itemId, itemTi
                         <i className="fa-solid fa-user"></i> Name: {merchant.displayName}
                     </Typography>
                     <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }} gutterBottom>
-                        <i className="fa-solid fa-location-dot"></i> Location: *******
+                        <i className="fa-solid fa-location-dot"></i> Location: {merchant.address}
                     </Typography>
                     <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }} gutterBottom>
-                        <i className="fa-solid fa-phone"></i> Contact No: +94 #########
+                        <i className="fa-solid fa-phone"></i> Contact No: {merchant.phoneNumber}
                     </Typography>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
