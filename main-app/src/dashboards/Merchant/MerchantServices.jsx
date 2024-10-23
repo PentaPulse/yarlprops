@@ -306,15 +306,10 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
           Upload Images
           <VisuallyHiddenInput type="file" onChange={handleImageChange} />
         </Button>
-        <Typography variant="body2" color="textSecondary">
-          You must upload at least 2 images and no more than 5 images.
-        </Typography>
 
-        {validationMessage && (
-          <Typography variant="body2" color="error">
-            {validationMessage}
-          </Typography>
-        )}
+        <Typography variant="body1" color="textSecondary" gutterBottom>
+          (Note:- Add high quality images.)
+        </Typography>
 
         <Grid container spacing={2}>
           {existingImages.map((src, index) => (
@@ -369,8 +364,9 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
             </Grid>
           ))}
         </Grid> */}
+  
 
-        <Grid container justifyContent="flex-end" spacing={2} style={{ marginTop: 20 }}>
+        {/* <Grid container justifyContent="flex-end" spacing={2} style={{ marginTop: 20 }}>
           <Grid item>
             <Button variant="contained" onClick={onCancel}>
               Cancel
@@ -381,7 +377,19 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
               Save
             </Button>
           </Grid>
-        </Grid>
+        </Grid> */}
+        {validationMessage && (
+          <Typography color="error" sx={{ mt: '1rem'}} gutterBottom>
+            {validationMessage}
+          </Typography>
+        )}
+
+        <Button type="submit" variant="contained" color="success" style={{ marginTop: '25px' }}>
+          Save
+        </Button>
+        <Button onClick={onCancel} variant="outlined" style={{ marginTop: '25px', marginLeft: '10px' }}>
+          Cancel
+        </Button>
       </form>
     </Paper>
   );
