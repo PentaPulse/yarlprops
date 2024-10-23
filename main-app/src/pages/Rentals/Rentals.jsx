@@ -12,6 +12,7 @@ import { rentalFilters } from '../../components/menuLists';
 import { fetchSelectedRental } from '../../api/db/rentals';
 import Filters from '../../components/Filters/Filters';
 import Details from '../../components/Details/Details';
+import Rate from '../../components/Ratings/Ratings';
 
 export default function Rentals() {
     return (
@@ -277,6 +278,7 @@ export function RentalsPage({ setSignin, setSignup }) {
                                     <li><Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4">Quantity: {rental.quantity}</Typography></li>
                                 </ul>
                             </Box>
+                            <Rate/>
                             <Box sx={{ mx: '1rem', mt: '2.5rem' }}>
                                 {/* Seller Details */}
                                 <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
