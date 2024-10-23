@@ -6,11 +6,18 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import FeedbackIcon from '@mui/icons-material/Feedback';
 import { fetchFeedbackCount, fetchOrderCount, fetchOrders } from '../../api/db/orders';
 
+
+
+
 export default function CustomerOverview() {
     const { user } = useAuth();
     const [completedCount, setCompletedCount] = useState(0);
     const [pendingCount, setPendingCount] = useState(0);
     const [feedbackCount, setFeedBackCount] = useState(0);
+    //const [merchant,setMerchant]=useState('')
+
+   
+
 
     useEffect(() => {
         const fetchOrdersCount = async () => {
@@ -101,11 +108,15 @@ function OrderHistory() {
             <TableContainer component={Paper} sx={{ mt: 4 }}>
                 <Table>
                     <TableHead>
-                        <TableRow>
+                        <TableRow >
+                          
+                             <TableCell sx={{ backgroundColor: 'black', color: 'white' }} align="center">Index</TableCell>
+                             <TableCell sx={{ backgroundColor: 'black', color: 'white' }} align="center">Item</TableCell>
+                            <TableCell sx={{ backgroundColor: 'black', color: 'white' }} align="center">Merchant Name</TableCell>
 
-                            <TableCell sx={{ backgroundColor: 'black', color: 'white' }} align="center">Item</TableCell>
-                            <TableCell sx={{ backgroundColor: 'black', color: 'white' }} align="center">Quantity</TableCell>
-                            <TableCell sx={{ backgroundColor: 'black', color: 'white' }} align="center">Price</TableCell>
+
+                             <TableCell sx={{ backgroundColor: 'black', color: 'white' }} align="center">Date</TableCell> 
+                            {/* <TableCell sx={{ backgroundColor: 'black', color: 'white' }} align="center">Price</TableCell> */}
                             <TableCell sx={{ backgroundColor: 'black', color: 'white' }} align="center">Status</TableCell>
                         </TableRow>
                     </TableHead>
@@ -113,10 +124,12 @@ function OrderHistory() {
 
                         {item.length > 0 ? (
                             item.slice(0, 5).map((item, index) => (
-                                <TableRow>
+                                <TableRow key={index}>
+                                      <TableCell align="center">{index + 1}</TableCell>
                                     <TableCell align="center">{item.title}</TableCell>
-                                    <TableCell align="center">{item.quantity}</TableCell>
-                                    <TableCell align="center">{item.price}</TableCell>
+                                    <TableCell align="center">{item.merchName}</TableCell>
+                                    <TableCell align="center">{new Date(item.date).toLocaleDateString()}</TableCell> 
+                                    {/* <TableCell align="center">{item.price}</TableCell> */}
                                     <TableCell align="center">{item.status}</TableCell>
 
                                 </TableRow>
