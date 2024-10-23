@@ -72,10 +72,10 @@ export default function Details({ setSignin, setSignup, itemType, itemId, itemTi
                         sx={{
                             mt: '0.8rem',
                             fontWeight: 'bold',
-                            backgroundColor: '#0d6efd',
+                            backgroundColor: '#018ABD',
                             color: 'white',
                             '&:hover': {
-                                backgroundColor: '#90caf9',
+                                backgroundColor: '#004581',
                             },
                         }}
                         onClick={handleOrderNow}
