@@ -15,6 +15,8 @@ import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
 import Notifications from '../components/Notifications/Notifications';
+import logo from '../components/NavigationBar/logoimage/logo.jpg';
+
 
 const drawerWidth = 240;
 const openedMixin = (theme) => ({
@@ -217,12 +219,15 @@ export default function DashboardLayout({ handleMode, children }) {
               >
                 <MenuIcon />
               </IconButton>
-              <Typography variant="h6" noWrap component="div" >
-                logo {/*large screens logo + name*/}
-              </Typography>
-              <Typography variant="h6" noWrap component="div" sx={{ display: { xs: 'none', sm: 'none', md: 'block', lg: 'block' } }}>
-                YarlProps {/*small screens logo*/}
-              </Typography>
+              
+              <img src={logo} alt="YarlProps logo" 
+                            style={{ 
+                                height: '70px',
+                                width: '70px',
+                                 marginRight: '20px',
+                                 borderRadius: '60%', 
+                                 border: '2px solid #ccc'
+                                  }} />
             </Box>
             <Box sx={{ flexGrow: 1 }} />
             <Box display={'flex'} gap={1} >              
