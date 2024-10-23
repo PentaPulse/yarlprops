@@ -22,6 +22,15 @@ export const userMenu = [
    
 ]
 
+export const bothMenu=[
+    ['Overview', <DashboardIcon />, 'overview'],
+    ['My Products', <InventoryIcon />, 'myproducts'],
+    ['My Rentals', <CarRentalIcon />, 'myrentals'],
+    ['My Services', <MiscellaneousServicesIcon />, 'myservices'],
+    ['Customer Orders', <StoreIcon />, 'custorders'],
+    ['My Orders',< ShoppingCartIcon/>,'orders'],
+    ['Feedbacks',<FeedbackIcon/>,'feedback'],
+]
 export const additionalMenu=[    
     ['My Orders',< ShoppingCartIcon/>,'orders'],
     ['Feedbacks',<FeedbackIcon/>,'feedback'],

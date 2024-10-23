@@ -66,7 +66,7 @@ export default function MyOrders() {
                 <CardMedia
                   component="img"
                   height="140"
-                  image={order.images}
+                  image={order.itemImage}
                   alt={order.title}
                 />
                 <CardContent>

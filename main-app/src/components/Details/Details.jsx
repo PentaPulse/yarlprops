@@ -8,7 +8,7 @@ import { useAlerts } from '../../api/AlertService';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../../api/firebase';
 
-export default function Details({ setSignin, setSignup, itemType, itemId, itemTitle, merchantId}) {
+export default function Details({ setSignin, setSignup, itemType, itemId, itemTitle,itemImage, merchantId}) {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const { user } = useAuth();
@@ -37,7 +37,7 @@ export default function Details({ setSignin, setSignup, itemType, itemId, itemTi
 
     const handleOrderNow = async () => {
         try {
-            await addOrder(user, itemId, itemTitle, itemType, merchantId, merchant.displayName).then((result)=>{
+            await addOrder(user, itemId,itemImage, itemTitle, itemType, merchantId, merchant.displayName).then((result)=>{
                 if(result.success){
                     showAlerts('Your order request was sent to the merchant','success')
                 }
