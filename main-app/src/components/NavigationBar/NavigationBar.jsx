@@ -19,6 +19,7 @@ import ModeSwitch from '../ModeHandler/ModeSwitch';
 import SearchBar from './SearchBar';
 import ProfileBox from '../ProfileBox/ProfileBox';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import logo from './logoimage/logo.jpg'
 
 const style = {
     position: 'absolute',
@@ -233,7 +234,15 @@ export default function NavigationBar({ handleMode, signin, setSignin, signup, s
                                 color: theme.palette.primary.main
                             }}
                         >
-                            YarlProps
+                             {/* YarlProps  */}
+                            <img src={logo} alt="YarlProps logo" 
+                            style={{ 
+                                height: '70px',
+                                width: '70px',
+                                 marginRight: '20px',
+                                 borderRadius: '60%', 
+                                 border: '2px solid #ccc'
+                                  }} />
                         </Typography>
                         <Box sx={{
                             flexGrow: 1, [theme.breakpoints.down('lg')]: { display: 'none' },
