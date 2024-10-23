@@ -313,6 +313,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
           margin="normal"
           required
           inputProps={{ min: 1 }}
+          disabled={rental.category === 'Bordims'}
         />
         <TextField
           label="Location"

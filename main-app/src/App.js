@@ -37,7 +37,7 @@ const lightTheme = createTheme({
       main: "#000000",
     },
     background: {
-      default: "#ADBBDA",
+      default: "#CBE3EF",
     },
     notification:{
       beforeread:"#ffffff",
