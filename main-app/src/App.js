@@ -87,14 +87,6 @@ const lightTheme = createTheme({
         }
       }
     },
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          minWidth: '100px',
-          padding: '8px 16px'
-        }
-      }
-    },
     MuiPaper: {
       styleOverrides: {
         root: {
@@ -161,14 +153,6 @@ const darkTheme = createTheme({
       styleOverrides: {
         root: {
           padding: '24px'
-        }
-      }
-    },
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          minWidth: '100px',
-          padding: '8px 16px'
         }
       }
     },

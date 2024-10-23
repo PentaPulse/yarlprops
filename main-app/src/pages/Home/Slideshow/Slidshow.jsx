@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Carousel from 'react-bootstrap/Carousel';
-import { useMediaQuery, useScrollTrigger } from '@mui/material';
+import { useMediaQuery} from '@mui/material';
 import { Link } from 'react-router-dom';
 import './SlideShow.css';
 import { collection, getDocs } from 'firebase/firestore';
@@ -28,7 +28,9 @@ function SlideShow() {
 
   return (
     <Carousel>
-      {slides.map((slide, index) => (
+      {slides.length
+      ?
+      slides.map((slide, index) => (
         <Carousel.Item>
           {slide.mediaType === 'image' &&
             <img src={slide.mediaUrl} alt={slide.title} style={{ height: carouselHeight }} className="d-block w-100"  />
@@ -59,7 +61,10 @@ function SlideShow() {
             </Link>
           </Carousel.Caption>
         </Carousel.Item>
-      ))}
+      ))
+    :<Carousel.Item>
+      Loading
+      </Carousel.Item>}
     </Carousel>
   );
 }
