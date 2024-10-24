@@ -19,11 +19,11 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../api/firebase";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "../../api/AuthContext";
-//import { Snackbar, Alert } from "@mui/material";
-import useAlerts from '../../api/AlertService'
+import { useAlerts } from "../../api/AlertService";
 
 
 export default function FeedbackPage() {
+  const {showAlerts}=useAlerts()
   const [feedbacks, setFeedbacks] = useState([]);
   const [orderList, setOrderList] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null); // New state for selected order
@@ -38,7 +38,6 @@ export default function FeedbackPage() {
   });
 
   const theme = useTheme();
-  const {showAlerts}=useAlerts()
 
   // Fetching orders from Firestore
   useEffect(() => {
