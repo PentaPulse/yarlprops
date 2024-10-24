@@ -79,7 +79,7 @@ function Row(props) {
                   <TableRow>
                     <TableCell>Order Date</TableCell>
                     <TableCell>Customer Name</TableCell>
-                    <TableCell align="right">Quantity</TableCell>
+                    <TableCell >Quantity</TableCell>
                     <TableCell>Status</TableCell>
                     <TableCell>Action</TableCell>
                   </TableRow>

@@ -56,7 +56,7 @@ export const fetchCustomerOrders = async (merchid, itemType, itemId) => {
 }
 
 //FOR BOTH CUSTS AND MERCHANTS
-export const addOrder = async (cust, itemId, itemImage, title, itemType, merchId, merchName) => {
+export const addOrder = async (cust, itemId, itemImage, title, itemType,itemQuantity, merchId, merchName) => {
   try {
     const ordersRef = collection(db, "orders");
     const q = query(
@@ -75,6 +75,7 @@ export const addOrder = async (cust, itemId, itemImage, title, itemType, merchId
       itemImage,
       title,
       itemType,
+      itemQuantity,
       merchId,
       merchName,
       status: "pending",

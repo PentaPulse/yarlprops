@@ -37,7 +37,7 @@ export default function Details({ setSignin, setSignup, itemType, itemId, itemTi
 
     const handleOrderNow = async () => {
         try {
-            await addOrder(user, itemId,itemImage, itemTitle, itemType, merchantId, merchant.displayName).then((result)=>{
+            await addOrder(user, itemId,itemImage, itemTitle, itemType,1, merchantId, merchant.displayName).then((result)=>{
                 if(result.success){
                     showAlerts('Your order request was sent to the merchant','success')
                 }
