@@ -3,7 +3,7 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     match /systemusers/{userId} {
-      allow get;//: if request.resource.data.keys().hasOnly(['displayName']);
+      allow get: if request.resource.data.keys().hasOnly(['displayName']);
       allow create:if request.auth != null;
       allow read: if request.auth != null;
       allow update: if isUser(request.auth.uid);
@@ -23,8 +23,7 @@ service cloud.firestore {
 
     match /admins/{aid}{
       allow create:if request.auth != null;
-      allow read: if request.auth != null;
-      allow update,delete: if isAdmin(request.auth.uid);
+      allow read,update,delete: if isAdmin(request.auth.uid);
 
       match /items/{itemNotificationId}{
         allow write :if request.auth != null;

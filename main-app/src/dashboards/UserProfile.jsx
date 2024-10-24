@@ -328,7 +328,7 @@ const ProfileSettings = ({ setProfilePercentage }) => {
           />
           <TextField
             label="Display name"
-            name="displayname"
+            name="displayName"
             value={profile.displayName}
             onChange={handleInputChange}
             InputProps={{

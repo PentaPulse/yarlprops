@@ -20,13 +20,14 @@ import { db } from "../../api/firebase";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "../../api/AuthContext";
 import { useAlerts } from "../../api/AlertService";
+import { getOrderDetails, getOrders } from "../../api/db/feedback";
 
 
 export default function FeedbackPage() {
-  const {showAlerts}=useAlerts()
+  const { showAlerts } = useAlerts()
   const [feedbacks, setFeedbacks] = useState([]);
   const [orderList, setOrderList] = useState([]);
-  const [selectedOrder, setSelectedOrder] = useState(null); // New state for selected order
+  const [selectedOrder, setSelectedOrder] = useState(null);
   const { user } = useAuth();
   const location = useLocation();
   const { merchantName, productName } = location.state || {};
@@ -43,15 +44,7 @@ export default function FeedbackPage() {
   useEffect(() => {
     const fetchOrderList = async () => {
       try {
-        const q = query(
-          collection(db, "systemusers", user.uid, "orders"),
-          where("review", "==", false)
-        );
-        const qSnapshot = await getDocs(q);
-        const data = qSnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
+        const data = await getOrders(user)
         setOrderList(data);
       } catch (e) {
         console.log(e);
@@ -59,6 +52,11 @@ export default function FeedbackPage() {
     };
     fetchOrderList();
   }, [user.uid]);
+
+  const selectOrder = async(order) => {
+    const details = await getOrderDetails(order)
+    setSelectedOrder(details)
+  }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -145,12 +143,24 @@ export default function FeedbackPage() {
             label="Order"
           >
             {orderList.map((order) => (
-              <MenuItem key={order.id} value={order.id}>
-                {order.productName} - {order.merchantName}
+              <MenuItem key={order.id} value={order.id} onClick={()=>selectOrder(order)}>
+                {order.title} - {order.merchName}
               </MenuItem>
             ))}
           </Select>
         </FormControl>
+
+        {/* Conditionally render order info based on selectedOrder */}
+        {selectedOrder && (
+          <Box sx={{ mt: 2, p: 2, border: '1px solid grey', borderRadius: 2 }}>
+            <Typography variant="h6">Order Details</Typography>
+            <Typography><strong>Product:</strong> {selectedOrder.title}</Typography>
+            <Typography><strong>Merchant:</strong> {selectedOrder.displayName}</Typography>
+            <Typography><strong>Quantity:</strong> {selectedOrder.quantity}</Typography>
+            <Typography><strong>Status:</strong> {selectedOrder.status}</Typography>
+          </Box>
+        )}
+
 
         <TextField
           required
