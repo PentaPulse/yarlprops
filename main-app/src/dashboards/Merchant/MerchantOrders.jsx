@@ -29,21 +29,22 @@ function formatDate(isoString) {
 }
 
 function Row(props) {
-  const { row } = props;
+  const { row ,setRefresh,refresh} = props;
   const [open, setOpen] = React.useState(false);
   const [orders, setOrders] = React.useState([]);
-  const {user}=useAuth()
+  const { user } = useAuth()
 
   const handleRowClick = async () => {
     if (!open) {
-      const fetchedOrders = await fetchOrdersForItem(row.pid || row.rid || row.sid,user.uid);
+      const fetchedOrders = await fetchOrdersForItem(row.pid || row.rid || row.sid, user.uid);
       setOrders(fetchedOrders);
     }
     setOpen(!open);
   };
 
-  const handleApproval=async(order)=>{
+  const handleApproval = async (order) => {
     await approveOrder(order)
+    setRefresh(!refresh)
     //await approveOrderNotification(order)
   }
 
@@ -63,9 +64,9 @@ function Row(props) {
         <TableCell>{row.category}</TableCell>
         <TableCell>{row.subCategory}</TableCell>
         {!row.sid &&
-          <TableCell align="right">{row.quantity}</TableCell>
+          <TableCell >{row.quantity}</TableCell>
         }
-        <TableCell>{row.currentStatus}</TableCell>
+        <TableCell>{row.status}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -74,28 +75,32 @@ function Row(props) {
               <Typography variant="h6" gutterBottom component="div">
                 Orders for {row.title}
               </Typography>
-              <Table size="small" aria-label="orders">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Order Date</TableCell>
-                    <TableCell>Customer Name</TableCell>
-                    <TableCell >Quantity</TableCell>
-                    <TableCell>Status</TableCell>
-                    <TableCell>Action</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {orders.map((order, index) => (
-                    <TableRow key={index}>
-                      <TableCell component="th" scope="row">{formatDate(order.date)}</TableCell>
-                      <TableCell>{order.custName}</TableCell>
-                      <TableCell align="right">{order.quantity}</TableCell>
-                      <TableCell>{order.status}</TableCell>
-                      <TableCell><Button onClick={()=>handleApproval(order)}>Approval</Button></TableCell>
+              {orders.length > 0 ?
+                <Table size="small" aria-label="orders">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Order Date</TableCell>
+                      <TableCell>Customer Name</TableCell>
+                      <TableCell >Quantity</TableCell>
+                      <TableCell>Status</TableCell>
+                      <TableCell>Action</TableCell>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHead>
+                  <TableBody>
+                    {orders.map((order, index) => (
+                      <TableRow key={index}>
+                        <TableCell component="th" scope="row">{formatDate(order.date)}</TableCell>
+                        <TableCell>{order.custName}</TableCell>
+                        <TableCell>{order.itemQuantity}</TableCell>
+                        <TableCell>{order.status}</TableCell>
+                        <TableCell>{order.status==='pending'?<Button onClick={() => handleApproval(order)}>Approval</Button>:<Typography>Approved</Typography>}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+                :
+                <Typography>No orders yet</Typography>
+              }
             </Box>
           </Collapse>
         </TableCell>
@@ -119,6 +124,7 @@ export default function MerchantOrders() {
   const [products, setProducts] = React.useState([])
   const [rentals, setRentals] = React.useState([])
   const [services, setServices] = React.useState([])
+  const [refresh,setRefresh]=React.useState(false)
 
   React.useEffect(() => {
     const fetchProducts = async () => {
@@ -137,10 +143,10 @@ export default function MerchantOrders() {
     fetchProducts()
     fetchRentals()
     fetchServices()
-  }, [])
+  }, [refresh])
   return (
     <>
-      <ItemOrders title={'Products'} rows={products} />
+      <ItemOrders title={'Products'} rows={products} setRefresh={setRefresh} refresh={refresh}/>
       <ItemOrders title={'Rentals'} rows={rentals} />
       <ItemOrders title={'Services'} rows={services} />
     </>
@@ -149,7 +155,7 @@ export default function MerchantOrders() {
 
 function ItemOrders({ title, rows }) {
   return (
-    <TableContainer component={Paper} sx={{mt:4,ml:3}}>
+    <TableContainer component={Paper} sx={{ mt: 4, ml: 3 }}>
       <Typography variant='h5' textAlign={'center'} mt={2}>{title}</Typography>
       <Table aria-label="collapsible table">
         <TableHead>
@@ -159,7 +165,7 @@ function ItemOrders({ title, rows }) {
             <TableCell>Category</TableCell>
             <TableCell>Type</TableCell>
             {title !== 'Services' &&
-              <TableCell align="right">Quantity</TableCell>
+              <TableCell >Quantity</TableCell>
             }
             <TableCell>Current Status</TableCell>
           </TableRow>

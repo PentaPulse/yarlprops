@@ -56,7 +56,7 @@ export const fetchCustomerOrders = async (merchid, itemType, itemId) => {
 }
 
 //FOR BOTH CUSTS AND MERCHANTS
-export const addOrder = async (cust, itemId, itemImage, title, itemType,itemQuantity, merchId, merchName) => {
+export const addOrder = async (cust, itemId, itemImage, title, itemType, itemQuantity, merchId, merchName) => {
   try {
     const ordersRef = collection(db, "orders");
     const q = query(
@@ -85,33 +85,33 @@ export const addOrder = async (cust, itemId, itemImage, title, itemType,itemQuan
     };
 
     const docRef = await addDoc(collection(db, "orders"), order);
-    setDoc(docRef,{id:docRef.id},{merge:true})
+    setDoc(docRef, { id: docRef.id }, { merge: true })
     return { success: true }
   } catch (e) {
     console.log("add order error: ", e);
   }
 };
 
-export const fetchOrdersForItem = async (itemId,merchId) => {
-  const q = await getDocs(collection(db, 'orders'),where('merchId','==',merchId))
+export const fetchOrdersForItem = async (itemId, merchId) => {
+  const q = await getDocs(collection(db, 'orders'), where('merchId', '==', merchId))
   const orders = q.docs.map((doc) => doc.data())
 
   return orders.filter(order => order.itemId === itemId);
 }
 
-export const fetchProductsToOrders=async()=>{
-  const q = await getDocs(collection(db,'products'))
-  const data = q.docs.map((doc)=>doc.data())
+export const fetchProductsToOrders = async () => {
+  const q = await getDocs(collection(db, 'products'))
+  const data = q.docs.map((doc) => doc.data())
   return data
 }
-export const fetchRentalsToOrders=async()=>{
-  const q = await getDocs(collection(db,'rentals'))
-  const data = q.docs.map((doc)=>doc.data())
+export const fetchRentalsToOrders = async () => {
+  const q = await getDocs(collection(db, 'rentals'))
+  const data = q.docs.map((doc) => doc.data())
   return data
 }
-export const fetchServicesToOrders=async()=>{
-  const q = await getDocs(collection(db,'services'))
-  const data = q.docs.map((doc)=>doc.data())
+export const fetchServicesToOrders = async () => {
+  const q = await getDocs(collection(db, 'services'))
+  const data = q.docs.map((doc) => doc.data())
   return data
 }
 
@@ -126,7 +126,35 @@ export const approveOrder = async (order) => {
   const querySnapshot = await getDocs(q);
 
   querySnapshot.forEach(async (doc) => {
-    const docRef = doc.ref; // Get the reference to each matching document
+    const docRef = doc.ref;
+    
     await setDoc(docRef, { status: 'completed' }, { merge: true });
+
+    const itemQuery = query(
+      collection(db, order.itemType),
+      where(`${order.itemType.charAt(0)}id`, '==', order.itemId)
+    );
+
+    const itemSnapshot = await getDocs(itemQuery);
+
+    itemSnapshot.forEach(async (itemDoc) => {
+      const itemRef = itemDoc.ref;
+      const currentQuantity = itemDoc.data().quantity;
+
+      if (currentQuantity > 0) {
+        const updatedQuantity = currentQuantity - 1;
+
+        const newStatus = updatedQuantity === 0 ? 'Sold out' : itemDoc.data().status;
+
+        await setDoc(itemRef, {
+          quantity: updatedQuantity,
+          status: newStatus
+        }, { merge: true });
+
+      } else {
+        await setDoc(itemRef, { status: 'Sold out' }, { merge: true });
+      }
+    });
   });
 };
+
