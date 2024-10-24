@@ -1,4 +1,4 @@
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { addDoc, collection, getDocs, query, setDoc, where } from "firebase/firestore";
 import { db } from "../firebase";
 
 //FOR CUSTOMERS
@@ -84,14 +84,15 @@ export const addOrder = async (cust, itemId, itemImage, title, itemType, merchId
     };
 
     const docRef = await addDoc(collection(db, "orders"), order);
+    setDoc(docRef,{id:docRef.id},{merge:true})
     return { success: true }
   } catch (e) {
     console.log("add order error: ", e);
   }
 };
 
-export const fetchOrdersForItem = async (itemId) => {
-  const q = await getDocs(collection(db, 'orders'))
+export const fetchOrdersForItem = async (itemId,merchId) => {
+  const q = await getDocs(collection(db, 'orders'),where('merchId','==',merchId))
   const orders = q.docs.map((doc) => doc.data())
 
   return orders.filter(order => order.itemId === itemId);
@@ -112,3 +113,19 @@ export const fetchServicesToOrders=async()=>{
   const data = q.docs.map((doc)=>doc.data())
   return data
 }
+
+export const approveOrder = async (order) => {
+  const q = query(
+    collection(db, 'orders'),
+    where('merchId', '==', order.merchId),
+    where('custId', '==', order.custId),
+    where('itemId', '==', order.itemId)
+  );
+
+  const querySnapshot = await getDocs(q);
+
+  querySnapshot.forEach(async (doc) => {
+    const docRef = doc.ref; // Get the reference to each matching document
+    await setDoc(docRef, { status: 'completed' }, { merge: true });
+  });
+};

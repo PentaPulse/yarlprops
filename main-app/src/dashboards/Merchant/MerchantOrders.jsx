@@ -13,8 +13,9 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { fetchOrdersForItem, fetchProductsToOrders, fetchRentalsToOrders, fetchServicesToOrders } from '../../api/db/orders';
+import { approveOrder, fetchOrdersForItem, fetchProductsToOrders, fetchRentalsToOrders, fetchServicesToOrders } from '../../api/db/orders';
 import { Button } from '@mui/material';
+import { useAuth } from '../../api/AuthContext';
 
 function formatDate(isoString) {
   const date = new Date(isoString);
@@ -31,14 +32,20 @@ function Row(props) {
   const { row } = props;
   const [open, setOpen] = React.useState(false);
   const [orders, setOrders] = React.useState([]);
+  const {user}=useAuth()
 
   const handleRowClick = async () => {
     if (!open) {
-      const fetchedOrders = await fetchOrdersForItem(row.pid || row.rid || row.sid);
+      const fetchedOrders = await fetchOrdersForItem(row.pid || row.rid || row.sid,user.uid);
       setOrders(fetchedOrders);
     }
     setOpen(!open);
   };
+
+  const handleApproval=async(order)=>{
+    await approveOrder(order)
+    //await approveOrderNotification(order)
+  }
 
   return (
     <React.Fragment>
@@ -84,7 +91,7 @@ function Row(props) {
                       <TableCell>{order.custName}</TableCell>
                       <TableCell align="right">{order.quantity}</TableCell>
                       <TableCell>{order.status}</TableCell>
-                      <TableCell><Button>Approval</Button></TableCell>
+                      <TableCell><Button onClick={()=>handleApproval(order)}>Approval</Button></TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

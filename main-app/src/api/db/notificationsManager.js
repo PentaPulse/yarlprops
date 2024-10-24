@@ -52,6 +52,10 @@ export const itemNotification = async (user, item, itemType, action) => {
   }
 }
 
+export const approveOrderNotification=(order)=>{
+  
+}
+
 export const welcomeNotification = async (user) => {
   const welcome = {
     topic: `Welcome to Yarlprops ${user.displayName}`,
