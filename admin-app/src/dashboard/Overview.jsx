@@ -131,13 +131,13 @@ function UsersTable() {
 }
 
 
-function ContactResponsesTable() {
+function ContactResponsesTable() { 
     const [responses, setResponses] = React.useState([]);
 
     React.useEffect(() => {
         async function fetchData() {
             try {
-                const q = await getDocs(query(collection(db, 'contactus'), where("status", "==", "new"), orderBy('createdAt', 'asc'), limit(5)))
+                const q = await getDocs(query(collection(db, 'contactus'), where("status", "==", "new"), limit(5)))
                 const responses = q.docs.map((doc) => doc.data())
                 setResponses(responses);
             } catch (err) {
