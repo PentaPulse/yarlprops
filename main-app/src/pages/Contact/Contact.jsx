@@ -76,7 +76,7 @@ function Contact() {
         >
           <b>About Us</b>
         </Typography>
-        <Typography variant="body1" align="justify" maxWidth="lg" sx={{ margin: '0 auto', paddingBottom: 4 }}>
+        <Typography  align="justify" maxWidth="lg" sx={{ margin: '0 auto', paddingBottom: 4 ,fontSize: { xs: '1.1rem', sm: '1.2rem', md: '2rem' ,lg:'1.2rem' }}}>
           Welcome to YarlProps, your trusted platform for property management and advertisement. Whether you're looking to rent, buy, or sell a property, or you need reliable services, YarlProps offers comprehensive solutions tailored to your needs. Our platform connects property owners, renters, and service providers in a seamless and efficient manner. With our user-friendly interface and extensive listings, finding your next home or service has never been easier. At YarlProps, we are committed to providing superior customer service and innovative tools to help you navigate the property market with confidence.
         </Typography>
       </Box>
@@ -104,10 +104,13 @@ function Contact() {
           }}
         >
           <Box sx={{ background: "white", opacity: "0.8", borderRadius: 3, padding: { xs: 3 } }}>
-            <Typography variant={"h2"} color="black" align="center" pt={8}>
+            <Typography variant={"h2"} color="black" align="center" pt={8} gutterBottom>
               <b>Contact Us</b>
             </Typography>
-            <Typography variant="body1" color="black" align="center" pb={8}>
+            <Typography sx={{
+            fontSize: { xs: '1.1rem', sm: '1.2rem', md: '2rem' ,lg:'1.2rem' },
+          }}
+           color="black" align="justify" pl={1} pr={1} pb={8}>
               We are committed to supporting you, first and foremost! We continually strive to exceed expectations and deliver superior 24/7 Days Support.
               You can always count on us for live help whenever you need assistance. Call us now!
             </Typography>
@@ -116,15 +119,17 @@ function Contact() {
       </Box>
 
       {/* Contact Form Section */}
-      <Box sx={{ padding: 4, }}>
-        <Typography variant={"h3"} align="center" pt={8}>
-          <b>Contact <span style={{ color: "#0d6efd" }}>Yarl</span>Props</b>
+      <Box sx={{ padding: 4,marginLeft: '35px' }}>
+        <Typography variant={"h3"} align="center" pt={8} gutterBottom>
+          <b>Contact <span style={{ color: "#018ABD" }}>Yarl</span>Props</b>
         </Typography>
-        <Typography variant="body1" align="center" pb={8}>
+        <Typography sx={{
+            fontSize: { xs: '1.1rem', sm: '1.2rem', md: '2rem' ,lg:'1.2rem' },
+          }} align="center" pb={8} >
           We are committed to supporting you, first and foremost! We continually strive to exceed expectations and deliver superior 24/7 Days Support...
         </Typography>
 
-        <Box sx={{ padding: 1, marginLeft: '-10px' }}>
+        <Box sx={{ padding: 1}}>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={8}>
               <Card sx={{ backgroundColor: "rgba(255, 255, 255, 0.3)", padding: { xs: 3 }, borderRadius: 4 }}>
