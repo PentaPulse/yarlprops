@@ -11,6 +11,7 @@ import { arrayRemove, collection, deleteDoc, doc, getDocs, query, updateDoc, whe
 import { useAuth } from '../../api/AuthContext';
 import { serviceFilters } from '../../components/menuLists';
 import { itemNotification } from '../../api/db/notificationsManager';
+import { addItemByMerchant } from '../../api/db/logsManager';
 
 export default function MerchantServices() {
   const [showAddService, setShowAddService] = React.useState(false);
@@ -103,7 +104,7 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
       };
       fetchServiceData();
     }
-  }, [sid]);
+  }, [sid, user]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -162,19 +163,25 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
       const allImageUrls = [...existingImages, ...newImageUrls];
 
       if (sid) {
-        await updateService(sid, { ...service, images: allImageUrls });
+        await updateService(sid, { ...service, images: allImageUrls, visibility: false });
         await itemNotification(user,service,'service','update')
+        Swal.fire({
+          icon: 'success',
+          title: 'Service updated successfully',
+          showConfirmButton: false,
+          timer: 1500,
+        });
       } else {
-        await addService({ ...service, images: allImageUrls });
+        await addService({ ...service, images: allImageUrls, visibility: false });
+        await addItemByMerchant(user, service, 'service')
         await itemNotification(user,service,'service','add')
+        Swal.fire({
+          icon: 'success',
+          title: 'Service saved, request sent to the admin panel for approval',
+          showConfirmButton: false,
+          timer: 1500,
+        });
       }
-
-      Swal.fire({
-        icon: 'success',
-        title: 'Service saved successfully',
-        showConfirmButton: false,
-        timer: 1500,
-      });
 
       setService({
         merchantId: user.uid,
@@ -441,6 +448,7 @@ const ServiceDetail = ({ sid, onBack }) => {
       <Typography variant="body1">
         <strong>Location:</strong> {service.location}
       </Typography>
+      <Typography variant="body1">Visibility: {(service.visibility === false) ? 'No':'Yes'}</Typography>
       <Grid container spacing={2} style={{ marginTop: 10, marginBottom: 10 }}>
         {service.images.map((url, index) => (
           <Grid item key={index}>
@@ -547,6 +555,7 @@ const ServiceList = ({ onEditService, onViewService }) => {
               <StyledTableCell align="center">Sub Category</StyledTableCell>
               {/* <StyledTableCell>Description</StyledTableCell> */}
               <StyledTableCell align="center">Location</StyledTableCell>
+              <StyledTableCell align="center">Visibility On Site</StyledTableCell>
               <StyledTableCell align="center">Actions</StyledTableCell>
             </TableRow>
           </TableHead>
@@ -565,6 +574,7 @@ const ServiceList = ({ onEditService, onViewService }) => {
                   <StyledTableCell align="center">{service.subCategory}</StyledTableCell>
                   {/* <StyledTableCell>{service.description}</StyledTableCell> */}
                   <StyledTableCell align="center">{service.location}</StyledTableCell>
+                  <StyledTableCell align="center">{(service.visibility === false) ? 'No':'Yes'}</StyledTableCell>
                   <StyledTableCell>
                     <Button onClick={() => onEditService(service.sid)} variant="outlined" color="success" style={{ margin: '5px', width: '100%' }}>Edit</Button>
                     <Button onClick={() => onViewService(service.sid)} variant="outlined" color="secondary" style={{ margin: '5px', width: '100%' }}>View</Button>
