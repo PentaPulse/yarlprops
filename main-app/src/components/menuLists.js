@@ -14,7 +14,7 @@ export const merchMenu = [
     ['My Rentals', <CarRentalIcon />, 'myrentals'],
     ['My Services', <MiscellaneousServicesIcon />, 'myservices'],
     ['Customer Orders', <StoreIcon />, 'custorders'],
-    ['Feedback Center', <FeedbackIcon />, 'Fcenter'],
+    ['Feedback Center', <FeedbackIcon />, 'mrfeedback'],
 
 
 ]

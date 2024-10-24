@@ -19,10 +19,14 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../api/firebase";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "../../api/AuthContext";
+//import { Snackbar, Alert } from "@mui/material";
+import useAlerts from '../../api/AlertService'
+
 
 export default function FeedbackPage() {
   const [feedbacks, setFeedbacks] = useState([]);
   const [orderList, setOrderList] = useState([]);
+  const [selectedOrder, setSelectedOrder] = useState(null); // New state for selected order
   const { user } = useAuth();
   const location = useLocation();
   const { merchantName, productName } = location.state || {};
@@ -34,13 +38,14 @@ export default function FeedbackPage() {
   });
 
   const theme = useTheme();
+  const {showAlerts}=useAlerts()
 
   // Fetching orders from Firestore
   useEffect(() => {
     const fetchOrderList = async () => {
       try {
         const q = query(
-          collection(db, "systemusers", user.uid, "orders"), // Replace with user.uid
+          collection(db, "systemusers", user.uid, "orders"),
           where("review", "==", false)
         );
         const qSnapshot = await getDocs(q);
@@ -54,7 +59,7 @@ export default function FeedbackPage() {
       }
     };
     fetchOrderList();
-  }, []);
+  }, [user.uid]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -64,7 +69,23 @@ export default function FeedbackPage() {
     }));
   };
 
-  const handleSubmit = () => {
+  const handleOrderChange = (event) => {
+    const orderId = event.target.value;
+    const order = orderList.find((o) => o.id === orderId);
+    setSelectedOrder(order); // Set the selected order
+    setFeedback((prevFeedback) => ({
+      ...prevFeedback,
+      merchantName: order?.merchantName || "",
+      productName: order?.productName || "",
+    }));
+  };
+
+  const handleSubmit = async () => {
+    if (!selectedOrder) {
+      showAlerts("Please select an order", "error");
+      return;
+    }
+
     const newFeedback = {
       id: feedbacks.length + 1,
       title: feedback.title,
@@ -72,16 +93,28 @@ export default function FeedbackPage() {
       merchantName: feedback.merchantName,
       productName: feedback.productName,
       date: new Date().toISOString().split("T")[0],
+      userId: user.uid, // track which user submitted feedback
+      merchantId: selectedOrder.merchantId, // Use selected order's merchantId
     };
 
-    setFeedbacks((prevFeedbacks) => [newFeedback, ...prevFeedbacks]);
-    setFeedback({  content: "", merchantName: "", productName: "" });
+    try {
+      // Store feedback in Firestore under merchant's feedback collection
+      await db
+        .collection("merchants")
+        .doc(selectedOrder.merchantId)
+        .collection("feedbacks")
+        .add(newFeedback);
+      setFeedbacks((prevFeedbacks) => [newFeedback, ...prevFeedbacks]);
+      setFeedback({ title: "", content: "", merchantName: "", productName: "" });
+      showAlerts("Feedback submitted successfully", "success");
+    } catch (error) {
+      console.error("Error submitting feedback:", error);
+      showAlerts("Failed to submit feedback", "error");
+    }
   };
 
   const isFormValid =
-    feedback.content &&
-    feedback.merchantName &&
-    feedback.productName;
+    feedback.content && feedback.merchantName && feedback.productName;
 
   return (
     <Container>
@@ -105,28 +138,30 @@ export default function FeedbackPage() {
         </Typography>
 
         <FormControl fullWidth sx={{ mb: 2 }} required>
-          <InputLabel>Merchant Name</InputLabel>
+          <InputLabel>Order</InputLabel>
           <Select
-            name="merchantName"
-            value={feedback.merchantName}
-            onChange={handleInputChange}
-            label="Merchant Name"
+            name="order"
+            value={selectedOrder?.id || ""}
+            onChange={handleOrderChange}
+            label="Order"
           >
-            <MenuItem value={merchantName}>{merchantName}</MenuItem>
+            {orderList.map((order) => (
+              <MenuItem key={order.id} value={order.id}>
+                {order.productName} - {order.merchantName}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
 
-        <FormControl fullWidth sx={{ mb: 2 }} required>
-          <InputLabel>Product Name</InputLabel>
-          <Select
-            name="productName"
-            value={feedback.productName}
-            onChange={handleInputChange}
-            label="Product Name"
-          >
-            <MenuItem value={productName}>{productName}</MenuItem>
-          </Select>
-        </FormControl>
+        <TextField
+          required
+          fullWidth
+          label="Feedback Title"
+          name="title"
+          value={feedback.title}
+          onChange={handleInputChange}
+          sx={{ mb: 2 }}
+        />
 
         <TextField
           required
