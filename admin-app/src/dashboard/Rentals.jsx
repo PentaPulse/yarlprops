@@ -417,10 +417,9 @@ const RentalList = ({ onEditProduct, onViewProduct }) => {
                       {/* <TableCell>ID</TableCell> */}
                       <StyledTableCell align="center">Title</StyledTableCell>
                       <StyledTableCell align="center">Category</StyledTableCell>
-                      <StyledTableCell align="center">Type</StyledTableCell>
-                      <StyledTableCell align="center">Description</StyledTableCell>
+                      {/* <StyledTableCell align="center">Description</StyledTableCell>
                       <StyledTableCell align="center">Quantity</StyledTableCell>
-                      <StyledTableCell align="center">Location</StyledTableCell>
+                      <StyledTableCell align="center">Location</StyledTableCell> */}
                       <StyledTableCell align="center">Current Status</StyledTableCell>
                       <StyledTableCell align="center">Actions</StyledTableCell>
                   </TableRow>
@@ -431,10 +430,9 @@ const RentalList = ({ onEditProduct, onViewProduct }) => {
                       {/* <TableCell>{rental.id}</TableCell> */}
                       <StyledTableCell align="center">{rental.title}</StyledTableCell>
                       <StyledTableCell align="center">{rental.category}</StyledTableCell>
-                      <StyledTableCell align="center">{rental.type}</StyledTableCell>
-                      <StyledTableCell align="justify">{rental.description}</StyledTableCell>
+                      {/* <StyledTableCell align="justify">{rental.description}</StyledTableCell>
                       <StyledTableCell align="center">{rental.quantity}</StyledTableCell>
-                      <StyledTableCell align="center">{rental.location}</StyledTableCell>
+                      <StyledTableCell align="center">{rental.location}</StyledTableCell> */}
                       <StyledTableCell align="center">{rental.status}</StyledTableCell>
                       
                       <StyledTableCell align="center">
@@ -492,7 +490,7 @@ const RentalDetail = ({ rid, onBack }) => {
       </Button>
       <Typography variant="h4">{product.title}</Typography>
       <Typography variant="subtitle1">Category: {product.category}</Typography>
-      <Typography variant="subtitle1">Type: {product.type}</Typography>
+      <Typography variant="subtitle1">Sub category: {product.subCategory}</Typography>
       <Typography variant="body1">Description: {product.description}</Typography>
       <Typography variant="body1">Quantity: {product.quantity}</Typography>
       <Typography variant="body1">Location: {product.location}</Typography>

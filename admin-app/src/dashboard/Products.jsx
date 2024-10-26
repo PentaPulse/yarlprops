@@ -62,7 +62,8 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
     description: '', 
     quantity: '', 
     location: '',
-    status: '', 
+    status: 'For Sale',
+    visibility: false,
     images: [], 
   });
   
@@ -163,8 +164,8 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
         description: '', 
         quantity: '', 
         location: '',
-        status: '',
-        visibility:'',
+        status: 'For Sale',
+        visibility: false,
         images: [] });
       setExistingImages([]);
       setNewImages([]);
@@ -482,10 +483,10 @@ const ProductList = ({ onEditProduct, onViewProduct }) => {
                       {/* <TableCell>ID</TableCell> */}
                       <StyledTableCell align="center">Title</StyledTableCell>
                       <StyledTableCell align="center">Category</StyledTableCell>
-                      <StyledTableCell align="center">Type</StyledTableCell>
-                      <StyledTableCell align="center">Description</StyledTableCell>
+                      <StyledTableCell align="center">SubCategory</StyledTableCell>
+                      {/* <StyledTableCell align="center">Description</StyledTableCell>
                       <StyledTableCell align="center">Quantity</StyledTableCell>
-                      <StyledTableCell align="center">Location</StyledTableCell>
+                      <StyledTableCell align="center">Location</StyledTableCell> */}
                       <StyledTableCell align="center">Current Status</StyledTableCell>
                       <StyledTableCell align="center">Visibility</StyledTableCell>
                       <StyledTableCell align="center">Actions</StyledTableCell>
@@ -497,12 +498,12 @@ const ProductList = ({ onEditProduct, onViewProduct }) => {
                       {/* <TableCell>{product.id}</TableCell> */}
                       <StyledTableCell align="center">{product.title}</StyledTableCell>
                       <StyledTableCell align="center">{product.category}</StyledTableCell>
-                      <StyledTableCell align="center">{product.type}</StyledTableCell>
-                      <StyledTableCell align="justify">{product.description}</StyledTableCell>
+                      <StyledTableCell align="center">{product.subCategory}</StyledTableCell>
+                      {/* <StyledTableCell align="justify">{product.description}</StyledTableCell>
                       <StyledTableCell align="center">{product.quantity}</StyledTableCell>
-                      <StyledTableCell align="center">{product.location}</StyledTableCell>
+                      <StyledTableCell align="center">{product.location}</StyledTableCell> */}
                       <StyledTableCell align="center">{product.status}</StyledTableCell>
-                      <StyledTableCell align="center">{product.visibility}</StyledTableCell>
+                      <StyledTableCell align="center">{(product.visibility === false) ? 'No':'Yes'}</StyledTableCell>
                       
                       <StyledTableCell align="center">
                           <Button disabled={!user.approved} onClick={() => onViewProduct(product.id)} variant="outlined" color="secondary" style={{ margin: '5px', width: '100%' }}>View</Button>
@@ -559,12 +560,12 @@ const ProductDetail = ({ pid, onBack }) => {
       </Button>
       <Typography variant="h4">{product.title}</Typography>
       <Typography variant="subtitle1">Category: {product.category}</Typography>
-      <Typography variant="subtitle1">Type: {product.type}</Typography>
+      <Typography variant="subtitle1">SubCategory: {product.subCategory}</Typography>
       <Typography variant="body1">Description: {product.description}</Typography>
       <Typography variant="body1">Quantity: {product.quantity}</Typography>
       <Typography variant="body1">Location: {product.location}</Typography>
       <Typography variant="body1">Status: {product.status}</Typography>
-      <Typography variant="body1">Visibility: {product.visibility}</Typography>
+      <Typography variant="body1">Visibility: {(product.visibility === false) ? 'No':'Yes'}</Typography>
       <Grid container spacing={2} style={{ marginTop: 16 }}>
         {product.images && product.images.map((src, index) => (
           <Grid item key={index}>
