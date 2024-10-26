@@ -31,7 +31,7 @@ import Guide from "./pages/Guide/Guide";
 import PageLayout from "./pages/PageLayout";
 import NotificationsPanel from "./dashboards/NotificationsPanel";
 
-import { blue } from '@mui/material/colors';
+import useSessionTimeout from "./api/useSessionTimeout";
 
 const lightTheme = createTheme({
   palette: {
@@ -69,9 +69,9 @@ const darkTheme = createTheme({
 export default function App() {
   if (typeof ResizeObserver !== null) {
     const ro = new ResizeObserver(() => {
-      // Suppress ResizeObserver errors for undelivered notifications
+      
       try {
-        // your resize logic or simply observing the body for layout changes
+        
       } catch (e) {
         // Ignore the ResizeObserver loop limit exceeded error
       }
@@ -81,8 +81,10 @@ export default function App() {
     ro.observe(document.body);
     ro.disconnect()
   }
+
+  useSessionTimeout()
   return (
-    <>
+    <>    
       <Themed />
     </>
   );

@@ -14,6 +14,7 @@ import Filters from '../../components/Filters/Filters';
 import { useAuth } from '../../api/AuthContext';
 import Details from '../../components/Details/Details';
 import Rate from '../../components/Ratings/Ratings';
+import { fetchProductReviews } from '../../api/db/feedback';
 
 function Products() {
   return (
@@ -140,6 +141,8 @@ const ProductsContents = () => {
 export function ProductPage({ setSignin, setSignup }) {
   const [product, setProduct] = React.useState(null);
   const [merchant, setMerchant] = React.useState(null)
+  const [reviews, setReviews] = React.useState([]); // Store product reviews
+  const [averageRating, setAverageRating] = React.useState(0); 
   const [selectedImageIndex, setSelectedImageIndex] = React.useState(0); // Track the index of the selected image
   const [startIndex, setStartIndex] = React.useState(0);
   const visibleImagesCount = 3; // Number of images to display at a time
@@ -156,13 +159,21 @@ export function ProductPage({ setSignin, setSignup }) {
         setProduct(productData);
         const merchantData = await fetchMerchantDetails(product.merchantId);
         setMerchant(merchantData)
-        setSelectedImageIndex(0); // Start with the first image
+        setSelectedImageIndex(0); 
         console.log(merchant)
+
+        const reviewsData = await fetchProductReviews(id,'products'); 
+        setReviews(reviewsData);
+
+        const totalRating = reviewsData.reduce((acc, review) => acc + review.rating, 0);
+        setAverageRating(reviewsData.length ? totalRating / reviewsData.length : 0);
+
       } catch (error) {
-        //console.error("Error fetching product:", error);
+        
       }
     };
     fetchProduct();
+    
   }, [id]);
 
   if (!product) {
@@ -290,7 +301,23 @@ export function ProductPage({ setSignin, setSignup }) {
                 <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
               </Box>
               <Details itemImage={product.images[0]} setSignin={setSignin} setSignup={setSignup} itemType={'products'} itemId={product.pid} itemTitle={product.title} merchantId={product.merchantId}  />
-              <Rate/>
+              <Box sx={{ my: 3 }}>
+                <Typography variant="h6" sx={{ textAlign: 'center', fontWeight: 'bold' }}>Reviews Summary</Typography>
+                {reviews.length > 0 ? (
+                  <>
+                    <Typography variant="body1" sx={{ textAlign: 'center', mb: 1 }}>
+                      Average Rating: {averageRating.toFixed(1)} / 5
+                    </Typography>
+                    <Typography variant="body2" sx={{ textAlign: 'center' }}>
+                      Based on {reviews.length} review{reviews.length > 1 ? 's' : ''}.
+                    </Typography>
+                  </>
+                ) : (
+                  <Typography variant="body1" sx={{ textAlign: 'center', mb: 1 }}>
+                    No reviews yet. Be the first to leave a review!
+                  </Typography>
+                )}
+              </Box>
               </CardContent>
           </Card>
         </Grid>

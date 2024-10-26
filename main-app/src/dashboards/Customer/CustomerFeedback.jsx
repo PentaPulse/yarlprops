@@ -13,50 +13,65 @@ import {
   Select,
   InputLabel,
   FormControl,
+  Rating,  // Import Rating component
 } from "@mui/material";
 import FeedbackIcon from "@mui/icons-material/Feedback";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "../../api/firebase";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "../../api/AuthContext";
 import { useAlerts } from "../../api/AlertService";
-import { getOrderDetails, getOrders } from "../../api/db/feedback";
-
+import { fetchFeedbacks, getOrderDetails, sendFeedback } from "../../api/db/feedback";
+import { fetchOrders } from "../../api/db/orders";
+import formatDate from "../../components/date/dateTime";
+import { addItemRating } from "../../api/db/ratings"; // Add the function to update item ratings
 
 export default function FeedbackPage() {
-  const { showAlerts } = useAlerts()
+  const { showAlerts } = useAlerts();
   const [feedbacks, setFeedbacks] = useState([]);
+  const [refresh, setRefresh] = useState(false);
   const [orderList, setOrderList] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const { user } = useAuth();
   const location = useLocation();
-  const { merchantName, productName } = location.state || {};
+  const { merchantName, productName, order } = location.state || {};
   const [feedback, setFeedback] = useState({
     title: "",
     content: "",
     merchantName: merchantName || "",
     productName: productName || "",
+    rating: 0, // Add rating field
   });
 
   const theme = useTheme();
 
-  // Fetching orders from Firestore
   useEffect(() => {
+    if (order) {
+      selectOrder(order);
+    }
     const fetchOrderList = async () => {
       try {
-        const data = await getOrders(user)
+        const data = await fetchOrders(user);
         setOrderList(data);
       } catch (e) {
         console.log(e);
       }
     };
     fetchOrderList();
-  }, [user.uid]);
 
-  const selectOrder = async(order) => {
-    const details = await getOrderDetails(order)
-    setSelectedOrder(details)
-  }
+    const fetchFeedback = async () => {
+      const fData = await fetchFeedbacks(user.uid);
+      setFeedbacks(fData);
+    };
+    fetchFeedback();
+  }, [user.uid, refresh]);
+
+  const selectOrder = async (order) => {
+    try {
+      const details = await getOrderDetails(order);
+      setSelectedOrder({ ...order, displayName: details });
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -69,7 +84,7 @@ export default function FeedbackPage() {
   const handleOrderChange = (event) => {
     const orderId = event.target.value;
     const order = orderList.find((o) => o.id === orderId);
-    setSelectedOrder(order); // Set the selected order
+    setSelectedOrder(order);
     setFeedback((prevFeedback) => ({
       ...prevFeedback,
       merchantName: order?.merchantName || "",
@@ -90,28 +105,24 @@ export default function FeedbackPage() {
       merchantName: feedback.merchantName,
       productName: feedback.productName,
       date: new Date().toISOString().split("T")[0],
-      userId: user.uid, // track which user submitted feedback
-      merchantId: selectedOrder.merchantId, // Use selected order's merchantId
+      userId: user.uid,
+      merchantId: selectedOrder.merchId,
+      itemId:selectedOrder.itemId,
+      rating: feedback.rating, 
     };
 
     try {
-      // Store feedback in Firestore under merchant's feedback collection
-      await db
-        .collection("merchants")
-        .doc(selectedOrder.merchantId)
-        .collection("feedbacks")
-        .add(newFeedback);
-      setFeedbacks((prevFeedbacks) => [newFeedback, ...prevFeedbacks]);
-      setFeedback({ title: "", content: "", merchantName: "", productName: "" });
-      showAlerts("Feedback submitted successfully", "success");
+      await sendFeedback(user.uid, selectedOrder.merchId, newFeedback);
+      await addItemRating(selectedOrder.itemId,selectedOrder.itemType, feedback.rating); 
+      showAlerts("Feedback and rating submitted successfully", "success");
+      setRefresh(!refresh);
     } catch (error) {
       console.error("Error submitting feedback:", error);
       showAlerts("Failed to submit feedback", "error");
     }
   };
 
-  const isFormValid =
-    feedback.content && feedback.merchantName && feedback.productName;
+  const isFormValid = feedback.content && feedback.rating > 0;
 
   return (
     <Container>
@@ -143,24 +154,33 @@ export default function FeedbackPage() {
             label="Order"
           >
             {orderList.map((order) => (
-              <MenuItem key={order.id} value={order.id} onClick={()=>selectOrder(order)}>
+              <MenuItem key={order.id} value={order.id} onClick={() => selectOrder(order)}>
                 {order.title} - {order.merchName}
               </MenuItem>
             ))}
           </Select>
         </FormControl>
 
-        {/* Conditionally render order info based on selectedOrder */}
         {selectedOrder && (
-          <Box sx={{ mt: 2, p: 2, border: '1px solid grey', borderRadius: 2 }}>
+          <Box sx={{ mt: 2, mb: 2, p: 2, border: "1px solid grey", borderRadius: 2 }}>
             <Typography variant="h6">Order Details</Typography>
-            <Typography><strong>Product:</strong> {selectedOrder.title}</Typography>
-            <Typography><strong>Merchant:</strong> {selectedOrder.displayName}</Typography>
-            <Typography><strong>Quantity:</strong> {selectedOrder.quantity}</Typography>
-            <Typography><strong>Status:</strong> {selectedOrder.status}</Typography>
+            <Typography>
+              <strong>Order date:</strong> {formatDate(selectedOrder.date)}
+            </Typography>
+            <Typography>
+              <strong>Product:</strong> {selectedOrder.title}
+            </Typography>
+            <Typography>
+              <strong>Merchant:</strong> {selectedOrder.displayName}
+            </Typography>
+            <Typography>
+              <strong>Quantity:</strong> {selectedOrder.itemQuantity}
+            </Typography>
+            <Typography>
+              <strong>Status:</strong> {selectedOrder.status}
+            </Typography>
           </Box>
         )}
-
 
         <TextField
           required
@@ -183,6 +203,21 @@ export default function FeedbackPage() {
           rows={4}
           sx={{ mb: 2 }}
         />
+
+        {/* Add Rating Field */}
+        <FormControl fullWidth sx={{ mb: 2 }}>
+          <Typography component="legend">Rate the Product</Typography>
+          <Rating
+            name="rating"
+            value={feedback.rating}
+            onChange={(event, newValue) => {
+              setFeedback((prevFeedback) => ({
+                ...prevFeedback,
+                rating: newValue,
+              }));
+            }}
+          />
+        </FormControl>
 
         <Button
           variant="contained"
@@ -241,6 +276,7 @@ export default function FeedbackPage() {
                     Product: {fb.productName}
                   </Typography>
                   <Typography variant="body1">{fb.content}</Typography>
+                  <Typography variant="body2">Rating: {fb.rating}</Typography> {/* Display Rating */}
                 </CardContent>
               </Card>
             </Grid>

@@ -22,7 +22,7 @@ const MerchantFeedback = () => {
     const fetchFeedbacks = async () => {
       try {
         const q = query(
-          collection(db, 'merchants', user.uid, 'feedback') // Feedbacks for the logged-in merchant
+          collection(db, 'systemusers', user.uid, 'feedbacks') // Feedbacks for the logged-in merchant
         );
         const qSnapshot = await getDocs(q);
         const feedbackData = qSnapshot.docs.map((doc) => doc.data());

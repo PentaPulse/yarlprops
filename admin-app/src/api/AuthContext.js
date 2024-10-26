@@ -6,7 +6,7 @@ import { registerAdmin } from './db/users';
 import { useNavigate } from 'react-router-dom';
 import { useAlerts } from './AlertService';
 import { signinLog, signoutLog } from './db/logs';
-import { welcomeNotification } from './db/notificationsManager';
+//import { welcomeNotification } from './db/notificationsManager';
 
 const AuthContext = React.createContext();
 
@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = React.useState(null);
     const [loading, setLoading] = React.useState(true);
     const navigate = useNavigate()
-    const { showAlerts } = useAlerts();
+    const { showAlerts2 } = useAlerts();
 
     React.useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -66,24 +66,24 @@ export const AuthProvider = ({ children }) => {
                             }
                         })
                     })
-                welcomeNotification(user)
-                showAlerts('Account created , wait a little ', 'success', 'top-center')
+                //welcomeNotification(user)
+                showAlerts2('Account created , wait a little ', 'success', 'top-center')
                 signinLog(user.uid, { method: 'signup' })
             })
             .catch((error) => {
-                //showAlerts('ww' + error, 'error')
+                //showAlerts2('ww' + error, 'error')
                 if (email === '' || password === '' || firstName === '' || lastName === '') {
                     if (error.code === 'auth/invalid-email' || error.code === 'auth/missing-password') {
-                        showAlerts('Enter details', 'warning')
+                        showAlerts2('Enter details', 'warning')
                     }
                 } else if (error.code === 'auth/invalid-email') {
-                    showAlerts('Try different email', 'warning')
+                    showAlerts2('Try different email', 'warning')
                 }
                 if (error.code === 'auth/email-already-in-use') {
-                    showAlerts('Try different email', 'warning')
+                    showAlerts2('Try different email', 'warning')
                 }
                 if (error.code === 'auth/weak-password') {
-                    showAlerts('Try different password', 'warning')
+                    showAlerts2('Try different password', 'warning')
                 }
             });
     }
@@ -101,7 +101,7 @@ export const AuthProvider = ({ children }) => {
             sessionStorage.setItem('displayName', user.displayName);
         })
         .catch(() => {
-            showAlerts('Error occured , Try again with different gmail', 'error')
+            showAlerts2('Error occured , Try again with different gmail', 'error')
         })
 
     const login = (email, password) => signInWithEmailAndPassword(auth, email, password)
@@ -110,17 +110,17 @@ export const AuthProvider = ({ children }) => {
             sessionStorage.setItem('pp', user.photoURL);
             sessionStorage.setItem('displayName', user.displayName);
             signinLog(user.uid, { method: 'email&password' })
-            showAlerts('Successfully logged', 'success')
+            showAlerts2('Successfully logged', 'success')
         })
         .catch((error) => {
             if (error.code === 'auth/invalid-email') {
-                showAlerts('Invalid credentials', 'error')
+                showAlerts2('Invalid credentials', 'error')
             }
             if (error.code === 'auth/missing-password') {
-                showAlerts('Enter your password', 'warning')
+                showAlerts2('Enter your password', 'warning')
             }
             if (error.code === 'auth/invalid-credential') {
-                showAlerts('Check email and password and try again', 'warning')
+                showAlerts2('Check email and password and try again', 'warning')
             }
         })
 
@@ -128,11 +128,11 @@ export const AuthProvider = ({ children }) => {
     const reset = (email) => sendPasswordResetEmail(auth, email)
         .then(() => {
             //resetLog(user.uid) //no user object returning
-            showAlerts(`Check ${email} inbox`, 'info')
+            showAlerts2(`Check ${email} inbox`, 'info')
         })
         .catch((error) => {
             if (error.code === 'auth/missing-email') {
-                showAlerts('Enter your email address', 'warning')
+                showAlerts2('Enter your email address', 'warning')
             }
             console.error(error)
         })
@@ -155,7 +155,7 @@ export const AuthProvider = ({ children }) => {
         React.useEffect(() => {
             const unsubscribe = onAuthStateChanged(auth, (user) => {
                 if (user && !user.emailVerified) {
-                    showAlerts(
+                    showAlerts2(
                         <>
                             Verify your email <VerifyEmail />
                         </>,
@@ -171,7 +171,7 @@ export const AuthProvider = ({ children }) => {
             const verify = () => {
                 sendEmailVerification(auth.currentUser)
                     .then(() => {
-                        showAlerts('Check your email inbox');
+                        showAlerts2('Check your email inbox');
                     })
                     .catch((e) => {
                         console.log(e)

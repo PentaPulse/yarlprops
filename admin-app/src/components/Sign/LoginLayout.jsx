@@ -1,236 +1,184 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-    Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, FormControl,
-    FormControlLabel, FormLabel, Grid, OutlinedInput, Stack, styled, SvgIcon, TextField, Typography
+    Box, Button,
+    FormControlLabel, SvgIcon, TextField, Typography,Switch
 } from '@mui/material';
-import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
-import { auth } from '../../api/firebase';
-import { Link, useNavigate } from 'react-router-dom';
-import MuiCard from '@mui/material/Card';
-import PropTypes from 'prop-types';
-import { useAuth } from '../../api/AuthContext';
-import NavigationBar from '../NavigationBar/NavigationBar';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
+import { auth,db } from '../../api/firebase';
+import { doc, setDoc } from 'firebase/firestore';
+import { signinLog } from '../../api/db/logs';
+import { useNavigate } from 'react-router-dom';
 
-export function LoginLayout({ handleMode }) {
-    const [signin, setSignin] = useState(true);
-
-    return (
-        <Box>
-            <NavigationBar handleMode={handleMode} />
-            <Grid container mt={10} justifyContent="space-around" alignItems="center">
-                <SignIn signin={signin} setSignin={() => setSignin(false)} />
-                <SignUp signin={signin} setSignin={() => setSignin(true)} />
-            </Grid>
-        </Box>
-    );
-}
-
-const Card = styled(MuiCard)(({ theme }) => ({
-    display: 'flex',
-    flexDirection: 'column',
-    alignSelf: 'center',
-    width: '100%',
-    padding: theme.spacing(4),
-    gap: theme.spacing(2),
-    margin: 'auto',
-    [theme.breakpoints.up('sm')]: {
-        maxWidth: '450px',
-    },
-    boxShadow:
-        'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
-}));
-
-const SignInContainer = styled(Stack)(({ theme }) => ({
-    minHeight: '100%',
-    padding: theme.spacing(2),
-    [theme.breakpoints.up('sm')]: {
-        padding: theme.spacing(4),
-    },
-    '&::before': {
-        content: '""',
-        display: 'block',
-        position: 'absolute',
-        zIndex: -1,
-        inset: 0,
-        backgroundImage: 'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
-    },
-}));
-
-const SignUpContainer = styled(Stack)(({ theme }) => ({
-    minHeight: '100%',
-    padding: theme.spacing(2),
-    [theme.breakpoints.up('sm')]: {
-        padding: theme.spacing(4),
-    },
-    '&::before': {
-        content: '""',
-        display: 'block',
-        position: 'absolute',
-        zIndex: -1,
-        inset: 0,
-        backgroundImage: 'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
-    },
-}));
-
-function SignIn({ signin, setSignin }) {
-    const [open, setOpen] = useState(false);
-    const navigate = useNavigate();
-
-    const handleClickOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
-
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        const email = data.get('email');
-        const password = data.get('password');
-
-        if (!email || !/\S+@\S+\.\S+/.test(email)) {
-            alert('Please enter a valid email.');
-            return;
-        }
-
-        if (!password || password.length < 6) {
-            alert('Password must be at least 6 characters long.');
-            return;
-        }
-
-        try {
-            await signInWithEmailAndPassword(auth, email, password);
-            navigate('/overview');
-        } catch (error) {
-            console.error(error);
-            alert('Failed to sign in. Please check your credentials.');
-        }
-    };
-
-    const provider = new GoogleAuthProvider();
-    const handleGoogleLogin = () =>
-        signInWithPopup(auth, provider).then(() => {
-            navigate('/overview');
-        }).catch((error) => {
-            console.error(error);
-            alert('Google sign-in failed.');
-        });
-
-    return (
-        <SignInContainer display={signin ? 'flex' : 'none'} direction="column" justifyContent="space-between">
-            <Card variant="outlined">
-                <Typography component="h1" variant="h4" sx={{ fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}>Sign in</Typography>
-                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                    <FormControl>
-                        <FormLabel htmlFor="email">Email</FormLabel>
-                        <TextField type="email" name="email" placeholder="your@email.com" autoComplete="email" autoFocus required fullWidth variant="outlined" />
-                    </FormControl>
-                    <FormControl>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <FormLabel htmlFor="password">Password</FormLabel>
-                            <Link component="button" onClick={handleClickOpen} variant="body2">Forgot your password?</Link>
-                        </Box>
-                        <TextField name="password" placeholder="••••••" type="password" autoComplete="current-password" required fullWidth variant="outlined" />
-                    </FormControl>
-                    <FormControlLabel control={<Checkbox color="primary" />} label="Remember me" />
-                    <ForgotPassword open={open} handleClose={handleClose} />
-                    <Button type="submit" fullWidth variant="contained">Sign in</Button>
-                    <Typography sx={{ textAlign: 'center' }}>Don't have an account? <Button onClick={setSignin}>Sign up</Button></Typography>
-                </Box>
-                <Divider>or</Divider>
-                <Button fullWidth variant="outlined" onClick={handleGoogleLogin} startIcon={<GoogleIcon />}>Sign in with Google</Button>
-            </Card>
-        </SignInContainer>
-    );
-}
-
-function ForgotPassword({ open, handleClose }) {
-    return (
-        <Dialog open={open} onClose={handleClose} PaperProps={{ component: 'form', onSubmit: (e) => { e.preventDefault(); handleClose(); } }}>
-            <DialogTitle>Reset password</DialogTitle>
-            <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                <DialogContentText>Enter your account's email address, and we'll send you a link to reset your password.</DialogContentText>
-                <OutlinedInput autoFocus required margin="dense" id="email" name="email" type="email" fullWidth />
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={handleClose}>Cancel</Button>
-                <Button variant="contained" type="submit">Continue</Button>
-            </DialogActions>
-        </Dialog>
-    );
-}
-
-ForgotPassword.propTypes = {
-    handleClose: PropTypes.func.isRequired,
-    open: PropTypes.bool.isRequired,
-};
-
-function SignUp({ signin, setSignin }) {
-    const { register } = useAuth();
-    const [firstname, setFirstname] = useState('');
-    const [lastname, setLastname] = useState('');
+export function LoginLayout() {
+    const [isSignUp, setIsSignUp] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [fname, setFname] = useState('');
+    const [lname, setLname] = useState('');
+    const [error, setError] = useState(null);
+    const [showForgotPassword, setShowForgotPassword] = useState(false);
+    const navigate=useNavigate()
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-
-        if (!email || !/\S+@\S+\.\S+/.test(email)) {
-            alert('Please enter a valid email.');
-            return;
+    useEffect(()=>{
+        if(auth.currentUser){
+            navigate('/overview')
         }
+    })
 
-        if (!password || password.length < 6) {
-            alert('Password must be at least 6 characters long.');
+    const handleFormSubmit = async (event) => {
+        event.preventDefault();
+        setError(null); // Reset error message
+
+        try {
+            if (isSignUp) {
+                // Sign up the user
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // Store user details in Firestore under the 'admins' collection
+                await setDoc(doc(db, "admins", user.uid), {
+                    uid: user.uid,
+                    firstName: fname,
+                    lastName: lname,
+                    email: user.email,
+                    createdAt: new Date(),
+                    approved: false // Default false for admin approval process
+                });
+                navigate('/overview')
+            } else {
+                // Sign in the user
+                await signInWithEmailAndPassword(auth, email, password).then((res)=>{
+                    const user = res.user
+                    signinLog(user.uid,{method:'email'})
+                })
+                navigate('/overview')
+            }
+        } catch (e) {
+            setError(e.message);
+        }
+    };
+
+    const handlePasswordReset = async () => {
+        if (!email) {
+            setError("Please enter your email to reset your password.");
             return;
         }
 
         try {
-            await register(firstname, lastname, `${firstname} ${lastname}`, email, password);
-        } catch (error) {
-            console.error(error);
-            alert('Sign up failed.');
+            await sendPasswordResetEmail(auth, email);
+            alert("Password reset email sent!");
+        } catch (e) {
+            setError(e.message);
         }
     };
 
     return (
-        <SignUpContainer display={!signin ? 'flex' : 'none'} direction="column" justifyContent="space-between">
-            <Card variant="outlined">
-                <Typography component="h1" variant="h4">Sign up</Typography>
-                <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                    <FormControl>
-                        <FormLabel>First name</FormLabel>
-                        <TextField required placeholder="Jon" fullWidth onChange={(e) => setFirstname(e.target.value)} />
-                    </FormControl>
-                    <FormControl>
-                        <FormLabel>Last name</FormLabel>
-                        <TextField required placeholder="Snow" fullWidth onChange={(e) => setLastname(e.target.value)} />
-                    </FormControl>
-                    <FormControl>
-                        <FormLabel>Email</FormLabel>
-                        <TextField required placeholder="your@email.com" fullWidth onChange={(e) => setEmail(e.target.value)} />
-                    </FormControl>
-                    <FormControl>
-                        <FormLabel>Password</FormLabel>
-                        <TextField required type="password" placeholder="••••••" fullWidth onChange={(e) => setPassword(e.target.value)} />
-                    </FormControl>
-                    <Button type="submit" fullWidth variant="contained">Sign up</Button>
-                    <Typography sx={{ textAlign: 'center' }}>Already have an account? <Button onClick={setSignin}>Sign in</Button></Typography>
-                </Box>
-                <Divider>or</Divider>
-                <Button fullWidth variant="outlined" onClick={() => alert('Sign up with Google')} startIcon={<GoogleIcon />}>Sign up with Google</Button>
-            </Card>
-        </SignUpContainer>
+        <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
+            sx={{ minHeight: '100vh', padding: 2 }}
+        >
+            <Typography variant="h4" gutterBottom>
+                {isSignUp ? 'Sign Up' : showForgotPassword ? 'Reset Password' : 'Sign In'}
+            </Typography>
+
+            <form onSubmit={handleFormSubmit}>
+                {isSignUp && (
+                    <>
+                        <TextField
+                            label="First Name"
+                            value={fname}
+                            onChange={(e) => setFname(e.target.value)}
+                            required
+                            fullWidth
+                            margin="normal"
+                        />
+                        <TextField
+                            label="Last Name"
+                            value={lname}
+                            onChange={(e) => setLname(e.target.value)}
+                            required
+                            fullWidth
+                            margin="normal"
+                        />
+                    </>
+                )}
+
+                <TextField
+                    label="Email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    fullWidth
+                    margin="normal"
+                />
+
+                {!showForgotPassword && (
+                    <TextField
+                        label="Password"
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        fullWidth
+                        margin="normal"
+                    />
+                )}
+
+                {error && (
+                    <Typography color="error" variant="body2" sx={{ mt: 1 }}>
+                        {error}
+                    </Typography>
+                )}
+
+                {!showForgotPassword ? (
+                    <>
+                        <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
+                            {isSignUp ? 'Sign Up' : 'Sign In'}
+                        </Button>
+
+                        <Box display="flex" justifyContent="space-between" mt={2}>
+                            <FormControlLabel
+                                control={
+                                    <Switch checked={isSignUp} onChange={() => setIsSignUp(!isSignUp)} />
+                                }
+                                label={isSignUp ? 'Switch to Sign In' : 'Switch to Sign Up'}
+                            />
+                            {!isSignUp && (
+                                <Button color="secondary" onClick={() => setShowForgotPassword(true)}>
+                                    Forgot Password?
+                                </Button>
+                            )}
+                        </Box>
+                    </>
+                ) : (
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        fullWidth
+                        sx={{ mt: 2 }}
+                        onClick={handlePasswordReset}
+                    >
+                        Send Password Reset Email
+                    </Button>
+                )}
+
+                {showForgotPassword && (
+                    <Button
+                        color="secondary"
+                        onClick={() => setShowForgotPassword(false)}
+                        sx={{ mt: 2 }}
+                    >
+                        Back to Sign In
+                    </Button>
+                )}
+            </form>
+        </Box>
     );
-}
-
-SignIn.propTypes = {
-    signin: PropTypes.bool.isRequired,
-    setSignin: PropTypes.func.isRequired,
 };
-
-SignUp.propTypes = {
-    signin: PropTypes.bool.isRequired,
-    setSignin: PropTypes.func.isRequired,
-};
-
 function GoogleIcon() {
     return (
         <SvgIcon>

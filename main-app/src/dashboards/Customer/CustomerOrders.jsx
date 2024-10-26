@@ -36,9 +36,9 @@ export default function MyOrders() {
   const handleFeedbackClick = (order) => {
     navigate("/d/feedback", { state: {
         merchantName:order.merchantId,
-        productName:order.title
-     } }); // Navigate to feedback page
-  };
+        productName:order.title,
+        order:order
+     } }); }
 
   return (
     <Container>

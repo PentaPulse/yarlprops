@@ -99,18 +99,18 @@ export const fetchOrdersForItem = async (itemId, merchId) => {
   return orders.filter(order => order.itemId === itemId);
 }
 
-export const fetchProductsToOrders = async () => {
-  const q = await getDocs(collection(db, 'products'))
+export const fetchProductsToOrders = async (merchId) => {
+  const q = await getDocs(collection(db, 'products'),where('merchId','==',merchId))
   const data = q.docs.map((doc) => doc.data())
   return data
 }
-export const fetchRentalsToOrders = async () => {
-  const q = await getDocs(collection(db, 'rentals'))
+export const fetchRentalsToOrders = async (merchId) => {
+  const q = await getDocs(collection(db, 'rentals'),where('merchId','==',merchId))
   const data = q.docs.map((doc) => doc.data())
   return data
 }
-export const fetchServicesToOrders = async () => {
-  const q = await getDocs(collection(db, 'services'))
+export const fetchServicesToOrders = async (merchId) => {
+  const q = await getDocs(collection(db, 'services'),where('merchId','==',merchId))
   const data = q.docs.map((doc) => doc.data())
   return data
 }

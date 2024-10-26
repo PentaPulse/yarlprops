@@ -16,20 +16,10 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { approveOrder, fetchOrdersForItem, fetchProductsToOrders, fetchRentalsToOrders, fetchServicesToOrders } from '../../api/db/orders';
 import { Button } from '@mui/material';
 import { useAuth } from '../../api/AuthContext';
-
-function formatDate(isoString) {
-  const date = new Date(isoString);
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-  const day = String(date.getDate()).padStart(2, '0');
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  const seconds = String(date.getSeconds()).padStart(2, '0');
-  return `${year}-${month}-${day} ${hours}.${minutes}.${seconds}`;
-}
+import formatDate from '../../components/date/dateTime';
 
 function Row(props) {
-  const { row ,setRefresh,refresh} = props;
+  const { row } = props;
   const [open, setOpen] = React.useState(false);
   const [orders, setOrders] = React.useState([]);
   const { user } = useAuth()
@@ -44,7 +34,7 @@ function Row(props) {
 
   const handleApproval = async (order) => {
     await approveOrder(order)
-    setRefresh(!refresh)
+
     //await approveOrderNotification(order)
   }
 
@@ -93,7 +83,7 @@ function Row(props) {
                         <TableCell>{order.custName}</TableCell>
                         <TableCell>{order.itemQuantity}</TableCell>
                         <TableCell>{order.status}</TableCell>
-                        <TableCell>{order.status==='pending'?<Button onClick={() => handleApproval(order)}>Approval</Button>:<Typography>Approved</Typography>}</TableCell>
+                        <TableCell>{order.status === 'pending' ? <Button onClick={() => handleApproval(order)}>Approval</Button> : <Typography>Approved</Typography>}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -124,29 +114,29 @@ export default function MerchantOrders() {
   const [products, setProducts] = React.useState([])
   const [rentals, setRentals] = React.useState([])
   const [services, setServices] = React.useState([])
-  const [refresh,setRefresh]=React.useState(false)
+  const { user } = useAuth()
 
   React.useEffect(() => {
-    const fetchProducts = async () => {
-      const data = await fetchProductsToOrders()
+    const fetchProducts = async() => {
+      const data = await fetchProductsToOrders(user.uid)
       setProducts(data)
     }
-    const fetchRentals = async () => {
-      const data = await fetchRentalsToOrders()
+    const fetchRentals = async() => {
+      const data = await fetchRentalsToOrders(user.uid)
       setRentals(data)
     }
-    const fetchServices = async () => {
-      const data = await fetchServicesToOrders()
+    const fetchServices = async() => {
+      const data = await fetchServicesToOrders(user.uid)
       setServices(data)
     }
 
     fetchProducts()
     fetchRentals()
     fetchServices()
-  }, [refresh])
+  }, [])
   return (
     <>
-      <ItemOrders title={'Products'} rows={products} setRefresh={setRefresh} refresh={refresh}/>
+      <ItemOrders title={'Products'} rows={products} />
       <ItemOrders title={'Rentals'} rows={rentals} />
       <ItemOrders title={'Services'} rows={services} />
     </>

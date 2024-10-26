@@ -60,7 +60,7 @@ export const welcomeNotification = async (user) => {
     timestamp: new Date().toISOString(),
   };
   try {
-    await addDoc(collection(db, 'notifications'), welcome);
+    await addDoc(collection(db,'admins',user.uid, 'notifications'), welcome);
   } catch (e) {
     console.log("Error adding welcome notification: ", e);
   }
