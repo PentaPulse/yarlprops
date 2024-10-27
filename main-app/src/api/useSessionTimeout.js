@@ -38,7 +38,9 @@ const useSessionTimeout = () => {
   };
 
   useEffect(() => {
+    if(auth.currentUser){
     startSessionTimer();
+    }
 
     // Cleanup timer on unmount
     return () => clearTimeout(timer);
