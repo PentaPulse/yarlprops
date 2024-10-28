@@ -10,6 +10,8 @@ import Swal from 'sweetalert2';
 import {useAuth} from '../api/AuthContext';
 import { serviceFilters } from '../../src/components/menuLists';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { itemNotification } from '../../src/api/db/notificationsManager';
+import { addItemByMerchant } from '../../src/api/db/logsManager';
 
 export default function Services () {
   const [showAddService, setShowAddService] = useState(false);
@@ -54,7 +56,10 @@ export default function Services () {
 };
 
 const ServicesForm =  ({ sid, onSuccess, onCancel }) => {
+  const { user } = useAuth();
   const [service, setService] = useState({
+    merchantId: user.uid,
+    merchantName:user.displayName,
     title: '',
     category: '',
     subCategory: '',
@@ -81,7 +86,7 @@ const ServicesForm =  ({ sid, onSuccess, onCancel }) => {
       };
       fetchServices();
     }
-  }, [sid]);
+  }, [sid, user]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -139,18 +144,27 @@ const ServicesForm =  ({ sid, onSuccess, onCancel }) => {
 
     if (sid) {
       await updateService(sid, { ...service, images: allImageUrls, visibility: false});
+      await itemNotification(user,service,'service','update')
+      Swal.fire({
+        icon: 'success',
+        title: 'Service saved successfully',
+        showConfirmButton: false,
+        timer: 1500,
+      });
     } else {
       await addService({ ...service, images: allImageUrls, visibility: false });
+      await addItemByMerchant(user, service, 'service')
+        await itemNotification(user,service,'service','add')
+        Swal.fire({
+          icon: 'success',
+          title: 'Service saved, request sent to the admin panel for approval',
+          showConfirmButton: false,
+          timer: 1500,
+        });
     }
-
-    Swal.fire({
-      icon: 'success',
-      title: 'Service saved successfully',
-      showConfirmButton: false,
-      timer: 1500,
-    });
-
+    
     setService({
+      merchantId: user.uid,
       title: '',
       category: '',
       subCategory: '',
@@ -284,10 +298,6 @@ const ServicesForm =  ({ sid, onSuccess, onCancel }) => {
           <VisuallyHiddenInput type="file" onChange={handleImageChange} />
         </Button>
 
-        <Typography variant="body1" color="textSecondary" gutterBottom>
-          (Note:- Add high quality images.)
-        </Typography>
-
         <Grid container spacing={2}>
           {existingImages.map((src, index) => (
             <Grid item key={index}>
@@ -353,12 +363,9 @@ const ServiceDetails = ({ sid, onBack }) => {
 
   useEffect(() => {
     const fetchService = async () => {
+      setLoading(true);
       const fetchedService = await fetchSelectedService(sid);
-      if (fetchedService) {
-        setService(fetchedService);
-      } else {
-        console.log('No such document!');
-      }
+      setService(fetchedService);
       setLoading(false);
     };
     fetchService();
@@ -366,25 +373,40 @@ const ServiceDetails = ({ sid, onBack }) => {
 
   if (loading) return <CircularProgress />;
 
+  if (!service) {
+    return <Typography variant="body1">Service not found.</Typography>;
+  }
+
   return (
     <Paper style={{ padding: 16 }}>
       <Button variant="contained" color="primary" onClick={onBack} style={{ marginBottom: 16 }}>
         Back to Services List
       </Button>
-      <Typography variant="h4">{service.serviceName}</Typography>
-      <Typography variant="body1">
-        Description: 
-      <ul style={{ textAlign: 'justify'}}>
-        {service.serviceDescription.map((description, index) => (
-          <li key={index}>{description}</li>
-      ))}          
-      </ul>
+      <Typography variant="h4" gutterBottom>
+        {service.title}
       </Typography>
-      <Typography variant="body1">Location: {service.serviceLocation}</Typography>
-      <Grid container spacing={2} style={{ marginTop: 16 }}>
-        {service.images && service.images.map((src, index) => (
+      <Typography variant="subtitle1">
+        Category: {service.category}
+      </Typography>
+      <Typography variant="subtitle1">
+        Sub category: {service.subCategory}
+      </Typography>
+      <Typography variant="body1">
+        Description:
+      </Typography>
+      <ul>
+        {service.description.map((desc, index) => (
+          <li key={index}><Typography variant='body1'>{desc}</Typography></li>
+        ))}
+      </ul>
+      <Typography variant="body1">
+        <strong>Location:</strong> {service.location}
+      </Typography>
+      <Typography variant="body1">Visibility: {(service.visibility === false) ? 'No':'Yes'}</Typography>
+      <Grid container spacing={2} style={{ marginTop: 10, marginBottom: 10 }}>
+        {service.images.map((url, index) => (
           <Grid item key={index}>
-            <Image src={src} alt={`Product ${index}`} />
+            <img src={url} alt={`Service  ${index + 1}`} style={{ width: '185px', height: '175px', objectFit: 'cover', borderRadius: '10px' }} />
           </Grid>
         ))}
       </Grid>
@@ -403,6 +425,7 @@ const ServicesList = ({ onEditService, onViewService }) => {
       const fetchServiceList = async () => {
           const fetchedServices = await fetchServices();
           setServices(fetchedServices);
+          setLoading(false);
       };
       fetchServiceList();
   }, []);

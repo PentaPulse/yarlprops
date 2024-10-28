@@ -5,7 +5,7 @@ import { addProduct, fetchProducts, fetchSelectedProduct, updateProduct } from '
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { db, storage } from '../api/firebase';
 import Swal from 'sweetalert2';
-import { deleteDoc, doc } from 'firebase/firestore';
+import { deleteDoc, doc, updateDoc, arrayRemove } from 'firebase/firestore';
 import { useAuth } from '../api/AuthContext';
 import { productFilters } from '../components/menuLists';
 import AddIcon from '@mui/icons-material/Add';
@@ -54,7 +54,7 @@ export default function Products(){
 };
 
 const ProductForm = ({ pid, onSuccess, onCancel }) => {
-  const {user}=useAuth()
+  const {user} = useAuth();
   const [product, setProduct] = useState({ 
     title: '', 
     category: '', 
@@ -84,11 +84,26 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
       };
       fetchProduct();
     }
-  }, [pid]);
+  }, [pid, user]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setProduct({ ...product, [name]: value });
+  };
+
+  const handleDescriptionChange = (index, event) => {
+    const newProductDescription = [...product.description];
+    newProductDescription[index] = event.target.value;
+    setProduct({ ...product, description: newProductDescription });
+  };
+
+  const addDescriptionLine = () => {
+    setProduct({ ...product, description: [...product.description, ''] });
+  };
+
+  const handleRemoveDescriptionLine = (index) => {
+    const updatedDescriptions = product.description.filter((_, i) => i !== index);
+    setProduct({ ...product, description: updatedDescriptions });
   };
 
   const handleStatusChange = (event) => {
@@ -191,21 +206,6 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
     whiteSpace: 'nowrap',
     width: 1,
   });  
-
-  const handleDescriptionChange = (index, event) => {
-    const newProductDescription = [...product.description];
-    newProductDescription[index] = event.target.value;
-    setProduct({ ...product, description: newProductDescription });
-  };
-
-  const addDescriptionLine = () => {
-    setProduct({ ...product, description: [...product.description, ''] });
-  };
-
-  const handleRemoveDescriptionLine = (index) => {
-    const updatedDescriptions = product.description.filter((_, i) => i !== index);
-    setProduct({ ...product, description: updatedDescriptions });
-  };
 
   return (
     <Paper style={{ padding: 16 }}>
@@ -312,11 +312,10 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
           onChange={handleStatusChange}
           required
         >
-          <FormControlLabel value="For Rent" control={<Radio />} label="For Rent" />
           <FormControlLabel value="For Sale" control={<Radio />} label="For Sale" />
           <FormControlLabel
             value="Sold Out"
-            
+            disabled={!pid}
             control={<Radio />}
             label="Sold Out!"
           />
@@ -337,7 +336,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
         </FormControl><br/>
 
         <Button
-        disabled={!user.approved}
+          disabled={!user.approved}
           accept='image/*'
           multiple
           onChange={handleImageChange}
@@ -348,7 +347,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
           startIcon={<CloudUploadIcon />}
           style={{ marginTop:'15px', marginBottom: '25px' }}
         >
-        Upload file
+        Upload Images
         <VisuallyHiddenInput type="file" />
         </Button>
         
@@ -388,7 +387,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
             </Grid>
           ))}
         </Grid>
-        {validationMessage && <Typography color="error">{validationMessage}</Typography>}
+        {validationMessage && <Typography color="error" sx={{ mt: '1rem'}} gutterBottom>{validationMessage}</Typography>}
         <Button disabled={!user.approved} type="submit" variant="contained" color="success" style={{ marginTop: '25px' }}>
           Save
         </Button>
@@ -426,8 +425,11 @@ const ProductList = ({ onEditProduct, onViewProduct }) => {
           });
 
           if (result.isConfirmed){
-              await deleteDoc(doc(db, 'products', id));
-              setProducts(products.filter(product => product.id !== id));
+            await deleteDoc(doc(db, 'products', id));
+            await updateDoc(doc(db, 'systemusers', user.uid), {
+              myProducts: arrayRemove(id)
+            })
+            setProducts(products.filter(product => product.pid !== id));
 
               Swal.fire({
                   icon: 'success',
@@ -489,12 +491,13 @@ const ProductList = ({ onEditProduct, onViewProduct }) => {
                       <StyledTableCell align="center">Quantity</StyledTableCell>
                       <StyledTableCell align="center">Location</StyledTableCell> */}
                       <StyledTableCell align="center">Current Status</StyledTableCell>
-                      <StyledTableCell align="center">Visibility</StyledTableCell>
+                      <StyledTableCell align="center">Visibility On Site</StyledTableCell>
                       <StyledTableCell align="center">Actions</StyledTableCell>
                   </TableRow>
               </TableHead>
               <TableBody>
-                  {products.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(product => (
+                {products.length > 0 ?
+                  products.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(product => (
                   <StyledTableRow key={product.id}>
                       {/* <TableCell>{product.id}</TableCell> */}
                       <StyledTableCell align="center">{product.title}</StyledTableCell>
@@ -512,7 +515,13 @@ const ProductList = ({ onEditProduct, onViewProduct }) => {
                           <Button disabled={!user.approved} onClick={() => handleDelete(product.id)} variant="outlined" color="error" style={{ margin: '5px', width: '100%' }}>Delete</Button>
                       </StyledTableCell>
                   </StyledTableRow>
-                 ))}
+                 )) : (
+                  <TableRow>
+                    <StyledTableCell colSpan={8} align="center">
+                      No services found.
+                    </StyledTableCell>
+                  </TableRow>
+                 )}
               </TableBody>
           </Table>
           <TablePagination
@@ -562,15 +571,20 @@ const ProductDetail = ({ pid, onBack }) => {
       <Typography variant="h4">{product.title}</Typography>
       <Typography variant="subtitle1">Category: {product.category}</Typography>
       <Typography variant="subtitle1">SubCategory: {product.subCategory}</Typography>
-      <Typography variant="body1">Description: {product.description}</Typography>
+      <Typography variant="body1">Description:</Typography>
+      <ul>
+        {product.description.map((item, index) => (
+        <li key={index}><Typography variant='body1'>{item}</Typography></li>
+      ))}
+      </ul>
       <Typography variant="body1">Quantity: {product.quantity}</Typography>
       <Typography variant="body1">Location: {product.location}</Typography>
       <Typography variant="body1">Status: {product.status}</Typography>
       <Typography variant="body1">Visibility: {(product.visibility === false) ? 'No':'Yes'}</Typography>
-      <Grid container spacing={2} style={{ marginTop: 16 }}>
+      <Grid container spacing={2} style={{ marginTop: 10, marginBottom: 10 }}>
         {product.images && product.images.map((src, index) => (
           <Grid item key={index}>
-            <Image src={src} alt={`Product ${index}`} />
+            <Image src={src} alt={`Product ${index}`} style={{ width: '185px', height: '175px', objectFit: 'cover', borderRadius: '10px' }}/>
           </Grid>
         ))}
       </Grid>

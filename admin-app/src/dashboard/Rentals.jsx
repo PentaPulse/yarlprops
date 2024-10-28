@@ -10,6 +10,7 @@ import { useAuth } from '../api/AuthContext';
 import { rentalFilters } from '../../src/components/menuLists';
 import {  collection, deleteDoc, doc, getDocs, query } from 'firebase/firestore';
 import { addRental, fetchSelectedRental, updateRental } from '../api/db/rentals';
+import { itemNotification } from '../../src/api/db/notificationsManager';
 
 export default function Rentals() {
   const [showAddRental, setShowAddRental] = React.useState(false);
@@ -160,11 +161,13 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
       // Add or update rental with the combined image URLs
       if (rid) {
         await updateRental(rid, { ...rental, quantity:rental.category==='Bordims'?1:rental.quantity, images: allImageUrls, visibility:false });
+        await itemNotification(user,rental,'rental','update')
       } else {
         console.log("Stage 2", rental)
 
-        await addRental({ ...rental, images: allImageUrls });
-      }
+        await addRental({ ...rental,quantity:rental.category==='Bordims'?1:rental.quantity, images: allImageUrls,visibility:false});      }
+        await itemNotification(user,rental,'rental','add')
+      
 
       Swal.fire({
         icon: 'success',
@@ -316,12 +319,16 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
             onChange={handleStatusChange}
             required
           >
-            <FormControlLabel value="For Rent" control={<Radio />} label="For Rent" />
+            <FormControlLabel 
+              value="For Rent" 
+              control={<Radio />} 
+              label="For Rent" />
             <FormControlLabel
               value="Sold Out"
 
               control={<Radio />}
               label="Sold Out!"
+              disabled={!rid}
             />
           </RadioGroup>
         </FormControl><br />
@@ -337,9 +344,13 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
           startIcon={<CloudUploadIcon />}
           style={{ marginTop: '15px', marginBottom: '25px' }}
         >
-          Upload file
+          Upload Images
           <VisuallyHiddenInput type="file" />
         </Button>
+
+        <Typography variant="body1" color="textSecondary" gutterBottom>
+          (Note:- Add high quality images.)
+        </Typography>
 
         <Grid container spacing={2}>
           {existingImages.map((src, index) => (
@@ -375,7 +386,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
             </Grid>
           ))}
         </Grid>
-        {validationMessage && <Typography color="error">{validationMessage}</Typography>}
+        {validationMessage && <Typography color="error" sx={{ mt: '1rem'}} gutterBottom>{validationMessage}</Typography>}
         <Button type="submit" variant="contained" color="success" style={{ marginTop: '25px' }}>
           Save
         </Button>
@@ -472,23 +483,28 @@ const RentalList = ({ onEditProduct, onViewProduct }) => {
                       {/* <TableCell>ID</TableCell> */}
                       <StyledTableCell align="center">Title</StyledTableCell>
                       <StyledTableCell align="center">Category</StyledTableCell>
+                      <StyledTableCell align="center">SubCategory</StyledTableCell>
                       {/* <StyledTableCell align="center">Description</StyledTableCell>
                       <StyledTableCell align="center">Quantity</StyledTableCell>
                       <StyledTableCell align="center">Location</StyledTableCell> */}
                       <StyledTableCell align="center">Current Status</StyledTableCell>
+                      <StyledTableCell align="center">Visibility On Site</StyledTableCell>
                       <StyledTableCell align="center">Actions</StyledTableCell>
                   </TableRow>
               </TableHead>
               <TableBody>
-                  {rentals.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(rental => (
+                {rentals.length > 0 ?
+                  rentals.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(rental => (
                   <StyledTableRow key={rental.rid}>
                       {/* <TableCell>{rental.id}</TableCell> */}
                       <StyledTableCell align="center">{rental.title}</StyledTableCell>
                       <StyledTableCell align="center">{rental.category}</StyledTableCell>
+                      <StyledTableCell align="center">{rental.subCategory}</StyledTableCell>
                       {/* <StyledTableCell align="justify">{rental.description}</StyledTableCell>
                       <StyledTableCell align="center">{rental.quantity}</StyledTableCell>
                       <StyledTableCell align="center">{rental.location}</StyledTableCell> */}
                       <StyledTableCell align="center">{rental.status}</StyledTableCell>
+                      <StyledTableCell align="center">{(rental.visibility === false) ? 'No':'Yes'}</StyledTableCell>
                       
                       <StyledTableCell align="center">
                           <Button disabled={!user.approved} onClick={() => onViewProduct(rental.rid)} variant="outlined" color="secondary" style={{ margin: '5px', width: '100%' }}>View</Button>
@@ -496,7 +512,13 @@ const RentalList = ({ onEditProduct, onViewProduct }) => {
                           <Button disabled={!user.approved} onClick={() => handleDelete(rental.rid)} variant="outlined" color="error" style={{ margin: '5px', width: '100%' }}>Delete</Button>
                       </StyledTableCell>
                   </StyledTableRow>
-                 ))}
+                 )) : (
+                  <TableRow>
+                    <StyledTableCell colSpan={8} align="center">
+                      No services found.
+                    </StyledTableCell>
+                  </TableRow>
+                 )}
               </TableBody>
           </Table>
           <TablePagination
@@ -520,20 +542,20 @@ const Image = styled('img')({
 });
 
 const RentalDetail = ({ rid, onBack }) => {
-  const [product, setProduct] = React.useState(null);
+  const [rental, setRental] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    const fetchProduct = async () => {
-      const fetchedProduct = await fetchSelectedRental(rid);
-      if (fetchedProduct) {
-        setProduct(fetchedProduct);
+    const fetchRental = async () => {
+      const fetchedRental = await fetchSelectedRental(rid);
+      if (fetchedRental) {
+        setRental(fetchedRental);
       } else {
         console.log('No such document!');
       }
       setLoading(false);
     };
-    fetchProduct();
+    fetchRental();
   }, [rid]);
 
   if (loading) return <CircularProgress />;
@@ -543,17 +565,24 @@ const RentalDetail = ({ rid, onBack }) => {
       <Button variant="contained" color="primary" onClick={onBack} style={{ marginBottom: 16 }}>
         Back to Product List
       </Button>
-      <Typography variant="h4">{product.title}</Typography>
-      <Typography variant="subtitle1">Category: {product.category}</Typography>
-      <Typography variant="subtitle1">Sub category: {product.subCategory}</Typography>
-      <Typography variant="body1">Description: {product.description}</Typography>
-      <Typography variant="body1">Quantity: {product.quantity}</Typography>
-      <Typography variant="body1">Location: {product.location}</Typography>
-      <Typography variant="body1">Status: {product.status}</Typography>
-      <Grid container spacing={2} style={{ marginTop: 16 }}>
-        {product.images && product.images.map((src, index) => (
+      <Typography variant="h4">{rental.title}</Typography>
+      <Typography variant="subtitle1">Category: {rental.category}</Typography>
+      <Typography variant="subtitle1">Sub category: {rental.subCategory}</Typography>
+      <Typography variant="body1">Description:</Typography>
+      <ul>
+      {rental.description.map((item, index) => (
+        <li key={index}><Typography variant='body1'>{item}</Typography></li>
+      ))}
+      </ul>
+      <Typography variant="body1">Quantity: {rental.quantity}</Typography>
+      <Typography variant="body1">Location: {rental.location}</Typography>
+      <Typography variant="body1">Status: {rental.status}</Typography>
+      <Typography variant="body1">Visibility: {(rental.visibility === false) ? 'No':'Yes'}</Typography>
+
+      <Grid container spacing={2} style={{ marginTop: 10, marginBottom: 10 }}>
+        {rental.images && rental.images.map((src, index) => (
           <Grid item key={index}>
-            <Image src={src} alt={`Product ${index}`} />
+            <Image src={src} alt={`rental ${index}`} style={{ width: '185px', height: '175px', objectFit: 'cover', borderRadius: '10px'}}/>
           </Grid>
         ))}
       </Grid>
