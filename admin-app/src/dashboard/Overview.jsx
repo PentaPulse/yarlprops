@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Paper, Typography, Table, TableHead, TableRow, TableCell, TableBody, TableContainer, Button } from '@mui/material';
+import { Grid, Paper, Typography, Table, TableHead, TableRow, TableCell, TableBody, TableContainer, Button,Badge } from '@mui/material';
 import { countAdmins, countUsers, fetchUserList } from '../api/db/users';
 import { countProducts } from '../api/db/products';
 import { countservices } from '../api/db/services';
@@ -119,7 +119,7 @@ function UsersTable() {
                                     <TableCell>{usr.email}</TableCell>
                                     <TableCell>{usr.isMerchant ? 'Merchant' : 'Customer'}</TableCell>
                                     <TableCell>{usr.isMerchant ? `P - ${usr.myProducts && usr.myProducts.length} , R - ${usr.myRentals && usr.myRentals.length} , S - ${usr.myServices && usr.myServices.length}` : 'P - 0 , R - 0 , S - 0'}</TableCell>
-                                    <TableCell><Button disabled={!user?.approved} variant='primary' >Assign</Button></TableCell>
+                                    <TableCell><Badge color="secondary" variant="dot" invisible={!usr.isRequested}><Button disabled={!user?.approved} variant='primary' >Assign</Button></Badge></TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

@@ -20,6 +20,7 @@ import SearchBar from './SearchBar';
 import ProfileBox from '../ProfileBox/ProfileBox';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import logo from './logoimage/logo.jpg'
+import Notifications from '../Notifications/Notifications';
 
 const style = {
     position: 'absolute',
@@ -108,9 +109,7 @@ export default function NavigationBar({ handleMode, signin, setSignin, signup, s
                     size="large"
                     color="inherit"
                 >
-                    <Badge badgeContent={17} color="error">
-                        <NotificationsIcon />
-                    </Badge>
+                    <Notifications/>
                 </IconButton>
                 <Typography>Notifications</Typography>
             </MenuItem>
@@ -262,7 +261,10 @@ export default function NavigationBar({ handleMode, signin, setSignin, signup, s
                         <Box sx={{ flexGrow: 1 }} />
                         <ModeSwitch handleMode={handleMode} />
                         {isLogged ? (
+                            <>
+                            <Notifications/>
                             <ProfileBox isLogged={isLogged} handleProfileClick={handleMobileMenuOpen} />
+                            </>
                         ) : (
                             <>
                                 <ButtonGroup variant="text" sx={{ [theme.breakpoints.down('lg')]: { display: 'none' } }}>
