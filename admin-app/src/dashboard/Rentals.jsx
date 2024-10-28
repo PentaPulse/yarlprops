@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { Container, Button, styled, Paper, Typography, TextField, FormControl, FormLabel, RadioGroup, Radio, FormControlLabel, Grid, TableCell, tableCellClasses, TableRow, TableContainer, Table, TableHead, TableBody, TablePagination, CircularProgress } from '@mui/material';
+import { Container, Button, IconButton, styled, Paper, Typography, TextField, FormControl, FormLabel, RadioGroup, Radio, FormControlLabel, Grid, TableCell, tableCellClasses, TableRow, TableContainer, Table, TableHead, TableBody, TablePagination, CircularProgress, Select, InputLabel, MenuItem } from '@mui/material';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { db, storage } from '../api/firebase';
 import Swal from 'sweetalert2';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useAuth } from '../api/AuthContext';
+import { rentalFilters } from '../../src/components/menuLists';
 import {  collection, deleteDoc, doc, getDocs, query } from 'firebase/firestore';
 import { addRental, fetchSelectedRental, updateRental } from '../api/db/rentals';
 
@@ -57,16 +60,16 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
   const { user } = useAuth();
   const [rental, setRental] = useState({
     merchantId: user.uid,
+    merchantName:user.displayName,
     title: '',
     category: '',
-    type: '',
-    description: '',
+    subcategory: '',
+    description: [''],
     quantity: '',
     location: '',
-    status: '',
-    images: [
-
-    ],
+    status: 'For Rent',
+    images: [],
+    visibility: false,
   });
 
   const [existingImages, setExistingImages] = React.useState([]);
@@ -91,6 +94,21 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
   const handleChange = (event) => {
     const { name, value } = event.target;
     setRental({ ...rental, [name]: value });
+  };
+
+  const handleDescriptionChange = (index, event) => {
+    const newRentDescription = [...rental.description];
+    newRentDescription[index] = event.target.value;
+    setRental({ ...rental, description: newRentDescription });
+  };
+
+  const addDescriptionLine = () => {
+    setRental({ ...rental, description: [...rental.description, ''] });
+  };
+
+  const handleRemoveDescriptionLine = (index) => {
+    const updatedDescriptions = rental.description.filter((_, i) => i !== index);
+    setRental({ ...rental, description: updatedDescriptions });
   };
 
   const handleStatusChange = (event) => {
@@ -121,7 +139,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
       return;
     }
 
-    if (rental.quantity <= 1) {
+    if (rental.category!=='Bordims' && rental.quantity < 1) {
       setValidationMessage('Quantity must be greater than 1 or equal to 1.');
       return;
     }
@@ -141,7 +159,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
 
       // Add or update rental with the combined image URLs
       if (rid) {
-        await updateRental(rid, { ...rental, images: allImageUrls });
+        await updateRental(rid, { ...rental, quantity:rental.category==='Bordims'?1:rental.quantity, images: allImageUrls, visibility:false });
       } else {
         console.log("Stage 2", rental)
 
@@ -159,12 +177,13 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
       setRental({
         title: '',
         category: '',
-        type: '',
+        subCategory: '',
         description: '',
         quantity: '',
         location: '',
         status: '',
-        images: []
+        images: [],
+        visibility: false,
       });
       setExistingImages([]);
       setNewImages([]);
@@ -204,33 +223,67 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
           margin="normal"
           required
         />
-        <TextField
-          label="Category"
-          name="category"
-          value={rental.category}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          required
-        />
-        <TextField
-          label="Type"
-          name="type"
-          value={rental.type}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          required
-        />
-        <TextField
-          label="Description"
-          name="description"
-          value={rental.description}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          required
-        />
+        <FormControl fullWidth margin='normal'>
+          <InputLabel>Category</InputLabel>
+          <Select
+            name="category"
+            value={rental.category}
+            onChange={handleChange}
+            required
+          >
+            {Object.keys(rentalFilters["categories"]).map((category) => (
+              <MenuItem key={category} value={category}>
+                {category}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl fullWidth margin='normal'>
+          <InputLabel>SubCategory</InputLabel>
+          <Select
+            name="subCategory"
+            value={rental.subCategory}
+            onChange={handleChange}
+            required
+            disabled={!rental.category}
+          >
+            {rental.category &&
+              rentalFilters["categories"][rental.category].map((subCategory) => (
+                <MenuItem key={subCategory} value={subCategory}>
+                  {subCategory}
+                </MenuItem>
+              ))}
+          </Select>
+        </FormControl>
+        {rental.description.map((des, index) => (
+          <Grid container key={index} spacing={1} alignItems="center">
+            <Grid item xs={11.5}>
+              <TextField
+                label={`Description Line ${index + 1}`}
+                value={des}
+                onChange={(event) => handleDescriptionChange(index, event)}
+                fullWidth
+                margin="normal"
+                required
+              />
+            </Grid>
+            {index > 0 && (
+              <IconButton onClick={() => handleRemoveDescriptionLine(index)} style={{ marginTop: '1rem' }} aria-label="delete">
+                <DeleteIcon />
+              </IconButton>
+            )}
+          </Grid>
+        ))}
+
+        <Button
+          onClick={addDescriptionLine}
+          variant="outlined"
+          startIcon={<AddIcon />}
+          color="success"
+          style={{ marginTop: '10px', marginBottom: '10px' }}
+        >
+          Add new line
+        </Button>
         <TextField
           label="Quantity"
           name="quantity"
@@ -240,6 +293,8 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
           fullWidth
           margin="normal"
           required
+          inputProps={{ min: 1 }}
+          disabled={rental.category === 'Bordims'}
         />
         <TextField
           label="Location"
