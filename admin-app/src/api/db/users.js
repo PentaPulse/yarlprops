@@ -1,5 +1,5 @@
 import { auth, db } from "../firebase";
-import { doc, setDoc, collection, getDoc, getDocs, where, query } from "firebase/firestore";
+import { doc, setDoc,updateDoc, collection, getDoc, getDocs, where, query } from "firebase/firestore";
 import { updateProfile } from "firebase/auth";
 
 // Register admin
@@ -173,3 +173,12 @@ export const fetchMerchantServiceDetails = async (pid) => {
         return null;
     }
 };
+
+export const updateUser=async(userDetails)=>{
+    try{
+    await updateDoc(doc(db,'systemusers',userDetails.uid),{isRequested:false,isMerchant:true,reason:userDetails.reason})
+    return {success:true}
+}catch(e){
+return e//{success:false}
+}
+}

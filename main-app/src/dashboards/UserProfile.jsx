@@ -426,36 +426,17 @@ const AccountSettings = ({ profilePercentage }) => {
 
   const changeRole = async () => {
     try {
-      if (user.isMerchant) {
-        if (user.myProducts.length > 0 || user.myRentals.length > 0 || user.myService.length > 0) {
-          showAlerts2('Remove ongoing items and try again', 'warning')
-        } else {
-          await updateDoc(doc(db, 'systemusers', user.uid), { 'isMerchant': false })
-          Swal.fire({
-            title: `Successfully changed to ${role}`,
-            icon: "success"
-          }).then((result) => {
-            if (result.isConfirmed) {
-              window.location.reload()
-            }
-          });
-        }
+      if (profilePercentage === 100) {
+        await updateDoc(doc(db, 'systemusers', user.uid), { isRequested:true ,isMerchant:false})
+        Swal.fire({
+          title: `Change role request sent to ADMINS`,
+          icon: "success"
+        })
       } else {
-        if (profilePercentage === 100) {
-          await updateDoc(doc(db, 'systemusers', user.uid), { 'isMerchant': true })
-          Swal.fire({
-            title: `Successfully changed to ${role}`,
-            icon: "success"
-          }).then((result) => {
-            if (result.isConfirmed) {
-              window.location.reload()
-            }
-          });
-        } else {
-          showAlerts2('Complete Your profile', 'warning')
-        }
+        showAlerts2('Complete Your profile', 'warning')
       }
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Error updating role:', error);
     }
   };
@@ -479,8 +460,6 @@ const AccountSettings = ({ profilePercentage }) => {
       return;
     }
     try {
-      // Use your method to update the phone number
-      //await updatePhoneNumber(user, phoneNumber.new);
       await updateDoc(doc(db, 'systemusers', user.uid), { phoneNumber: phoneNumber.confirm });
       alert("Phone number updated successfully");
     } catch (error) {
@@ -513,27 +492,14 @@ const AccountSettings = ({ profilePercentage }) => {
         }}
         noValidate
         autoComplete="off"
-      >
+      >{!user.isMerchant&&
         <Box>
           <Typography variant='h6'>Change role</Typography>
-          <Typography>I am currently a {user.isMerchant ? 'Merchant' : 'Customer'} in Yarlprops and I want to be a </Typography>
-          <FormControl sx={{ m: 1 }} fullWidth>
-            <InputLabel>Role</InputLabel>
-            <Select
-              disabled={user.adminid}
-              value={role}
-              onChange={handleSelectChange}
-              label="Role"
-            >
-              {['Merchant', 'Customer'].map((roleOption, index) => (
-                <MenuItem key={index} value={roleOption}>{roleOption}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <Typography>I am currently a {user.isMerchant ? 'Merchant' : 'Customer'} in Yarlprops and I want to be a Merchant</Typography>
           <Container sx={{ display: 'flex', justifyContent: 'end', marginTop: '20px' }}>
-            <Button variant="contained" fullWidth color="primary" onClick={changeRole}>Change Role</Button>
+            <Button variant="contained" fullWidth color="primary" onClick={changeRole}>Request Merchant role</Button>
           </Container>
-        </Box>
+        </Box>}
         <Box>
           <Typography variant="h6">Change Email</Typography>
           <TextField

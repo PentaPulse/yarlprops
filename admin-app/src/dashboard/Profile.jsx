@@ -405,7 +405,7 @@ const ProfileSettings = ({ setProfilePercentage }) => {
   );
 };
 
-const AccountSettings = ({ profilePercentage }) => {
+const AccountSettings = () => {
   const { user } = useAuth();
 
   const [email, setEmail] = useState({ old: '', new: '', confirm: '' });

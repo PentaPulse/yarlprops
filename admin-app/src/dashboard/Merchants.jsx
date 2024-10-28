@@ -115,7 +115,6 @@ export default function Merchants() {
                                     </TableCell>
                                     <TableCell>
                                         <Box display="flex" gap={1}>
-                                            <Button disabled={user.approved} variant="outlined" color="primary" size="small" onClick={handleAssign}>Assign</Button>
                                             <Button disabled={user.approved} variant="outlined" color="secondary" size="small" onClick={handleView}>View</Button>
                                             <Button disabled={user.approved} variant="outlined" color="error" size="small" >Delete</Button>
                                         </Box>
