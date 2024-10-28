@@ -59,7 +59,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
     title: '', 
     category: '', 
     type: '', 
-    description: '', 
+    description: [''], 
     quantity: '', 
     location: '',
     status: 'For Sale',
@@ -122,7 +122,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
       return;
     }
 
-    if (product.quantity <= 1) {
+    if (product.quantity < 1) {
       setValidationMessage('Quantity must be greater than 1 or equal to 1.');
       return;
     }
@@ -161,10 +161,10 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
         title: '', 
         category: '', 
         type: '', 
-        description: '', 
+        description: [''], 
         quantity: '', 
         location: '',
-        status: 'For Sale',
+        status: '',
         visibility: false,
         images: [] });
       setExistingImages([]);
@@ -254,7 +254,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
         </FormControl>
         {product.description.map((des, index) => (
           <Grid container key={index} spacing={1} alignItems="center">
-            <Grid item xs={11}>
+            <Grid item xs={11.5}>
               <TextField
                 label={`Description Line ${index + 1}`}
                 value={des}
@@ -290,6 +290,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
           fullWidth
           margin="normal"
           required
+          inputProps={{ min: 1 }}
         />
         <TextField
           label="Location"
