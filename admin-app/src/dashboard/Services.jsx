@@ -525,8 +525,8 @@ const ServicesList = ({ onEditService, onViewService }) => {
                   <StyledTableCell align="center">{service.location}</StyledTableCell>
                   <StyledTableCell align="center">{(service.visibility === false) ? 'No':'Yes'}</StyledTableCell>
                   <StyledTableCell>
-                    <Button onClick={() => onEditService(service.sid)} variant="outlined" color="success" style={{ margin: '5px', width: '100%' }}>Edit</Button>
                     <Button onClick={() => onViewService(service.sid)} variant="outlined" color="secondary" style={{ margin: '5px', width: '100%' }}>View</Button>
+                    <Button onClick={() => onEditService(service.sid)} variant="outlined" color="success" style={{ margin: '5px', width: '100%' }}>Edit</Button>
                     <Button onClick={() => handleDeleteService(service.sid)} variant="outlined" color="error" style={{ margin: '5px', width: '100%' }}>Delete</Button>
                   </StyledTableCell>
                 </StyledTableRow>

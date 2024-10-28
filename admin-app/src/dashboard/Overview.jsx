@@ -5,6 +5,10 @@ import { countProducts } from '../api/db/products';
 import { countservices } from '../api/db/services';
 import { countRentals } from '../api/db/rentals';
 import { collection, getDocs, limit, orderBy, query, where } from 'firebase/firestore';
+import { fetchProducts } from '../api/db/products';
+import { fetchServices } from '../api/db/services';
+import { fetchSelectedRental } from '../api/db/rentals';
+
 import { db } from '../api/firebase';
 import { useAuth } from '../api/AuthContext';
 
@@ -194,12 +198,11 @@ function ProductsTable() {
     const [products, setProducts] = React.useState([]);
 
     React.useEffect(() => {
-        async function fetchData() {
-            const q = await getDocs(query(collection(db, 'products'), orderBy('createdAt', 'asc'), limit(5)))
-            const data = q.docs.map((doc) => doc.data())
-            setProducts(data);
-        }
-        fetchData();
+        const fetchProductList = async () => {
+            const fetchedProducts = await fetchProducts();
+            setProducts(fetchedProducts);
+        };
+        fetchProductList();
     }, []);
     const cols = ["No", "Name", "Quantity", "Price"]
     return (
@@ -244,12 +247,7 @@ function RentalsTable() {
     const [rentals, setRentals] = React.useState([]);
 
     React.useEffect(() => {
-        async function fetchData() {
-            const q = await getDocs(query(collection(db, 'rentals'), orderBy('createdAt', 'asc'), limit(5)))
-            const data = q.docs.map((doc) => doc.data())
-            setRentals(data);
-        }
-        fetchData();
+        
     }, []);
     const cols = ["No", "Name", "Quntity", "Price"]
     return (
@@ -294,12 +292,11 @@ function ServicesTable() {
     const [services, setServices] = React.useState([]);
 
     React.useEffect(() => {
-        async function fetchData() {
-            const q = await getDocs(query(collection(db, 'services'), orderBy('createdAt', 'asc'), limit(5)))
-            const data = q.docs.map((doc) => doc.data())
-            setServices(data);
-        }
-        fetchData();
+        const fetchServiceList = async () => {
+            const fetchedServices = await fetchServices();
+            setServices(fetchedServices);
+        };
+        fetchServiceList();
     }, []);
     const cols = ["No", "Name", "Category", "Price"]
     return (
@@ -322,8 +319,8 @@ function ServicesTable() {
                                 services.slice(0, 5).map((service, index) => (
                                     <TableRow>
                                         <TableCell>{index + 1}</TableCell>
-                                        <TableCell>{service.serviceName}</TableCell>
-                                        <TableCell>{service.serviceLocation}</TableCell>
+                                        <TableCell>{service.title}</TableCell>
+                                        <TableCell>{service.location}</TableCell>
                                         <TableCell>{service.price}</TableCell>
 
                                     </TableRow>
