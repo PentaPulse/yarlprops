@@ -1,30 +1,41 @@
-import { Box, Grid,  List, ListItem, Paper, Typography } from '@mui/material'
-import React, { useEffect, useState } from 'react'
-import { getNotifications, markAsRead } from '../api/db/notificationsManager';
+import { Box, Grid, List, ListItem, Paper, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import NotificationManager from '../api/db/notificationsManager';
 import { useAuth } from '../api/AuthContext';
+
+const notificationsManager = new NotificationManager();
 
 export default function NotificationsPanel() {
   const [selectedNotification, setSelectedNotification] = useState(null);
-  const [notifications, setNotifications] = useState([])
-  const { user } = useAuth()
+  const [notifications, setNotifications] = useState([]);
+  const { user } = useAuth();
 
-  const handleSelectNotification = (notification) => {
+  const handleSelectNotification = async (notification) => {
     setSelectedNotification(notification);
-    markAsRead(user, notification.id)
+    try {
+      await notificationsManager.updateNotification(notification.id, { read: true }, { userId: user.id, requiresAdminPermission: false });
+      setNotifications((prevNotifications) =>
+        prevNotifications.map((n) =>
+          n.id === notification.id ? { ...n, read: true } : n
+        )
+      );
+    } catch (error) {
+      console.error('Error marking notification as read:', error);
+    }
   };
 
   useEffect(() => {
-    const fecthNotifications = async () => {
+    const fetchNotifications = async () => {
       try {
-        const data = await getNotifications(user)
-        setNotifications(data)
+        const data = await notificationsManager.getNotifications({ userId: user.id});
+        setNotifications(data);
       } catch (e) {
-        setNotifications([])
+        console.error('Error fetching notifications:', e);
+        setNotifications([]);
       }
-    }
-    
-    fecthNotifications()
-  }, [])
+    };
+    fetchNotifications();
+  }, [user]);
 
   return (
     <>
@@ -39,7 +50,9 @@ export default function NotificationsPanel() {
                   button
                   onClick={() => handleSelectNotification(notification)}
                 >
-                  <Typography variant="subtitle1">{notification.topic}</Typography>
+                  <Typography variant="subtitle1" color={notification.read ? 'textSecondary' : 'textPrimary'}>
+                    {notification.topic}
+                  </Typography>
                 </ListItem>
               ))}
             </List>
@@ -50,22 +63,29 @@ export default function NotificationsPanel() {
         {selectedNotification && (
           <Grid item xs={12} md={9}>
             <Paper elevation={3}>
-              {selectedNotification.isItem ?
+              {selectedNotification.isItem ? (
                 <Box p={2}>
                   <Typography variant="h6">{selectedNotification.topic}</Typography>
-                  <Typography variant="body1">
-                    {selectedNotification.itemImage}
+                  {selectedNotification.itemImage && (
+                    <img src={selectedNotification.itemImage} alt={selectedNotification.itemName} width={150} />
+                  )}
+                  <Typography variant="body1">Item Name: {selectedNotification.itemName}</Typography>
+                  <Typography variant="body2" color="textSecondary">Type: {selectedNotification.itemType}</Typography>
+                  <Typography variant="body2" color="textSecondary">Merchant: {selectedNotification.merchantName}</Typography>
+                  <Typography variant="body2" color="primary" sx={{ mt: 1 }}>
+                    Action: {selectedNotification.action} {selectedNotification.itemType}
                   </Typography>
                 </Box>
-                :
+              ) : (
                 <Box p={2}>
-
+                  <Typography variant="h6">{selectedNotification.topic}</Typography>
+                  <Typography variant="body2" color="textSecondary">Welcome to our platform!</Typography>
                 </Box>
-              }
+              )}
             </Paper>
           </Grid>
         )}
       </Grid>
     </>
-  )
+  );
 }
