@@ -4,28 +4,32 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import CloseIcon from '@mui/icons-material/Close';
 import { useAuth } from '../../api/AuthContext';
-import { getNewNotifications, getNotifications } from '../../api/db/notificationsManager'
+import NotificationManager from '../../api/db/notificationsManager';
+
+const notificationsManager = new NotificationManager();
 
 export default function Notifications() {
     const [anchorEl, setAnchorEl] = useState(null);
     const theme = useTheme();
-    const [notifications, setNotifications] = useState([])
-    const [newNotificationCount,setNewNotificationCount]=useState(0)
-    const { user } = useAuth()
+    const [notifications, setNotifications] = useState([]);
+    const [newNotificationCount, setNewNotificationCount] = useState(0);
+    const { user } = useAuth();
 
     useEffect(() => {
-        const fecthNotifications = async () => {
+        const fetchNotifications = async () => {
             try {
-                const data = await getNotifications(user)
-                setNotifications(data)
-                const nData = await getNewNotifications(user)
-                setNewNotificationCount(nData.length)
+                const allNotifications = await notificationsManager.getNotifications({ userId: user.uid });
+                setNotifications(allNotifications);
+
+                const newNotifications = await notificationsManager.getNotifications({ userId: user.id });
+                setNewNotificationCount(newNotifications.length);
             } catch (e) {
-                setNotifications([])
+                console.error('Error fetching notifications:', e);
+                setNotifications([]);
             }
-        }
-        fecthNotifications()
-    }, [])
+        };
+        fetchNotifications();
+    }, [user]);
 
     const handleOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -33,6 +37,25 @@ export default function Notifications() {
 
     const handleClose = () => {
         setAnchorEl(null);
+    };
+
+    const markAsRead = async (notificationId) => {
+        try {
+            await notificationsManager.updateNotification(notificationId, { read: true }, { userId: user.id, requiresAdminPermission: false });
+            setNotifications(notifications.map((n) => (n.id === notificationId ? { ...n, read: true } : n)));
+            setNewNotificationCount((count) => count - 1);
+        } catch (error) {
+            console.error('Error marking notification as read:', error);
+        }
+    };
+
+    const removeNotification = async (notificationId) => {
+        try {
+            await notificationsManager.deleteNotification(notificationId, { userId: user.id, requiresAdminPermission: false });
+            setNotifications(notifications.filter((n) => n.id !== notificationId));
+        } catch (error) {
+            console.error('Error removing notification:', error);
+        }
     };
 
     return (
@@ -51,37 +74,40 @@ export default function Notifications() {
                 transformOrigin={{ vertical: 'top', horizontal: 'right' }}
             >
                 <Typography fontWeight="bold" align="center">NOTIFICATIONS</Typography>
-                {notifications.length !== 0 ?
-                    notifications.map((notification, index) => (
-                        notification.isItem ?
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    justifyContent: 'space-between',
-                                    width: '300px',
-                                    padding: '16px',
-                                    boxShadow: 2,
-                                    borderRadius: 2,
-                                    backgroundColor: notification.read?theme.palette.notification.afterread: theme.palette.notification.beforeread,
-                                    position: 'relative',
-                                    mb: 2,
-                                }}
-                            >
-                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                                    <IconButton >
-                                        <DoneAllIcon sx={{ color: 'green' }} />
-                                        <Typography>Mark as read</Typography>
-                                    </IconButton>
-                                    <IconButton size="small" onClick={handleClose}>
-                                        <CloseIcon />
-                                    </IconButton>
-                                </Box>
-                                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                                    <Typography variant="body1" fontWeight="bold">{notification.topic}</Typography>
-                                </Box>
+                {notifications.length !== 0 ? (
+                    notifications.map((notification) => (
+                        <Box
+                            key={notification.id}
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'space-between',
+                                width: '300px',
+                                padding: '16px',
+                                boxShadow: 2,
+                                borderRadius: 2,
+                                backgroundColor: notification.read
+                                    ? theme.palette.notification.afterread
+                                    : theme.palette.notification.beforeread,
+                                position: 'relative',
+                                mb: 2,
+                            }}
+                        >
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                                <IconButton onClick={() => markAsRead(notification.id)}>
+                                    <DoneAllIcon sx={{ color: 'green' }} />
+                                    <Typography>Mark as read</Typography>
+                                </IconButton>
+                                <IconButton size="small" onClick={() => removeNotification(notification.id)}>
+                                    <CloseIcon />
+                                </IconButton>
+                            </Box>
+                            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                                <Typography variant="body1" fontWeight="bold">{notification.topic}</Typography>
+                            </Box>
 
-                                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                {notification.itemImage && (
                                     <Box>
                                         <img
                                             src={notification.itemImage}
@@ -90,48 +116,29 @@ export default function Notifications() {
                                             alt={notification.itemName}
                                         />
                                     </Box>
-                                    <Box ml={3}>
-                                        <Typography variant="body1" fontWeight="bold">
-                                            Item: {notification.itemName}
-                                        </Typography>
-                                        <Typography variant="body2" color="textSecondary">
-                                            Type: {notification.itemType}
-                                        </Typography>
-                                        <Typography variant="body2" color="textSecondary">
-                                            Merchant: {notification.merchantName}
-                                        </Typography>
-                                        <Typography variant="body2" color="primary" sx={{ mt: 1 }}>
-                                            Action: {notification.action} {notification.itemType}
-                                        </Typography>
-                                    </Box>
+                                )}
+                                <Box ml={3}>
+                                    <Typography variant="body1" fontWeight="bold">
+                                        Item: {notification.itemName}
+                                    </Typography>
+                                    <Typography variant="body2" color="textSecondary">
+                                        Type: {notification.itemType}
+                                    </Typography>
+                                    <Typography variant="body2" color="textSecondary">
+                                        Merchant: {notification.merchantName}
+                                    </Typography>
+                                    <Typography variant="body2" color="primary" sx={{ mt: 1 }}>
+                                        Action: {notification.action} {notification.itemType}
+                                    </Typography>
                                 </Box>
                             </Box>
-                            :
-
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    justifyContent: 'space-between',
-                                    width: '300px',
-                                    padding: '16px',
-                                    boxShadow: 2,
-                                    borderRadius: 2,
-                                    backgroundColor: theme.palette.background,
-                                    position: 'relative',
-                                }}
-                            >
-                                <Typography variant="body1" fontWeight="bold">{'notification.topic'}</Typography>
-                                <Typography variant="body2" color="textSecondary">
-                                    Welcome to our platform!
-                                </Typography>
-                            </Box>
+                        </Box>
                     ))
-                    :
+                ) : (
                     <MenuItem disabled>
                         <ListItemText primary="No new notifications" />
                     </MenuItem>
-                }
+                )}
             </Menu>
         </>
     );
