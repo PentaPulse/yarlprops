@@ -36,6 +36,16 @@ export const updateRental = async (id, updatedRental) => {
     }
 };
 
+export const fetchRentals = async () => {
+    try{
+        const qSnapshot = await getDocs(rentalRef);
+        const rentalList = qSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        return rentalList;
+    } catch (e){
+        return []
+    }
+};
+
 export const fetchSelectedRental = async (rid) => {
     const q = query(rentalRef, where('rid', '==', rid));
     try {

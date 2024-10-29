@@ -3,11 +3,11 @@ import { Grid, Paper, Typography, Table, TableHead, TableRow, TableCell, TableBo
 import { countAdmins, countUsers, fetchUserList } from '../api/db/users';
 import { countProducts } from '../api/db/products';
 import { countservices } from '../api/db/services';
-import { countRentals } from '../api/db/rentals';
+import { countRentals, fetchRentals } from '../api/db/rentals';
 import { collection, getDocs, limit, orderBy, query, where } from 'firebase/firestore';
 import { fetchProducts } from '../api/db/products';
 import { fetchServices } from '../api/db/services';
-import { fetchSelectedRental } from '../api/db/rentals';
+
 
 import { db } from '../api/firebase';
 import { useAuth } from '../api/AuthContext';
@@ -204,7 +204,7 @@ function ProductsTable() {
         };
         fetchProductList();
     }, []);
-    const cols = ["No", "Name", "Quantity", "Price"]
+    const cols = ["No", "Name", "Quantity"]
     return (
         <>
             <Typography variant="h6" gutterBottom>
@@ -227,7 +227,6 @@ function ProductsTable() {
                                         <TableCell>{index + 1}</TableCell>
                                         <TableCell>{product.title}</TableCell>
                                         <TableCell>{product.quantity}</TableCell>
-                                        <TableCell>{product.price}</TableCell>
 
                                     </TableRow>
                                 ))) : (
@@ -247,9 +246,13 @@ function RentalsTable() {
     const [rentals, setRentals] = React.useState([]);
 
     React.useEffect(() => {
-        
+        const fetchRentalsList = async () => {
+            const fetchedRentals = await fetchRentals();
+            setRentals(fetchedRentals);
+        };
+        fetchRentalsList();
     }, []);
-    const cols = ["No", "Name", "Quntity", "Price"]
+    const cols = ["No", "Name", "Quntity"]
     return (
         <>
             <Typography variant="h6" gutterBottom>
@@ -272,7 +275,6 @@ function RentalsTable() {
                                         <TableCell>{index + 1}</TableCell>
                                         <TableCell>{rental.title}</TableCell>
                                         <TableCell>{rental.quantity}</TableCell>
-                                        <TableCell>{rental.price}</TableCell>
 
                                     </TableRow>
                                 ))) : (
@@ -298,7 +300,7 @@ function ServicesTable() {
         };
         fetchServiceList();
     }, []);
-    const cols = ["No", "Name", "Category", "Price"]
+    const cols = ["No", "Name", "Category"]
     return (
         <>
             <Typography variant="h6" gutterBottom>
@@ -321,7 +323,6 @@ function ServicesTable() {
                                         <TableCell>{index + 1}</TableCell>
                                         <TableCell>{service.title}</TableCell>
                                         <TableCell>{service.location}</TableCell>
-                                        <TableCell>{service.price}</TableCell>
 
                                     </TableRow>
                                 ))) : (
