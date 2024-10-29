@@ -1,5 +1,5 @@
 // NotificationManager.js
-import {  collection, addDoc, doc, updateDoc, deleteDoc, getDocs, query, where } from 'firebase/firestore';
+import {  collection, addDoc, doc, updateDoc, deleteDoc, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 
 class NotificationManager {
@@ -7,17 +7,6 @@ class NotificationManager {
     this.db = db;
   }
 
-  /**
-   * Add a new notification
-   * @param {Object} notification - The notification details
-   * @param {string} notification.variant - Type of notification (e.g., welcome, changerole)
-   * @param {string} notification.path - Path related to the notification
-   * @param {string} notification.userId - User ID associated with the notification
-   * @param {boolean} notification.requiresAdminPermission - Whether the notification requires admin permission
-   * @param {Date} [notification.timestamp=new Date()] - Timestamp of the notification
-   * @param {Object} [notification.additionalFields={}] - Additional fields if any
-   * @returns {Promise} Promise representing the notification ID of the added notification
-   */
   async addNotification({ variant, path, userId, requiresAdminPermission, timestamp = new Date(), additionalFields = {} }) {
     try {
       const notificationData = {
@@ -30,7 +19,6 @@ class NotificationManager {
 
       let collectionRef;
 
-      // Determine the collection based on admin permission requirement
       if (requiresAdminPermission) {
         collectionRef = collection(this.db, 'admins', 'notifications', variant);
       } else {
@@ -44,16 +32,6 @@ class NotificationManager {
       throw error;
     }
   }
-
-  /**
-   * Update an existing notification
-   * @param {string} id - The document ID of the notification to update
-   * @param {string} userId - The user ID associated with the notification (null if for admin)
-   * @param {string} variant - Type of notification (only if admin permission required)
-   * @param {Object} updatedData - The updated data fields
-   * @param {boolean} requiresAdminPermission - Whether the notification requires admin permission
-   * @returns {Promise} Promise representing the completion of the update
-   */
   async updateNotification(id, updatedData, { userId, variant, requiresAdminPermission }) {
     try {
       let docRef;
@@ -70,15 +48,6 @@ class NotificationManager {
       throw error;
     }
   }
-
-  /**
-   * Delete a notification
-   * @param {string} id - The document ID of the notification to delete
-   * @param {string} userId - The user ID associated with the notification (null if for admin)
-   * @param {string} variant - Type of notification (only if admin permission required)
-   * @param {boolean} requiresAdminPermission - Whether the notification requires admin permission
-   * @returns {Promise} Promise representing the completion of the deletion
-   */
   async deleteNotification(id, { userId, variant, requiresAdminPermission }) {
     try {
       let docRef;
@@ -95,14 +64,6 @@ class NotificationManager {
       throw error;
     }
   }
-
-  /**
-   * Retrieve notifications for a specific user or admin category
-   * @param {string} userId - The user ID to filter notifications by (null if for admin)
-   * @param {string} [variant] - Type of notification (only if admin permission required)
-   * @param {boolean} requiresAdminPermission - Whether the notifications require admin permission
-   * @returns {Promise} Promise representing an array of notifications
-   */
   async getNotifications({ userId }) {
     try {
       let collectionRef;
