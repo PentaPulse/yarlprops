@@ -164,7 +164,7 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
 
       if (sid) {
         await updateService(sid, { ...service, images: allImageUrls, visibility: false });
-        await itemNotification(user,service,'service','update')
+        //await itemNotification(user,service,'service','update')
         Swal.fire({
           icon: 'success',
           title: 'Service updated successfully',
@@ -174,7 +174,7 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
       } else {
         await addService({ ...service, images: allImageUrls, visibility: false });
         await addItemByMerchant(user, service, 'service')
-        await itemNotification(user,service,'service','add')
+        //await itemNotification(user,service,'service','add')
         Swal.fire({
           icon: 'success',
           title: 'Service saved, request sent to the admin panel for approval',

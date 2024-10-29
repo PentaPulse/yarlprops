@@ -118,7 +118,7 @@ function UsersTable() {
                                     <TableCell>{usr.firstName + ' ' + usr.lastName}</TableCell>
                                     <TableCell>{usr.email}</TableCell>
                                     <TableCell>{usr.isMerchant ? 'Merchant' : 'Customer'}</TableCell>
-                                    <TableCell>{usr.isMerchant ? `P - ${usr.myProducts && usr.myProducts.length} , R - ${usr.myRentals && usr.myRentals.length} , S - ${usr.myServices && usr.myServices.length}` : 'P - 0 , R - 0 , S - 0'}</TableCell>
+                                    <TableCell>{usr.isMerchant ? `P - ${usr.myProducts ? usr.myProducts.length:0} , R - ${usr.myRentals ? usr.myRentals.length:0} , S - ${usr.myServices ? usr.myServices.length:0}` : 'P - 0 , R - 0 , S - 0'}</TableCell>
                                     <TableCell><Badge color="secondary" variant="dot" invisible={!usr.isRequested}><Button disabled={!user?.approved} variant='primary' >Assign</Button></Badge></TableCell>
                                 </TableRow>
                             ))}

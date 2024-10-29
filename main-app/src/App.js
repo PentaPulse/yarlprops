@@ -193,16 +193,23 @@ function DashboardRoutes({ handleMode }) {
           <Route path="notifications" element={<NotificationsPanel/>}/>
 
           {/* Merch */}
+          {user.isMerchant&&
+          <>
           <Route path="myproducts" element={<MerchantProducts />} />
           <Route path="myrentals" element={<MerchantRentals />} />
           <Route path="myservices" element={<MerchantServices />} />
           <Route path="custorders" element={<MerchantOrders />} />
           <Route path="mrfeedback" element={<MerchantFeedback />} />
-
+          </>
+          }
 
           {/* Customer */}
+          {!user.isMerchant&&
+          <>
           <Route path="orders" element={<CustomerOrders />} />
           <Route path="feedback" element={<CustomerFeedback />} />
+          </>
+          }
          
         </Routes>
       </DashboardLayout>

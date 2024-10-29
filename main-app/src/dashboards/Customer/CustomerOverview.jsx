@@ -135,7 +135,7 @@ function OrderHistory() {
                                 </TableRow>
                             ))) : (
                             <TableRow>
-                                <TableCell >No data available</TableCell>
+                                <TableCell colSpan={5}>No data available</TableCell>
                             </TableRow>
                         )}
                     </TableBody>

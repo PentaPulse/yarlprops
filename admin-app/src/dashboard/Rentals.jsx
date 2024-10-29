@@ -161,12 +161,12 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
       // Add or update rental with the combined image URLs
       if (rid) {
         await updateRental(rid, { ...rental, quantity:rental.category==='Bordims'?1:rental.quantity, images: allImageUrls, visibility:false });
-        await itemNotification(user,rental,'rental','update')
+        //await itemNotification(user,rental,'rental','update')
       } else {
         console.log("Stage 2", rental)
 
         await addRental({ ...rental,quantity:rental.category==='Bordims'?1:rental.quantity, images: allImageUrls,visibility:false});      }
-        await itemNotification(user,rental,'rental','add')
+        //await itemNotification(user,rental,'rental','add')
       
 
       Swal.fire({
