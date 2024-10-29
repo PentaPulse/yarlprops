@@ -8,7 +8,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useAuth } from '../api/AuthContext';
 import { rentalFilters } from '../../src/components/menuLists';
-import {  collection, deleteDoc, doc, getDocs, query } from 'firebase/firestore';
+import { arrayRemove, updateDoc, collection, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
 import { addRental, fetchSelectedRental, updateRental } from '../api/db/rentals';
 import { itemNotification } from '../../src/api/db/notificationsManager';
 
@@ -215,7 +215,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
 
   return (
     <Paper style={{ padding: 16 }}>
-      <Typography variant="h6">{rid ? 'Edit Rental' : 'Add Rental'}</Typography>
+      <Typography variant="h6">{rid ? 'Edit Rental' : ''}</Typography>
       <form onSubmit={handleSubmit}>
         <TextField
           label="Title"
@@ -426,6 +426,9 @@ const RentalList = ({ onEditProduct, onViewProduct }) => {
 
           if (result.isConfirmed){
               await deleteDoc(doc(db, 'rentals', id));
+              await updateDoc(doc(db,'systemusers',user.uid),{
+                myRentals:arrayRemove(id)
+              })
               setRentals(rentals.filter(rental => rental.id !== id));
 
               Swal.fire({
