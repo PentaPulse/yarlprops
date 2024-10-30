@@ -379,9 +379,6 @@ const ServiceDetails = ({ sid, onBack }) => {
 
   return (
     <Paper style={{ padding: 16 }}>
-      <Button variant="contained" color="primary" onClick={onBack} style={{ marginBottom: 16 }}>
-        Back to Services List
-      </Button>
       <Typography variant="h4" gutterBottom>
         {service.title}
       </Typography>
@@ -410,6 +407,9 @@ const ServiceDetails = ({ sid, onBack }) => {
           </Grid>
         ))}
       </Grid>
+      <Button variant="contained" color="primary" onClick={onBack} style={{ marginBottom: 16 }}>
+        Back
+      </Button>
     </Paper>
   );
 };
