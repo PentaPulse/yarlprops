@@ -7,12 +7,12 @@ class NotificationManager {
     this.db = db;
   }
 
-  async addNotification({ variant, userId, requiresAdminPermission, additionalFields = {} }) {
+  async addNotification({ variant, user, requiresAdminPermission, additionalFields = {} }) {
     try {
       const notificationData = {
         variant,
         path:'',
-        userId,
+        userId:user.uid,
         timestamp: this.formatDate(new Date()),
         ...additionalFields
       };
@@ -22,7 +22,7 @@ class NotificationManager {
       if (requiresAdminPermission) {
         collectionRef = collection(this.db, 'admins', 'notifications', variant);
       } 
-        collectionRef = collection(this.db, 'systemusers', userId, 'notifications');
+        collectionRef = collection(this.db, 'systemusers', user.uid, 'notifications');
 
       const docRef = await addDoc(collectionRef, notificationData);
       return docRef.id;

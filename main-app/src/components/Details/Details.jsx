@@ -56,12 +56,14 @@ export default function Details({ setSignin, setSignup, itemType, itemId, itemTi
                     <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }} gutterBottom>
                         <i className="fa-solid fa-user"></i> Name: {merchant.displayName}
                     </Typography>
+
                     <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }} gutterBottom>
                         <i className="fa-solid fa-location-dot"></i> Location: {merchant.address}
                     </Typography>
                     <Typography variant={isMobile ? 'subtitle1' : 'h6'} component="h4" sx={{ textAlign: 'center' }} gutterBottom>
                         <i className="fa-solid fa-phone"></i> Contact No: {merchant.phoneNumber}
                     </Typography>
+                    
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <Button

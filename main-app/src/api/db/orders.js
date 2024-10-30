@@ -100,17 +100,17 @@ export const fetchOrdersForItem = async (itemId, merchId) => {
 }
 
 export const fetchProductsToOrders = async (merchId) => {
-  const q = await getDocs(collection(db, 'products'),where('merchId','==',merchId))
+  const q = await getDocs(collection(db, 'products'), where('merchId', '==', merchId))
   const data = q.docs.map((doc) => doc.data())
   return data
 }
 export const fetchRentalsToOrders = async (merchId) => {
-  const q = await getDocs(collection(db, 'rentals'),where('merchId','==',merchId))
+  const q = await getDocs(collection(db, 'rentals'), where('merchId', '==', merchId))
   const data = q.docs.map((doc) => doc.data())
   return data
 }
 export const fetchServicesToOrders = async (merchId) => {
-  const q = await getDocs(collection(db, 'services'),where('merchId','==',merchId))
+  const q = await getDocs(collection(db, 'services'), where('merchId', '==', merchId))
   const data = q.docs.map((doc) => doc.data())
   return data
 }
@@ -127,7 +127,7 @@ export const approveOrder = async (order) => {
 
   querySnapshot.forEach(async (doc) => {
     const docRef = doc.ref;
-    
+
     await setDoc(docRef, { status: 'completed' }, { merge: true });
 
     const itemQuery = query(
@@ -158,3 +158,20 @@ export const approveOrder = async (order) => {
   });
 };
 
+export const rejectOrder = async (order) => {
+  const q = query(
+    collection(db, 'orders'),
+    where('merchId', '==', order.merchId),
+    where('custId', '==', order.custId),
+    where('itemId', '==', order.itemId)
+  );
+
+  const querySnapshot = await getDocs(q);
+
+  querySnapshot.forEach(async (doc) => {
+    const docRef = doc.ref;
+
+    await setDoc(docRef, { status: 'cancelled' }, { merge: true });
+
+  });
+};

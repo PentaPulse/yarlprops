@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { approveOrder, fetchOrdersForItem, fetchProductsToOrders, fetchRentalsToOrders, fetchServicesToOrders } from '../../api/db/orders';
+import { rejectOrder,approveOrder, fetchOrdersForItem, fetchProductsToOrders, fetchRentalsToOrders, fetchServicesToOrders } from '../../api/db/orders';
 import { Button } from '@mui/material';
 import { useAuth } from '../../api/AuthContext';
 import formatDate from '../../components/date/dateTime';
@@ -34,8 +34,10 @@ function Row(props) {
 
   const handleApproval = async (order) => {
     await approveOrder(order)
+  }
 
-    //await approveOrderNotification(order)
+  const handleReject=async(order)=>{
+    await rejectOrder(order)
   }
 
   return (
@@ -83,7 +85,7 @@ function Row(props) {
                         <TableCell>{order.custName}</TableCell>
                         <TableCell>{order.itemQuantity}</TableCell>
                         <TableCell>{order.status}</TableCell>
-                        <TableCell>{order.status === 'pending' ? <Button onClick={() => handleApproval(order)}>Approval</Button> : <Typography>Approved</Typography>}</TableCell>
+                        <TableCell>{order.status === 'pending'||order.status==='cancelled' ? <><Button onClick={() => handleApproval(order)}>Approval</Button><Button onClick={()=>handleReject(order)}>Reject</Button> </>: <Typography>Approved</Typography>}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
