@@ -6,7 +6,63 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useAuth } from '../../api/AuthContext';
 import NotificationManager from '../../api/db/notificationsManager';
 
-const notificationsManager = new NotificationManager();
+// Import renderNotificationDetails
+const renderNotificationDetails = (notification) => {
+    switch (notification.variant) {
+        case 'welcome':
+            return (
+                <Typography variant="body1" gutterBottom>
+                    Welcome to the platform, {notification.userName || 'User'}!<br/> We're glad to have you.<br/>go to profile -&gt; notifications to more details
+                </Typography>
+            );
+        case 'addItem':
+            return (
+                <Typography variant="body1" gutterBottom>
+                    A new item has been added successfully! Check it out in the items section.
+                </Typography>
+            );
+        case 'updateItem':
+            return (
+                <Typography variant="body1" gutterBottom>
+                    An item was updated. Please review the changes.
+                </Typography>
+            );
+        case 'removeItem':
+            return (
+                <Typography variant="body1" gutterBottom>
+                    An item has been removed. If this was unintentional, please contact support.
+                </Typography>
+            );
+        case 'changerole':
+            return (
+                <Typography variant="body1" gutterBottom>
+                    User role has been changed. Please review the updated permissions.
+                </Typography>
+            );
+        case 'deleteAccount':
+            return (
+                <Typography variant="body1" gutterBottom>
+                    An account deletion request has been processed. Ensure all related data is archived.
+                </Typography>
+            );
+        default:
+            return (
+                <>
+                    <Typography variant="body1" gutterBottom>
+                        Notification ID: {notification.nId}
+                    </Typography>
+                    <Typography variant="body1" gutterBottom>
+                        Path: {notification.path}
+                    </Typography>
+                    <Typography variant="body1" gutterBottom>
+                        User ID: {notification.userId || 'N/A'}
+                    </Typography>
+                </>
+            );
+    }
+};
+
+const notificationManager = new NotificationManager();
 
 export default function Notifications() {
     const [anchorEl, setAnchorEl] = useState(null);
@@ -18,11 +74,8 @@ export default function Notifications() {
     useEffect(() => {
         const fetchNotifications = async () => {
             try {
-                const allNotifications = await notificationsManager.getNotifications({ userId: user.uid });
+                const allNotifications = await notificationManager.getNotifications(user.uid);
                 setNotifications(allNotifications);
-
-                const newNotifications = await notificationsManager.getNotifications({ userId: user.id });
-                setNewNotificationCount(newNotifications.length);
             } catch (e) {
                 console.error('Error fetching notifications:', e);
                 setNotifications([]);
@@ -41,7 +94,7 @@ export default function Notifications() {
 
     const markAsRead = async (notificationId) => {
         try {
-            await notificationsManager.updateNotification(notificationId, { read: true }, { userId: user.id, requiresAdminPermission: false });
+            await notificationManager.updateNotification(notificationId, { read: true }, { userId: user.id, requiresAdminPermission: false });
             setNotifications(notifications.map((n) => (n.id === notificationId ? { ...n, read: true } : n)));
             setNewNotificationCount((count) => count - 1);
         } catch (error) {
@@ -51,7 +104,7 @@ export default function Notifications() {
 
     const removeNotification = async (notificationId) => {
         try {
-            await notificationsManager.deleteNotification(notificationId, { userId: user.id, requiresAdminPermission: false });
+            await notificationManager.deleteNotification(notificationId, { userId: user.id, requiresAdminPermission: false });
             setNotifications(notifications.filter((n) => n.id !== notificationId));
         } catch (error) {
             console.error('Error removing notification:', error);
@@ -61,7 +114,7 @@ export default function Notifications() {
     return (
         <>
             <IconButton color={theme.palette.primary.default} onClick={handleOpen}>
-                <Badge badgeContent={newNotificationCount} color="error">
+                <Badge badgeContent={notifications.length} color="error">
                     <NotificationsIcon />
                 </Badge>
             </IconButton>
@@ -105,7 +158,6 @@ export default function Notifications() {
                             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                                 <Typography variant="body1" fontWeight="bold">{notification.topic}</Typography>
                             </Box>
-
                             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                                 {notification.itemImage && (
                                     <Box>
@@ -118,18 +170,8 @@ export default function Notifications() {
                                     </Box>
                                 )}
                                 <Box ml={3}>
-                                    <Typography variant="body1" fontWeight="bold">
-                                        Item: {notification.itemName}
-                                    </Typography>
-                                    <Typography variant="body2" color="textSecondary">
-                                        Type: {notification.itemType}
-                                    </Typography>
-                                    <Typography variant="body2" color="textSecondary">
-                                        Merchant: {notification.merchantName}
-                                    </Typography>
-                                    <Typography variant="body2" color="primary" sx={{ mt: 1 }}>
-                                        Action: {notification.action} {notification.itemType}
-                                    </Typography>
+                                    {/* Render customized notification details */}
+                                    {renderNotificationDetails(notification)}
                                 </Box>
                             </Box>
                         </Box>

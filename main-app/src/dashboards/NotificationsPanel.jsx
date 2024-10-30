@@ -2,15 +2,17 @@ import { Box, Container, Typography, List, ListItem, ListItemText, useTheme } fr
 import { useState, useEffect } from "react";
 import NotificationManager from "../api/db/notificationsManager";
 import { useAuth } from "../api/AuthContext";
+import { getDocs, doc, collection } from 'firebase/firestore'
+import { db } from "../api/firebase";
 
-const notificationManager=new NotificationManager()
+const notificationManager = new NotificationManager()
 
 export default function NotificationPanel() {
   const [notifications, setNotifications] = useState([]);
   const [selectedNotification, setSelectedNotification] = useState(null);
-  const {user}=useAuth()
-  const theme=useTheme()
-  
+  const { user } = useAuth()
+  const theme = useTheme()
+
   useEffect(() => {
 
     const fetchNotifications = async () => {
@@ -97,7 +99,7 @@ export default function NotificationPanel() {
               key={notification.nId}
               button
               onClick={() => handleSelectNotification(notification)}
-              sx={{ bgcolor: 'grey.200', mb: 1, borderRadius: 1 }}
+              sx={{ bgcolor: `${theme.palette.mode==='light'?'grey.200':'grey.800'}`, mb: 1, borderRadius: 1 }}
             >
               <ListItemText primary={notification.variant} />
             </ListItem>
@@ -106,7 +108,7 @@ export default function NotificationPanel() {
       </Box>
 
       {/* Selected Notification Details Panel */}
-      <Box p={3} height={'800px'} width={'70%'} borderRadius={1} boxShadow={3} borderColor={theme.palette.background.default}>
+      <Box p={3} height={'800px'} width={'70%'} borderRadius={1} boxShadow={3} bgcolor={theme.palette.mode==='light'?'grey.100':'grey.900'}>
         {selectedNotification ? (
           <>
             <Typography variant="h5" gutterBottom>

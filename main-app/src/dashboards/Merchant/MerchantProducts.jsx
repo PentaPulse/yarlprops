@@ -206,6 +206,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
         console.log(product)
         await updateProduct(pid, { ...product, images: allImageUrls, visibility: false });
         //await itemNotification(user,product,'product','update')
+        notificationManager.addNotification({variant:'updateItem',})
         //notificationManager.addNotification({'update','/d/notification'})
         Swal.fire({
           icon: 'success',

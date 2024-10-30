@@ -4,7 +4,7 @@ import { countAdmins, countUsers, fetchUserList } from '../api/db/users';
 import { countProducts } from '../api/db/products';
 import { countservices } from '../api/db/services';
 import { countRentals, fetchRentals } from '../api/db/rentals';
-import { collection, getDocs, limit, orderBy, query, where } from 'firebase/firestore';
+import { collection, getDocs, limit,  query, where } from 'firebase/firestore';
 import { fetchProducts } from '../api/db/products';
 import { fetchServices } from '../api/db/services';
 
