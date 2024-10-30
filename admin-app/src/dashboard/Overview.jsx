@@ -8,7 +8,6 @@ import { collection, getDocs, limit,  query, where } from 'firebase/firestore';
 import { fetchProducts } from '../api/db/products';
 import { fetchServices } from '../api/db/services';
 
-
 import { db } from '../api/firebase';
 import { useAuth } from '../api/AuthContext';
 
@@ -204,7 +203,7 @@ function ProductsTable() {
         };
         fetchProductList();
     }, []);
-    const cols = ["No", "Name", "Quantity"]
+    const cols = ["No", "Name", "Quantity", "Visibility"]
     return (
         <>
             <Typography variant="h6" gutterBottom>
@@ -227,6 +226,7 @@ function ProductsTable() {
                                         <TableCell>{index + 1}</TableCell>
                                         <TableCell>{product.title}</TableCell>
                                         <TableCell>{product.quantity}</TableCell>
+                                        <TableCell>{(product.visibility === false) ? 'No':'Yes'}</TableCell>
 
                                     </TableRow>
                                 ))) : (
@@ -252,7 +252,7 @@ function RentalsTable() {
         };
         fetchRentalsList();
     }, []);
-    const cols = ["No", "Name", "Quntity"]
+    const cols = ["No", "Name", "Quntity", "Visibility"]
     return (
         <>
             <Typography variant="h6" gutterBottom>
@@ -275,6 +275,7 @@ function RentalsTable() {
                                         <TableCell>{index + 1}</TableCell>
                                         <TableCell>{rental.title}</TableCell>
                                         <TableCell>{rental.quantity}</TableCell>
+                                        <TableCell>{(rental.visibility === false) ? 'No':'Yes'}</TableCell>
 
                                     </TableRow>
                                 ))) : (
@@ -300,7 +301,7 @@ function ServicesTable() {
         };
         fetchServiceList();
     }, []);
-    const cols = ["No", "Name", "Category"]
+    const cols = ["No", "Name", "Category", "Visibility"]
     return (
         <>
             <Typography variant="h6" gutterBottom>
@@ -323,6 +324,7 @@ function ServicesTable() {
                                         <TableCell>{index + 1}</TableCell>
                                         <TableCell>{service.title}</TableCell>
                                         <TableCell>{service.location}</TableCell>
+                                        <TableCell>{(service.visibility === false) ? 'No':'Yes'}</TableCell>
 
                                     </TableRow>
                                 ))) : (
