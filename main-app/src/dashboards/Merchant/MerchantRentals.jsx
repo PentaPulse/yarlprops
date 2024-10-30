@@ -197,7 +197,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
         title: '',
         category: '',
         subCategory: '',
-        description: '',
+        description: [''],
         quantity: '',
         location: '',
         status: '',

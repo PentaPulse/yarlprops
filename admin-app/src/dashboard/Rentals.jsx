@@ -1,22 +1,27 @@
 import React, { useState } from 'react';
 import { Container, Button, IconButton, styled, Paper, Typography, TextField, FormControl, FormLabel, RadioGroup, Radio, FormControlLabel, Grid, TableCell, tableCellClasses, TableRow, TableContainer, Table, TableHead, TableBody, TablePagination, CircularProgress, Select, InputLabel, MenuItem } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { db, storage } from '../api/firebase';
 import Swal from 'sweetalert2';
-import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useAuth } from '../api/AuthContext';
-import { rentalFilters } from '../../src/components/menuLists';
-import { arrayRemove, updateDoc, collection, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
+import { arrayRemove, collection, deleteDoc, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { addRental, fetchSelectedRental, updateRental } from '../api/db/rentals';
-import { itemNotification } from '../../src/api/db/notificationsManager';
+import { rentalFilters } from '../components/menuLists';
+import { itemNotification } from '../api/db/notificationsManager';
 
-export default function Rentals() {
+export default function MerchantRentals() {
   const [showAddRental, setShowAddRental] = React.useState(false);
   const [editingRentalId, setEditingRentalId] = React.useState(null);
   const [viewingRentalId, setViewingRentalId] = React.useState(null);
-  const {user}=useAuth()
+
+  const handleAddRental = () => {
+    setEditingRentalId(null);
+    setShowAddRental(true);
+    setViewingRentalId(null);
+  }
 
   const handleEditRental = (rentalId) => {
     setEditingRentalId(rentalId);
@@ -41,18 +46,17 @@ export default function Rentals() {
 
   return (
     <>
-      <Container>
-        {user.approved?(
-          showAddRental ? (
-            <RentalForm rid={editingRentalId} onSuccess={handleSuccess} onCancel={handleCancel} />
-          ) : viewingRentalId ? (
-            <RentalDetail rid={viewingRentalId} onBack={handleCancel} />
-          ) : (
-            <RentalList onEditProduct={handleEditRental} onViewProduct={handleViewRental} />
-          )
-        ):'wait for admin approval'
-        }
-      </Container>
+        <Container>
+          {
+            showAddRental ? (
+              <RentalForm rid={editingRentalId} onSuccess={handleSuccess} onCancel={handleCancel} />
+            ) : viewingRentalId ? (
+              <RentalDetail rid={viewingRentalId} onBack={handleCancel} />
+            ) : (
+              <RentalList onEditrental={handleEditRental} onViewrental={handleViewRental} />
+            )
+          }
+        </Container>
     </>
   );
 };
@@ -64,7 +68,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
     merchantName:user.displayName,
     title: '',
     category: '',
-    subcategory: '',
+    subCategory: '',
     description: [''],
     quantity: '',
     location: '',
@@ -140,7 +144,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
       return;
     }
 
-    if (rental.category!=='Bordims' && rental.quantity < 1) {
+    if (rental.category!=='Bordims'&&rental.quantity < 1) {
       setValidationMessage('Quantity must be greater than 1 or equal to 1.');
       return;
     }
@@ -160,18 +164,17 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
 
       // Add or update rental with the combined image URLs
       if (rid) {
-        await updateRental(rid, { ...rental, quantity:rental.category==='Bordims'?1:rental.quantity, images: allImageUrls, visibility:false });
+        await updateRental(rid, { ...rental,quantity:rental.category==='Bordims'?1:rental.quantity, images: allImageUrls ,visibility:false});
         //await itemNotification(user,rental,'rental','update')
       } else {
         console.log("Stage 2", rental)
 
         await addRental({ ...rental,quantity:rental.category==='Bordims'?1:rental.quantity, images: allImageUrls,visibility:false});      }
         //await itemNotification(user,rental,'rental','add')
-      
 
       Swal.fire({
         icon: 'success',
-        title: 'Rental details saved successfully',
+        title: 'Rental details saved successfully and request sent to the admin panel',
         showConfirmButton: false,
         timer: 1500,
       });
@@ -181,7 +184,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
         title: '',
         category: '',
         subCategory: '',
-        description: '',
+        description: [''],
         quantity: '',
         location: '',
         status: '',
@@ -215,7 +218,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
 
   return (
     <Paper style={{ padding: 16 }}>
-      <Typography variant="h6">{rid ? 'Edit Rental' : ''}</Typography>
+      <Typography variant="h6">{rid ? 'Edit Rental' : 'Add Rental'}</Typography>
       <form onSubmit={handleSubmit}>
         <TextField
           label="Title"
@@ -319,9 +322,9 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
             onChange={handleStatusChange}
             required
           >
-            <FormControlLabel 
-              value="For Rent" 
-              control={<Radio />} 
+            <FormControlLabel
+              value="For Rent"
+              control={<Radio />}
               label="For Rent" />
             <FormControlLabel
               value="Sold Out"
@@ -348,15 +351,11 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
           <VisuallyHiddenInput type="file" />
         </Button>
 
-        <Typography variant="body1" color="textSecondary" gutterBottom>
-          (Note:- Add high quality images.)
-        </Typography>
-
         <Grid container spacing={2}>
           {existingImages.map((src, index) => (
             <Grid item key={index}>
               <div style={{ position: 'relative' }}>
-                <img src={src} alt={`Existing Preview ${index}`} style={{ width: 150, height: 100, objectFit: 'cover' }} />
+                <img src={src} alt={`Existing Preview ${index}`} style={{ width: 150, height: 120, borderRadius: 5 ,objectFit: 'cover' }} />
                 <Button
                   onClick={() => handleRemoveImage(index, 'existing')}
                   variant="contained"
@@ -372,7 +371,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
           {newImages.map((file, index) => (
             <Grid item key={index + existingImages.length}>
               <div style={{ position: 'relative' }}>
-                <img src={URL.createObjectURL(file)} alt={`New Preview ${index}`} style={{ width: 150, height: 120, objectFit: 'cover' }} />
+                <img src={URL.createObjectURL(file)} alt={`New Preview ${index}`} style={{ width: 150, height: 120, borderRadius: 5 ,objectFit: 'cover' }} />
                 <Button
                   onClick={() => handleRemoveImage(index, 'new')}
                   variant="contained"
@@ -398,142 +397,143 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
   );
 };
 
-const RentalList = ({ onEditProduct, onViewProduct }) => {
+const RentalList = ({ onEditrental, onViewrental }) => {
   const [rentals, setRentals] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const {user}=useAuth();  
-  
+  const { user } = useAuth();
+
   React.useEffect(() => {
-      const fetchRentalList = async () => {
-          const q = await getDocs(query(collection(db,'rentals')))
-          const fetchedRentals = q.docs.map(doc=>doc.data()) 
-          setRentals(fetchedRentals);
-      };
-      fetchRentalList();
-  }, []);
+    const fetchRentalList = async () => {
+      const q = await getDocs(query(collection(db, 'rentals')))
+      const fetchedRentals = q.docs.map(doc => doc.data())
+      setRentals(fetchedRentals);
+    };
+    fetchRentalList();
+  }, [user.uid]);
 
   const handleDelete = async (id) => {
-      try {
-          const result = await Swal.fire({
-              icon: 'warning',
-              title: 'Are you sure?',
-              text: "You won't be able to revert this!",
-              showCancelButton: true,
-              confirmButtonText: 'Yes, delete it!',
-              cancelButtonText: 'No, cancel!',
-          });
+    try {
+      const result = await Swal.fire({
+        icon: 'warning',
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'No, cancel!',
+      });
 
-          if (result.isConfirmed){
-              await deleteDoc(doc(db, 'rentals', id));
-              await updateDoc(doc(db,'systemusers',user.uid),{
-                myRentals:arrayRemove(id)
-              })
-              setRentals(rentals.filter(rental => rental.id !== id));
+      if (result.isConfirmed) {
+        await deleteDoc(doc(db, 'rentals', id));
+        await updateDoc(doc(db,'systemusers',user.uid),{
+          myRentals:arrayRemove(id)
+        })
+        setRentals(rentals.filter(rental => rental.id !== id));
 
-              Swal.fire({
-                  icon: 'success',
-                  title: 'Deleted!',
-                  text: `The product has been deleted.`,
-                  showConfirmButton: false,
-                  timer: 1500,
-              });
-          }
-      } catch (error) {
-          console.error("Error deleting product: ", error);
-          Swal.fire({
-              icon: 'error',
-              title: 'Error!',
-              text: 'There was an error deleting the rental.',
-          });
+        Swal.fire({
+          icon: 'success',
+          title: 'Deleted!',
+          text: `The rental has been deleted.`,
+          showConfirmButton: false,
+          timer: 1500,
+        });
       }
+    } catch (error) {
+      console.error("Error deleting rental: ", error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'There was an error deleting the rental.',
+      });
+    }
   };
 
   const handleChangePage = (event, newPage) => {
-      setPage(newPage);
+    setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (event) => {
-      setRowsPerPage(+event.target.value);
-      setPage(0);
+    setRowsPerPage(+event.target.value);
+    setPage(0);
   };
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
-      [`&.${tableCellClasses.head}`]: {
-        backgroundColor: theme.palette.common.black,
-        color: theme.palette.common.white,
-      },
-      [`&.${tableCellClasses.body}`]: {
-        fontSize: 14,
-      },
-    }));
-    
-    const StyledTableRow = styled(TableRow)(({ theme }) => ({
-      '&:nth-of-type(odd)': {
-        backgroundColor: theme.palette.action.hover,
-      },
-      // hide last border
-      '&:last-child td, &:last-child th': {
-        border: 0,
-      },
-    }));
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    '&:last-child td, &:last-child th': {
+      border: 0,
+    },
+  }));
 
   return (
-      <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 700 }} aria-label="customized table">
-              <TableHead>
-                  <TableRow>
-                      {/* <TableCell>ID</TableCell> */}
-                      <StyledTableCell align="center">Title</StyledTableCell>
-                      <StyledTableCell align="center">Category</StyledTableCell>
-                      <StyledTableCell align="center">SubCategory</StyledTableCell>
-                      {/* <StyledTableCell align="center">Description</StyledTableCell>
-                      <StyledTableCell align="center">Quantity</StyledTableCell>
-                      <StyledTableCell align="center">Location</StyledTableCell> */}
-                      <StyledTableCell align="center">Current Status</StyledTableCell>
-                      <StyledTableCell align="center">Visibility On Site</StyledTableCell>
-                      <StyledTableCell align="center">Actions</StyledTableCell>
-                  </TableRow>
-              </TableHead>
-              <TableBody>
-                {rentals.length > 0 ?
-                  rentals.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(rental => (
-                  <StyledTableRow key={rental.rid}>
-                      {/* <TableCell>{rental.id}</TableCell> */}
-                      <StyledTableCell align="center">{rental.title}</StyledTableCell>
-                      <StyledTableCell align="center">{rental.category}</StyledTableCell>
-                      <StyledTableCell align="center">{rental.subCategory}</StyledTableCell>
-                      {/* <StyledTableCell align="justify">{rental.description}</StyledTableCell>
-                      <StyledTableCell align="center">{rental.quantity}</StyledTableCell>
-                      <StyledTableCell align="center">{rental.location}</StyledTableCell> */}
-                      <StyledTableCell align="center">{rental.status}</StyledTableCell>
-                      <StyledTableCell align="center">{(rental.visibility === false) ? 'No':'Yes'}</StyledTableCell>
-                      
-                      <StyledTableCell align="center">
-                          <Button disabled={!user.approved} onClick={() => onViewProduct(rental.rid)} variant="outlined" color="secondary" style={{ margin: '5px', width: '100%' }}>View</Button>
-                          <Button disabled={!user.approved} onClick={() => onEditProduct(rental.rid)} variant="outlined" color="success" style={{ margin: '5px', width: '100%' }}>Edit</Button>
-                          <Button disabled={!user.approved} onClick={() => handleDelete(rental.rid)} variant="outlined" color="error" style={{ margin: '5px', width: '100%' }}>Delete</Button>
-                      </StyledTableCell>
-                  </StyledTableRow>
-                 )) : (
-                  <TableRow>
-                    <StyledTableCell colSpan={8} align="center">
-                      No services found.
-                    </StyledTableCell>
-                  </TableRow>
-                 )}
-              </TableBody>
-          </Table>
-          <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={rentals.length} 
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-      </TableContainer>    
+    <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 700 }} aria-label="customized table">
+        <TableHead>
+          <TableRow>
+            {/* <TableCell>ID</TableCell> */}
+            <StyledTableCell align="center">Title</StyledTableCell>
+            <StyledTableCell align="center">Category</StyledTableCell>
+            <StyledTableCell align="center">Sub category</StyledTableCell>
+            {/* <StyledTableCell align="center">Description</StyledTableCell>
+            <StyledTableCell align="center">Quantity</StyledTableCell>
+            <StyledTableCell align="center">Location</StyledTableCell> */}
+            <StyledTableCell align="center">Current Status</StyledTableCell>
+            <StyledTableCell align="center">Visibility On Site</StyledTableCell>
+            <StyledTableCell align="center">Actions</StyledTableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rentals.length > 0 ?
+            rentals.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(rental => (
+              <StyledTableRow key={rental.rid}>
+                {/* <TableCell>{rental.id}</TableCell> */}
+                <StyledTableCell align="center">{rental.title}</StyledTableCell>
+                <StyledTableCell align="center">{rental.category}</StyledTableCell>
+                <StyledTableCell align="center">{rental.subCategory}</StyledTableCell>
+                {/* <StyledTableCell align="justify">{rental.description}</StyledTableCell>
+                <StyledTableCell align="center">{rental.quantity}</StyledTableCell>
+                <StyledTableCell align="center">{rental.location}</StyledTableCell> */}
+                <StyledTableCell align="center">{rental.status}</StyledTableCell>
+                <StyledTableCell align="center">{(rental.visibility === false) ? 'No':'Yes'}</StyledTableCell>
+
+
+                <StyledTableCell align="center">
+                  <Button onClick={() => onViewrental(rental.rid)} variant="outlined" color="secondary" style={{ margin: '5px', width: '100%' }}>View</Button>
+                  <Button onClick={() => onEditrental(rental.rid)} variant="outlined" color="success" style={{ margin: '5px', width: '100%' }}>Edit</Button>
+                  <Button onClick={() => handleDelete(rental.rid)} variant="outlined" color="error" style={{ margin: '5px', width: '100%' }}>Delete</Button>
+                </StyledTableCell>
+              </StyledTableRow>
+            )) : (
+              <TableRow>
+                <StyledTableCell colSpan={8} align="center">
+                  No services found.
+                </StyledTableCell>
+              </TableRow>
+            )}
+        </TableBody>
+      </Table>
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 25]}
+        component="div"
+        count={rentals.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+    </TableContainer>
   );
 };
 
@@ -545,35 +545,33 @@ const Image = styled('img')({
 });
 
 const RentalDetail = ({ rid, onBack }) => {
-  const [rental, setRental] = React.useState(null);
+  const [rental, setrental] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    const fetchRental = async () => {
-      const fetchedRental = await fetchSelectedRental(rid);
-      if (fetchedRental) {
-        setRental(fetchedRental);
+    const fetchrental = async () => {
+      const fetchedrental = await fetchSelectedRental(rid);
+      if (fetchedrental) {
+        setrental(fetchedrental);
       } else {
         console.log('No such document!');
       }
       setLoading(false);
     };
-    fetchRental();
+    fetchrental();
   }, [rid]);
 
   if (loading) return <CircularProgress />;
 
   return (
     <Paper style={{ padding: 16 }}>
-      <Button variant="contained" color="primary" onClick={onBack} style={{ marginBottom: 16 }}>
-        Back to Product List
-      </Button>
-      <Typography variant="h4">{rental.title}</Typography>
+      <Typography variant="h4" gutterBottom>{rental.title}</Typography>
       <Typography variant="subtitle1">Category: {rental.category}</Typography>
       <Typography variant="subtitle1">Sub category: {rental.subCategory}</Typography>
       <Typography variant="body1">Description:</Typography>
       <ul>
       {rental.description.map((item, index) => (
+        // <Typography key={index} variant="body1">{item}</Typography>
         <li key={index}><Typography variant='body1'>{item}</Typography></li>
       ))}
       </ul>
@@ -581,7 +579,6 @@ const RentalDetail = ({ rid, onBack }) => {
       <Typography variant="body1">Location: {rental.location}</Typography>
       <Typography variant="body1">Status: {rental.status}</Typography>
       <Typography variant="body1">Visibility: {(rental.visibility === false) ? 'No':'Yes'}</Typography>
-
       <Grid container spacing={2} style={{ marginTop: 10, marginBottom: 10 }}>
         {rental.images && rental.images.map((src, index) => (
           <Grid item key={index}>
@@ -589,6 +586,9 @@ const RentalDetail = ({ rid, onBack }) => {
           </Grid>
         ))}
       </Grid>
+      <Button variant="contained" color="primary" onClick={onBack} style={{ marginTop: 16 }}>
+        Back
+      </Button>
     </Paper>
   );
 };
