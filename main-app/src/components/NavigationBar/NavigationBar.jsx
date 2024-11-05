@@ -42,7 +42,7 @@ export default function NavigationBar({ handleMode, signin, setSignin, signup, s
     const [isLogged, setIsLogged] = React.useState(false);
     const { user, logout } = useAuth()
     const navigate = useNavigate()
-    const [page,setPage]=React.useState('Home');
+    const [page, setPage] = React.useState('Home');
 
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -70,7 +70,7 @@ export default function NavigationBar({ handleMode, signin, setSignin, signup, s
         navigate('/')
     };
 
-    const handleNavigatePages=(array)=>{
+    const handleNavigatePages = (array) => {
         setPage(array[0])
         navigate(array[1])
     }
@@ -106,7 +106,7 @@ export default function NavigationBar({ handleMode, signin, setSignin, signup, s
                     size="large"
                     color="inherit"
                 >
-                    <Notifications/>
+                    <Notifications />
                 </IconButton>
                 <Typography>Notifications</Typography>
             </MenuItem>
@@ -186,17 +186,32 @@ export default function NavigationBar({ handleMode, signin, setSignin, signup, s
                                         sx={{
                                             display: 'flex',
                                             alignItems: 'center',
-                                            justifyContent: 'space-between',
                                         }}
                                     >
                                         <IconButton onClick={handleCloseNavMenu}>
                                             <CloseRoundedIcon />
                                         </IconButton>
+                                        <Box
+                                            sx={{
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                                width: '100%',
+                                            }}
+                                        >
+                                            <img
+                                                src={`${process.env.PUBLIC_URL}/logo.png`}
+                                                alt="YarlProps logo"
+                                                style={{
+                                                    height: '70px',
+                                                    width: '130px',
+                                                }}
+                                            />
+                                        </Box>
                                     </Box>
                                     <Divider sx={{ my: 3 }} />
                                     {pages.map((page) => (
                                         <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                            <Button textAlign="center" onClick={()=>handleNavigatePages(page)} sx={{ textDecoration: 'none', color: theme.palette.primary.main }}>
+                                            <Button textAlign="center" onClick={() => handleNavigatePages(page)} sx={{ textDecoration: 'none', color: theme.palette.primary.main }}>
                                                 {page[0]}
                                             </Button>
                                         </MenuItem>
@@ -213,6 +228,7 @@ export default function NavigationBar({ handleMode, signin, setSignin, signup, s
                                     </MenuItem>
                                 </Box>
                             </Drawer>
+
                         </Box>
                         <Typography
                             variant="h6"
@@ -230,14 +246,14 @@ export default function NavigationBar({ handleMode, signin, setSignin, signup, s
                                 color: theme.palette.primary.main
                             }}
                         >
-                             {/* YarlProps  */}
-                            <img src={`${process.env.PUBLIC_URL}/logo.png`} alt="YarlProps logo" 
-                            style={{ 
-                                height: '70px',
-                                width: '130px',
-                                 marginRight: '20px',
-                                
-                                  }} />
+                            {/* YarlProps  */}
+                            <img src={`${process.env.PUBLIC_URL}/logo.png`} alt="YarlProps logo"
+                                style={{
+                                    height: '70px',
+                                    width: '130px',
+                                    marginRight: '20px',
+
+                                }} />
                         </Typography>
                         <Box sx={{
                             flexGrow: 1, [theme.breakpoints.down('lg')]: { display: 'none' },
@@ -246,20 +262,20 @@ export default function NavigationBar({ handleMode, signin, setSignin, signup, s
                             {pages.map((page) => (
                                 <Button
                                     key={page}
-                                    onClick={()=>handleNavigatePages(page)}
+                                    onClick={() => handleNavigatePages(page)}
                                     sx={{ my: 2, display: 'block', color: theme.palette.primary }}
                                 >
                                     {page[0]}
                                 </Button>
                             ))}
                         </Box>
-                        <SearchBar page={page}/>
+                        <SearchBar page={page} />
                         <Box sx={{ flexGrow: 1 }} />
                         <ModeSwitch handleMode={handleMode} />
                         {isLogged ? (
                             <>
-                            <Notifications/>
-                            <ProfileBox isLogged={isLogged} handleProfileClick={handleMobileMenuOpen} />
+                                <Notifications />
+                                <ProfileBox isLogged={isLogged} handleProfileClick={handleMobileMenuOpen} />
                             </>
                         ) : (
                             <>
