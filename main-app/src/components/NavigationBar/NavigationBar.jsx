@@ -231,13 +231,12 @@ export default function NavigationBar({ handleMode, signin, setSignin, signup, s
                             }}
                         >
                              {/* YarlProps  */}
-                            <img src={`${process.env.PUBLIC_URL}/logo.jpg`} alt="YarlProps logo" 
+                            <img src={`${process.env.PUBLIC_URL}/logo.png`} alt="YarlProps logo" 
                             style={{ 
                                 height: '70px',
-                                width: '70px',
+                                width: '130px',
                                  marginRight: '20px',
-                                 borderRadius: '60%', 
-                                 border: '2px solid #ccc'
+                                
                                   }} />
                         </Typography>
                         <Box sx={{
