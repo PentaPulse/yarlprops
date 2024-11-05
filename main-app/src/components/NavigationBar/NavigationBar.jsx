@@ -4,13 +4,11 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import { Button, useTheme, ButtonGroup, Modal, Fade, Backdrop, Drawer, Divider } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../api/AuthContext';
@@ -19,7 +17,6 @@ import ModeSwitch from '../ModeHandler/ModeSwitch';
 import SearchBar from './SearchBar';
 import ProfileBox from '../ProfileBox/ProfileBox';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
-import logo from './logoimage/logo.jpg'
 import Notifications from '../Notifications/Notifications';
 
 const style = {
@@ -234,7 +231,7 @@ export default function NavigationBar({ handleMode, signin, setSignin, signup, s
                             }}
                         >
                              {/* YarlProps  */}
-                            <img src={logo} alt="YarlProps logo" 
+                            <img src={`${process.env.PUBLIC_URL}/logo.jpg`} alt="YarlProps logo" 
                             style={{ 
                                 height: '70px',
                                 width: '70px',

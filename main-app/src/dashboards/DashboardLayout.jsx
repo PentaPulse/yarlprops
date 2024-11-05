@@ -15,7 +15,6 @@ import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
 import Notifications from '../components/Notifications/Notifications';
-import logo from '../components/NavigationBar/logoimage/logo.jpg';
 
 
 const drawerWidth = 240;
@@ -220,7 +219,7 @@ export default function DashboardLayout({ handleMode, children }) {
                 <MenuIcon />
               </IconButton>
               
-              <img src={logo} alt="YarlProps logo" 
+              <img src={`${process.env.PUBLIC_URL}/logo.jpg`} alt="YarlProps logo" 
                             style={{ 
                                 height: '70px',
                                 width: '70px',

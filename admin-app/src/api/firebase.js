@@ -27,14 +27,14 @@ const appCheck = initializeAppCheck(app, {
   provider: new ReCaptchaV3Provider('6Ld8mQkqAAAAADb9fn9eJaoq4mAkcZ0SKA8-5sbE'),
   isTokenAutoRefreshEnabled: true
 });
-*/
+*
 
 if (window.location.hostname === "localhost" || window.location.hostname === '127.0.0.1' || window.location.hostname === '192.168.70.247') {
   connectFirestoreEmulator(db, '127.0.0.1', 8080);
   connectAuthEmulator(auth, "http://127.0.0.1:9099");
   connectStorageEmulator(storage, '127.0.0.1', 9199);
   //connectDatabaseEmulator(realtimeDB, '127.0.0.1', 9000);
-}
+}*/
 
 
 export { db, auth, storage }
