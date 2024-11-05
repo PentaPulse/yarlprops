@@ -67,6 +67,7 @@ export const AuthProvider = ({ children }) => {
                                 sessionStorage.setItem('pp', user.photoURL);
                                 sessionStorage.setItem('displayName', user.displayName);
                                 setOk(true)
+                                
                             }
                         })
                     })
@@ -115,6 +116,7 @@ export const AuthProvider = ({ children }) => {
                 sessionStorage.setItem('pp', user.photoURL);
                 sessionStorage.setItem('displayName', user.displayName);
                 showAlerts('Successfully logged', 'success')
+                
             })
             .catch((error) => {
                 console.error('Google sign-in error:', error);
@@ -129,6 +131,7 @@ export const AuthProvider = ({ children }) => {
             sessionStorage.setItem('displayName', user.displayName);
             signinLog(user.uid, { method: 'email&password' })
             showAlerts('Successfully logged', 'success')
+            
         })
         .catch((error) => {
             if (error.code === 'auth/invalid-email') {

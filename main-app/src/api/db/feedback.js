@@ -11,9 +11,10 @@ export const getOrderDetails = async (order) => {
     return merchData
 }
 
-export const sendFeedback=async(custId,merchId,feedbackData)=>{
+export const sendFeedback=async(custId,merchId,itemId,itemType,feedbackData)=>{
     await addDoc(collection(db,'systemusers',merchId,'feedbacks'),feedbackData)
     await addDoc(collection(db,'systemusers',custId,'reviews'),feedbackData)
+    await addDoc(collection(db,itemType,itemId,'reviews'),feedbackData)
 }
 
 export const fetchFeedbacks=async(custId)=>{
@@ -22,11 +23,11 @@ export const fetchFeedbacks=async(custId)=>{
     return data
 }
 
-export const fetchProductReviews = async (itemId,merchId) => {
+export const fetchProductReviews = async (itemId) => {
     try {
-      const reviewsRef = collection(db, 'systemusers', merchId, "feedbacks");
+      const reviewsRef = collection(db, 'products', itemId, "reviews");
   
-      const reviewsSnapshot = await getDocs(reviewsRef,where('itemId','==',itemId));
+      const reviewsSnapshot = await getDocs(reviewsRef);
   
       const reviews = reviewsSnapshot.docs.map(doc => ({
         id: doc.id,

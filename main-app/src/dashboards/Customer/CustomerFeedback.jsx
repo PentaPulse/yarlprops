@@ -112,7 +112,8 @@ export default function FeedbackPage() {
     };
 
     try {
-      await sendFeedback(user.uid, selectedOrder.merchId, newFeedback);
+      //await sendFeedback(user.uid, selectedOrder.merchId, newFeedback);
+      await sendFeedback(user.uid,selectedOrder.merchId,selectedOrder.itemId,selectedOrder.itemType,newFeedback)
       await addItemRating(selectedOrder.itemId,selectedOrder.itemType, feedback.rating); 
       showAlerts("Feedback and rating submitted successfully", "success");
       setRefresh(!refresh);

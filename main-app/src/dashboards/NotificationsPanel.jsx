@@ -2,8 +2,6 @@ import { Box, Container, Typography, List, ListItem, ListItemText, useTheme } fr
 import { useState, useEffect } from "react";
 import NotificationManager from "../api/db/notificationsManager";
 import { useAuth } from "../api/AuthContext";
-import { getDocs, doc, collection } from 'firebase/firestore'
-import { db } from "../api/firebase";
 
 const notificationManager = new NotificationManager()
 

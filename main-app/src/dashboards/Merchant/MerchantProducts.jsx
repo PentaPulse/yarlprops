@@ -90,8 +90,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
     description: [''],
     quantity: '',
     location: '',
-    status: 'For Sale',
-    visibility: false,
+    status: 'For Sale',    
     images: [],
   });
 
@@ -205,7 +204,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
       if (pid) {
         console.log(product)
         await updateProduct(pid, { ...product, images: allImageUrls, visibility: false });
-        notificationManager.addNotification({variant:'updateItem',})
+        notificationManager.addNotification({variant:'updateItem',requiresAdminPermission:true,user:user,additionalFields:{itemType:'product'}})
         Swal.fire({
           icon: 'success',
           title: 'Product updated successfully',
@@ -235,7 +234,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
         location: '',
         status: '',
         images: [],
-        visibility: false,
+        
       });
       setExistingImages([]);
       setNewImages([]);
