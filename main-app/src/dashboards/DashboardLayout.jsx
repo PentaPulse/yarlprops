@@ -219,13 +219,12 @@ export default function DashboardLayout({ handleMode, children }) {
                 <MenuIcon />
               </IconButton>
               
-              <img src={`${process.env.PUBLIC_URL}/logo.jpg`} alt="YarlProps logo" 
+              <img src={`${process.env.PUBLIC_URL}/logo.png`} alt="YarlProps logo" 
                             style={{ 
                                 height: '70px',
-                                width: '70px',
+                                width: '130px',
                                  marginRight: '20px',
-                                 borderRadius: '60%', 
-                                 border: '2px solid #ccc'
+                                
                                   }} />
             </Box>
             <Box sx={{ flexGrow: 1 }} />
