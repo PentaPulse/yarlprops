@@ -34,7 +34,7 @@ if (window.location.hostname === "localhost" || window.location.hostname === '12
   connectAuthEmulator(auth, "http://127.0.0.1:9099");
   connectStorageEmulator(storage, '127.0.0.1', 9199);
   //connectDatabaseEmulator(realtimeDB, '127.0.0.1', 9000);
-}
+}/**/
 
 
 export { db, auth, storage }
