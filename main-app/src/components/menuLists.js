@@ -67,6 +67,8 @@ export const serviceFilters = {
         "Food":
             ["Cake", "Meals"],
         "Saloon":
-            ["Boys", "Girls", "Both"]
+            ["Boys", "Girls", "Both"],
+        "Vehicals":
+            ["Three Wheel", "Bike"]
     }
 }
