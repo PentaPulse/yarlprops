@@ -65,6 +65,7 @@ function SlideShow() {
               Your browser does not support the video tag.
             </video>
           )}
+          {/*
           <Carousel.Caption>
             <Link to="/p/rentals">
               <button
@@ -77,7 +78,7 @@ function SlideShow() {
                 View Details
               </button>
             </Link>
-          </Carousel.Caption>
+          </Carousel.Caption>*/}
         </Carousel.Item>
       ))}
       {/*}

@@ -10,6 +10,7 @@ import { fetchServices } from '../api/db/services';
 
 import { db } from '../api/firebase';
 import { useAuth } from '../api/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function Overview() {
     const [adminCount, setadminCount] = React.useState(0);
@@ -18,6 +19,7 @@ export default function Overview() {
     const [productCount, setProductCount] = React.useState(0);
     const [serviceCount, setServiceCount] = React.useState(0);
     const [rentalCount, setRentalCount] = React.useState(0);
+    const navigate=useNavigate()
 
     React.useEffect(() => {
         const fetchCounts = async () => {
@@ -67,28 +69,29 @@ export default function Overview() {
                 ))}
             </Grid>
             <Grid item xs={12}>
-                <UsersTable />
+                <UsersTable navigate={navigate}/>
             </Grid>
             <Grid item xs={12}>
-                <ContactResponsesTable />
+                <ContactResponsesTable navigate={navigate} />
             </Grid>
             <Grid item xs={12}>
-                <ProductsTable />
+                <ProductsTable navigate={navigate} />
             </Grid>
             <Grid item xs={12}>
-                <RentalsTable />
+                <RentalsTable navigate={navigate} />
             </Grid>
             <Grid item xs={12}>
-                <ServicesTable />
+                <ServicesTable navigate={navigate} />
             </Grid>
         </>
     );
 }
 
 
-function UsersTable() {
+function UsersTable({navigate}) {
     const { user } = useAuth();
     const [users, setUsers] = React.useState([]);
+    const [showAll, setShowAll] = React.useState(false);
 
     React.useEffect(() => {
         async function fetchData() {
@@ -98,7 +101,8 @@ function UsersTable() {
         fetchData();
     }, []);
 
-    const cols = ["No", "Name", "Email", "Role", "Counts", "Action"]
+    const cols = ["No", "Name", "Email", "Role", "Counts"]; // Removed "Action"
+
     return (
         <>
             <Typography variant="h6" gutterBottom>
@@ -109,8 +113,10 @@ function UsersTable() {
                     <Table stickyHeader>
                         <TableHead>
                             <TableRow>
-                                {cols.map((column) => (
-                                    <TableCell style={{ backgroundColor: 'black', color: 'white' }} >{column}</TableCell>
+                                {cols.map((column, index) => (
+                                    <TableCell key={index} style={{ backgroundColor: 'black', color: 'white' }}>
+                                        {column}
+                                    </TableCell>
                                 ))}
                             </TableRow>
                         </TableHead>
@@ -121,20 +127,36 @@ function UsersTable() {
                                     <TableCell>{usr.firstName + ' ' + usr.lastName}</TableCell>
                                     <TableCell>{usr.email}</TableCell>
                                     <TableCell>{usr.isMerchant ? 'Merchant' : 'Customer'}</TableCell>
-                                    <TableCell>{usr.isMerchant ? `P - ${usr.myProducts ? usr.myProducts.length:0} , R - ${usr.myRentals ? usr.myRentals.length:0} , S - ${usr.myServices ? usr.myServices.length:0}` : 'P - 0 , R - 0 , S - 0'}</TableCell>
+                                    <TableCell>{usr.isMerchant ?` P - ${usr.myProducts ? usr.myProducts.length:0} , R - ${usr.myRentals ? usr.myRentals.length:0} , S - ${usr.myServices ? usr.myServices.length:0}` : 'P - 0 , R - 0 , S - 0'}</TableCell>
                                     <TableCell><Badge color="secondary" variant="dot" invisible={!usr.isRequested}><Button disabled={!user?.approved} variant='primary' >Assign</Button></Badge></TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => navigate('/customerlist')}
+                    sx={{ mt: 2 }}
+                >
+                    See all customers
+                </Button>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => navigate('/merchantlist')}
+                    sx={{ mt: 2 }}
+                >
+                    See all merchants
+                </Button>
             </Paper>
         </>
     );
 }
 
 
-function ContactResponsesTable() { 
+function ContactResponsesTable({navigate}) { 
     const [responses, setResponses] = React.useState([]);
 
     React.useEffect(() => {
@@ -188,12 +210,20 @@ function ContactResponsesTable() {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => navigate('/contactreqs')}
+                    sx={{ mt: 2 }}
+                >
+                    See all
+                </Button>
             </Paper>
         </>
     );
 }
 
-function ProductsTable() {
+function ProductsTable({navigate}) {
     const [products, setProducts] = React.useState([]);
 
     React.useEffect(() => {
@@ -237,12 +267,20 @@ function ProductsTable() {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => navigate('/productlist')}
+                    sx={{ mt: 2 }}
+                >
+                    See all
+                </Button>
             </Paper>
         </>
     );
 }
 
-function RentalsTable() {
+function RentalsTable({navigate}) {
     const [rentals, setRentals] = React.useState([]);
 
     React.useEffect(() => {
@@ -286,12 +324,20 @@ function RentalsTable() {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => navigate('/rentallist')}
+                    sx={{ mt: 2 }}
+                >
+                    See all
+                </Button>
             </Paper>
         </>
     );
 }
 
-function ServicesTable() {
+function ServicesTable({navigate}) {
     const [services, setServices] = React.useState([]);
 
     React.useEffect(() => {
@@ -335,124 +381,15 @@ function ServicesTable() {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => navigate('/servicelist')}
+                    sx={{ mt: 2 }}
+                >
+                    See all
+                </Button>
             </Paper>
         </>
     );
 }
-
-/* experimental short code*/
-/*function Tables() {
-    const { user } = useAuth();
-    const [users, setUsers] = React.useState([]);
-    const [responses, setResponses] = React.useState([]);
-    const [error, setError] = React.useState(null);
-    const [products, setProducts] = React.useState([]);
-    const [rentals, setRentals] = React.useState([]);
-    const [services, setServices] = React.useState([]);
-
-    React.useEffect(() => {
-        async function fetchUsers() {
-            const data = await fetchUserList();
-            setUsers(data);
-        }
-        fetchUsers();
-        async function fetchC() {
-            try {
-                const q = await getDocs(query(collection(db, 'contactus'), where("status", "==", "new"), orderBy('createdAt', 'asc'), limit(5)))
-                const responses = q.docs.map((doc) => doc.data())
-                setResponses(responses);
-            } catch (err) {
-                setError(err.message);
-            }
-        }
-        fetchC();
-        async function fetchP() {
-            const q = await getDocs(query(collection(db, 'products'), orderBy('createdAt', 'asc'), limit(5)))
-            const data = q.docs.map((doc) => doc.data())
-            setProducts(data);
-        }
-        fetchP();
-        async function fetchR() {
-            const q = await getDocs(query(collection(db, 'rentals'), orderBy('createdAt', 'asc'), limit(5)))
-            const data = q.docs.map((doc) => doc.data())
-            setRentals(data);
-        }
-        fetchR();
-        async function fetchS() {
-            const q = await getDocs(query(collection(db, 'services'), orderBy('createdAt', 'asc'), limit(5)))
-            const data = q.docs.map((doc) => doc.data())
-            setServices(data);
-        }
-        fetchS();
-    }, []);
-
-    const details = [
-        ['Users', ["No", "displayName", "email",  "Counts", "Action"], users],
-        ['Contact us requests', ['No', 'Name', 'Email', 'Status', 'Message'], responses],
-        ['Products', ["No", "Name", "Quantity", "Price"], products],
-        ['Rentals', ["No", "Name", "Quantity", "Price"], rentals],
-        ['Services', ["No", "Name", "Category", "Price"], services]
-    ];
-    
-    return (
-        <>
-            {details.map((detail, index) => (
-            <DefaultTables
-                key={index}
-                title={detail[0]}       // Map title
-                columns={detail[1]}     // Map columns array
-                items={detail[2]}       // Map items array
-            />
-        ))}
-        </>
-    );
-}*/
-
-/*
-function DefaultTables({ title, columns, items }) {
-    return (
-        <>
-            <Typography variant="h6" gutterBottom>
-                {title}
-            </Typography>
-            <Paper sx={{ width: '100%', mb: 4 }}>
-                <TableContainer sx={{ maxHeight: 450 }}>
-                    <Table stickyHeader>
-                        <TableHead>
-                            <TableRow>
-                                {columns.map((column, colIndex) => (
-                                    <TableCell
-                                        key={colIndex}  // Assign key to the TableCell
-                                        style={{ backgroundColor: 'black', color: 'white' }}
-                                    >
-                                        {column} {/* Directly display the column name since it's a string *}
-                                    </TableCell>
-                                ))}
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {items.length > 0 ? (
-                                items.slice(0, 5).map((item, index) => (
-                                    <TableRow key={index}> {/* Assign key to TableRow *}
-                                        {columns.map((column, colIndex) => (
-                                            <TableCell key={colIndex}>
-                                                {/* Dynamically access item data based on column index *}
-                                                {colIndex === 0 ? index + 1 :colIndex===columns.length-1?'': item[Object.keys(item)[colIndex - 1]]}
-                                            </TableCell>
-                                        ))}
-                                    </TableRow>
-                                ))
-                            ) : (
-                                <TableRow>
-                                    <TableCell colSpan={columns.length} align="center">
-                                        No data available
-                                    </TableCell>
-                                </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Paper>
-        </>
-    );
-}*/

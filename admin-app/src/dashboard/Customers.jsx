@@ -1,6 +1,6 @@
 import { MenuItem,InputLabel,Box, Button, Paper, Table, TableBody, TableCell, Badge, TableContainer, TableHead, TablePagination, TableRow, Modal, Typography, FormControl, Select } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, query, where,deleteDoc,doc } from "firebase/firestore";
 import { db } from "../api/firebase";
 import { useAuth } from "../api/AuthContext";
 import { updateUser } from "../api/db/users";
@@ -41,12 +41,6 @@ export default function Customers() {
         setNewUser({ id: '', name: '', email: '', phone: '', address: '', status: 'Active' });
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        setRows([...rows, { ...newUser, id: rows.length + 1 }]);
-        handleClose();
-    };
-
     const handleAssign = (user) => {
         setAssign(true)
         setSelectedUser(user)
@@ -67,6 +61,38 @@ export default function Customers() {
     const handleDelete = (rowId) => {
         console.log("Delete row with id:", rowId);
         setRows(rows.filter(row => row.id !== rowId));
+    };
+
+    const handleDeleteUser = async (user) => {
+        try {
+            // Confirm delete action with the user
+            const result = await Swal.fire({
+                title: "Are you sure?",
+                text: `Do you want to delete the user ${user.displayName || user.email}?`,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Yes, delete it!",
+            });
+    
+            if (result.isConfirmed) {
+                // Reference to the document in the systemusers collection
+                const userDocRef = doc(db, "systemusers", user.uid);
+                
+                // Delete the document
+                await deleteDoc(userDocRef);
+    
+                // Remove from the local state
+                setCustomers(customers.filter((cust) => cust.uid !== user.uid));
+    
+                // Show success message
+                Swal.fire("Deleted!", "The user has been deleted.", "success");
+            }
+        } catch (error) {
+            console.error("Error deleting user:", error);
+            Swal.fire("Error", "Failed to delete the user. Please try again.", "error");
+        }
     };
 
     // const handleReasonChange = (event) => {
@@ -140,7 +166,7 @@ export default function Customers() {
                                         <Box display="flex" gap={1}>
                                             <Badge color="secondary" variant="dot" invisible={!user.isRequested}><Button disabled={user.approved} variant="outlined" color="primary" size="small" onClick={() => handleAssign(user)}>Assign</Button></Badge>
                                             <Button disabled={user.approved} variant="outlined" color="secondary" size="small" onClick={() => handleView(user)}>View</Button>
-                                            <Button disabled={user.approved} variant="outlined" color="error" size="small" >Delete</Button>
+                                            <Button disabled={user.approved} variant="outlined" color="error" size="small" onClick={()=>handleDeleteUser(user)}>Delete</Button>
                                         </Box>
                                     </TableCell>
                                 </TableRow>
