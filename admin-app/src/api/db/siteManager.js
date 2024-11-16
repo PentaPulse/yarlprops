@@ -34,8 +34,8 @@ export const removeSlide = async (id) => {
     } catch (e) { }
 }
 
-export const sendEmail = async (emailDetails) => {
-    const response = await axios.post('https://yp-backend-rho.vercel.app/api/send-email', emailDetails, {
+export const sendEmail = async (to,subject,body) => {
+    const response = await axios.post('https://yp-backend-rho.vercel.app/api/send-email', {to,subject,body}, {
         headers: {
             'Content-Type': 'application/json',
         },

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   Box, Button, TextField, Typography, FormControl, InputLabel, Select, MenuItem,
-  ImageList, ImageListItem, Stack, Tab, Tabs, Paper, ImageListItemBar, IconButton,
+  ImageList, ImageListItem, Stack, Tab, Tabs,  ImageListItemBar, IconButton,
   CircularProgress,
   Container
 } from '@mui/material';
@@ -287,7 +287,7 @@ export const EmailService = () => {
     setErrorMessage('');
 
     try {
-      const response = await sendEmail(emailDetails)
+      const response = await sendEmail(emailDetails.to,emailDetails.subject,emailDetails.text)
       setSuccessMessage(response.data.message || 'Email sent successfully!');
     } catch (error) {
       setErrorMessage(
