@@ -4,6 +4,7 @@
 /node_modules
 main-app/node_modules
 admin-app/node_modules
+backend/node_modules
 /.pnp
 .pnp.js
 
