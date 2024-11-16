@@ -20,6 +20,7 @@ const addProduct = async ({ merchantId, title, category, subCategory, descriptio
             status,
             images,
             merchantId,
+            visibility:false,
             createdAt: new Date().toISOString()
         });
         await setDoc(docRef, { pid: docRef.id }, { merge: true });

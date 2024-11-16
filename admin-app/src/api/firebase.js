@@ -2,8 +2,7 @@ import { connectAuthEmulator, getAuth } from 'firebase/auth';
 import firebase from 'firebase/compat/app';
 import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore';
 import { connectStorageEmulator, getStorage } from 'firebase/storage';
-//import { getDatabase, connectDatabaseEmulator } from "firebase/database";
-//import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
+import { getFunctions, httpsCallable } from "firebase/functions";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBNssJmBhLoe2IrCWi6Gbmy-53Y6od-9zY",
@@ -20,15 +19,10 @@ firebase.initializeApp(firebaseConfig);
 const db = getFirestore();
 const auth = getAuth();
 const storage = getStorage();
-//const realtimeDB = getDatabase()
+const functions = getFunctions();
 
+export const sendEmail = httpsCallable(functions, "sendEmail");
 /*
-const appCheck = initializeAppCheck(app, {
-  provider: new ReCaptchaV3Provider('6Ld8mQkqAAAAADb9fn9eJaoq4mAkcZ0SKA8-5sbE'),
-  isTokenAutoRefreshEnabled: true
-});
-*/
-
 if (window.location.hostname === "localhost" || window.location.hostname === '127.0.0.1' || window.location.hostname === '192.168.70.247') {
   connectFirestoreEmulator(db, '127.0.0.1', 8080);
   connectAuthEmulator(auth, "http://127.0.0.1:9099");

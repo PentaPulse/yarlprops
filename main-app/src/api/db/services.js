@@ -17,6 +17,7 @@ export const addService= async ({ merchantId, title, category, subCategory, desc
             description,
             location,
             images,
+            visibility:false,
             createdAt: new Date().toISOString()
         });
         await setDoc(docRef, { sid: docRef.id }, { merge: true });

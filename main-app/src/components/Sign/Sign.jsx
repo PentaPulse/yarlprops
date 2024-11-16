@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Button, SvgIcon, ButtonGroup, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Typography, useTheme } from "@mui/material";
+import { Button, SvgIcon, ButtonGroup, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Typography, useTheme, Grid } from "@mui/material";
 import { useAuth } from "../../api/AuthContext";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -82,37 +82,33 @@ export function Login({ closeBox }) {
     };
 
     return (
-        <div className="d-flex flex-column gap-2">
-            <h2>Welcome to YarlProps</h2>
-            <Button
-                sx={{
-                    borderRadius: '100px',
-                    width: '80%',
-                    border: `1px solid ${theme.palette.mode === 'light' ? '#FFFFFF' : '#000000'}`,
-                    gap: 3,
-                    display: 'block',
-                    margin: 'auto',
-                }}
-                onClick={handleGoogle}
-            >
-                <GoogleIcon /> Connect with Google
-            </Button>
-            <h5>OR</h5>
-            <hr />
-            <div className="d-flex flex-column gap-4">
+        <Grid container spacing={2} direction="column" alignItems="center">
+            <Grid item xs={12}>
+                <Typography variant="h4" align="center">Welcome to YarlProps</Typography>
+            </Grid>
+            <Grid item xs={12} md={8}>
+                <Button
+                    fullWidth
+                    sx={{ borderRadius: '100px', border: `1px solid ${theme.palette.mode === 'light' ? '#FFFFFF' : '#000000'}` }}
+                    onClick={handleGoogle}
+                >
+                    <GoogleIcon /> Connect with Google
+                </Button>
+            </Grid>
+            <Grid item xs={12} md={8}>
+                <Typography variant="body1" align="center">OR</Typography>
+            </Grid>
+            <Grid item xs={12} md={8}>
                 <TextField
                     label="Email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     fullWidth
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                            e.preventDefault();
-                            handleLogin(e);
-                        }
-                    }}
+                    onKeyDown={(e) => e.key === 'Enter' && handleLogin(e)}
                 />
-                <FormControl variant="outlined">
+            </Grid>
+            <Grid item xs={12} md={8}>
+                <FormControl fullWidth variant="outlined">
                     <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                     <OutlinedInput
                         id="outlined-adornment-password"
@@ -121,40 +117,28 @@ export function Login({ closeBox }) {
                         onChange={(e) => setPassword(e.target.value)}
                         endAdornment={
                             <InputAdornment position="end">
-                                <IconButton
-                                    aria-label="toggle password visibility"
-                                    onClick={handleClickShowPassword}
-                                    onMouseDown={handleMouseDownPassword}
-                                    edge="end"
-                                >
+                                <IconButton onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword}>
                                     {showPassword ? <VisibilityOff /> : <Visibility />}
                                 </IconButton>
                             </InputAdornment>
                         }
                         label="Password"
-                        onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                                e.preventDefault();
-                                handleLogin(e);
-                            }
-                        }}
+                        onKeyDown={(e) => e.key === 'Enter' && handleLogin(e)}
                     />
                 </FormControl>
+            </Grid>
+            <Grid item xs={12} md={8}>
                 <Typography
                     onClick={handleReset}
-                    style={{ cursor: 'pointer', color: theme.palette.primary.main }}
+                    sx={{ cursor: 'pointer', color: theme.palette.primary.main, textAlign: 'center' }}
                 >
                     Forgot Your Password?
                 </Typography>
-            </div>
-            <div className="text-center">
-                <ButtonGroup aria-label="Vertical button group" className="gap-3">
-                    <Button variant="contained" onClick={handleLogin}>
-                        Sign in
-                    </Button>
-                </ButtonGroup>
-            </div>
-        </div>
+            </Grid>
+            <Grid item xs={12} md={8}>
+                <Button variant="contained" onClick={handleLogin} fullWidth>Sign in</Button>
+            </Grid>
+        </Grid>
     );
 }
 
@@ -166,7 +150,7 @@ export function Register({ closeBox }) {
     const [password, setPassword] = React.useState('');
     const [showPassword, setShowPassword] = React.useState(false);
     const { showAlerts } = useAlerts()
-    const {register}=useAuth()
+    const { register } = useAuth()
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -179,23 +163,51 @@ export function Register({ closeBox }) {
         if (!firstName || !lastName || !displayName || !email || !password) {
             return showAlerts('Enter details to Register', 'warning')
         } else {
-            await register(email,password,firstName,lastName,displayName)
+            await register(email, password, firstName, lastName, displayName)
             closeBox()
         }
     }
 
     return (
-        <div className="d-flex flex-column justify-content-center text-center">
-            <h2>Create account</h2>
-            <hr />
-            <div className="d-flex flex-column gap-3">
-                <div className="d-flex gap-4 w-100">
-                    <TextField className="w-50" label="First name" value={firstName} onChange={(e) => { setFirstName(e.target.value); setDisplayName(e.target.value + " " + lastName); }} required />
-                    <TextField className="w-50" label="Last name" value={lastName} onChange={(e) => { setLastName(e.target.value); setDisplayName(firstName + " " + e.target.value); }} required />
-                </div>
-                <TextField label="Display name" value={displayName} onChange={(e) => setDisplayName(e.target.value)} />
-                <TextField label="Email" type='email' value={email} onChange={(e) => setEmail(e.target.value)} required />
-                <FormControl variant="outlined">
+        <Grid container spacing={2} direction="column" alignItems="center">
+            <Grid item xs={12}>
+                <Typography variant="h4" align="center">Create Account</Typography>
+            </Grid>
+            <Grid item xs={12} md={8}>
+                <TextField
+                    label="First Name"
+                    value={firstName}
+                    onChange={(e) => { setFirstName(e.target.value); setDisplayName(`${e.target.value} ${lastName}`); }}
+                    fullWidth
+                />
+            </Grid>
+            <Grid item xs={12} md={8}>
+                <TextField
+                    label="Last Name"
+                    value={lastName}
+                    onChange={(e) => { setLastName(e.target.value); setDisplayName(`${firstName} ${e.target.value}`); }}
+                    fullWidth
+                />
+            </Grid>
+            <Grid item xs={12} md={8}>
+                <TextField
+                    label="Display Name"
+                    value={displayName}
+                    onChange={(e) => setDisplayName(e.target.value)}
+                    fullWidth
+                />
+            </Grid>
+            <Grid item xs={12} md={8}>
+                <TextField
+                    label="Email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    fullWidth
+                />
+            </Grid>
+            <Grid item xs={12} md={8}>
+                <FormControl fullWidth variant="outlined">
                     <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                     <OutlinedInput
                         id="outlined-adornment-password"
@@ -204,11 +216,7 @@ export function Register({ closeBox }) {
                         onChange={(e) => setPassword(e.target.value)}
                         endAdornment={
                             <InputAdornment position="end">
-                                <IconButton
-                                    onClick={handleClickShowPassword}
-                                    onMouseDown={handleMouseDownPassword}
-                                    edge="end"
-                                >
+                                <IconButton onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword}>
                                     {showPassword ? <VisibilityOff /> : <Visibility />}
                                 </IconButton>
                             </InputAdornment>
@@ -216,10 +224,10 @@ export function Register({ closeBox }) {
                         label="Password"
                     />
                 </FormControl>
-                <div className="text-center">
-                    <Button variant="contained" onClick={handleRegister}>Register</Button>
-                </div>
-            </div>
-        </div>
+            </Grid>
+            <Grid item xs={12} md={8}>
+                <Button variant="contained" onClick={handleRegister} fullWidth>Register</Button>
+            </Grid>
+        </Grid>
     );
 }

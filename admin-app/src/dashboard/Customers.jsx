@@ -1,4 +1,4 @@
-import { MenuItem,InputLabel,Box, Button, Paper, Table, TableBody, TableCell, Badge, TableContainer, TableHead, TablePagination, TableRow, Modal, Typography, FormControl, Select } from "@mui/material";
+import { Box, Button, Paper, Table, TableBody, TableCell, Badge, TableContainer, TableHead, TablePagination, TableRow, Modal, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { collection, getDocs, query, where,deleteDoc,doc } from "firebase/firestore";
 import { db } from "../api/firebase";
@@ -30,18 +30,12 @@ export default function Customers() {
     const [rows, setRows] = useState([]);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
-    const [open, setOpen] = useState(false);
     const [assign, setAssign] = useState(false)
     const [viewOpen, setViewOpen] = useState(false);
-    const [newUser, setNewUser] = useState({ id: '', name: '', email: '', phone: '', address: '', status: 'Active' });
+    const [refresh,setRefresh]=useState(false)
     const [selectedUser, setSelectedUser] = useState(null);
 
-    const handleClose = () => {
-        setOpen(false);
-        setNewUser({ id: '', name: '', email: '', phone: '', address: '', status: 'Active' });
-    };
-
-    const handleAssign = (user) => {
+        const handleAssign = (user) => {
         setAssign(true)
         setSelectedUser(user)
     }
@@ -109,6 +103,7 @@ export default function Customers() {
                 Swal.fire({
                     title:'okay'
                 })
+                setRefresh(!refresh)
             }
         })
       }
@@ -127,7 +122,7 @@ export default function Customers() {
     }
     useEffect(() => {
         fetchCustomers()
-    }, [])
+    }, [customers,refresh])
 
     return (
         <Box sx={{ textAlign: 'center', margin: 'auto', mt: 2 }}>
@@ -142,7 +137,7 @@ export default function Customers() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {user.approved ? customers.map((user, index) => (
+                            {user.approved ? (customers.length>0?customers.map((user, index) => (
                                 <TableRow>
                                     <TableCell>
                                         {index + 1}
@@ -170,7 +165,9 @@ export default function Customers() {
                                         </Box>
                                     </TableCell>
                                 </TableRow>
-                            )) : 'wait for admin approval'}
+                            )):<TableRow>
+                                <TableCell colSpan={7} align="center">No Data Available</TableCell>
+                                </TableRow>) : 'wait for admin approval'}
                             {rows && rows
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row) => (

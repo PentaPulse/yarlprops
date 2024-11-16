@@ -16,6 +16,7 @@ export const addRental = async ({merchantId, title, category, subCategory, descr
             status,
             images,
             merchantId,
+            visibility:false,
             createdAt: new Date().toISOString()
         });
         await setDoc(docRef, { rid: docRef.id }, { merge: true });

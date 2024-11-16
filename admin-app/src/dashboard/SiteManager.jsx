@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import {
   Box, Button, TextField, Typography, FormControl, InputLabel, Select, MenuItem,
-  ImageList, ImageListItem, Stack, Tab, Tabs, Paper, ImageListItemBar, IconButton
+  ImageList, ImageListItem, Stack, Tab, Tabs, Paper, ImageListItemBar, IconButton,
+  CircularProgress,
+  Container
 } from '@mui/material';
-import { storage, db } from '../api/firebase'; // Import your Firebase configurations
+import { storage, db, sendEmail } from '../api/firebase'; // Import your Firebase configurations
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import { collection, addDoc, query, orderBy, getDocs, setDoc, doc, deleteDoc } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
 import PropTypes from 'prop-types';
 import { addQuestions, getQuestions, getQuestionsFromContactus } from '../api/db/siteManager';
 import DeleteIcon from '@mui/icons-material/Delete';
+import axios from 'axios'
 
 export default function SiteManager() {
   const [value, setValue] = React.useState(0);
@@ -24,13 +27,17 @@ export default function SiteManager() {
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
           <Tab label="Slideshow" {...a11yProps(0)} />
           <Tab label="Guide" {...a11yProps(1)} />
+          <Tab label="Emails" {...a11yProps(2)} />
         </Tabs>
       </Box>
-      <CustomTabPanel value={value} index={0}>
+      <CustomTabPanel value={value} index={1}>
         <SlideshowManagement />
       </CustomTabPanel>
-      <CustomTabPanel value={value} index={1}>
+      <CustomTabPanel value={value} index={2}>
         <GuideManagement />
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={0}>
+        <EmailService />
       </CustomTabPanel>
     </Box>
   );
@@ -252,6 +259,111 @@ export const GuideManagement = () => {
       </Box>
     </Box>
   );
+};
+
+export const EmailService=()=>{
+  const [emailDetails, setEmailDetails] = useState({
+    to: '',
+    subject: '',
+    text: '',
+});
+const [loading, setLoading] = useState(false);
+const [successMessage, setSuccessMessage] = useState('');
+const [errorMessage, setErrorMessage] = useState('');
+
+// Handle form input changes
+const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEmailDetails((prev) => ({
+        ...prev,
+        [name]: value,
+    }));
+};
+
+// Handle form submission
+const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSuccessMessage('');
+    setErrorMessage('');
+
+    try {
+        const response = await sendEmail(emailDetails)
+
+        setSuccessMessage(response.data.message || 'Email sent successfully!');
+    } catch (error) {
+        setErrorMessage(
+            error.response?.data?.error || 'Failed to send email. Please try again later.'
+        );
+    } finally {
+        setLoading(false);
+    }
+};
+
+  return (
+    <Container maxWidth="sm">
+        <Box mt={4}>
+            <Typography variant="h4" gutterBottom>
+                Send Email
+            </Typography>
+            <form onSubmit={handleSubmit}>
+                <TextField
+                    fullWidth
+                    label="Recipient Email"
+                    name="to"
+                    value={emailDetails.to}
+                    onChange={handleChange}
+                    margin="normal"
+                    required
+                />
+                <TextField
+                    fullWidth
+                    label="Subject"
+                    name="subject"
+                    value={emailDetails.subject}
+                    onChange={handleChange}
+                    margin="normal"
+                    required
+                />
+                <TextField
+                    fullWidth
+                    label="Message"
+                    name="text"
+                    value={emailDetails.text}
+                    onChange={handleChange}
+                    margin="normal"
+                    multiline
+                    rows={4}
+                    required
+                />
+                <Box mt={2} display="flex" justifyContent="space-between" alignItems="center">
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        disabled={loading}
+                    >
+                        {loading ? (
+                            <CircularProgress size={24} color="inherit" />
+                        ) : (
+                            'Send Email'
+                        )}
+                    </Button>
+                    {successMessage && (
+                        <Typography variant="body2" color="green">
+                            {successMessage}
+                        </Typography>
+                    )}
+                    {errorMessage && (
+                        <Typography variant="body2" color="red">
+                            {errorMessage}
+                        </Typography>
+                    )}
+                </Box>
+            </form>
+        </Box>
+    </Container>
+);
 };
 
 function CustomTabPanel(props) {
