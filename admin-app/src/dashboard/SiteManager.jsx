@@ -261,109 +261,108 @@ export const GuideManagement = () => {
   );
 };
 
-export const EmailService=()=>{
+export const EmailService = () =>{
   const [emailDetails, setEmailDetails] = useState({
-    to: '',
-    subject: '',
-    text: '',
-});
-const [loading, setLoading] = useState(false);
-const [successMessage, setSuccessMessage] = useState('');
-const [errorMessage, setErrorMessage] = useState('');
+      to: '',
+      subject: '',
+      text: '',
+  });
+  const [loading, setLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
-// Handle form input changes
-const handleChange = (e) => {
-    const { name, value } = e.target;
-    setEmailDetails((prev) => ({
-        ...prev,
-        [name]: value,
-    }));
-};
+  // Handle form input changes
+  const handleChange = (e) => {
+      const { name, value } = e.target;
+      setEmailDetails((prev) => ({
+          ...prev,
+          [name]: value,
+      }));
+  };
 
-// Handle form submission
-const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setSuccessMessage('');
-    setErrorMessage('');
+  // Handle form submission
+  const handleSubmit = async (e) => {
+      e.preventDefault();
+      setLoading(true);
+      setSuccessMessage('');
+      setErrorMessage('');
 
-    try {
-        const response = await sendEmail(emailDetails)
-
-        setSuccessMessage(response.data.message || 'Email sent successfully!');
-    } catch (error) {
-        setErrorMessage(
-            error.response?.data?.error || 'Failed to send email. Please try again later.'
-        );
-    } finally {
-        setLoading(false);
-    }
-};
+      try {
+          const response = await axios.post('https://yp-emails-a-back.vercel.app/api/send-email', emailDetails);
+          setSuccessMessage(response.data.message || 'Email sent successfully!');
+      } catch (error) {
+          setErrorMessage(
+              error.response?.data?.message || 'Failed to send email. Please try again later.'
+          );
+      } finally {
+          setLoading(false);
+      }
+  };
 
   return (
-    <Container maxWidth="sm">
-        <Box mt={4}>
-            <Typography variant="h4" gutterBottom>
-                Send Email
-            </Typography>
-            <form onSubmit={handleSubmit}>
-                <TextField
-                    fullWidth
-                    label="Recipient Email"
-                    name="to"
-                    value={emailDetails.to}
-                    onChange={handleChange}
-                    margin="normal"
-                    required
-                />
-                <TextField
-                    fullWidth
-                    label="Subject"
-                    name="subject"
-                    value={emailDetails.subject}
-                    onChange={handleChange}
-                    margin="normal"
-                    required
-                />
-                <TextField
-                    fullWidth
-                    label="Message"
-                    name="text"
-                    value={emailDetails.text}
-                    onChange={handleChange}
-                    margin="normal"
-                    multiline
-                    rows={4}
-                    required
-                />
-                <Box mt={2} display="flex" justifyContent="space-between" alignItems="center">
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                        disabled={loading}
-                    >
-                        {loading ? (
-                            <CircularProgress size={24} color="inherit" />
-                        ) : (
-                            'Send Email'
-                        )}
-                    </Button>
-                    {successMessage && (
-                        <Typography variant="body2" color="green">
-                            {successMessage}
-                        </Typography>
-                    )}
-                    {errorMessage && (
-                        <Typography variant="body2" color="red">
-                            {errorMessage}
-                        </Typography>
-                    )}
-                </Box>
-            </form>
-        </Box>
-    </Container>
-);
+      <Container maxWidth="sm">
+          <Box mt={4}>
+              <Typography variant="h4" gutterBottom>
+                  Send Email
+              </Typography>
+              <form onSubmit={handleSubmit}>
+                  <TextField
+                      fullWidth
+                      label="Recipient Email"
+                      name="to"
+                      value={emailDetails.to}
+                      onChange={handleChange}
+                      margin="normal"
+                      required
+                  />
+                  <TextField
+                      fullWidth
+                      label="Subject"
+                      name="subject"
+                      value={emailDetails.subject}
+                      onChange={handleChange}
+                      margin="normal"
+                      required
+                  />
+                  <TextField
+                      fullWidth
+                      label="Message"
+                      name="text"
+                      value={emailDetails.text}
+                      onChange={handleChange}
+                      margin="normal"
+                      multiline
+                      rows={4}
+                      required
+                  />
+                  <Box mt={2} display="flex" justifyContent="space-between" alignItems="center">
+                      <Button
+                          type="submit"
+                          variant="contained"
+                          color="primary"
+                          disabled={loading}
+                      >
+                          {loading ? (
+                              <CircularProgress size={24} color="inherit" />
+                          ) : (
+                              'Send Email'
+                          )}
+                      </Button>
+                      {successMessage && (
+                          <Typography variant="body2" color="green">
+                              {successMessage}
+                          </Typography>
+                      )}
+                      {errorMessage && (
+                          <Typography variant="body2" color="red">
+                              {errorMessage}
+                          </Typography>
+                      )}
+                  </Box>
+              </form>
+          </Box>
+      </Container>
+  );
 };
 
 function CustomTabPanel(props) {
