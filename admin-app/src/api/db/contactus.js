@@ -1,6 +1,7 @@
 import "firebase/firestore";
 import { db } from "../firebase";
 import { collection, getDocs, addDoc, setDoc, query, where, serverTimestamp } from "firebase/firestore";
+import { sendEmail } from "./siteManager";
 
 //reference
 const contactRef = collection(db, "contactus");
@@ -40,3 +41,10 @@ export const fetchSelectedRequest = async (id) => {
       throw new Error("Error fetching request: " + e.message);
   }
 };
+
+export const sendResponse=async(to,question,reply)=>{
+  try{
+    const sendResponse = sendEmail(to,"Reply for contactus request - Yarlprops",`Your question : ${question} \nOur Response : ${reply} \nThank you for contacting us, Good day for you`)
+    //if(sendResponse.)
+  }catch(e){}
+}
