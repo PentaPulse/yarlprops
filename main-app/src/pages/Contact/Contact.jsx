@@ -2,8 +2,7 @@ import * as React from 'react';
 import Image1 from "./images/contact1.jpg";
 import Image2 from "./images/hi1.png";
 
-import { Box, Typography } from "@mui/material";
-import Grid from '@mui/system/Unstable_Grid';
+import { Box, Typography,Grid } from "@mui/material";
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -27,31 +26,36 @@ function Contact() {
     lastName: '',
     email: '',
     message: '',
-  })
-  const { showAlerts } = useAlerts()
+  });
+
+  const { showAlerts } = useAlerts();
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setDetails((prevDetails) => ({ ...prevDetails, [name]: value }));
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (event) => {
+    event.preventDefault(); // Prevent default form submission
     try {
-      if (!details.firstName, !details.lastName, !details.email, !details.message) {
-        showAlerts('Fill the details', 'warning')
-        return
+      const { firstName, lastName, email, message } = details;
+      if (!firstName || !lastName || !email || !message) {
+        showAlerts('Fill all the details', 'warning');
+        return;
       }
-      await sendMessage(details.firstName, details.lastName, details.email, details.message)
-      showAlerts('Message sent ', 'success')
+
+      await sendMessage(firstName, lastName, email, message);
+      showAlerts('Message sent successfully', 'success');
+
       setDetails({
         firstName: '',
         lastName: '',
         email: '',
         message: '',
-      })
-
+      });
     } catch (error) {
-      //console.log(error)
+      console.error('Error sending message:', error);
+      showAlerts('Failed to send message. Please try again.', 'error');
     }
   };
   return (

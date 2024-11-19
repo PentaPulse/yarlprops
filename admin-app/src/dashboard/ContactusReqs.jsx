@@ -7,7 +7,7 @@ import { db } from '../api/firebase';
 import { collection, deleteDoc, doc, getDocs, updateDoc } from 'firebase/firestore';
 import { useAuth } from '../api/AuthContext';
 import { tableCellClasses } from '@mui/material/TableCell';
-import { fetchSelectedRequest } from '../api/db/contactus';
+import { fetchSelectedRequest, sendResponse } from '../api/db/contactus';
 import { sendEmail } from '../api/db/siteManager';
 
 export default function ContactusRequests() {
@@ -194,7 +194,8 @@ const ContactusResponseDetail = ({ id, onBack }) => {
   const handleReply = async () => {
     try {
       console.log(response)
-      await sendEmail(response.email, 'Reply to your request', reply);
+      //await sendEmail(response.email, 'Reply to your request', reply);
+      await sendResponse(response.email,response.message,reply)
       await updateDoc(doc(db, 'contactus', id), { status: 'replied' ,reply:reply});
       Swal.fire({
         icon: 'success',
