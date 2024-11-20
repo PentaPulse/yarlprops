@@ -3,14 +3,15 @@ import {
   Box, Button, TextField, Typography, FormControl, InputLabel, Select, MenuItem,
   ImageList, ImageListItem, Stack, Tab, Tabs,  ImageListItemBar, IconButton,
   CircularProgress,
-  Container
+  Container,
+  Divider
 } from '@mui/material';
 import { storage, db } from '../api/firebase'; // Import your Firebase configurations
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import { collection, addDoc, query, orderBy, getDocs, setDoc, doc, deleteDoc } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
 import PropTypes from 'prop-types';
-import { addQuestions, getQuestions, getQuestionsFromContactus, sendEmail } from '../api/db/siteManager';
+import { addQuestions, deleteQuestion, getQuestions, getQuestionsFromContactus, sendEmail } from '../api/db/siteManager';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function SiteManager() {
@@ -181,34 +182,21 @@ export const SlideshowManagement = () => {
 export const GuideManagement = () => {
   const [guideQuestion, setGuideQuestion] = useState({ from: '', for: '', question: '', answer: '' });
   const [questionsList, setQuestionsList] = useState({ customers: [], merchants: [] });
-  const [contactusQuestions, setContactusQuestions] = useState([]);
+  const [r,setR]=useState(false)
 
   useEffect(() => {
-    const fetchQuestionLists = async (type) => {
+    const fetchQuestionLists = async () => {
       try {
-        const qs = await getQuestions(type);
-        setQuestionsList((prevQuestions) => ({
-          ...prevQuestions,
-          [type]: qs
-        }));
+        const customers = await getQuestions('customers');
+        const merchants = await getQuestions('merchants');
+        setQuestionsList({ customers, merchants });
       } catch (e) {
-        console.error("Error fetching questions:", e);
+        console.error('Error fetching questions:', e);
       }
     };
 
-    const fetchQuestionsFromContactUs = async () => {
-      try {
-        const data = await getQuestionsFromContactus();
-        setContactusQuestions(data);
-      } catch (e) {
-        console.error("Error fetching contact us questions:", e);
-      }
-    };
-
-    fetchQuestionLists('customers');
-    fetchQuestionLists('merchants');
-    fetchQuestionsFromContactUs();
-  }, []);
+    fetchQuestionLists();
+  }, [r]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -220,41 +208,89 @@ export const GuideManagement = () => {
 
   const handleSubmit = async () => {
     if (guideQuestion.from && guideQuestion.for && guideQuestion.question && guideQuestion.answer) {
-      await addQuestions(guideQuestion);
-      console.log(guideQuestion);
+      try {
+        await addQuestions(guideQuestion);
+        setQuestionsList((prev) => ({
+          ...prev,
+          [guideQuestion.for === 'customer' ? 'customers' : 'merchants']: [
+            ...prev[guideQuestion.for === 'customer' ? 'customers' : 'merchants'],
+            { ...guideQuestion }, // Include the question in the UI list
+          ],
+        }));
+        setGuideQuestion({ from: '', for: '', question: '', answer: '' });
+        setR(!r)
+      } catch (e) {
+        console.error('Error adding question:', e);
+      }
     } else {
       alert('Please fill all fields');
-      console.log(guideQuestion);
     }
   };
 
+  const handleDelete = async (type, index) => {
+    try {
+      const question = questionsList[type][index];
+      await deleteQuestion(type, question.id); // Use the `id` field for deletion
+      setQuestionsList((prev) => ({
+        ...prev,
+        [type]: prev[type].filter((_, i) => i !== index),
+      }));
+    } catch (e) {
+      console.error('Error deleting question:', e);
+    }
+  };
+
+  const renderQuestions = (type) => (
+    <Box>
+      <Typography variant="h6">{type === 'customers' ? 'Customer Guide' : 'Merchant Guide'}</Typography>
+      <Divider sx={{ mb: 2 }} />
+      {questionsList[type].length > 0 ? (
+        questionsList[type].map((question, index) => (
+          <Box key={question.id} sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+            <Box sx={{ flexGrow: 1 }}>
+              <Typography><strong>Q:</strong> {question.question}</Typography>
+              <Typography><strong>A:</strong> {question.answer}</Typography>
+            </Box>
+            <IconButton onClick={() => handleDelete(type, index)} color="error">
+              <DeleteIcon />
+            </IconButton>
+          </Box>
+        ))
+      ) : (
+        <Typography>No questions available.</Typography>
+      )}
+    </Box>
+  );
+
   return (
     <Box sx={{ padding: 4, display: 'flex', flexDirection: 'column', width: '100%' }}>
-      <Box sx={{ width: '100%' }}>
-        <Typography variant="h4">Manage Guide</Typography>
-        <Box display={'flex'} flexDirection={'row'} sx={{ width: '100%', gap: 2 }}>
-          <FormControl fullWidth sx={{ mb: 2 }} required>
-            <InputLabel>From</InputLabel>
-            <Select name="from" value={guideQuestion.from} onChange={handleInputChange} label="From">
-              <MenuItem value='contactus'>Contact us</MenuItem>
-              <MenuItem value='newq'>New question</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl fullWidth sx={{ mb: 2 }} required>
-            <InputLabel>For</InputLabel>
-            <Select name="for" value={guideQuestion.for} onChange={handleInputChange} label="For">
-              <MenuItem value='customer'>Customer</MenuItem>
-              <MenuItem value='merchant'>Merchant</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
-        <Stack direction={'row'} gap={2} sx={{ width: '100%' }}>
-          <TextField name="question" label="Question" value={guideQuestion.question} onChange={handleInputChange} fullWidth required />
-          <TextField name="answer" label="Answer" value={guideQuestion.answer} onChange={handleInputChange} fullWidth required />
-        </Stack>
-        <Box>
-          <Button onClick={handleSubmit} fullWidth variant="contained" sx={{ my: 2 }}>Add</Button>
-        </Box>
+      <Typography variant="h4" sx={{ mb: 2 }}>Manage Guide</Typography>
+      <Box display={'flex'} flexDirection={'row'} sx={{ width: '100%', gap: 2 }}>
+        <FormControl fullWidth sx={{ mb: 2 }}>
+          <InputLabel>From</InputLabel>
+          <Select name="from" value={guideQuestion.from} onChange={handleInputChange} label="From">
+            <MenuItem value="contactus">Contact us</MenuItem>
+            <MenuItem value="newq">New question</MenuItem>
+          </Select>
+        </FormControl>
+        <FormControl fullWidth sx={{ mb: 2 }}>
+          <InputLabel>For</InputLabel>
+          <Select name="for" value={guideQuestion.for} onChange={handleInputChange} label="For">
+            <MenuItem value="customers">Customer</MenuItem>
+            <MenuItem value="merchants">Merchant</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
+      <Stack direction="row" gap={2} sx={{ width: '100%', mb: 2 }}>
+        <TextField name="question" label="Question" value={guideQuestion.question} onChange={handleInputChange} fullWidth required />
+        <TextField name="answer" label="Answer" value={guideQuestion.answer} onChange={handleInputChange} fullWidth required />
+      </Stack>
+      <Button onClick={handleSubmit} fullWidth variant="contained" sx={{ mb: 4 }}>Add</Button>
+      <Box sx={{display:'flex'}}>
+        <Box sx={{width:'50%'}}>
+        {renderQuestions('customers')}</Box>
+        <Box sx={{width:'50%'}}>
+        {renderQuestions('merchants')}</Box>
       </Box>
     </Box>
   );
