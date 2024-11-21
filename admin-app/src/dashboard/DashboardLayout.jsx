@@ -11,6 +11,7 @@ import SupportRoundedIcon from '@mui/icons-material/SupportRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
+import { auth } from '../api/firebase';
 
 const drawerWidth = 240;
 const openedMixin = (theme) => ({
@@ -144,7 +145,7 @@ export default function DashboardLayout({ handleMode, children }) {
       <Divider />
       <Box display={'flex'} pb={3} justifyContent={'space-between'} mb={6}>
         <Box display={'flex'} justifyContent={'space-between'} ml={2}>
-          <Avatar src={sessionStorage.getItem('pp')} />
+          <Avatar src={auth.currentUser.photoURL ||sessionStorage.getItem('pp')} />
           <Box pl={1}>
             <Typography>{sessionStorage.getItem('displayName')}</Typography>
             <Typography

@@ -11,10 +11,6 @@ import { useAuth } from '../../api/AuthContext';
 import { arrayRemove, collection, deleteDoc, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { productFilters } from '../../components/menuLists';
 import { addItemByMerchant } from '../../api/db/logsManager';
-import NotificationManager from '../../api/db/notificationsManager';
-
-
-const notificationManager = new NotificationManager()
 
 export default function MerchantProducts() {
   const [showAddProduct, setShowAddProduct] = useState(false);
@@ -204,7 +200,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
       if (pid) {
         console.log(product)
         await updateProduct(pid, { ...product, images: allImageUrls, visibility: false });
-        notificationManager.addNotification({variant:'updateItem',requiresAdminPermission:true,user:user,additionalFields:{itemType:'product'}})
+       // notificationManager.addNotification({variant:'updateItem',requiresAdminPermission:true,user:user,additionalFields:{itemType:'product'}})
         Swal.fire({
           icon: 'success',
           title: 'Product updated successfully',

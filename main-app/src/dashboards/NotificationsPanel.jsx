@@ -1,9 +1,8 @@
 import { Box, Container, Typography, List, ListItem, ListItemText, useTheme } from "@mui/material";
 import { useState, useEffect } from "react";
-import NotificationManager from "../api/db/notificationsManager";
 import { useAuth } from "../api/AuthContext";
-
-const notificationManager = new NotificationManager()
+import { db } from "../api/firebase";
+import {collection,getDocs} from 'firebase/firestore'
 
 export default function NotificationPanel() {
   const [notifications, setNotifications] = useState([]);
@@ -12,53 +11,63 @@ export default function NotificationPanel() {
   const theme = useTheme()
 
   useEffect(() => {
-
     const fetchNotifications = async () => {
       try {
-        const data = await notificationManager.getNotifications(user.uid);
-        setNotifications(data);
+        const notificationsRef = collection(db, 'systemusers', user.uid, 'notifications');
+        const snapshot = await getDocs(notificationsRef);
+        const fetchedNotifications = snapshot.docs.map(doc => ({
+          ...doc.data(),
+          nId: doc.id,
+        }));
+        setNotifications(fetchedNotifications);
       } catch (error) {
-        console.error("Failed to fetch notifications:", error);
+        console.error('Error fetching notifications:', error);
       }
     };
 
-    fetchNotifications();
-  }, []);
+    if (user.uid) fetchNotifications();
+  }, [user.uid]);
 
   const handleSelectNotification = (notification) => {
     setSelectedNotification(notification);
   };
 
-  const renderWelcomeNotification = (notification) => (
-    <Box
-      sx={{
-        padding: '16px',
-        backgroundColor: theme.palette.background.default,
-        boxShadow: 3,
-        borderRadius: 2,
-        maxWidth: '600px',
-        margin: '0 auto',
-      }}
-    >
-      <Typography variant="h5" fontWeight="bold" align="center" gutterBottom>
-        Welcome to Our Platform, {notification.userName || 'User'}!
-      </Typography>
-      <Typography variant="body1" align="center" sx={{ mb: 2 }}>
-        We're thrilled to have you here! Explore and make the most of the features available. If you
-        need any help getting started, feel free to reach out.
-      </Typography>
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mb: 3 }}>
-        <img
-          src={`${process.env.PUBLIC_URL}/welcome.jpg`}
-          alt="Welcome"
-          style={{ width: '100%', borderRadius: '8px' }}
-        />
+  const renderWelcomeNotification = (notification) => {
+    return (
+      <Box
+        sx={{
+          padding: 3,
+          backgroundColor: theme.palette.background.default,
+          boxShadow: 3,
+          borderRadius: 2,
+          maxWidth: "600px",
+          margin: "0 auto",
+        }}
+      >
+        <Typography variant="h5" fontWeight="bold" align="center" gutterBottom>
+          Welcome to Our Platform, {notification.userName || "User"}!
+        </Typography>
+        <Typography variant="body1" align="center" sx={{ mb: 2 }}>
+          We're thrilled to have you here! Explore and make the most of the
+          features available. If you need any help getting started, feel free to
+          reach out.
+        </Typography>
+        <Box
+          sx={{ display: "flex", justifyContent: "center", alignItems: "center", mb: 3 }}
+        >
+          <img
+            src={`${process.env.PUBLIC_URL}/welcome.jpg`}
+            alt="Welcome"
+            style={{ width: "100%", borderRadius: "8px" }}
+            loading="lazy"
+          />
+        </Box>
+        <Typography variant="body2" color="textSecondary" align="center">
+          Enjoy your journey with us, and feel free to contact support if you need any assistance.
+        </Typography>
       </Box>
-      <Typography variant="body2" color="textSecondary" align="center">
-        Enjoy your journey with us, and feel free to contact support if you need any assistance.
-      </Typography>
-    </Box>
-  );
+    );
+  };
   
 
   const renderAddItemDetails = (notification) => (
@@ -193,37 +202,59 @@ export default function NotificationPanel() {
       case 'changerole':
         return renderChangeRoleDetails(notification);
       default:
-        // Default case handling...
+        return <Typography variant="body2">Unknown notification type</Typography>;
     }
-  };  
+  }; 
 
   return (
     <Container sx={{ display: 'flex', gap: 3, mt: 3 }}>
       {/* Notifications List Panel */}
-      <Box width={'35%'} p={2} borderRadius={1} boxShadow={3}>
+      <Box width={'35%'} p={2} borderRadius={1} boxShadow={3} bgcolor={theme.palette.background.paper}>
         <Typography variant="h6" align="center" gutterBottom>
           Notifications
         </Typography>
         <List>
-          {notifications.map((notification) => (
-            <ListItem
-              key={notification.nId}
-              button
-              onClick={() => handleSelectNotification(notification)}
-              sx={{ bgcolor: `${theme.palette.mode === 'light' ? 'grey.200' : 'grey.800'}`, mb: 1, borderRadius: 1 }}
-            >
-              <ListItemText primary={notification.variant} />
-            </ListItem>
-          ))}
+          {notifications.length > 0 ? (
+            notifications.map((notification) => (
+              <ListItem
+                key={notification.nId}
+                button
+                onClick={() => handleSelectNotification(notification)}
+                sx={{
+                  bgcolor: theme.palette.mode === 'light' ? 'grey.200' : 'grey.800',
+                  mb: 1,
+                  borderRadius: 1,
+                }}
+              >
+                <ListItemText
+                  primary={notification.variant}
+                  secondary={notification.date || 'Date not available'}
+                />
+              </ListItem>
+            ))
+          ) : (
+            <Typography variant="body2" align="center" sx={{ mt: 2 }}>
+              No notifications available.
+            </Typography>
+          )}
         </List>
       </Box>
 
       {/* Selected Notification Details Panel */}
-      <Box p={3} height={'800px'} width={'70%'} borderRadius={1} boxShadow={3} bgcolor={theme.palette.mode === 'light' ? 'grey.100' : 'grey.900'}>
+      <Box
+        p={3}
+        height={'800px'}
+        width={'70%'}
+        borderRadius={1}
+        boxShadow={3}
+        bgcolor={theme.palette.mode === 'light' ? 'grey.100' : 'grey.900'}
+      >
         {selectedNotification ? (
           <>
             <Typography variant="h5" gutterBottom>
-              {selectedNotification.variant.charAt(0).toUpperCase() + selectedNotification.variant.slice(1)} Notification
+              {selectedNotification.variant.charAt(0).toUpperCase() +
+                selectedNotification.variant.slice(1)}{' '}
+              Notification
             </Typography>
             {renderNotificationDetails(selectedNotification)}
           </>

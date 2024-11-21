@@ -7,9 +7,6 @@ import { useNavigate } from 'react-router-dom';
 import { useAlerts } from './AlertService';
 import { signinLog, signoutLog } from './db/logsManager';
 import { Button } from '@mui/material';
-import NotificationManager from './db/notificationsManager';
-
-const notificationsManager = new NotificationManager();
 const AuthContext = React.createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -71,7 +68,7 @@ export const AuthProvider = ({ children }) => {
                             }
                         })
                     })
-                notificationsManager.addNotification({variant:'welcome',path:'/d/notifications',userId:user.uid,requiresAdminPermission:false,timestamp:new Date().toISOString(),additionalFields:{message:'Welcome to the Yarlprops',read:false}})
+                //notificationsManager.addNotification({variant:'welcome',path:'/d/notifications',userId:user.uid,requiresAdminPermission:false,timestamp:new Date().toISOString(),additionalFields:{message:'Welcome to the Yarlprops',read:false}})
 
                 showAlerts('Account created , wait a little ', 'success', 'top-center')
                 signinLog(user.uid, { method: 'signup' })

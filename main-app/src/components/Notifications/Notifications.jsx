@@ -4,99 +4,77 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import CloseIcon from '@mui/icons-material/Close';
 import { useAuth } from '../../api/AuthContext';
-import NotificationManager from '../../api/db/notificationsManager';
+import { deleteNotification, markNotificationAsRead } from '../../api/db/notifications';
 
 // Import renderNotificationDetails
 const renderNotificationDetails = (notification) => {
     switch (notification.variant) {
         case 'welcome':
             return (
-                <Typography variant="body1" gutterBottom>
-                    Welcome to the platform, {notification.userName || 'User'}!<br/> We're glad to have you.<br/>go to profile -&gt; notifications to more details
+                <Typography variant="body1">
+                    Welcome to the platform, {notification.userName || 'User'}! Explore more in your profile.
                 </Typography>
             );
         case 'addItem':
             return (
-                <Typography variant="body1" gutterBottom>
-                    A new item has been added successfully! Check it out in the items section.
+                <Typography variant="body1">
+                    A new item "{notification.itemName}" has been added to the inventory.
                 </Typography>
             );
         case 'updateItem':
             return (
-                <Typography variant="body1" gutterBottom>
-                    An item was updated. Please review the changes.
+                <Typography variant="body1">
+                    The item "{notification.itemName}" has been updated. Please review the changes.
                 </Typography>
             );
         case 'removeItem':
             return (
-                <Typography variant="body1" gutterBottom>
-                    An item has been removed. If this was unintentional, please contact support.
+                <Typography variant="body1">
+                    The item "{notification.itemName}" has been removed from the inventory.
                 </Typography>
             );
         case 'changerole':
             return (
-                <Typography variant="body1" gutterBottom>
-                    User role has been changed. Please review the updated permissions.
+                <Typography variant="body1">
+                    Your role has been updated to "{notification.newRole}".
                 </Typography>
             );
         case 'deleteAccount':
             return (
-                <Typography variant="body1" gutterBottom>
-                    An account deletion request has been processed. Ensure all related data is archived.
+                <Typography variant="body1">
+                    Your account deletion request has been processed. Contact support for further assistance.
                 </Typography>
             );
         default:
-            return (
-                <>
-                    <Typography variant="body1" gutterBottom>
-                        Notification ID: {notification.nId}
-                    </Typography>
-                    <Typography variant="body1" gutterBottom>
-                        Path: {notification.path}
-                    </Typography>
-                    <Typography variant="body1" gutterBottom>
-                        User ID: {notification.userId || 'N/A'}
-                    </Typography>
-                </>
-            );
+            return <Typography variant="body1">Unknown notification type.</Typography>;
     }
 };
 
-const notificationManager = new NotificationManager();
-
 export default function Notifications() {
     const [anchorEl, setAnchorEl] = useState(null);
-    const theme = useTheme();
     const [notifications, setNotifications] = useState([]);
-    const [newNotificationCount, setNewNotificationCount] = useState(0);
     const { user } = useAuth();
+    const theme=useTheme()
 
     useEffect(() => {
         const fetchNotifications = async () => {
             try {
-                const allNotifications = await notificationManager.getNotifications(user.uid);
-                setNotifications(allNotifications);
-            } catch (e) {
-                console.error('Error fetching notifications:', e);
+                const response = await fetchNotifications(user.uid)
+                setNotifications(response);
+            } catch (error) {
+                console.error('Error fetching notifications:', error);
                 setNotifications([]);
             }
         };
         fetchNotifications();
-    }, [user]);
+    }, []);
 
-    const handleOpen = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+    const handleOpen = (event) => setAnchorEl(event.currentTarget);
+    const handleClose = () => setAnchorEl(null);
 
     const markAsRead = async (notificationId) => {
         try {
-            await notificationManager.updateNotification(notificationId, { read: true }, { userId: user.id, requiresAdminPermission: false });
-            setNotifications(notifications.map((n) => (n.id === notificationId ? { ...n, read: true } : n)));
-            setNewNotificationCount((count) => count - 1);
+            await markNotificationAsRead(notificationId)
         } catch (error) {
             console.error('Error marking notification as read:', error);
         }
@@ -104,8 +82,7 @@ export default function Notifications() {
 
     const removeNotification = async (notificationId) => {
         try {
-            await notificationManager.deleteNotification(notificationId, { userId: user.id, requiresAdminPermission: false });
-            setNotifications(notifications.filter((n) => n.id !== notificationId));
+            await deleteNotification(notificationId)
         } catch (error) {
             console.error('Error removing notification:', error);
         }

@@ -10,7 +10,6 @@ import { db, storage } from '../../api/firebase';
 import { arrayRemove, collection, deleteDoc, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { useAuth } from '../../api/AuthContext';
 import { serviceFilters } from '../../components/menuLists';
-import { itemNotification } from '../../api/db/notificationsManager';
 import { addItemByMerchant } from '../../api/db/logsManager';
 
 export default function MerchantServices() {

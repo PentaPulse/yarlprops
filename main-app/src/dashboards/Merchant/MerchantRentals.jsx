@@ -10,7 +10,6 @@ import { useAuth } from '../../api/AuthContext';
 import { arrayRemove, collection, deleteDoc, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { addRental, fetchSelectedRental, updateRental } from '../../api/db/rentals';
 import { rentalFilters } from '../../components/menuLists';
-import { itemNotification } from '../../api/db/notificationsManager';
 
 export default function MerchantRentals() {
   const [showAddRental, setShowAddRental] = React.useState(false);
