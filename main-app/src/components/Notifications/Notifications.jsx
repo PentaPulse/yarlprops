@@ -91,7 +91,7 @@ export default function Notifications() {
     return (
         <>
             <IconButton color={theme.palette.primary.default} onClick={handleOpen}>
-                <Badge badgeContent={notifications.length} color="error">
+                <Badge badgeContent={0} color="error">
                     <NotificationsIcon />
                 </Badge>
             </IconButton>
@@ -104,7 +104,7 @@ export default function Notifications() {
                 transformOrigin={{ vertical: 'top', horizontal: 'right' }}
             >
                 <Typography fontWeight="bold" align="center">NOTIFICATIONS</Typography>
-                {notifications.length !== 0 ? (
+                {notifications  ? (
                     notifications.map((notification) => (
                         <Box
                             key={notification.id}
