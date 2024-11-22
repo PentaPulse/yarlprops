@@ -102,12 +102,13 @@ function Contact() {
       }}>
         <Box
           sx={{
-            width: { xs: "100%", sm: "100%", md: "80%" },
-            padding: { xs: 3, sm: 2, md: 20 },
+            width: { xs: "100%", sm: "90%", md: "80%" },
+            padding: { xs: 0.5, sm: 2, md: 3 },
             animation: `${bounceAnimation} 1.5s ease-in-out infinite`,
+           
           }}
         >
-          <Box sx={{ background: "white", opacity: "0.8", borderRadius: 3, padding: { xs: 3 } }}>
+          <Box sx={{ background: "white", opacity: "0.8", borderRadius: 3, padding: { xs: 3 } ,}}>
             <Typography variant={"h2"} color="black" align="center" pt={8} gutterBottom>
               <b>Contact Us</b>
             </Typography>
@@ -133,10 +134,16 @@ function Contact() {
           We are committed to supporting you, first and foremost! We continually strive to exceed expectations and deliver superior 24/7 Days Support...
         </Typography>
 
-        <Box sx={{ padding: 1}}>
+        <Box
+  sx={{
+    padding: { xs: 1, sm: 2, md: 3 },
+    margin: "0 auto", 
+    width: { xs: "100%", sm: "100%", md: "100%", lg: "100%" }, 
+  }}
+>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={8}>
-              <Card sx={{ backgroundColor: "rgba(255, 255, 255, 0.3)", padding: { xs: 3 }, borderRadius: 4 }}>
+              <Card sx={{ backgroundColor: "rgba(255, 255, 255, 0.3)", padding: { xs: 1}, borderRadius: 4 }}>
                 <CardContent>
                   <Typography gutterBottom variant="h5">
                     <b>Get in touch</b>
@@ -145,6 +152,7 @@ function Contact() {
                     Fill up the form and our team will get back to you within 24 hours.
                   </Typography>
                   <form >
+                  <Typography   gutterBottom>
                     <Grid container spacing={2}>
                       <Grid item xs={12} sm={6}>
                         <TextField placeholder="Enter first name" label="First Name" variant="outlined" name='firstName' fullWidth value={details.firstName} onChange={handleChange} required />
@@ -162,6 +170,7 @@ function Contact() {
                         <Button type="submit" variant="contained" onClick={handleSubmit} endIcon={<SendIcon />} fullWidth>Send</Button>
                       </Grid>
                     </Grid>
+                    </Typography>
                   </form>
                 </CardContent>
               </Card>
