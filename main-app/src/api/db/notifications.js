@@ -1,19 +1,21 @@
-import {  collection, getDocs, query, where, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { collection, getDocs,  doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '../firebase';
+
 
 // Function to fetch notifications for the user
 export const fetchNotifications = async (userId) => {
     try {
-        const notificationsRef = collection(db,'systemusers',userId, 'notifications');
-        const querySnapshot = await getDocs(notificationsRef);
 
-        const notifications = querySnapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-        }));
+        // Fetch all documents in the notifications subcollection
+        const querySnapshot = await getDocs(collection(db, 'systemusers', userId, 'notifications'));
+
+        // Map the results to an array
+        const notifications = querySnapshot.docs.map((doc) => doc.data());
+        console.log(notifications)
+
         return notifications;
     } catch (error) {
-        console.error('Error fetching notifications:', error);
+        console.error('Error fetching notifications func:', error);
         return [];
     }
 };

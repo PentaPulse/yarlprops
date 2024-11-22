@@ -7,10 +7,9 @@ import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import WeekendIcon from '@mui/icons-material/Weekend';
 import WatchIcon from '@mui/icons-material/Watch';
 import FastfoodIcon from '@mui/icons-material/Fastfood';
-import SpaIcon from '@mui/icons-material/Spa'; // 
-import { collection, getDocs, limit, query } from 'firebase/firestore';
-import { db } from '../../api/firebase';
+import SpaIcon from '@mui/icons-material/Spa';
 import DbError from '../../components/DbError/DbError';
+import { fetchItems } from '../../api/db/items';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -117,13 +116,13 @@ function ProductList() {
     navigate(`/p/product/${pid}`);
   };
 
+  const fetchProductstoHome=async()=>{
+    const data = await  fetchItems({itemType:"products",location:'home'})
+    setProducts(data)
+  }
+
   React.useEffect(() => {
-    const getProducts = async () => {
-      const q = await getDocs(query(collection(db, 'products'), limit(4)))
-      const productList = q.docs.map(doc => doc.data())
-      setProducts(productList);
-    };
-    getProducts();
+    fetchProductstoHome()
   }, []);
 
   return (
@@ -204,8 +203,7 @@ function RentalsList() {
 
   React.useEffect(() => {
     const getRentals = async () => {
-      const q = await getDocs(query(collection(db, 'rentals'), limit(4)))
-      const rentalsList = q.docs.map(doc => doc.data())
+      const rentalsList = await fetchItems({itemType:"rentals",location:'home'})
       setRentals(rentalsList);
     };
     getRentals();
@@ -287,8 +285,7 @@ function ServicesList() {
 
   React.useEffect(() => {
     const getServices = async () => {
-      const q = await getDocs(query(collection(db, 'services'), limit(4)))
-      const serviceList = q.docs.map(doc => doc.data())
+      const serviceList = await fetchItems({itemType:"services",location:'home'})
       setServices(serviceList);
     };
     getServices();

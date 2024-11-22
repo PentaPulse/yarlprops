@@ -1,7 +1,7 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-
+    //systemusers
     match /systemusers/{userId} {
       allow get: if request.resource.data.keys().hasOnly(['displayName']);
       allow create:if request.auth != null;
@@ -13,21 +13,22 @@ service cloud.firestore {
         allow read , write : if request.auth!=null;
       }
       match /notifications/{notificationId}{
-        allow read,write :if request.auth != null;
+       allow read, write: if request.auth != null && request.auth.uid == userId;
       }
 
       match /customerorders/{orderId}{
-      allow read,write:if true;
+        allow read,write:if true;
       }
       match /feedbacks/{id}{
-       allow read;//:if request.auth != null;
-       allow write: if isUser(request.auth.uid)
+        allow read;//:if request.auth != null;
+        allow write: if isUser(request.auth.uid)
       }
       match /reviews/{id}{
-      allow read,write:if request.auth.uid== userId;
+        allow read,write:if request.auth.uid== userId;
       }
     }
 
+    //admins
     match /admins/{aid}{
       allow create:if request.auth != null;
       allow read,update,delete: if isAdmin(request.auth.uid);
@@ -41,38 +42,40 @@ service cloud.firestore {
         allow read : if isAdmin(request.auth.uid)
       }
     }
-
+    //contact
     match /contactus/{id}{
       allow read,update:if isAdmin(request.auth.uid);
       allow write:if true;
     }
-
+    //orders
     match /orders/{id}{
       allow read , write : if request.auth!=null;
     }
-
+    //products
     match /products/{productId} {
       allow read: if true;
       allow write;//:if isMerchant(request.auth.uid)||isAdmin(request.auth.uid);
       //allow write, update, delete: if request.auth != null && 
       //(request.auth.uid == resource.data.merchantId || isAdmin(request.auth.uid));
       match /reviws/{rId}{
-      allow read;
-      allow write:if request.auth != null;
+        allow read;
+        allow write:if request.auth != null;
       }
     }
+    //service
 
     match /services/{serviceId}{
       allow read;//: if true;
 
       allow write, update, delete;//: if request.auth != null && (request.auth.uid == resource.data.merchantId|| isAdmin(request.auth.uid));
     }
-
+    //rentals
     match /rentals/{rentalId}{
       allow read;//: if true;
 
       allow write, update, delete;//: if request.auth != null &&       (request.auth.uid == resource.data.merchantId || isAdmin(request.auth.uid));
     }
+    //logs
     match /logs/{userId} {
       allow read: if request.auth != null && request.auth.uid == userId;
       allow write;
@@ -97,18 +100,18 @@ service cloud.firestore {
         allow read : if isAdmin(request.auth.uid)
       }
     }
-
+    //site-management
     match /site/{id}{
       allow read;
       allow write:if isAdmin(request.auth.uid)
 
       match /customers/{id}{
-      allow read;
-      allow write : if isAdmin(request.auth.uid)
+        allow read;
+        allow write : if isAdmin(request.auth.uid)
       }
       match /merchants/{id}{
-      allow read;
-      allow write : if isAdmin(request.auth.uid)
+        allow read;
+        allow write : if isAdmin(request.auth.uid)
       }
     }
 
@@ -116,8 +119,8 @@ service cloud.firestore {
       return exists(/databases/$(database)/documents/admins/$(userId));
     }
     function isUser(userId) {
-    return exists(/databases/$(database)/documents/systemusers/$(userId));
-}
+      return exists(/databases/$(database)/documents/systemusers/$(userId));
+    }
 
   }
 }

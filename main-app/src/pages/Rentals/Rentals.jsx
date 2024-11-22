@@ -14,6 +14,7 @@ import Filters from '../../components/Filters/Filters';
 import Details from '../../components/Details/Details';
 import Rate from '../../components/Ratings/Ratings';
 import { fetchProductReviews } from '../../api/db/feedback';
+import { fetchFilters, useFilters } from '../../api/db/items';
 
 export default function Rentals() {
     return (
@@ -29,95 +30,126 @@ export default function Rentals() {
 function RentalsContents() {
     const [rentals, setRentals] = React.useState([]);
     const navigate = useNavigate();
-    const [search] = useSearchParams()
-    const searchTerm = search.get('search')
-    const category = search.get('category')
-    const subCategory = search.get('subcategory');
-    const price = search.get('price')
-    const quantity = search.get('quantity')
+    const [search] = useSearchParams();
     const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-    const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
-
+    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+    const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
 
     React.useEffect(() => {
         const fetchData = async () => {
             try {
-                if (searchTerm || category || subCategory) {
-                    let q;
-                    const rentalRef = collection(db, 'rentals')
-                    if (searchTerm !== null) {
-                        q = query(rentalRef, where('title', '>=', capitalize(searchTerm)), where('title', '<=', capitalize(searchTerm) + '\uf8ff'));
-                    }
-                    if (category !== null) {
-                        q = query(rentalRef, where('category', '==', category))
-                    }
-                    if (subCategory !== null) {
-                        q = query(rentalRef, where('subCategory', '==', subCategory))
-                    }/*
-                if (price) {
-                    q = query(rentalRef, where('category', '==', price))
-                }
-                if (quantity) {
-                    q = query(rentalRef, where('category', '==', quantity))
-                }*/
-                    const querySnapshot = await getDocs(q);
-                    const items = querySnapshot.docs.map(doc => doc.data());
-                    setRentals(items);
-
-                } else {
-                    const q = await getDocs(query(collection(db, 'rentals')));
-                    const rentalList = q.docs.map(doc => doc.data())
-                    setRentals(rentalList);
-                }
+                const rentalList = await fetchFilters("rentals", search);
+                setRentals(rentalList);
             } catch (e) {
-                setRentals([])
+                console.error(e);
+                setRentals([]);
             }
         };
-        fetchData()
-    }, [searchTerm, category, subCategory, price, quantity]);
+        fetchData();
+    }, [search]); // Add `search` as a dependency
 
     const handleCardClick = (rid) => {
         navigate(`/p/rental/${rid}`);
     };
+
+    const renderStatusButton = (status) => {
+        let backgroundColor, text;
+        switch (status) {
+            case "For Sale":
+                backgroundColor = "green";
+                text = "For Sale";
+                break;
+            case "For Rent":
+                backgroundColor = "darkorange";
+                text = "For Rent";
+                break;
+            default:
+                backgroundColor = "red";
+                text = "Sold Out!";
+        }
+        return (
+            <Button
+                size="small"
+                sx={{
+                    backgroundColor,
+                    color: "white",
+                    fontWeight: "bold",
+                }}
+            >
+                {text}
+            </Button>
+        );
+    };
+
     return (
         <Container maxWidth="xl">
             <Grid container spacing={{ xs: 2, sm: 2, md: 3 }} columns={24}>
-                {!rentals ? <DbError items={9} /> : rentals.length === 0 ?
+                {rentals.length === 0 ? (
                     <DbError items={9} />
-                    :
-                    rentals.map((rental, index) => (
-                        <Grid item xs={24} sm={12} md={12} lg={8} key={index}>
-                            <Card sx={{ boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)', position: 'relative' }}>
-
+                ) : (
+                    rentals.map((rental) => (
+                        <Grid item xs={24} sm={12} md={12} lg={8} key={rental.rid}>
+                            <Card
+                                sx={{
+                                    boxShadow:
+                                        "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+                                    position: "relative",
+                                }}
+                            >
                                 <CardActionArea onClick={() => handleCardClick(rental.rid)}>
                                     <CardMedia
-                                        sx={{ height: isMobile ? '15rem' : isTablet ? '18rem' : '20rem' }}
-                                        image={rental.images[0] || 'https://picsum.photos/id/11/200/300'}
+                                        sx={{
+                                            height: isMobile
+                                                ? "15rem"
+                                                : isTablet
+                                                ? "18rem"
+                                                : "20rem",
+                                        }}
+                                        image={
+                                            rental.images?.[0] ||
+                                            "https://picsum.photos/id/11/200/300"
+                                        }
                                         title={rental.name}
                                     />
-                                    <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                        <Typography gutterBottom variant={isMobile ? 'subtitle1' : 'h6'} component='div' color='inherit'>
+                                    <CardContent
+                                        sx={{
+                                            display: "flex",
+                                            justifyContent: "space-between",
+                                        }}
+                                    >
+                                        <Typography
+                                            gutterBottom
+                                            variant={isMobile ? "subtitle1" : "h6"}
+                                            component="div"
+                                            color="inherit"
+                                        >
                                             {rental.title}
                                         </Typography>
                                     </CardContent>
-                                    <CardActions sx={{ position: 'absolute', top: '2px', left: '5px' }}>
-                                        {(rental.status === "For Sale") ? (<Button size='small' style={{ backgroundColor: "green", color: 'white', fontWeight: 'bold' }}>For Sale</Button>) : ((rental.status === "For Rent") ? (<Button size='small' style={{ backgroundColor: "darkorange", color: 'white', fontWeight: 'bold' }}>For Rent</Button>) : ((<Button size='small' style={{ backgroundColor: "red", color: 'white', fontWeight: 'bold' }}>Sold Out!</Button>)))}
+                                    <CardActions
+                                        sx={{
+                                            position: "absolute",
+                                            top: "2px",
+                                            left: "5px",
+                                        }}
+                                    >
+                                        {renderStatusButton(rental.status)}
                                     </CardActions>
                                 </CardActionArea>
                             </Card>
                         </Grid>
-                    ))}
+                    ))
+                )}
             </Grid>
         </Container>
     );
-};
+}
 
 export function RentalsPage({ setSignin, setSignup }) {
     const [rental, setRental] = React.useState(null);
     const [merchant, setMerchant] = React.useState(null);
     const [reviews, setReviews] = React.useState([]); // Store product reviews
-    const [averageRating, setAverageRating] = React.useState(0); 
+    const [averageRating, setAverageRating] = React.useState(0);
     const [selectedImageIndex, setSelectedImageIndex] = React.useState(0); // Track the index of the selected image
     const [startIndex, setStartIndex] = React.useState(0);
     const visibleImagesCount = 3; // Number of images to display at a time
@@ -135,11 +167,11 @@ export function RentalsPage({ setSignin, setSignup }) {
                 setSelectedImageIndex(0);
 
 
-        const reviewsData = await fetchProductReviews(id,'rentals'); 
-        setReviews(reviewsData);
+                const reviewsData = await fetchProductReviews(id, 'rentals');
+                setReviews(reviewsData);
 
-        const totalRating = reviewsData.reduce((acc, review) => acc + review.rating, 0);
-        setAverageRating(reviewsData.length ? totalRating / reviewsData.length : 0);
+                const totalRating = reviewsData.reduce((acc, review) => acc + review.rating, 0);
+                setAverageRating(reviewsData.length ? totalRating / reviewsData.length : 0);
             } catch (error) {
                 //console.error("Error fetching rental:", error);
             }
@@ -215,7 +247,7 @@ export function RentalsPage({ setSignin, setSignup }) {
                         <Grid item xs={1} sm={1} md={1} lg={1} sx={{ display: 'flex', justifyContent: 'center' }}>
                             <IconButton
                                 onClick={handlePrevious}
-                                sx={{ fontSize: { xs: '1.5rem', sm: '2rem' }}}
+                                sx={{ fontSize: { xs: '1.5rem', sm: '2rem' } }}
                             >
                                 <ArrowBackIosIcon />
                             </IconButton>
@@ -246,9 +278,9 @@ export function RentalsPage({ setSignin, setSignup }) {
                         ))}
 
                         <Grid item xs={1} sm={1} md={1} lg={1} sx={{ display: 'flex', justifyContent: 'center' }}>
-                            <IconButton 
+                            <IconButton
                                 onClick={handleNext}
-                                sx={{ fontSize: { xs: '1.5rem', sm: '2rem' }}}
+                                sx={{ fontSize: { xs: '1.5rem', sm: '2rem' } }}
                             >
                                 <ArrowForwardIosIcon />
                             </IconButton>
@@ -294,22 +326,22 @@ export function RentalsPage({ setSignin, setSignup }) {
                             </Box>
                             <Details itemImage={rental.images[0]} setSignin={setSignin} setSignup={setSignup} itemType={'rentals'} itemId={rental.rid} itemTitle={rental.title} merchantId={rental.merchantId} />
                             <Box sx={{ my: 3 }}>
-                <Typography variant="h6" sx={{ textAlign: 'center', fontWeight: 'bold' }}>Reviews Summary</Typography>
-                {reviews.length > 0 ? (
-                  <>
-                    <Typography variant="body1" sx={{ textAlign: 'center', mb: 1 }}>
-                      Average Rating: {averageRating.toFixed(1)} / 5
-                    </Typography>
-                    <Typography variant="body2" sx={{ textAlign: 'center' }}>
-                      Based on {reviews.length} review{reviews.length > 1 ? 's' : ''}.
-                    </Typography>
-                  </>
-                ) : (
-                  <Typography variant="body1" sx={{ textAlign: 'center', mb: 1 }}>
-                    No reviews yet. Be the first to leave a review!
-                  </Typography>
-                )}
-              </Box>
+                                <Typography variant="h6" sx={{ textAlign: 'center', fontWeight: 'bold' }}>Reviews Summary</Typography>
+                                {reviews.length > 0 ? (
+                                    <>
+                                        <Typography variant="body1" sx={{ textAlign: 'center', mb: 1 }}>
+                                            Average Rating: {averageRating.toFixed(1)} / 5
+                                        </Typography>
+                                        <Typography variant="body2" sx={{ textAlign: 'center' }}>
+                                            Based on {reviews.length} review{reviews.length > 1 ? 's' : ''}.
+                                        </Typography>
+                                    </>
+                                ) : (
+                                    <Typography variant="body1" sx={{ textAlign: 'center', mb: 1 }}>
+                                        No reviews yet. Be the first to leave a review!
+                                    </Typography>
+                                )}
+                            </Box>
                         </CardContent>
                     </Card>
                 </Grid>

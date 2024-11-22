@@ -16,7 +16,6 @@ export default function Filters({ itemList, page }) {
 
     const updateFilters = (newFilter, remove) => {
         const params = new URLSearchParams(searchParams);
-        console.log(remove)
         Object.keys(newFilter).forEach((key) => {
             if (remove) {
                 params.delete(key);
@@ -65,6 +64,11 @@ export default function Filters({ itemList, page }) {
         setSubCategory(null);
         updateFilters({ subcategory: null }, true);
     };
+
+    const handleClearQuantity =()=>{
+        setQuantity(1)
+        updateFilters({quantity:1},true)
+    }
 
     const toggleDrawer = (open) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -118,7 +122,7 @@ export default function Filters({ itemList, page }) {
 
             <Divider sx={{ my: 2 }} />
 
-            <Typography variant="h6" gutterBottom>
+            {/* <Typography variant="h6" gutterBottom>
                 Price Range
             </Typography>
             <Slider
@@ -130,7 +134,7 @@ export default function Filters({ itemList, page }) {
                 step={500}
             />
 
-            <Divider sx={{ my: 2 }} />
+            <Divider sx={{ my: 2 }} /> */}
 
             <Typography variant="h6" gutterBottom>
                 Quantity
@@ -142,6 +146,7 @@ export default function Filters({ itemList, page }) {
                 InputProps={{ inputProps: { min: 1, max: 10 } }}
                 fullWidth
             />
+             {quantity>1 && <Button fullWidth onClick={handleClearQuantity}>Clear</Button>}
         </Paper>
     );
 

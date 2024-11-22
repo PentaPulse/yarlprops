@@ -1,4 +1,4 @@
-import { addDoc, arrayUnion, collection, doc, getDocs, query, serverTimestamp, setDoc, updateDoc, where } from "firebase/firestore";
+import { addDoc, arrayUnion, collection, doc, getDocs, limit, query, serverTimestamp, setDoc, updateDoc, where } from "firebase/firestore";
 import { db } from "../firebase";
 import { addItemByMerchant } from "./logsManager";
 
@@ -39,6 +39,27 @@ export const updateRental = async (id, updatedRental) => {
     }
 };
 
+export const fetchRentals = async (props) => {
+    try {
+        const { location, userId } = props; 
+        let q;
+
+        if (location === 'home') {            
+            q = query(rentalRef, where('visibility', '==', true), limit(4));
+        } else if (location === 'dash' && userId) {            
+            q = query(rentalRef, where('merchantId', '==', userId),);
+        } 
+
+        const qSnapshot = await getDocs(q);
+        const productList = qSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+        return productList;
+    } catch (e) {
+        console.error("Error fetching rentals:", e);
+        return [];
+    }
+};
+
 export const fetchSelectedRental = async (rid) => {
     const q = query(rentalRef, where('rid', '==', rid));
     try {
@@ -68,6 +89,6 @@ export const fetchRentalOrders = async(cid)=>{
 }
 
 export const countRentals = async () => {
-    const productsSnapshot = await getDocs(rentalRef);
-    return productsSnapshot.size;
+    const rentalsSnapshot = await getDocs(rentalRef);
+    return rentalsSnapshot.size;
 };

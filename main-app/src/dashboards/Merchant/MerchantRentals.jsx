@@ -20,7 +20,7 @@ export default function MerchantRentals() {
     setEditingRentalId(null);
     setShowAddRental(true);
     setViewingRentalId(null);
-  }
+  } 
 
   const handleEditRental = (rentalId) => {
     setEditingRentalId(rentalId);
@@ -86,7 +86,6 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
     location: '',
     status: 'For Rent',
     images: [],
-    visibility: false,
   });
 
   const [existingImages, setExistingImages] = React.useState([]);
@@ -201,7 +200,6 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
         location: '',
         status: '',
         images: [],
-        visibility: false,
       });
       setExistingImages([]);
       setNewImages([]);

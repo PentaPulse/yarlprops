@@ -4,17 +4,14 @@ import { productFilters } from '../../components/menuLists';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../../api/firebase';
-import { fetchProducts, fetchSelectedProduct } from '../../api/db/products';
+import {  fetchSelectedProduct } from '../../api/db/products';
 import DbError from '../../components/DbError/DbError';
-import { fetchMerchantDetails, fetchMerchantProductDetails } from '../../api/db/users';
+import { fetchMerchantDetails} from '../../api/db/users';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import Filters from '../../components/Filters/Filters';
-import { useAuth } from '../../api/AuthContext';
 import Details from '../../components/Details/Details';
-import Rate from '../../components/Ratings/Ratings';
 import { fetchProductReviews } from '../../api/db/feedback';
+import { fetchFilters } from '../../api/db/items';
 
 function Products() {
   return (
@@ -32,11 +29,6 @@ const ProductsContents = () => {
   const [products, setProducts] = React.useState([]);
   const navigate = useNavigate();
   const [search] = useSearchParams()
-  const searchTerm = search.get('search')
-  const category = search.get('category')
-  const subCategory = search.get('subcategory');
-  const price = search.get('price')
-  const quantity = search.get('quantity')
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
@@ -45,56 +37,15 @@ const ProductsContents = () => {
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log(category);
-
-        const productRef = collection(db, 'products');
-        let q = productRef;
-
-        if (searchTerm) {
-          q = query(q, where('title', '>=', capitalize(searchTerm)), where('title', '<=', capitalize(searchTerm) + '\uf8ff'));
-        }
-
-        if (category && !subCategory) {
-          q = query(q, where('category', '==', category));
-        }
-
-        if (subCategory) {
-          q = query(q, where('subCategory', '==', subCategory));
-        }
-
-        /*
-        if (price) {
-          q = query(q, where('price', '==', price));
-        }
-    
-        if (quantity) {
-          q = query(q, where('quantity', '==', quantity));
-        }
-        */
-
-        if (!category && !subCategory && !searchTerm) {
-          fetchProductsWithoutFilters();
-          return
-        }
-
-        const querySnapshot = await getDocs(q);
-        const items = querySnapshot.docs.map(doc => doc.data());
-
-        setProducts(items);
-
+          const rentalList = await fetchFilters("products", search);
+          setProducts(rentalList);
       } catch (e) {
-        console.error(e);
-        setProducts([]);
+          console.error(e);
+          setProducts([]);
       }
-    };
-
-    const fetchProductsWithoutFilters = async () => {
-      const productList = await fetchProducts();
-      setProducts(productList);
-    }
-
-    fetchData()
-  }, [searchTerm, category, subCategory, price, quantity]);
+  };
+  fetchData();
+  }, [search]);
 
   const handleCardClick = (pid) => {
     navigate(`/p/product/${pid}`);
@@ -179,26 +130,6 @@ export function ProductPage({ setSignin, setSignup }) {
   if (!product) {
     return <CircularProgress />;
   }
-
-  // const handlePrevious = () => {
-  //   if (startIndex > 0) {
-  //     setStartIndex(startIndex - 1);
-  //     setSelectedImageIndex(startIndex - 1);
-  //   } else {
-  //     setStartIndex(product.images.length - visibleImagesCount);
-  //     setSelectedImageIndex(product.images.length - 1);
-  //   }
-  // };
-
-  // const handleNext = () => {
-  //   if (startIndex + visibleImagesCount < product.images.length) {
-  //     setStartIndex(startIndex + 1);
-  //     setSelectedImageIndex(startIndex + 1);
-  //   } else {
-  //     setStartIndex(0);
-  //     setSelectedImageIndex(0);
-  //   }
-  // };
 
   return (
     <Container maxWidth="lg" sx={{ backgroundColor: theme.palette.background.default }}>

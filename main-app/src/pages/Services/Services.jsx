@@ -1,12 +1,10 @@
-import { Box, Button, capitalize, Card, CardActionArea, CardContent, CardMedia, CircularProgress, Container, Grid, Typography, useMediaQuery } from '@mui/material';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { Box, Button,  Card, CardActionArea, CardContent, CardMedia, CircularProgress, Container, Grid, Typography, useMediaQuery } from '@mui/material';
 import * as React from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { db } from '../../api/firebase';
 import DbError from '../../components/DbError/DbError';
 import { useTheme } from '@emotion/react';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import { fetchSelectedService, fetchServices } from '../../api/db/services';
+import { fetchSelectedService } from '../../api/db/services';
 import Carousel from 'react-material-ui-carousel';
 import { fetchMerchantServiceDetails } from '../../api/db/users';
 import { serviceFilters } from '../../components/menuLists';
@@ -14,6 +12,7 @@ import Filters from '../../components/Filters/Filters';
 import Details from '../../components/Details/Details';
 import Rate from '../../components/Ratings/Ratings';
 import { fetchProductReviews } from '../../api/db/feedback';
+import { fetchFilters } from '../../api/db/items';
 
 
 export default function Services() {
@@ -32,11 +31,6 @@ function ServicesContents() {
     const [services, setServices] = React.useState([]);
     const navigate = useNavigate();
     const [search] = useSearchParams()
-    const searchTerm = search.get('search')
-    const category = search.get('category')
-    const subCategory = search.get('subcategory');
-    const price = search.get('price')
-    const quantity = search.get('quantity')
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
@@ -45,39 +39,14 @@ function ServicesContents() {
     React.useEffect(() => {
         const fetchData = async () => {
             try {
-                if (searchTerm || category || subCategory) {
-                    let q;
-                    const serviceRef = collection(db, 'services')
-                    if (searchTerm !== null) {
-                        q = query(serviceRef, where('title', '>=', capitalize(searchTerm)), where('title', '<=', capitalize(searchTerm) + '\uf8ff'));
-                    }
-                    if (category !== null) {
-                        q = query(serviceRef, where('category', '==', category))
-                    }
-                    if (subCategory !== null) {
-                        q = query(serviceRef, where('subCategory', '==', subCategory))
-                    }/*
-                if (price) {
-                    q = query(serviceRef, where('category', '==', price))
-                }
-                if (quantity) {
-                    q = query(serviceRef, where('category', '==', quantity))
-                }*/
-                    const querySnapshot = await getDocs(q);
-                    const items = querySnapshot.docs.map(doc => doc.data());
-                    setServices(items);
-
-                } else {
-                    const serviceList = await fetchServices();
-                    setServices(serviceList);
-                }
+                const serviceList = await fetchFilters("services", search);
+                setServices(serviceList);
             } catch (e) {
                 setServices([])
             }
         };
-        console.log(`going to search ${searchTerm}`)
         fetchData()
-    }, [searchTerm, category, subCategory, price, quantity]);
+    }, [search]);
 
     const handleCardClick = (sid) => {
         navigate(`/p/service/${sid}`);
@@ -120,7 +89,7 @@ export function ServicePage({ setSignin, setSignup }) {
     const [service, setService] = React.useState(null);
     const [merchant, setMerchant] = React.useState(null)
     const [reviews, setReviews] = React.useState([]); // Store product reviews
-    const [averageRating, setAverageRating] = React.useState(0); 
+    const [averageRating, setAverageRating] = React.useState(0);
     const { id } = useParams();
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -132,11 +101,11 @@ export function ServicePage({ setSignin, setSignup }) {
                 setService(serviceData);
 
 
-        const reviewsData = await fetchProductReviews(id,'pservices'); 
-        setReviews(reviewsData);
+                const reviewsData = await fetchProductReviews(id, 'pservices');
+                setReviews(reviewsData);
 
-        const totalRating = reviewsData.reduce((acc, review) => acc + review.rating, 0);
-        setAverageRating(reviewsData.length ? totalRating / reviewsData.length : 0);
+                const totalRating = reviewsData.reduce((acc, review) => acc + review.rating, 0);
+                setAverageRating(reviewsData.length ? totalRating / reviewsData.length : 0);
             } catch (error) {
                 //console.error("Error fetching service:", error);
             }
@@ -225,24 +194,24 @@ export function ServicePage({ setSignin, setSignup }) {
                                 {/* Seller Details */}
                                 <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
                             </Box>
-                            <Details itemImage={service.images[0]} setSignin={setSignin} setSignup={setSignup} itemType={'services'} itemId={service.sid} itemTitle={service.title} merchantId={service.merchantId}/>
+                            <Details itemImage={service.images[0]} setSignin={setSignin} setSignup={setSignup} itemType={'services'} itemId={service.sid} itemTitle={service.title} merchantId={service.merchantId} />
                             <Box sx={{ my: 3 }}>
-                <Typography variant="h6" sx={{ textAlign: 'center', fontWeight: 'bold' }}>Reviews Summary</Typography>
-                {reviews.length > 0 ? (
-                  <>
-                    <Typography variant="body1" sx={{ textAlign: 'center', mb: 1 }}>
-                      Average Rating: {averageRating.toFixed(1)} / 5
-                    </Typography>
-                    <Typography variant="body2" sx={{ textAlign: 'center' }}>
-                      Based on {reviews.length} review{reviews.length > 1 ? 's' : ''}.
-                    </Typography>
-                  </>
-                ) : (
-                  <Typography variant="body1" sx={{ textAlign: 'center', mb: 1 }}>
-                    No reviews yet. Be the first to leave a review!
-                  </Typography>
-                )}
-              </Box>
+                                <Typography variant="h6" sx={{ textAlign: 'center', fontWeight: 'bold' }}>Reviews Summary</Typography>
+                                {reviews.length > 0 ? (
+                                    <>
+                                        <Typography variant="body1" sx={{ textAlign: 'center', mb: 1 }}>
+                                            Average Rating: {averageRating.toFixed(1)} / 5
+                                        </Typography>
+                                        <Typography variant="body2" sx={{ textAlign: 'center' }}>
+                                            Based on {reviews.length} review{reviews.length > 1 ? 's' : ''}.
+                                        </Typography>
+                                    </>
+                                ) : (
+                                    <Typography variant="body1" sx={{ textAlign: 'center', mb: 1 }}>
+                                        No reviews yet. Be the first to leave a review!
+                                    </Typography>
+                                )}
+                            </Box>
                         </CardContent>
                     </Card>
                 </Grid>

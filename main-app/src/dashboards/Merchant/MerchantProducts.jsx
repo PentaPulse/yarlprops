@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { Container, Button, IconButton, styled, Paper, Typography, TextField, FormControl, FormLabel, RadioGroup, Radio, FormControlLabel, Grid, TableCell, tableCellClasses, TableRow, TableContainer, Table, TableHead, TableBody, TablePagination, CircularProgress, InputLabel, Select, MenuItem } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { addProduct, fetchSelectedProduct, updateProduct } from '../../api/db/products';
+import { addProduct, fetchProducts, fetchSelectedProduct, updateProduct } from '../../api/db/products';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { db, storage } from '../../api/firebase';
 import Swal from 'sweetalert2';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useAuth } from '../../api/AuthContext';
-import { arrayRemove, collection, deleteDoc, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
+import { arrayRemove, deleteDoc, doc, updateDoc,  } from 'firebase/firestore';
 import { productFilters } from '../../components/menuLists';
 import { addItemByMerchant } from '../../api/db/logsManager';
 
@@ -455,15 +455,14 @@ const ProductList = ({ onEditProduct, onViewProduct }) => {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const { user } = useAuth();
 
-  React.useEffect(() => {
-    const fetchProductList = async () => {
-      const q = await getDocs(query(collection(db, 'products'), where('merchantId', '==', user.uid)))
-      const fetchedProducts = q.docs.map(doc => doc.data())
-      setProducts(fetchedProducts);
-    };
-    fetchProductList();
-  }, [user.uid]);
+  React.useEffect(() => {    
+    fetchProductsList();
+  }, []);
 
+  const fetchProductsList=async()=>{
+   const data= await fetchProducts({location:'dash',userId:user.uid})
+   setProducts(data)
+  }
   const handleDelete = async (id) => {
     try {
       const result = await Swal.fire({

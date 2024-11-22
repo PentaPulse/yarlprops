@@ -59,15 +59,15 @@ export default function Notifications() {
     useEffect(() => {
         const fetchNotifications = async () => {
             try {
-                const response = await fetchNotifications(user.uid)
-                setNotifications(response);
+                //const response = await fetchNotifications(user.uid)
+                setNotifications([]);
             } catch (error) {
                 console.error('Error fetching notifications:', error);
                 setNotifications([]);
             }
         };
         fetchNotifications();
-    }, []);
+    }, [user.uid]);
 
     const handleOpen = (event) => setAnchorEl(event.currentTarget);
     const handleClose = () => setAnchorEl(null);

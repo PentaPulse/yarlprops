@@ -1,12 +1,12 @@
 import "firebase/firestore";
 import { db } from "../firebase";
-import { doc, setDoc, collection, getDocs, query, where, addDoc, updateDoc, arrayUnion } from "firebase/firestore";
+import { doc, setDoc, collection, getDocs, query, where, addDoc, updateDoc, arrayUnion, limit, orderBy } from "firebase/firestore";
 import { addItemByMerchant } from "./logsManager";
 
-// Reference
+
 const productRef = collection(db, "products");
 
-// Adding products
+
 const addProduct = async ({ merchantId, title, category, subCategory, description, quantity, location, status, images }) => {
     console.log(status)
     try {
@@ -20,7 +20,7 @@ const addProduct = async ({ merchantId, title, category, subCategory, descriptio
             status,
             images,
             merchantId,
-            visibility:false,
+            visibility: false,
             createdAt: new Date().toISOString()
         });
         await setDoc(docRef, { pid: docRef.id }, { merge: true });
@@ -33,30 +33,40 @@ const addProduct = async ({ merchantId, title, category, subCategory, descriptio
     }
 };
 
-// Updating a product
+
 const updateProduct = async (id, updatedProduct) => {
     try {
         const productDocRef = doc(db, 'products', id);
-        await updateDoc(productDocRef, {...updatedProduct,id:id,updatedAt:new Date().toISOString()});
+        await updateDoc(productDocRef, { ...updatedProduct, id: id, updatedAt: new Date().toISOString() });
     } catch (e) {
         console.error("Error updating product:", e);
         throw new Error("Error updating product: " + e.message);
     }
 };
 
-// Fetching all products
-const fetchProducts = async () => {
+
+export const fetchProducts = async (props) => {
     try {
-        //if()
-        const qSnapshot = await getDocs(productRef, where('visibility', '==', true));
+        const { location, userId } = props; 
+        let q;
+
+        if (location === 'home') {            
+            q = query(productRef, where('visibility', '==', true), limit(4));
+        } else if (location === 'dash' && userId) {            
+            q = query(productRef, where('merchantId', '==', userId),);
+        } 
+
+        const qSnapshot = await getDocs(q);
         const productList = qSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
         return productList;
     } catch (e) {
-        return []
+        console.error("Error fetching products:", e);
+        return [];
     }
 };
 
-// Fetching a specific product by ID
+
 const fetchSelectedProduct = async (pid) => {
     const q = query(productRef, where('pid', '==', pid));
     try {
@@ -74,7 +84,7 @@ const fetchSelectedProduct = async (pid) => {
     }
 };
 
-//count products
+
 export const countProducts = async () => {
     const productsSnapshot = await getDocs(productRef);
     return productsSnapshot.size;
@@ -91,4 +101,4 @@ export const fetchProductOrders = async (cid) => {
     }
 }
 
-export { addProduct, updateProduct, fetchProducts, fetchSelectedProduct };
+export { addProduct, updateProduct, fetchSelectedProduct };
