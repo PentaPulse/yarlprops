@@ -29,7 +29,7 @@ import Profile from "./dashboards/UserProfile";
 import CustomerOverview from './dashboards/Customer/CustomerOverview'
 import Guide from "./pages/Guide/Guide";
 import PageLayout from "./pages/PageLayout";
-import NotificationsPanel from "./dashboards/NotificationsPanel";
+//import NotificationsPanel from "./dashboards/NotificationsPanel";
 
 import useSessionTimeout from "./api/useSessionTimeout";
 
@@ -190,7 +190,7 @@ function DashboardRoutes({ handleMode }) {
           {/* Common */}
           <Route path="overview" element={(merchantList.includes(user.uid) ? <MerchantOverview /> : <CustomerOverview />)} />
           <Route path="profile" element={<Profile />} />
-          <Route path="notifications" element={<NotificationsPanel/>}/>
+          {/* <Route path="notifications" element={<NotificationsPanel/>}/> */}
 
           {/* Merch */}
           {user.isMerchant&&

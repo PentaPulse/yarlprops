@@ -101,15 +101,15 @@ export default function NavigationBar({ handleMode, signin, setSignin, signup, s
             open={isMobileMenuOpen}
             onClose={handleMobileMenuClose}
         >
-            <MenuItem sx={{ [theme.breakpoints.up('md')]: { display: 'none' } }}>
+            {/* <MenuItem sx={{ [theme.breakpoints.up('md')]: { display: 'none' } }}>
                 <IconButton
                     size="large"
                     color="inherit"
                 >
-                    <Notifications />
+                    {/* <Notifications /> /}
                 </IconButton>
                 <Typography>Notifications</Typography>
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem onClick={() => navigate('/d/overview')}>
                 <IconButton
                     size="large"

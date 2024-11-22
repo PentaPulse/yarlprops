@@ -65,3 +65,29 @@ export const fetchItems = async (props) => {
         return [];
     }
 };
+
+export const fetchAllItems = async () => {
+  try {
+    const collections = ["products", "rentals", "services"];
+    const itemList = [];
+
+    for (const col of collections) {
+      const querySnapshot = await getDocs(collection(db, col));
+      querySnapshot.docs.forEach((doc) => {
+        const item = doc.data();
+        const getItemId = `${col.charAt(0).toLowerCase()}id`;
+        itemList.push({
+          title: item.title,
+          type: col,
+          id: item[`${col.charAt(0).toLowerCase()}id`], // Dynamically fetches id based on type
+        });
+      });
+    }
+
+    console.log(itemList);
+    return itemList;
+  } catch (error) {
+    console.error("Error fetching items:", error);
+    return [];
+  }
+};

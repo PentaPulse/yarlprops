@@ -1,5 +1,4 @@
 import { Avatar,  Box, IconButton, Tooltip} from "@mui/material";
-import Notifications from "../Notifications/Notifications";
 import React from "react";
 
 

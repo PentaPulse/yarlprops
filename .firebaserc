@@ -10,12 +10,6 @@
         ],
         "admin": [
           "ypalog"
-        ],
-        "yarlprops": [
-          "main"
-        ],
-        "ypalog": [
-          "admin"
         ]
       }
     }
