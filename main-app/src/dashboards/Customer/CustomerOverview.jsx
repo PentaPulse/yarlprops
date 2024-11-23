@@ -15,10 +15,6 @@ export default function CustomerOverview() {
     const [pendingCount, setPendingCount] = useState(0);
     const [feedbackCount, setFeedBackCount] = useState(0);
     //const [merchant,setMerchant]=useState('')
-
-   
-
-
     useEffect(() => {
         const fetchOrdersCount = async () => {
             try {

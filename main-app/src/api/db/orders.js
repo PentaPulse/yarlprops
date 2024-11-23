@@ -36,7 +36,7 @@ export const fetchFeedbackCount = async (custid) => {
 
 export const fetchOrders = async (custid) => {
   try {
-    const q = await getDocs(collection(db, 'orders'), where('custId', '==', custid))
+    const q = await getDocs(query(collection(db, 'orders'), where('custId', '==', custid)))
     const data = q.docs.map((doc) => doc.data())
     return data;
   } catch (e) {
@@ -47,7 +47,7 @@ export const fetchOrders = async (custid) => {
 //FOR MERCHANTS
 export const fetchCustomerOrders = async (merchid, itemType, itemId) => {
   try {
-    const q = await getDocs(collection(db, 'orders'), where('merchid', '==', merchid), where('itemType', '==', itemType), where('itemId', '==', itemId))
+    const q = await getDocs(query(collection(db, 'orders'), where('merchid', '==', merchid), where('itemType', '==', itemType), where('itemId', '==', itemId)))
     const data = q.docs.map((doc) => doc.data())
     return data
   } catch (e) {
