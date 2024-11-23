@@ -103,7 +103,7 @@ function Contact() {
       }}>
         <Box
           sx={{
-            width: { xs: "100%", sm: "90%", md: "80%",lg:"60%" },
+            width: { xs: "100%", sm: "90%", md: "90%",lg:"60%" },
             padding: { xs: 0.5, sm: 2, md: 3 },
             animation: `${bounceAnimation} 1.5s ease-in-out infinite`,
            
@@ -140,7 +140,7 @@ function Contact() {
     padding: { xs: 1, sm: 2, md: 3 },
     margin: "0 auto", 
     width: { xs: "105%", sm: "100%", md: "100%", lg: "100%" }, 
-    marginLeft:{lg:3,sm:-6,xs : -1}
+    marginLeft:{lg:3,sm:-6,xs : -1,md:1}
   }}
 >
           <Grid container spacing={3}>
