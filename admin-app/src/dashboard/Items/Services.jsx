@@ -57,6 +57,8 @@ export default function Services () {
 
 const ServicesForm =  ({ sid, onSuccess, onCancel }) => {
   const { user } = useAuth();
+  const [visibility,setVisibility]=useState(false)
+  const [reason,setReason]=useState('')
   const [service, setService] = useState({
     merchantId: user.uid,
     merchantName:user.displayName,
@@ -143,7 +145,7 @@ const ServicesForm =  ({ sid, onSuccess, onCancel }) => {
     const allImageUrls = [...existingImages, ...newImageUrls];
 
     if (sid) {
-      await updateService(sid, { ...service, images: allImageUrls, visibility: true});
+      await updateService(sid, { ...service, images: allImageUrls,  visibility:visibility,reason:reason});
       //await itemNotification(user,service,'service','update')
       Swal.fire({
         icon: 'success',
@@ -186,6 +188,52 @@ const ServicesForm =  ({ sid, onSuccess, onCancel }) => {
       text: e.message,
     });
   }
+};
+const handleApprove = () => {
+  Swal.fire({
+      title: 'Are you sure?',
+      text: 'Do you want to approve this request?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, approve it!'
+  }).then((result) => {
+      if (result.isConfirmed) {
+        setVisibility(true)
+          console.log('Request approved');
+          Swal.fire('Approved!', 'The request has been approved.', 'success');
+      }
+  });
+};
+const handleReject = () => {
+Swal.fire({
+    title: 'Reject Request',
+    input: 'textarea',
+    inputLabel: 'Reason for rejection',
+    inputPlaceholder: 'Enter your reason here...',
+    inputAttributes: {
+        'aria-label': 'Reason for rejection'
+    },
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Submit',
+    cancelButtonText: 'Cancel'
+}).then((result) => {
+    if (result.isConfirmed) {
+        const reason1 = result.value; // Get the rejection reason
+        if (reason1) {
+            // Handle rejection logic here
+            setVisibility(false)
+            setReason(reason1)
+            console.log('Request rejected with reason:', reason);
+            Swal.fire('Rejected!', 'The request has been rejected.', 'success');
+        } else {
+            Swal.fire('Error!', 'You must provide a reason to reject.', 'error');
+        }
+    }
+});
 };
 
   
@@ -338,7 +386,13 @@ const ServicesForm =  ({ sid, onSuccess, onCancel }) => {
             {validationMessage}
           </Typography>
         )}
-
+<Button variant="contained" color="success" sx={{ mt: 2 }} onClick={handleApprove}>
+                Approve
+            </Button>
+            <Button variant="contained" color="error" sx={{ mt: 2, ml: 3 }} onClick={handleReject}>
+                Reject
+            </Button>
+        <br/>
         <Button type="submit" variant="contained" color="success" style={{ marginTop: '25px' }}>
           Save
         </Button>

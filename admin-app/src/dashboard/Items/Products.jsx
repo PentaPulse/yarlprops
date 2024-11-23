@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Button,ButtonGroup, IconButton, styled, Paper, Typography, TextField, FormControl, FormLabel, RadioGroup, Radio, FormControlLabel, Grid, TableCell, tableCellClasses, TableRow, TableContainer, Table, TableHead, TableBody, TablePagination, CircularProgress, InputLabel, Select, MenuItem, Badge } from '@mui/material';
+import { Container, Button,ButtonGroup, IconButton, styled, Paper, Typography, TextField, FormControl, FormLabel, RadioGroup, Radio, FormControlLabel, Grid, TableCell, tableCellClasses, TableRow, TableContainer, Table, TableHead, TableBody, TablePagination, CircularProgress, InputLabel, Select, MenuItem, Badge, Menu } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { addProduct, fetchSelectedProduct, updateProduct } from '../../api/db/products';
@@ -65,6 +65,7 @@ export default function MerchantProducts() {
 const ProductForm = ({ pid, onSuccess, onCancel }) => {
   const { user } = useAuth();
   const [visibility,setVisibility]=useState(false)
+  const [reason,setReason]=useState('')
   const [product, setProduct] = useState({
     merchantId: user.uid,
     merchantName:user.displayName,
@@ -187,7 +188,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
       // Add or update product with the combined image URLs
       if (pid) {
         console.log(product)
-        await updateProduct(pid, { ...product, images: allImageUrls, visibility:visibility });
+        await updateProduct(pid, { ...product, images: allImageUrls, visibility:visibility,reason:reason });
         //await itemNotification(user,product,'product','update')
         //notificationManager.addNotification({'update','/d/notification'})
         Swal.fire({
@@ -220,6 +221,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
         status: '',
         images: [],
       });
+      setReason('')
       setExistingImages([]);
       setNewImages([]);
       onSuccess();
@@ -232,6 +234,52 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
       });
     }
   };
+  const handleApprove = () => {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'Do you want to approve this request?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, approve it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+          setVisibility(true)
+            console.log('Request approved');
+            Swal.fire('Approved!', 'The request has been approved.', 'success');
+        }
+    });
+};
+const handleReject = () => {
+  Swal.fire({
+      title: 'Reject Request',
+      input: 'textarea',
+      inputLabel: 'Reason for rejection',
+      inputPlaceholder: 'Enter your reason here...',
+      inputAttributes: {
+          'aria-label': 'Reason for rejection'
+      },
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Submit',
+      cancelButtonText: 'Cancel'
+  }).then((result) => {
+      if (result.isConfirmed) {
+          const reason1 = result.value; // Get the rejection reason
+          if (reason1) {
+              // Handle rejection logic here
+              setVisibility(false)
+              setReason(reason1)
+              console.log('Request rejected with reason:', reason);
+              Swal.fire('Rejected!', 'The request has been rejected.', 'success');
+          } else {
+              Swal.fire('Error!', 'You must provide a reason to reject.', 'error');
+          }
+      }
+  });
+};
 
   const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -422,6 +470,13 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
           ))}
         </Grid>
         {validationMessage && <Typography color="error" sx={{ mt: '1rem'}} gutterBottom>{validationMessage}</Typography>}
+        <Button variant="contained" color="success" sx={{ mt: 2 }} onClick={handleApprove}>
+                Approve
+            </Button>
+            <Button variant="contained" color="error" sx={{ mt: 2, ml: 3 }} onClick={handleReject}>
+                Reject
+            </Button>
+        <br/>
         <Button type="submit" variant="contained" color="success" style={{ marginTop: '25px' }}>
           Save
         </Button>
