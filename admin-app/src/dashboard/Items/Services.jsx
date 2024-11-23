@@ -1,17 +1,17 @@
 import React, { useState,useEffect } from 'react';
-import { Button, CircularProgress, Container, FormControl, Grid, IconButton, InputLabel, MenuItem, Paper, Select, styled, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TablePagination, TableRow, TextField, Typography } from '@mui/material';
+import { Badge, Button, CircularProgress, Container, FormControl, Grid, IconButton, InputLabel, MenuItem, Paper, Select, styled, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TablePagination, TableRow, TextField, Typography } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import AddIcon from '@mui/icons-material/Add';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { db, storage } from '../api/firebase';
-import {fetchSelectedService,updateService,addService,fetchServices}from '../api/db/services'
+import { db, storage } from '../../api/firebase';
+import {fetchSelectedService,updateService,addService,fetchServices}from '../../api/db/services'
 import { arrayRemove, collection, deleteDoc, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import Swal from 'sweetalert2';
-import {useAuth} from '../api/AuthContext';
-import { serviceFilters } from '../../src/components/menuLists';
+import {useAuth} from '../../api/AuthContext';
+import { serviceFilters } from '../../components/menuLists';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { itemNotification } from '../../src/api/db/notificationsManager';
-import { addItemByMerchant } from '../../src/api/db/logsManager';
+import { itemNotification } from '../../api/db/notificationsManager';
+import { addItemByMerchant } from '../../api/db/logsManager';
 
 export default function Services () {
   const [showAddService, setShowAddService] = useState(false);
@@ -143,7 +143,7 @@ const ServicesForm =  ({ sid, onSuccess, onCancel }) => {
     const allImageUrls = [...existingImages, ...newImageUrls];
 
     if (sid) {
-      await updateService(sid, { ...service, images: allImageUrls, visibility: false});
+      await updateService(sid, { ...service, images: allImageUrls, visibility: true});
       //await itemNotification(user,service,'service','update')
       Swal.fire({
         icon: 'success',
@@ -152,7 +152,7 @@ const ServicesForm =  ({ sid, onSuccess, onCancel }) => {
         timer: 1500,
       });
     } else {
-      await addService({ ...service, images: allImageUrls, visibility: false });
+      await addService({ ...service, images: allImageUrls, visibility: true });
       await addItemByMerchant(user, service, 'service')
         //await itemNotification(user,service,'service','add')
         Swal.fire({
@@ -526,7 +526,7 @@ const ServicesList = ({ onEditService, onViewService }) => {
                   <StyledTableCell align="center">{(service.visibility === false) ? 'No':'Yes'}</StyledTableCell>
                   <StyledTableCell>
                     <Button onClick={() => onViewService(service.sid)} variant="outlined" color="secondary" style={{ margin: '5px', width: '100%' }}>View</Button>
-                    <Button onClick={() => onEditService(service.sid)} variant="outlined" color="success" style={{ margin: '5px', width: '100%' }}>Edit</Button>
+                    <Button onClick={() => onEditService(service.sid)} variant="outlined" color="success" style={{ margin: '5px', width: '100%' }}>{service.visibility===false && <Badge color='warning' badgeContent={'!'} sx={{mr:3}}/>}Edit</Button>
                     <Button onClick={() => handleDeleteService(service.sid)} variant="outlined" color="error" style={{ margin: '5px', width: '100%' }}>Delete</Button>
                   </StyledTableCell>
                 </StyledTableRow>

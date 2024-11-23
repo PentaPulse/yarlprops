@@ -161,12 +161,12 @@ const ProfileSettings = ({ setCompletion }) => {
     const theme = useTheme();
 
     const [profile, setProfile] = useState({
-        firstName: user?.firstName || '',
-        lastName: user?.lastName || '',
-        displayName: user?.displayName || '',
-        dateOfBirth: user?.dateOfBirth || '',
-        gender: user?.gender || '',
-        address: user?.address || '',
+        firstName: user.firstName || '',
+        lastName: user.lastName || '',
+        displayName: user.displayName || '',
+        dateOfBirth: user.dateOfBirth || '',
+        gender: user.gender || '',
+        address: user.address || '',
     });
 
     const [edit, setEdit] = useState(false);
@@ -176,24 +176,30 @@ const ProfileSettings = ({ setCompletion }) => {
     useEffect(() => {
         if (user) {
             setProfile({
-                firstName: user?.firstName || '',
-                lastName: user?.lastName || '',
-                displayName: user?.displayName || '',
-                dateOfBirth: user?.dateOfBirth || '',
-                gender: user?.gender || '',
-                address: user?.address || '',
+                firstName: user.firstName || '',
+                lastName: user.lastName || '',
+                displayName: user.displayName || '',
+                dateOfBirth: user.dateOfBirth || '',
+                gender: user.gender || '',
+                address: user.address || '',
             });
-
-
-        } const completion = Object.values(profile).every(value => value !== '' && value !== null && value !== undefined)
-        if (completion) {
-            setCompletion(true)
         }
-    }, [user,profile,setCompletion]);
+    }, [user]);
+    
+    useEffect(() => {
+        const completion = Object.values(profile).every(
+            (value) => value !== '' && value !== null && value !== undefined
+        );
+        setCompletion(completion);
+    }, [profile, setCompletion]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setProfile((prevProfile) => ({ ...prevProfile, [name]: value }));
+        setProfile((prevProfile) => {
+            const updatedProfile = { ...prevProfile, [name]: value };
+            validateProfile(); // Optional: Validate here for instant feedback
+            return updatedProfile;
+        });
     };
 
     const handleSelectChange = (e) => {
@@ -204,7 +210,11 @@ const ProfileSettings = ({ setCompletion }) => {
         const newErrors = {};
         if (!profile.firstName.trim()) newErrors.firstName = 'First name is required.';
         if (!profile.lastName.trim()) newErrors.lastName = 'Last name is required.';
-
+        if (!profile.displayName.trim()) newErrors.displayName = 'Display name is required.';
+        if (!profile.dateOfBirth.trim()) newErrors.dateOfBirth = 'Date of birth is required.';
+        if (!profile.gender.trim()) newErrors.gender = 'Gender is required.';
+        if (!profile.address.trim()) newErrors.address = 'Address is required.';
+    
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -213,10 +223,11 @@ const ProfileSettings = ({ setCompletion }) => {
 
     const handleSubmit = async () => {
         if (!validateProfile()) return;
-
+    
         try {
-            await updateProfileInfo(user.uid, profile)
-
+            console.log('Updating profile with:', profile);
+            await updateProfileInfo(user, profile);
+    
             Swal.fire({
                 title: 'Profile updated successfully',
                 timer: 3000,
@@ -224,10 +235,10 @@ const ProfileSettings = ({ setCompletion }) => {
                 background: theme.palette.background.default,
                 color: theme.palette.primary.main,
             });
-
+    
             setEdit(false);
         } catch (error) {
-            console.error('Error updating profile:', error);
+            console.error('Error updating profile:', error.message);
             Swal.fire({
                 title: 'Failed to update profile',
                 text: error.message,
@@ -305,21 +316,21 @@ const ProfileSettings = ({ setCompletion }) => {
                 </Grid>
             </Grid>
             <Container sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-                {!edit ? (
-                    <Button variant="contained" color="primary" onClick={handleEditProfile}>
-                        Edit Profile
-                    </Button>
-                ) : (
-                    <>
-                        <Button variant="contained" color="primary" onClick={handleSubmit}>
-                            Submit
-                        </Button>
-                        <Button variant="outlined" color="secondary" onClick={handleCancel}>
-                            Cancel
-                        </Button>
-                    </>
-                )}
-            </Container>
+    {edit ? (
+        <>
+            <Button variant="contained" color="primary" onClick={handleSubmit}>
+                Submit
+            </Button>
+            <Button variant="outlined" color="secondary" onClick={handleCancel}>
+                Cancel
+            </Button>
+        </>
+    ) : (
+        <Button variant="contained" color="primary" onClick={handleEditProfile}>
+            Edit Profile
+        </Button>
+    )}
+</Container>
         </Box>
     );
 };

@@ -1,20 +1,16 @@
 import React, { useState } from 'react';
-import { Container, Button, IconButton, styled, Paper, Typography, TextField, FormControl, FormLabel, RadioGroup, Radio, FormControlLabel, Grid, TableCell, tableCellClasses, TableRow, TableContainer, Table, TableHead, TableBody, TablePagination, CircularProgress, InputLabel, Select, MenuItem } from '@mui/material';
+import { Container, Button,ButtonGroup, IconButton, styled, Paper, Typography, TextField, FormControl, FormLabel, RadioGroup, Radio, FormControlLabel, Grid, TableCell, tableCellClasses, TableRow, TableContainer, Table, TableHead, TableBody, TablePagination, CircularProgress, InputLabel, Select, MenuItem, Badge } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { addProduct, fetchSelectedProduct, updateProduct } from '../api/db/products';
+import { addProduct, fetchSelectedProduct, updateProduct } from '../../api/db/products';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import { db, storage } from '../api/firebase';
+import { db, storage } from '../../api/firebase';
 import Swal from 'sweetalert2';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { useAuth } from '../api/AuthContext';
+import { useAuth } from '../../api/AuthContext';
 import { arrayRemove, collection, deleteDoc, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
-import { productFilters } from '../components/menuLists';
-import { addItemByMerchant } from '../api/db/logsManager';
-import NotificationManager from '../api/db/notificationsManager';
-
-
-const notificationManager = new NotificationManager()
+import { productFilters } from '../../components/menuLists';
+import { addItemByMerchant } from '../../api/db/logsManager';
 
 export default function MerchantProducts() {
   const [showAddProduct, setShowAddProduct] = useState(false);
@@ -68,6 +64,7 @@ export default function MerchantProducts() {
 
 const ProductForm = ({ pid, onSuccess, onCancel }) => {
   const { user } = useAuth();
+  const [visibility,setVisibility]=useState(false)
   const [product, setProduct] = useState({
     merchantId: user.uid,
     merchantName:user.displayName,
@@ -78,7 +75,6 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
     quantity: '',
     location: '',
     status: 'For Sale',
-    visibility: false,
     images: [],
   });
 
@@ -191,7 +187,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
       // Add or update product with the combined image URLs
       if (pid) {
         console.log(product)
-        await updateProduct(pid, { ...product, images: allImageUrls, visibility: false });
+        await updateProduct(pid, { ...product, images: allImageUrls, visibility:visibility });
         //await itemNotification(user,product,'product','update')
         //notificationManager.addNotification({'update','/d/notification'})
         Swal.fire({
@@ -201,7 +197,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
           timer: 1500,
         });
       } else {
-        await addProduct({ ...product, images: allImageUrls, visibility: false });
+        await addProduct({ ...product, images: allImageUrls, visibility:visibility });
         await addItemByMerchant(user, product, 'product')
         //await itemNotification(user,product,'product','add')
         //notifi
@@ -223,7 +219,6 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
         location: '',
         status: '',
         images: [],
-        visibility: false,
       });
       setExistingImages([]);
       setNewImages([]);
@@ -551,7 +546,7 @@ const ProductList = ({ onEditProduct, onViewProduct }) => {
 
                 <StyledTableCell align="center">
                   <Button onClick={() => onViewProduct(product.pid)} variant="outlined" color="secondary" style={{ margin: '5px', width: '100%' }}>View</Button>
-                  <Button onClick={() => onEditProduct(product.pid)} variant="outlined" color="success" style={{ margin: '5px', width: '100%' }}>Edit</Button>
+                  <Button onClick={() => onEditProduct(product.pid)} variant="outlined" color="success" style={{ margin: '5px', width: '100%' }}>{product.visibility===false && <Badge color='warning' badgeContent={'!'} sx={{mr:3}}/>}Edit</Button>
                   <Button onClick={() => handleDelete(product.pid)} variant="outlined" color="error" style={{ margin: '5px', width: '100%' }}>Delete</Button>
                 </StyledTableCell>
               </StyledTableRow>
@@ -625,6 +620,10 @@ const ProductDetail = ({ pid, onBack }) => {
           </Grid>
         ))}
       </Grid>
+      <ButtonGroup>
+      <Button></Button>
+      <Button></Button>
+      </ButtonGroup>
       <Button variant="contained" color="primary" onClick={onBack} style={{ marginTop: 16 }}>
         Back
       </Button>

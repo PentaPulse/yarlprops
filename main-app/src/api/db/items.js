@@ -72,14 +72,13 @@ export const fetchAllItems = async () => {
     const itemList = [];
 
     for (const col of collections) {
-      const querySnapshot = await getDocs(collection(db, col));
+      const querySnapshot = await getDocs(query(collection(db, col),where('visibility','==',true)));
       querySnapshot.docs.forEach((doc) => {
         const item = doc.data();
-        const getItemId = `${col.charAt(0).toLowerCase()}id`;
         itemList.push({
           title: item.title,
           type: col,
-          id: item[`${col.charAt(0).toLowerCase()}id`], // Dynamically fetches id based on type
+          id: item[`${col.charAt(0).toLowerCase()}id`], 
         });
       });
     }

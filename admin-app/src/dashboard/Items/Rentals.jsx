@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import { Container, Button, IconButton, styled, Paper, Typography, TextField, FormControl, FormLabel, RadioGroup, Radio, FormControlLabel, Grid, TableCell, tableCellClasses, TableRow, TableContainer, Table, TableHead, TableBody, TablePagination, CircularProgress, Select, InputLabel, MenuItem } from '@mui/material';
+import { Container, Button, IconButton, styled, Paper, Typography, TextField, FormControl, FormLabel, RadioGroup, Radio, FormControlLabel, Grid, TableCell, tableCellClasses, TableRow, TableContainer, Table, TableHead, TableBody, TablePagination, CircularProgress, Select, InputLabel, MenuItem, Badge } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { db, storage } from '../api/firebase';
+import { db, storage } from '../../api/firebase';
 import Swal from 'sweetalert2';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { useAuth } from '../api/AuthContext';
+import { useAuth } from '../../api/AuthContext';
 import { arrayRemove, collection, deleteDoc, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
-import { addRental, fetchSelectedRental, updateRental } from '../api/db/rentals';
-import { rentalFilters } from '../components/menuLists';
-import { itemNotification } from '../api/db/notificationsManager';
+import { addRental, fetchSelectedRental, updateRental } from '../../api/db/rentals';
+import { rentalFilters } from '../../components/menuLists';
+import { itemNotification } from '../../api/db/notificationsManager';
 
 export default function MerchantRentals() {
   const [showAddRental, setShowAddRental] = React.useState(false);
@@ -465,6 +465,7 @@ const RentalList = ({ onEditrental, onViewrental }) => {
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
     },
+    
   }));
 
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -511,7 +512,7 @@ const RentalList = ({ onEditrental, onViewrental }) => {
 
                 <StyledTableCell align="center">
                   <Button onClick={() => onViewrental(rental.rid)} variant="outlined" color="secondary" style={{ margin: '5px', width: '100%' }}>View</Button>
-                  <Button onClick={() => onEditrental(rental.rid)} variant="outlined" color="success" style={{ margin: '5px', width: '100%' }}>Edit</Button>
+                  <Button onClick={() => onEditrental(rental.rid)} variant="outlined" color="success" style={{ margin: '5px', width: '100%' }}>{rental.visibility===false && <Badge color='warning' badgeContent={'!'} sx={{mr:3}}/>}Edit</Button>
                   <Button onClick={() => handleDelete(rental.rid)} variant="outlined" color="error" style={{ margin: '5px', width: '100%' }}>Delete</Button>
                 </StyledTableCell>
               </StyledTableRow>

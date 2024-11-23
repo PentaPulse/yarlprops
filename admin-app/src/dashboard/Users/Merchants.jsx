@@ -1,8 +1,8 @@
 import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Modal, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { collection, getDocs, query, where, doc, deleteDoc } from "firebase/firestore";
-import { db } from "../api/firebase";
-import { useAuth } from "../api/AuthContext";
+import { db } from "../../api/firebase";
+import { useAuth } from "../../api/AuthContext";
 import Swal from "sweetalert2";
 
 export default function Merchants() {

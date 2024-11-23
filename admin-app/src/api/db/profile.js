@@ -59,7 +59,7 @@ export const updateProfileInfo = async (user, profileData) => {
     try {
         const userDocRef = doc(db, "admins", user.uid);
         await updateDoc(userDocRef, profileData); // Update Firestore
-        await updateProfile(auth.currentUser, { displayName: profileData.name }); // Update Firebase Auth Profile
+        await updateProfile(auth.currentUser, { displayName: profileData.displayName }); // Update Firebase Auth Profile
         return "Profile updated successfully";
     } catch (error) {
         throw new Error("Error updating profile: " + error.message);

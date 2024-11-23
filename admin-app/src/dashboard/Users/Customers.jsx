@@ -1,9 +1,9 @@
 import { Box, Button, Paper, Table, TableBody, TableCell, Badge, TableContainer, TableHead, TablePagination, TableRow, Modal, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { collection, getDocs, query, where,deleteDoc,doc } from "firebase/firestore";
-import { db } from "../api/firebase";
-import { useAuth } from "../api/AuthContext";
-import { updateUser } from "../api/db/users";
+import { db } from "../../api/firebase";
+import { useAuth } from "../../api/AuthContext";
+import { updateUser } from "../../api/db/users";
 import Swal from "sweetalert2";
 
 export default function Customers() {

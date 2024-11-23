@@ -41,19 +41,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "testdb": "node ./src/api/db/test.js",
-    "eject": "react-scripts eject",
-    "start-emulators": "bash ./run_emulators.sh start",
-    "emu-charith": "firebase emulators:start --import=./datacharith",
-    "export-charith": "firebase emulators:export ./datacharith",
-    "emu-janani": "firebase emulators:start --import=./datajanani",
-    "export-janani": "firebase emulators:export ./datajanani",
-    "emu-priya": "firebase emulators:start --import=./datapriya",
-    "export-priya": "firebase emulators:export ./datapriya",
-    "emu-mith": "firebase emulators:start --import=./datamith",
-    "export-mith": "firebase emulators:export ./datamith",
-    "build:main": "cd main-app && npm run build && cp -r build/* ../main",
-    "build:admin": "cd admin-app && npm run build && cp -r build/* ../admin",
-    "start:main": "cd main-app && npm start"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [

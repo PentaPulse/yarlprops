@@ -158,173 +158,183 @@ const ProfileInfo = () => {
 };
 
 const ProfileSettings = ({ setCompletion }) => {
-  const { user } = useAuth();
-  const theme = useTheme();
+    const { user } = useAuth();
+    const theme = useTheme();
 
-  const [profile, setProfile] = useState({
-      firstName: user?.firstName || '',
-      lastName: user?.lastName || '',
-      displayName: user?.displayName || '',
-      dateOfBirth: user?.dateOfBirth || '',
-      gender: user?.gender || '',
-      address: user?.address || '',
-  });
+    const [profile, setProfile] = useState({
+        firstName: user.firstName || '',
+        lastName: user.lastName || '',
+        displayName: user.displayName || '',
+        dateOfBirth: user.dateOfBirth || '',
+        gender: user.gender || '',
+        address: user.address || '',
+    });
 
-  const [edit, setEdit] = useState(false);
-  const [errors, setErrors] = useState({});
+    const [edit, setEdit] = useState(false);
+    const [errors, setErrors] = useState({});
 
-  // Sync user data with state when the `user` object changes
-  useEffect(() => {
-      if (user) {
-          setProfile({
-              firstName: user?.firstName || '',
-              lastName: user?.lastName || '',
-              displayName: user?.displayName || '',
-              dateOfBirth: user?.dateOfBirth || '',
-              gender: user?.gender || '',
-              address: user?.address || '',
-          });
+    // Sync user data with state when the `user` object changes
+    useEffect(() => {
+        if (user) {
+            setProfile({
+                firstName: user.firstName || '',
+                lastName: user.lastName || '',
+                displayName: user.displayName || '',
+                dateOfBirth: user.dateOfBirth || '',
+                gender: user.gender || '',
+                address: user.address || '',
+            });
+        }
+    }, [user]);
+    
+    useEffect(() => {
+        const completion = Object.values(profile).every(
+            (value) => value !== '' && value !== null && value !== undefined
+        );
+        setCompletion(completion);
+    }, [profile, setCompletion]);
 
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setProfile((prevProfile) => {
+            const updatedProfile = { ...prevProfile, [name]: value };
+            validateProfile(); // Optional: Validate here for instant feedback
+            return updatedProfile;
+        });
+    };
 
-      } const completion = Object.values(profile).every(value => value !== '' && value !== null && value !== undefined)
-      if (completion) {
-          setCompletion(true)
-      }
-  }, [user,profile,setCompletion]);
+    const handleSelectChange = (e) => {
+        setProfile((prevProfile) => ({ ...prevProfile, gender: e.target.value }));
+    };
 
-  const handleInputChange = (e) => {
-      const { name, value } = e.target;
-      setProfile((prevProfile) => ({ ...prevProfile, [name]: value }));
-  };
+    const validateProfile = () => {
+        const newErrors = {};
+        if (!profile.firstName.trim()) newErrors.firstName = 'First name is required.';
+        if (!profile.lastName.trim()) newErrors.lastName = 'Last name is required.';
+        if (!profile.displayName.trim()) newErrors.displayName = 'Display name is required.';
+        if (!profile.dateOfBirth.trim()) newErrors.dateOfBirth = 'Date of birth is required.';
+        if (!profile.gender.trim()) newErrors.gender = 'Gender is required.';
+        if (!profile.address.trim()) newErrors.address = 'Address is required.';
+    
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
 
-  const handleSelectChange = (e) => {
-      setProfile((prevProfile) => ({ ...prevProfile, gender: e.target.value }));
-  };
+    const handleEditProfile = () => setEdit(true);
 
-  const validateProfile = () => {
-      const newErrors = {};
-      if (!profile.firstName.trim()) newErrors.firstName = 'First name is required.';
-      if (!profile.lastName.trim()) newErrors.lastName = 'Last name is required.';
+    const handleSubmit = async () => {
+        if (!validateProfile()) return;
+    
+        try {
+            console.log('Updating profile with:', profile);
+            await updateProfileInfo(user, profile);
+    
+            Swal.fire({
+                title: 'Profile updated successfully',
+                timer: 3000,
+                icon: 'success',
+                background: theme.palette.background.default,
+                color: theme.palette.primary.main,
+            });
+    
+            setEdit(false);
+        } catch (error) {
+            console.error('Error updating profile:', error.message);
+            Swal.fire({
+                title: 'Failed to update profile',
+                text: error.message,
+                icon: 'error',
+            });
+        }
+    };
 
-      setErrors(newErrors);
-      return Object.keys(newErrors).length === 0;
-  };
+    const handleCancel = () => setEdit(false);
 
-  const handleEditProfile = () => setEdit(true);
-
-  const handleSubmit = async () => {
-      if (!validateProfile()) return;
-
-      try {
-          await updateProfileInfo(user.uid, profile)
-
-          Swal.fire({
-              title: 'Profile updated successfully',
-              timer: 3000,
-              icon: 'success',
-              background: theme.palette.background.default,
-              color: theme.palette.primary.main,
-          });
-
-          setEdit(false);
-      } catch (error) {
-          console.error('Error updating profile:', error);
-          Swal.fire({
-              title: 'Failed to update profile',
-              text: error.message,
-              icon: 'error',
-          });
-      }
-  };
-
-  const handleCancel = () => setEdit(false);
-
-  return (
-      <Box component="form" sx={{ '& .MuiTextField-root': { m: 1, width: '100%' } }}>
-          <Typography variant="h6">Profile Details</Typography>
-          <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                  <TextField
-                      label="First Name"
-                      name="firstName"
-                      value={profile.firstName}
-                      onChange={handleInputChange}
-                      InputProps={{ readOnly: !edit }}
-                      error={!!errors.firstName}
-                      helperText={errors.firstName}
-                  />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                  <TextField
-                      label="Last Name"
-                      name="lastName"
-                      value={profile.lastName}
-                      onChange={handleInputChange}
-                      InputProps={{ readOnly: !edit }}
-                      error={!!errors.lastName}
-                      helperText={errors.lastName}
-                  />
-              </Grid>
-              <Grid item xs={12}>
-                  <TextField
-                      label="Display Name"
-                      name="displayName"
-                      value={profile.displayName}
-                      onChange={handleInputChange}
-                      InputProps={{ readOnly: !edit }}
-                  />
-              </Grid>
-              <Grid item xs={12}>
-                  <TextField
-                      label="Date of Birth"
-                      name="dateOfBirth"
-                      type="date"
-                      value={profile.dateOfBirth}
-                      onChange={handleInputChange}
-                      InputLabelProps={{ shrink: true }}
-                      InputProps={{ readOnly: !edit }}
-                  />
-              </Grid>
-              <Grid item xs={12}>
-                  <FormControl fullWidth disabled={!edit}>
-                      <InputLabel>Gender</InputLabel>
-                      <Select value={profile.gender} onChange={handleSelectChange} label="Gender">
-                          <MenuItem value="Male">Male</MenuItem>
-                          <MenuItem value="Female">Female</MenuItem>
-                          <MenuItem value="Other">Other</MenuItem>
-                      </Select>
-                  </FormControl>
-              </Grid>
-              <Grid item xs={12}>
-                  <TextField
-                      label="Address"
-                      name="address"
-                      value={profile.address}
-                      onChange={handleInputChange}
-                      InputProps={{ readOnly: !edit }}
-                  />
-              </Grid>
-          </Grid>
-          <Container sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-              {!edit ? (
-                  <Button variant="contained" color="primary" onClick={handleEditProfile}>
-                      Edit Profile
-                  </Button>
-              ) : (
-                  <>
-                      <Button variant="contained" color="primary" onClick={handleSubmit}>
-                          Submit
-                      </Button>
-                      <Button variant="outlined" color="secondary" onClick={handleCancel}>
-                          Cancel
-                      </Button>
-                  </>
-              )}
-          </Container>
-      </Box>
-  );
+    return (
+        <Box component="form" sx={{ '& .MuiTextField-root': { m: 1, width: '100%' } }}>
+            <Typography variant="h6">Profile Details</Typography>
+            <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                    <TextField
+                        label="First Name"
+                        name="firstName"
+                        value={profile.firstName}
+                        onChange={handleInputChange}
+                        InputProps={{ readOnly: !edit }}
+                        error={!!errors.firstName}
+                        helperText={errors.firstName}
+                    />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <TextField
+                        label="Last Name"
+                        name="lastName"
+                        value={profile.lastName}
+                        onChange={handleInputChange}
+                        InputProps={{ readOnly: !edit }}
+                        error={!!errors.lastName}
+                        helperText={errors.lastName}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField
+                        label="Display Name"
+                        name="displayName"
+                        value={profile.displayName}
+                        onChange={handleInputChange}
+                        InputProps={{ readOnly: !edit }}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField
+                        label="Date of Birth"
+                        name="dateOfBirth"
+                        type="date"
+                        value={profile.dateOfBirth}
+                        onChange={handleInputChange}
+                        InputLabelProps={{ shrink: true }}
+                        InputProps={{ readOnly: !edit }}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <FormControl fullWidth disabled={!edit}>
+                        <InputLabel>Gender</InputLabel>
+                        <Select value={profile.gender} onChange={handleSelectChange} label="Gender">
+                            <MenuItem value="Male">Male</MenuItem>
+                            <MenuItem value="Female">Female</MenuItem>
+                            <MenuItem value="Other">Other</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField
+                        label="Address"
+                        name="address"
+                        value={profile.address}
+                        onChange={handleInputChange}
+                        InputProps={{ readOnly: !edit }}
+                    />
+                </Grid>
+            </Grid>
+            <Container sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+    {edit ? (
+        <>
+            <Button variant="contained" color="primary" onClick={handleSubmit}>
+                Submit
+            </Button>
+            <Button variant="outlined" color="secondary" onClick={handleCancel}>
+                Cancel
+            </Button>
+        </>
+    ) : (
+        <Button variant="contained" color="primary" onClick={handleEditProfile}>
+            Edit Profile
+        </Button>
+    )}
+</Container>
+        </Box>
+    );
 };
-
 const AccountSettings = ({ completion }) => {
   const { user } = useAuth();
   const [email, setEmail] = useState({ old: '', new: '', confirm: '' });

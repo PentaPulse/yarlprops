@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Avatar, Box, CssBaseline, Divider,  Grid, IconButton, MenuItem, MenuList, Toolbar, Tooltip, Typography, useTheme, styled } from '@mui/material'
+import { Avatar, Box, CssBaseline, Divider, Grid, IconButton, MenuItem, MenuList, Toolbar, Tooltip, Typography, useTheme, styled } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -119,7 +119,29 @@ export default function DashboardLayout({ handleMode, children }) {
           }}
         >
           {adminMenu.map((text, index) => (
-            <MenuItem onClick={() => handleNavigation(text[2])}>{text[1]} {text[0]}</MenuItem>
+            <React.Fragment key={index}>
+              {index === 1 &&
+                <>
+                  <Typography variant='h6' ml={3}>Users</Typography>
+                  <Divider variant="inset" />
+                </>
+              }
+              {index === 4 &&
+                <>
+                  <Typography variant='h6' ml={3}>Items</Typography>
+                  <Divider variant="inset" />
+                </>
+              }
+              {index === 7 &&
+                <>
+                  <Typography variant='h6' ml={3}>Miscellaneous</Typography>
+                  <Divider variant="inset" />
+                </>
+              }
+              <MenuItem onClick={() => handleNavigation(text[2])}>
+                {index} {text[1]} {text[0]}
+              </MenuItem>
+            </React.Fragment>
           ))}
         </MenuList>
 
@@ -145,7 +167,7 @@ export default function DashboardLayout({ handleMode, children }) {
       <Divider />
       <Box display={'flex'} pb={3} justifyContent={'space-between'} mb={6}>
         <Box display={'flex'} justifyContent={'space-between'} ml={2}>
-          <Avatar src={auth.currentUser.photoURL ||sessionStorage.getItem('pp')} />
+          <Avatar src={auth.currentUser.photoURL || sessionStorage.getItem('pp')} />
           <Box pl={1}>
             <Typography>{sessionStorage.getItem('displayName')}</Typography>
             <Typography

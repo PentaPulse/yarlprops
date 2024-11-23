@@ -7,16 +7,16 @@ import { AuthProvider } from "./api/AuthContext";
 import PrivateRoute from "./api/PrivateRoute";
 import { LoginLayout } from "./components/Sign/LoginLayout";
 import DashboardLayout from "./dashboard/DashboardLayout";
-import Admins from "./dashboard/Admins";
-import Products from "./dashboard/Products";
-import Rentals from "./dashboard/Rentals";
-import Services from "./dashboard/Services";
+import Admins from "./dashboard/Users/Admins";
+import Products from "./dashboard/Items/Products";
+import Rentals from "./dashboard/Items/Rentals";
+import Services from "./dashboard/Items/Services";
 import ContactusRequests from "./dashboard/ContactusReqs";
 import Overview from "./dashboard/Overview";
 
 import Profile from "./dashboard/Profile";
-import Customers from "./dashboard/Customers";
-import Merchants from "./dashboard/Merchants";
+import Customers from "./dashboard/Users/Customers";
+import Merchants from "./dashboard/Users/Merchants";
 import NotificationsPanel from "./dashboard/NotificationsPanel";
 import SiteManager from "./dashboard/SiteManager";
 
