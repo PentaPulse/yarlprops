@@ -139,7 +139,7 @@ export default function DashboardLayout({ handleMode, children }) {
                 </>
               }
               <MenuItem onClick={() => handleNavigation(text[2])}>
-                {index} {text[1]} {text[0]}
+                {text[1]} {text[0]}
               </MenuItem>
             </React.Fragment>
           ))}

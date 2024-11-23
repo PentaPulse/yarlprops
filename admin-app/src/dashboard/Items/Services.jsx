@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from 'react';
-import { Badge, Button, CircularProgress, Container, FormControl, Grid, IconButton, InputLabel, MenuItem, Paper, Select, styled, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TablePagination, TableRow, TextField, Typography } from '@mui/material';
+import { Badge, Button, CircularProgress, Container, FormControl, Grid, IconButton, InputLabel, MenuItem, Paper, Select, styled, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TablePagination, TableRow, TableSortLabel, TextField, Typography } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import AddIcon from '@mui/icons-material/Add';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
@@ -526,16 +526,71 @@ const ServicesList = ({ onEditService, onViewService }) => {
       setRowsPerPage(+event.target.value);
       setPage(0);
   };
+  const [order, setOrder] = useState("asc");
+  const [orderBy, setOrderBy] = useState("calories");
 
+  const handleSortRequest = (property) => {
+    const isAscending = orderBy === property && order === "asc";
+    setOrder(isAscending ? "desc" : "asc");
+    setOrderBy(property);
+  };
+
+  const sortedRows = [...services].sort((a, b) => {
+    if (order === "asc") {
+      return a[orderBy] < b[orderBy] ? -1 : 1;
+    }
+    return a[orderBy] > b[orderBy] ? -1 : 1;
+  });
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
-      [`&.${tableCellClasses.head}`]: {
-        backgroundColor: theme.palette.common.black,
-        color: theme.palette.common.white,
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+      "& .MuiTableSortLabel-root": {
+        color: theme.palette.common.white, // Sort label color
+        "&:hover": {
+          color: "grey", // Hover effect
+        },
+        "&.Mui-active": {
+          color: theme.palette.primary.default, // Active state
+          "& .MuiTableSortLabel-icon": {
+            color: "grey", // Active sort icon
+          },
+        },
       },
-      [`&.${tableCellClasses.body}`]: {
-        fontSize: 14,
-      },
-    }));
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+
+  const cols = [
+    "title",
+    "category",
+    "Sub Category",
+    "location",
+    "visibility",
+    "action",
+  ];
+
+  const headRow = (
+    <>
+      {cols.map((col, index) => (
+        <StyledTableCell key={index} align="center">
+          {(col === "title" || col ==="category" || col ==="status" ||col ==="visibility")? (
+            <TableSortLabel
+              active={orderBy === col}
+              direction={orderBy === col ? order : "asc"}
+              onClick={() => handleSortRequest(col)}
+            >
+              {col.charAt(0).toUpperCase() + col.slice(1)}
+            </TableSortLabel>
+          ) : (
+            col.charAt(0).toUpperCase() + col.slice(1) 
+          )}
+        </StyledTableCell>
+      ))}
+    </>
+  );
     
     const StyledTableRow = styled(TableRow)(({ theme }) => ({
       '&:nth-of-type(odd)': {
@@ -553,13 +608,7 @@ const ServicesList = ({ onEditService, onViewService }) => {
         <Table aria-label="customized table">
           <TableHead>
             <TableRow>
-              <StyledTableCell align="center">Name</StyledTableCell>
-              <StyledTableCell align="center">Category</StyledTableCell>
-              <StyledTableCell align="center">Sub Category</StyledTableCell>
-              {/* <StyledTableCell>Description</StyledTableCell> */}
-              <StyledTableCell align="center">Location</StyledTableCell>
-              <StyledTableCell align="center">Visibility On Site</StyledTableCell>
-              <StyledTableCell align="center">Actions</StyledTableCell>
+            {headRow}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -570,7 +619,7 @@ const ServicesList = ({ onEditService, onViewService }) => {
                 </StyledTableCell>
               </TableRow>
             ) : services.length > 0 ? (
-              services.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(service => (
+              sortedRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(service => (
                 <StyledTableRow key={service.sid}>
                   <StyledTableCell align="center">{service.title}</StyledTableCell>
                   <StyledTableCell align="center">{service.category}</StyledTableCell>

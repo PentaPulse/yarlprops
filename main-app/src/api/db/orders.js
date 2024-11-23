@@ -144,11 +144,12 @@ export const approveOrder = async (order) => {
       if (currentQuantity > 0) {
         const updatedQuantity = currentQuantity - 1;
 
-        const newStatus = updatedQuantity === 0 ? 'Sold out' : itemDoc.data().status;
-
+        const newStatus = updatedQuantity === 0 ? 'Sold out'  : itemDoc.data().status;
+        const soldOutBy = updatedQuantity ===0 && new Date()
         await setDoc(itemRef, {
           quantity: updatedQuantity,
-          status: newStatus
+          status: newStatus,
+          soldOutBy:soldOutBy
         }, { merge: true });
 
       } else {

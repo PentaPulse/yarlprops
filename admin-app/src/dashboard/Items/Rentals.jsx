@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Button, IconButton, styled, Paper, Typography, TextField, FormControl, FormLabel, RadioGroup, Radio, FormControlLabel, Grid, TableCell, tableCellClasses, TableRow, TableContainer, Table, TableHead, TableBody, TablePagination, CircularProgress, Select, InputLabel, MenuItem, Badge } from '@mui/material';
+import { Container, Button, IconButton, styled, Paper, Typography, TextField, FormControl, FormLabel, RadioGroup, Radio, FormControlLabel, Grid, TableCell, tableCellClasses, TableRow, TableContainer, Table, TableHead, TableBody, TablePagination, CircularProgress, Select, InputLabel, MenuItem, Badge, TableSortLabel } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
@@ -511,17 +511,71 @@ const RentalList = ({ onEditrental, onViewrental }) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+  const [order, setOrder] = useState("asc");
+  const [orderBy, setOrderBy] = useState("calories");
 
+  const handleSortRequest = (property) => {
+    const isAscending = orderBy === property && order === "asc";
+    setOrder(isAscending ? "desc" : "asc");
+    setOrderBy(property);
+  };
+
+  const sortedRows = [...rentals].sort((a, b) => {
+    if (order === "asc") {
+      return a[orderBy] < b[orderBy] ? -1 : 1;
+    }
+    return a[orderBy] > b[orderBy] ? -1 : 1;
+  });
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: theme.palette.common.black,
       color: theme.palette.common.white,
+      "& .MuiTableSortLabel-root": {
+        color: theme.palette.common.white, // Sort label color
+        "&:hover": {
+          color: "grey", // Hover effect
+        },
+        "&.Mui-active": {
+          color: theme.palette.primary.default, // Active state
+          "& .MuiTableSortLabel-icon": {
+            color: "grey", // Active sort icon
+          },
+        },
+      },
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
     },
-    
   }));
+
+  const cols = [
+    "title",
+    "category",
+    "Sub Category",
+    "status",
+    "visibility",
+    "action",
+  ];
+
+  const headRow = (
+    <>
+      {cols.map((col, index) => (
+        <StyledTableCell key={index} align="center">
+          {(col === "title" || col ==="category" || col ==="status" ||col ==="visibility")? (
+            <TableSortLabel
+              active={orderBy === col}
+              direction={orderBy === col ? order : "asc"}
+              onClick={() => handleSortRequest(col)}
+            >
+              {col.charAt(0).toUpperCase() + col.slice(1)}
+            </TableSortLabel>
+          ) : (
+            col.charAt(0).toUpperCase() + col.slice(1) 
+          )}
+        </StyledTableCell>
+      ))}
+    </>
+  );
 
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:nth-of-type(odd)': {
@@ -538,21 +592,12 @@ const RentalList = ({ onEditrental, onViewrental }) => {
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
           <TableRow>
-            {/* <TableCell>ID</TableCell> */}
-            <StyledTableCell align="center">Title</StyledTableCell>
-            <StyledTableCell align="center">Category</StyledTableCell>
-            <StyledTableCell align="center">Sub category</StyledTableCell>
-            {/* <StyledTableCell align="center">Description</StyledTableCell>
-            <StyledTableCell align="center">Quantity</StyledTableCell>
-            <StyledTableCell align="center">Location</StyledTableCell> */}
-            <StyledTableCell align="center">Current Status</StyledTableCell>
-            <StyledTableCell align="center">Visibility On Site</StyledTableCell>
-            <StyledTableCell align="center">Actions</StyledTableCell>
+          {headRow}
           </TableRow>
         </TableHead>
         <TableBody>
           {rentals.length > 0 ?
-            rentals.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(rental => (
+            sortedRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(rental => (
               <StyledTableRow key={rental.rid}>
                 {/* <TableCell>{rental.id}</TableCell> */}
                 <StyledTableCell align="center">{rental.title}</StyledTableCell>
