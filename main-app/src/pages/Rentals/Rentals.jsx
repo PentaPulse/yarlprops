@@ -231,27 +231,28 @@ export function RentalsPage({ setSignin, setSignup }) {
     return (
         <Container maxWidth="lg" sx={{ backgroundColor: theme.palette.background.default }}>
             <Grid container spacing={4}>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={6} sx={{ alignItems: 'center', justifyContent: 'center' }}>
                     {/* Main rental Image */}
                     <Card sx={{ boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }}>
                         <CardMedia
                             component="img"
                             image={rental.images[selectedImageIndex]}  // Display the selected image as the main rental image
                             alt={rental.name}
-                            sx={{ borderRadius: '0px', width: '100%', height: { xs: '300px', sm: '550px', md: '430px', lg: '445px' }, minHeight: '300px', objectFit: 'cover' }}
+                            sx={{ borderRadius: '0px', width: '100%', height: { xs: '340px', sm: '570px', md: '430px', lg: '470px' }, minHeight: '340px', objectFit: 'cover' }}
+                            // sx={{ borderRadius: '0px', width: '100%', height: { xs: '300px', sm: '550px', md: '430px', lg: '445px' }, minHeight: '300px', objectFit: 'cover' }}
                         />
                     </Card>
 
                     {/* Small Images Grid */}
                     <Grid container spacing={2} sx={{ mt: 2, alignItems: 'center', justifyContent: 'center' }}>
-                        <Grid item xs={1} sm={1} md={1} lg={1} sx={{ display: 'flex', justifyContent: 'center' }}>
+                        {/* <Grid item xs={1} sm={1} md={1} lg={1} sx={{ display: 'flex', justifyContent: 'center' }}>
                             <IconButton
                                 onClick={handlePrevious}
                                 sx={{ fontSize: { xs: '1.5rem', sm: '2rem' } }}
                             >
                                 <ArrowBackIosIcon />
                             </IconButton>
-                        </Grid>
+                        </Grid> */}
 
                         {rental.images.slice(startIndex, startIndex + visibleImagesCount).map((image, index) => (
                             <Grid item xs={3} key={index}>
@@ -261,7 +262,8 @@ export function RentalsPage({ setSignin, setSignup }) {
                                     alt={`image ${index}`}
                                     sx={{
                                         width: '100%',
-                                        height: { xs: '70px', sm: '120px', md: '100px', lg: '100px' },
+                                        height: { xs: '70px', sm: '120px', md: '100px', lg: '130px' },
+                                        // height: { xs: '70px', sm: '120px', md: '100px', lg: '100px' },
                                         borderRadius: '8px',
                                         objectFit: 'cover',
                                         boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
@@ -277,14 +279,14 @@ export function RentalsPage({ setSignin, setSignup }) {
                             </Grid>
                         ))}
 
-                        <Grid item xs={1} sm={1} md={1} lg={1} sx={{ display: 'flex', justifyContent: 'center' }}>
+                        {/* <Grid item xs={1} sm={1} md={1} lg={1} sx={{ display: 'flex', justifyContent: 'center' }}>
                             <IconButton
                                 onClick={handleNext}
                                 sx={{ fontSize: { xs: '1.5rem', sm: '2rem' } }}
                             >
                                 <ArrowForwardIosIcon />
                             </IconButton>
-                        </Grid>
+                        </Grid> */}
                     </Grid>
                 </Grid>
 
