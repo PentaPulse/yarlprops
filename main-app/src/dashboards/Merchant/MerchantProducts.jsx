@@ -261,7 +261,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
   });
 
   return (
-    <Paper /*style={{ padding: 16 }}*/ sx={{ p: { xs: 2, sm: 3, md: 4}, mr: {xs: 6, sm : 12, md: 15} }} >
+    <Paper /*style={{ padding: 16 }}*/ sx={{ p: { xs: 2, sm: 3, md: 4}, mr: {xs: 1, sm: 1, md: 1, lg: -10, xl: -30} }} >
       <Typography variant="h6"  sx={{ mb: { xs: 2, sm: 3 } }}>
         {pid ? 'Edit Product' : 'Add Product'}
       </Typography>
@@ -462,7 +462,15 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
           ))}
           {newImages.map((file, index) => (
             <Grid item key={index + existingImages.length}>
-              <div style={{ position: 'relative' }}>
+                <Paper 
+                elevation={3}
+                sx={{
+                  position: 'relative',
+                  paddingTop: '75%',
+                  overflow: 'hidden',
+                  borderRadius: 1
+                }}
+              >
                 <img src={URL.createObjectURL(file)} alt={`New Preview ${index}`} style={{ width: 150, height: 120, borderRadius: 5 , objectFit: 'cover' }} />
                 <Button
                   onClick={() => handleRemoveImage(index, 'new')}
@@ -473,7 +481,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
                 >
                   X
                 </Button>
-              </div>
+              </Paper>
             </Grid>
           ))}
         </Grid>
@@ -608,7 +616,7 @@ const ProductList = ({ onEditProduct, onViewProduct }) => {
   }));
 
   return (
-    <Paper sx={{ width: 'auto', overflow: 'hidden', mr: {xs: 5, sm : 12, md: 15} }} >
+    <Paper sx={{ width: 'auto', overflow: 'hidden', mr: {xs: 1, sm: 1, md: 1, lg: -10, xl: -30} }} >
       <TableContainer /*component={Paper}*/sx={{ maxHeight: { xs: 440, sm: 600, md: 'none' } }}>
           <Table stickyHeader sx={{ minWidth: { xs: 300, sm: 750 } }}>
             <TableHead>
@@ -733,7 +741,7 @@ const ProductDetail = ({ pid, onBack }) => {
   if (loading) return <CircularProgress />;
 
   return (
-    <Paper /*style={{ padding: 16 }}*/ sx={{ p: { xs: 2, sm: 3, md: 4 }, mr: {xs: 5, sm : 10, md: 15} }}>
+    <Paper /*style={{ padding: 16 }}*/ sx={{ p: { xs: 2, sm: 3, md: 4 }, mr: {xs: 1, sm: 1, md: 1, lg: -10, xl: -30} }}>
       <Typography variant="h4" /*gutterBottom*/
         sx={{ 
           mb: 3,
@@ -765,18 +773,8 @@ const ProductDetail = ({ pid, onBack }) => {
       </Grid>
       <Grid container spacing={2} /*style={{ marginTop: 10, marginBottom: 10 }}*/ sx={{ mt: 3, mb: 3 }}>
         {product.images && product.images.map((src, index) => (
-          <Grid item key={index} xs={12} sm={6} md={4} lg={3}>
-            <Paper
-              elevation={3}
-              sx={{
-                position: 'relative',
-                paddingTop: '75%',
-                overflow: 'hidden',
-                borderRadius: 2
-              }}
-            >
-              <Image src={src} alt={`Product ${index}`} style={{ width: '185px', height: '175px', objectFit: 'cover', borderRadius: '10px' }}/>
-            </Paper>
+          <Grid item key={index}>
+            <Image src={src} alt={`Product ${index}`} style={{ width: '185px', height: '175px', objectFit: 'cover', borderRadius: '10px' }}/>
           </Grid>
         ))}
       </Grid>
