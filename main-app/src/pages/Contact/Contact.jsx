@@ -103,22 +103,24 @@ function Contact() {
       }}>
         <Box
           sx={{
-            width: { xs: "100%", sm: "90%", md: "90%",lg:"60%" },
-            padding: { xs: 0.5, sm: 2, md: 3 },
+            width: { xs: "100%", sm: "90%", md: "90%",lg:"69%" },
+            padding: { xs: 3, sm: 2, md: 3,lg:10 },
             animation: `${bounceAnimation} 1.5s ease-in-out infinite`,
+            
            
           }}
         >
           <Box sx={{ background: "white", opacity: "0.8", borderRadius: 3, padding: { xs: 3 } ,}}>
-            <Typography variant={"h2"} color="black" align="center" pt={8} gutterBottom>
+            <Typography sx={{fontSize: { xs: '1.9rem', sm: '1.2rem', md: '3.5rem' ,lg:'3.2rem' }}} color="black" align="center" pt={8} gutterBottom>
               <b>Contact Us</b>
             </Typography>
             <Typography sx={{
             fontSize: { xs: '1.1rem', sm: '1.2rem', md: '2rem' ,lg:'1.2rem' },
           }}
            color="black" align="justify" pl={1} pr={1} pb={8}>
-              We are committed to supporting you, first and foremost! We continually strive to exceed expectations and deliver superior 24/7 Days Support.
-              You can always count on us for live help whenever you need assistance. Call us now!
+              We are committed to supporting you, first and foremost.We continually strive to exceed expectations and deliver superior 24/7 Days Support.
+              You can always count on us for live help whenever you need  assistance.Call us now!
+              
             </Typography>
           </Box>
         </Box>
@@ -126,7 +128,7 @@ function Contact() {
 
       {/* Contact Form Section */}
       <Box sx={{ padding: 4,marginLeft:{xs:-3} }}>
-        <Typography variant={"h3"} align="center" pt={8} gutterBottom>
+        <Typography sx={{fontSize: { xs: '1.9rem', sm: '1.2rem', md: '3rem' ,lg:'3.2rem' }}} align="center" pt={8} gutterBottom>
           <b>Contact <span style={{ color: "#018ABD" }}>Yarl</span>Props</b>
         </Typography>
         <Typography sx={{
@@ -179,7 +181,7 @@ function Contact() {
             </Grid>
             <Grid item xs={12} sm={4}>
               <Box display="flex" justifyContent="center" alignItems="center" height="100%">
-                <img src={Image2} alt="Contact Us" style={{ maxWidth: '70%', height: 'auto', margin: '0 auto' }} />
+                <img src={Image2} alt="Contact Us" style={{ maxWidth: '76%', height: 'auto', margin: '0 auto' }} />
               </Box>
             </Grid>
           </Grid>
