@@ -7,7 +7,7 @@ admin-app/node_modules
 backend/node_modules
 /.pnp
 .pnp.js
-.firebase
+/.firebase
 
 # testing
 /coverage
@@ -35,3 +35,5 @@ yarn-error.log*
 /datapriya
 /datas
 *.log
+.firebase/hosting.bWFpbi1hcHBcYnVpbGQ.cache
+.firebase/hosting.YWRtaW4tYXBwXGJ1aWxk.cache
