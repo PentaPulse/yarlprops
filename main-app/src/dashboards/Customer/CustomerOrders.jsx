@@ -14,7 +14,6 @@ import { useAuth } from "../../api/AuthContext";
 import { useNavigate } from "react-router-dom"; // Add navigation hook
 import { fetchOrders } from "../../api/db/orders";
 
-
 export default function MyOrders() {
   const theme = useTheme();
   const [orders, setOrders] = useState([]);
@@ -24,7 +23,7 @@ export default function MyOrders() {
   useEffect(() => {
     const fetchOdata = async () => {
       try {
-        const data = await fetchOrders(user.uid)
+        const data = await fetchOrders(user.uid);
         setOrders(data);
       } catch (e) {
         console.error("Error fetching product orders:", e);
@@ -34,11 +33,14 @@ export default function MyOrders() {
   }, [user.uid]);
 
   const handleFeedbackClick = (order) => {
-    navigate("/d/feedback", { state: {
-        merchantName:order.merchantId,
-        productName:order.title,
-        order:order
-     } }); }
+    navigate("/d/feedback", {
+      state: {
+        merchantName: order.merchantId,
+        productName: order.title,
+        order: order,
+      },
+    });
+  };
 
   return (
     <Container>
@@ -52,10 +54,10 @@ export default function MyOrders() {
             <Grid item xs={12} sm={6} md={4} key={order.pid}>
               <Card
                 sx={{
-                  minWidth: '300px',
-                  maxHeight:'500px',
-                  width:'100%',
-                  height:'auto',
+                  minWidth: "300px",
+                  maxHeight: "500px",
+                  width: "100%",
+                  height: "auto",
                   backgroundColor:
                     theme.palette.mode === "dark"
                       ? order.status === "Completed"
@@ -66,21 +68,21 @@ export default function MyOrders() {
                       : "#ffebee",
                 }}
               >
-               <CardMedia
-  component="img"
-  image={order.itemImage}
-  alt={order.title}
-  sx={{
-    objectFit: 'cover',
-    height: {
-      xs: '17rem', // Smaller height for extra-small screens
-      sm: '18rem', // Slightly larger for small screens
-      md: '15rem', // Default height for medium screens and above
-      lg:'17rem'
-    },
-    width: '100%', // Ensure the image takes full width of the card
-  }}
-/>
+                <CardMedia
+                  component="img"
+                  image={order.itemImage}
+                  alt={order.title}
+                  sx={{
+                    objectFit: "cover",
+                    height: {
+                      xs: "17rem", // Smaller height for extra-small screens
+                      sm: "18rem", // Slightly larger for small screens
+                      md: "15rem", // Default height for medium screens and above
+                      lg: "17rem",
+                    },
+                    width: "100%", // Ensure the image takes full width of the card
+                  }}
+                />
 
                 <CardContent>
                   <Typography
@@ -133,16 +135,13 @@ export default function MyOrders() {
                 >
                   <Button
                     variant="contained"
-                    sx={{ color: theme.palette.mode === "dark" ? "#ffffff" : "#ffffff", }}
-                    color={
-                      order.status === "completed"
-                        ? "success"
-                        : "warning"
-                    }
+                    sx={{
+                      color:
+                        theme.palette.mode === "dark" ? "#ffffff" : "#ffffff",
+                    }}
+                    color={order.status === "completed" ? "success" : "warning"}
                   >
-                    {order.status === "completed"
-                      ? "Completed"
-                      : "Pending"}
+                    {order.status === "completed" ? "Completed" : "Pending"}
                   </Button>
                   {/* <Link to="/d/feedback"> */}
                   {order.status === "completed" && (
@@ -151,16 +150,20 @@ export default function MyOrders() {
                       color="primary"
                       onClick={() => handleFeedbackClick(order)}
                       sx={{
-                        color: theme.palette.mode === "dark" ? "#ffffff" : "#ffffff", // Adjust color based on theme
-                        backgroundColor: theme.palette.mode === "dark" ? "#1565c0" : "#1976d2", // Dark blue for dark mode
+                        color:
+                          theme.palette.mode === "dark" ? "#ffffff" : "#ffffff", // Adjust color based on theme
+                        backgroundColor:
+                          theme.palette.mode === "dark" ? "#1565c0" : "#1976d2", // Dark blue for dark mode
                         "&:hover": {
-                          backgroundColor: theme.palette.mode === "dark" ? "#0d47a1" : "#115293", // Adjust hover color
+                          backgroundColor:
+                            theme.palette.mode === "dark"
+                              ? "#0d47a1"
+                              : "#115293", // Adjust hover color
                         },
                       }}
                     >
                       Send Feedback
                     </Button>
-                    
                   )}
                   {/* </Link> */}
                 </Box>

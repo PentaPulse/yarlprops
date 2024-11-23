@@ -5,11 +5,11 @@
   "targets": {
     "yarlprops": {
       "hosting": {
-        "main": [
-          "yarlprops"
-        ],
         "admin": [
           "ypalog"
+        ],
+        "main": [
+          "yarlprops"
         ]
       }
     }

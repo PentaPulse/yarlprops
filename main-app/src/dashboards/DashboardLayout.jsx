@@ -119,7 +119,7 @@ export default function DashboardLayout({ handleMode, children }) {
     fetchMerchantList()
     const fetchOrderLists=async()=>{
       try{
-        const qsnapshot = await getDocs(collection(db,"systemusers",user.uid,'orders'))
+        const qsnapshot = await getDocs(query(collection(db,'orders'),where('custId','==',user.uid)))
         setOrderList(qsnapshot.size>0)
       }catch(e){}
     }
@@ -149,6 +149,10 @@ export default function DashboardLayout({ handleMode, children }) {
         >
           {(merchantList.includes(user.uid) ? (orderList?bothMenu:merchMenu) : customerList.includes(user.uid) ? userMenu : [])
             .map((text, index) => (
+text[0]==='Feedbacks'?
+              <MenuItem disabled key={index} onClick={() => handleNavigation(text[2])}>
+                {text[1]} {text[0]}
+              </MenuItem>:
               <MenuItem key={index} onClick={() => handleNavigation(text[2])}>
                 {text[1]} {text[0]}
               </MenuItem>

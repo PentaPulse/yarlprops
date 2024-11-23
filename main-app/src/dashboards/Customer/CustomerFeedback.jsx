@@ -13,13 +13,17 @@ import {
   Select,
   InputLabel,
   FormControl,
-  Rating,  // Import Rating component
+  Rating, // Import Rating component
 } from "@mui/material";
 import FeedbackIcon from "@mui/icons-material/Feedback";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "../../api/AuthContext";
 import { useAlerts } from "../../api/AlertService";
-import { fetchFeedbacks, getOrderDetails, sendFeedback } from "../../api/db/feedback";
+import {
+  fetchFeedbacks,
+  getOrderDetails,
+  sendFeedback,
+} from "../../api/db/feedback";
 import { fetchOrders } from "../../api/db/orders";
 import formatDate from "../../components/date/dateTime";
 import { addItemRating } from "../../api/db/ratings"; // Add the function to update item ratings
@@ -51,8 +55,10 @@ export default function FeedbackPage() {
       try {
         const data = await fetchOrders(user);
         setOrderList(data);
+        console.log(orderList);
       } catch (e) {
         console.log(e);
+        setOrderList([]);
       }
     };
     fetchOrderList();
@@ -107,14 +113,24 @@ export default function FeedbackPage() {
       date: new Date().toISOString().split("T")[0],
       userId: user.uid,
       merchantId: selectedOrder.merchId,
-      itemId:selectedOrder.itemId,
-      rating: feedback.rating, 
+      itemId: selectedOrder.itemId,
+      rating: feedback.rating,
     };
 
     try {
       //await sendFeedback(user.uid, selectedOrder.merchId, newFeedback);
-      await sendFeedback(user.uid,selectedOrder.merchId,selectedOrder.itemId,selectedOrder.itemType,newFeedback)
-      await addItemRating(selectedOrder.itemId,selectedOrder.itemType, feedback.rating); 
+      await sendFeedback(
+        user.uid,
+        selectedOrder.merchId,
+        selectedOrder.itemId,
+        selectedOrder.itemType,
+        newFeedback
+      );
+      await addItemRating(
+        selectedOrder.itemId,
+        selectedOrder.itemType,
+        feedback.rating
+      );
       showAlerts("Feedback and rating submitted successfully", "success");
       setRefresh(!refresh);
     } catch (error) {
@@ -146,24 +162,45 @@ export default function FeedbackPage() {
           Submit Your Feedback
         </Typography>
 
-        <FormControl fullWidth sx={{ mb: 2 }} required>
-          <InputLabel>Order</InputLabel>
+        <FormControl fullWidth sx={{ mb: 2 }}>
+          <InputLabel id="order-label">Order</InputLabel>
           <Select
+            labelId="order-label"
             name="order"
             value={selectedOrder?.id || ""}
-            onChange={handleOrderChange}
+            onChange={(e) => {
+              const selectedOrder = orderList.find(
+                (order) => order.id === e.target.value
+              );
+              handleOrderChange(selectedOrder); // Ensure you handle both the event and the order
+            }}
             label="Order"
+            required
           >
-            {orderList.map((order) => (
-              <MenuItem key={order.id} value={order.id} onClick={() => selectOrder(order)}>
-                {order.title} - {order.merchName}
-              </MenuItem>
-            ))}
+            {/* Placeholder for default/empty value */}
+            <MenuItem value="" disabled>
+              Select an order
+            </MenuItem>
+            {orderList.length > 0
+              ? orderList.map((order) => (
+                  <MenuItem key={order.id} value={order.id}>
+                    {order.title} - {order.merchName}
+                  </MenuItem>
+                ))
+              : null}
           </Select>
         </FormControl>
 
         {selectedOrder && (
-          <Box sx={{ mt: 2, mb: 2, p: 2, border: "1px solid grey", borderRadius: 2 }}>
+          <Box
+            sx={{
+              mt: 2,
+              mb: 2,
+              p: 2,
+              border: "1px solid grey",
+              borderRadius: 2,
+            }}
+          >
             <Typography variant="h6">Order Details</Typography>
             <Typography>
               <strong>Order date:</strong> {formatDate(selectedOrder.date)}
@@ -277,7 +314,10 @@ export default function FeedbackPage() {
                     Product: {fb.productName}
                   </Typography>
                   <Typography variant="body1">{fb.content}</Typography>
-                  <Typography variant="body2">Rating: {fb.rating}</Typography> {/* Display Rating */}
+                  <Typography variant="body2">
+                    Rating: {fb.rating}
+                  </Typography>{" "}
+                  {/* Display Rating */}
                 </CardContent>
               </Card>
             </Grid>

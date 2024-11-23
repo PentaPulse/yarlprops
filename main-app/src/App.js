@@ -204,13 +204,10 @@ function DashboardRoutes({ handleMode }) {
           }
 
           {/* Customer */}
-          {!user.isMerchant&&
-          <>
+          
           <Route path="orders" element={<CustomerOrders />} />
           <Route path="feedback" element={<CustomerFeedback />} />
-          </>
-          }
-         
+                   
         </Routes>
       </DashboardLayout>
     </>

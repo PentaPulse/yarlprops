@@ -83,7 +83,6 @@ export const fetchAllItems = async () => {
       });
     }
 
-    console.log(itemList);
     return itemList;
   } catch (error) {
     console.error("Error fetching items:", error);
