@@ -7,10 +7,9 @@ import {
   AccordionDetails,
   Button,
   Paper,
-  ThemeProvider,
-  createTheme,
   Container,
-  Box
+  Box,
+  useTheme
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { blue } from '@mui/material/colors';
@@ -20,6 +19,7 @@ import { getGuide } from '../../api/db/guide';
 const FAQSection = ({ title, faqs }) => {
   const [expanded, setExpanded] = useState(false);
   const [feedback, setFeedback] = useState({});
+  const theme = useTheme()
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -72,10 +72,10 @@ const FAQSection = ({ title, faqs }) => {
                   minHeight: 80,
                   '&.Mui-expanded': {
                     minHeight: 80,
-                    backgroundColor: blue[50]
+                    backgroundColor: theme.palette.mode==='light'? blue[50]:blue[700]
                   },
                   '&:hover': {
-                    backgroundColor: blue[50]
+                    backgroundColor: theme.palette.mode==='light'? blue[50]:blue[700]
                   }
                 }}
               >
