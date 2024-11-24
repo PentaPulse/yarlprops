@@ -31,11 +31,11 @@
     "export-mith": "firebase emulators:export ./datamith",
     "emu-sachi": "firebase emulators:start --import=./datas",
     "export-sachi": "firebase emulators:export ./datas",
-    "build:main": "cd main-app && npm run build && cd ..",
-    "build:admin": "cd admin-app && npm run build && cd ..",
-    "start:main": "cd main-app && npm start",
-    "start:admin": "cd admin-app && npm start", 
-    "build:all":"npm ci && cd main-app && npm ci && npm run build && cd .. && cd admin-app && npm ci && npm run build && cd .. && firebase deploy --only hosting:a,hosting:b --token `${{ secrets.FIREBASE_SERVICE_ACCOUNT }}`"
+    "build:main": "npm ci --prefix main-app && npm run build --prefix main-app",
+    "build:admin": "npm ci --prefix admin-app && npm run build --prefix admin-app",
+    "start:main": "npm start --prefix main-app",
+    "start:admin": "npm start --prefix admin-app", 
+    "build:all":"npm ci && npm run build:main && npm run build:admin"
   },
   "eslintConfig": {
     "extends": [
