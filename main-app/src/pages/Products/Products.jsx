@@ -1,9 +1,7 @@
-import { Grid, Typography, Button, capitalize, Container, Card, CardActionArea, CardMedia, CardContent, CardActions, useTheme, CircularProgress, IconButton, Box, useMediaQuery } from '@mui/material';
+import { Grid, Typography, Button,  Container, Card, CardActionArea, CardMedia, CardContent, CardActions, useTheme, CircularProgress,  Box, useMediaQuery } from '@mui/material';
 import * as React from 'react';
 import { productFilters } from '../../components/menuLists';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import { db } from '../../api/firebase';
 import {  fetchSelectedProduct } from '../../api/db/products';
 import DbError from '../../components/DbError/DbError';
 import { fetchMerchantDetails} from '../../api/db/users';
@@ -277,13 +275,3 @@ export function ProductPage({ setSignin, setSignup }) {
     </Container>
   );
 }
-
-{/* <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
-  <Typography variant="subtitle1" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-user"></i> Name</Typography>
-  <Typography variant="body1" >{merchant && merchant.firstName + ' ' + merchant.lastName}</Typography>
-  <Typography variant="subtitle1" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-location-dot"></i> Location</Typography>
-  <Typography variant="body1">{product.location}</Typography>
-  <Typography variant="subtitle1" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-phone"></i> Contact No</Typography>
-  <Typography variant="body1">{merchant && merchant.phoneNumber}</Typography> 
-  #0d6efd
-  */}

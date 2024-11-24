@@ -67,21 +67,6 @@ const darkTheme = createTheme({
 });
 
 export default function App() {
-  if (typeof ResizeObserver !== null) {
-    const ro = new ResizeObserver(() => {
-      
-      try {
-        
-      } catch (e) {
-        // Ignore the ResizeObserver loop limit exceeded error
-      }
-    });
-  
-    // Observe changes in the body element
-    ro.observe(document.body);
-    ro.disconnect()
-  }
-
   useSessionTimeout()
   return (
     <>    
