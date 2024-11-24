@@ -555,9 +555,9 @@ const RentalList = ({ onEditrental, onViewrental }) => {
   }));
 
   return (
-    <Paper sx={{ width: 'auto', overflow: 'hidden', mr: {xs: 1, sm: 1, md: 1, lg: -10, xl: -30} }} >
+    <Paper sx={{ width: 'auto', overflow: 'hidden', mr: {xs: 1, sm: 1, md: 1} }} >
     <TableContainer sx={{ maxHeight: { xs: 440, sm: 600, md: 'none' } }}>
-      <Table stickyHeader sx={{ minWidth: { xs: 300, sm: 750 } }}>
+      <Table stickyHeader sx={{ minWidth: { xs: 300, sm: 750} }}>
         <TableHead>
           <TableRow>
             {/* <TableCell>ID</TableCell> */}
@@ -589,15 +589,15 @@ const RentalList = ({ onEditrental, onViewrental }) => {
 
                 <StyledTableCell>
                 <Grid container spacing={1} sx={{ flexDirection: { xs: 'column', sm: 'row' } }}>
-                <Grid item xs={12} sm={4}>
+                <Grid item xs={12} sm={10}>
                   <Button onClick={() => onViewrental(rental.rid)} variant="outlined" color="secondary" fullWidth
-                            sx={{ mb: { xs: 1, sm: 0 } }}>View</Button>
+                            sx={{ mb: { xs: 1, sm:0 } }}>View</Button>
                 </Grid>
-                <Grid item xs={12} sm={4}>
+                <Grid item xs={12} sm={10}>
                   <Button onClick={() => onEditrental(rental.rid)} variant="outlined" color="success"  fullWidth
                             sx={{ mb: { xs: 1, sm: 0 } }}>Edit</Button>
                 </Grid>
-                <Grid item xs={12} sm={4}>
+                <Grid item xs={12} sm={10}>
                   <Button onClick={() => handleDelete(rental.rid)} variant="outlined" color="error" fullWidth>Delete</Button>
                 </Grid>
               </Grid>

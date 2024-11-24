@@ -616,7 +616,7 @@ const ProductList = ({ onEditProduct, onViewProduct }) => {
   }));
 
   return (
-    <Paper sx={{ width: 'auto', overflow: 'hidden', mr: {xs: 1, sm: 1, md: 1, lg: -10, xl: -30} }} >
+    <Paper sx={{ width: 'auto', overflow: 'hidden', mr: {xs: 1, sm: 1, md: 1} }} >
       <TableContainer /*component={Paper}*/sx={{ maxHeight: { xs: 440, sm: 600, md: 'none' } }}>
           <Table stickyHeader sx={{ minWidth: { xs: 300, sm: 750 } }}>
             <TableHead>
@@ -649,7 +649,7 @@ const ProductList = ({ onEditProduct, onViewProduct }) => {
 
                     <StyledTableCell>
                       <Grid container spacing={1} sx={{ flexDirection: { xs: 'column', sm: 'row' } }}>
-                        <Grid item xs={12} sm={4}>
+                        <Grid item xs={12} sm={10}>
                           <Button
                             onClick={() => onViewProduct(product.pid)}
                             variant="outlined"
@@ -660,7 +660,7 @@ const ProductList = ({ onEditProduct, onViewProduct }) => {
                             View
                           </Button>
                         </Grid>
-                        <Grid item xs={12} sm={4}>
+                        <Grid item xs={12} sm={10}>
                           <Button
                             onClick={() => onEditProduct(product.pid)}
                             variant="outlined"
@@ -671,7 +671,7 @@ const ProductList = ({ onEditProduct, onViewProduct }) => {
                             Edit
                           </Button>
                         </Grid>
-                        <Grid item xs={12} sm={4}>
+                        <Grid item xs={12} sm={10}>
                           <Button
                             onClick={() => handleDelete(product.pid)}
                             variant="outlined"
