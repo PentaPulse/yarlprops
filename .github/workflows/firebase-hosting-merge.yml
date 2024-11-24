@@ -11,11 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: npm run build:all
+      - run: npm ci && npm ci --prefix main-app && npm run build --prefix main-app &&        npm ci --prefix admin-app &&         npm run build --prefix admin-app
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_YARLPROPS }}
           channelId: live
           projectId: yarlprops
-        
