@@ -1,20 +1,15 @@
-import { Box, Button, capitalize, Card, CardActionArea, CardActions, CardContent, CardMedia, CircularProgress, Container, Grid, IconButton, Typography, useMediaQuery } from '@mui/material';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { Box, Button, Card, CardActionArea, CardActions, CardContent, CardMedia, CircularProgress, Container, Grid,  Typography, useMediaQuery } from '@mui/material';
 import * as React from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { db } from '../../api/firebase';
 import DbError from '../../components/DbError/DbError';
 import { useTheme } from '@emotion/react';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { rentalFilters } from '../../components/menuLists';
 import { fetchSelectedRental } from '../../api/db/rentals';
 import Filters from '../../components/Filters/Filters';
 import Details from '../../components/Details/Details';
-import Rate from '../../components/Ratings/Ratings';
 import { fetchProductReviews } from '../../api/db/feedback';
-import { fetchFilters, useFilters } from '../../api/db/items';
+import { fetchFilters } from '../../api/db/items';
 
 export default function Rentals() {
     return (
@@ -147,7 +142,6 @@ function RentalsContents() {
 
 export function RentalsPage({ setSignin, setSignup }) {
     const [rental, setRental] = React.useState(null);
-    const [merchant, setMerchant] = React.useState(null);
     const [reviews, setReviews] = React.useState([]); // Store product reviews
     const [averageRating, setAverageRating] = React.useState(0);
     const [selectedImageIndex, setSelectedImageIndex] = React.useState(0); // Track the index of the selected image

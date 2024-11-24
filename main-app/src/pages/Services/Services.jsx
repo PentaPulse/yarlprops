@@ -6,11 +6,10 @@ import { useTheme } from '@emotion/react';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { fetchSelectedService } from '../../api/db/services';
 import Carousel from 'react-material-ui-carousel';
-import { fetchMerchantServiceDetails } from '../../api/db/users';
+//import { fetchMerchantServiceDetails } from '../../api/db/users';
 import { serviceFilters } from '../../components/menuLists';
 import Filters from '../../components/Filters/Filters';
 import Details from '../../components/Details/Details';
-import Rate from '../../components/Ratings/Ratings';
 import { fetchProductReviews } from '../../api/db/feedback';
 import { fetchFilters } from '../../api/db/items';
 
@@ -87,7 +86,7 @@ function ServicesContents() {
 
 export function ServicePage({ setSignin, setSignup }) {
     const [service, setService] = React.useState(null);
-    const [merchant, setMerchant] = React.useState(null)
+    //const [merchant, setMerchant] = React.useState(null)
     const [reviews, setReviews] = React.useState([]); // Store product reviews
     const [averageRating, setAverageRating] = React.useState(0);
     const { id } = useParams();
@@ -112,16 +111,16 @@ export function ServicePage({ setSignin, setSignup }) {
         };
 
         fetchService();
-        const fetchMerchant = async () => {
-            try {
-                const merchantData = await fetchMerchantServiceDetails(id);
-                setMerchant(merchantData)
-            } catch (error) {
-                //console.error("Error fetching merchant:", error);
-            }
-        }
+        // const fetchMerchant = async () => {
+        //     try {
+        //         const merchantData = await fetchMerchantServiceDetails(id);
+        //         setMerchant(merchantData)
+        //     } catch (error) {
+        //         //console.error("Error fetching merchant:", error);
+        //     }
+        // }
 
-        fetchMerchant();
+        // fetchMerchant();
     }, [id]);
 
     if (!service) {
