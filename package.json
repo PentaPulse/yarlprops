@@ -34,7 +34,8 @@
     "build:main": "cd main-app && npm run build && cd ..",
     "build:admin": "cd admin-app && npm run build && cd ..",
     "start:main": "cd main-app && npm start",
-    "start:admin": "cd admin-app && npm start"
+    "start:admin": "cd admin-app && npm start",
+    "build:all":"npm ci && cd main-app && npm ci && npm run build && cd .. && cd admin-app && npm ci && npm run build && cd .. && firebase deploy --only hosting:a,hosting:b --token `${{ secrets.FIREBASE_SERVICE_ACCOUNT }}`"
   },
   "eslintConfig": {
     "extends": [
