@@ -182,6 +182,7 @@ export const SlideshowManagement = () => {
 export const GuideManagement = () => {
   const [guideQuestion, setGuideQuestion] = useState({ from: '', for: '', question: '', answer: '' });
   const [questionsList, setQuestionsList] = useState({ customers: [], merchants: [] });
+  const [qsFromContactusReqs,setQsFromContactusReqs]=useState([])
   const [r,setR]=useState(false)
 
   useEffect(() => {
@@ -196,6 +197,13 @@ export const GuideManagement = () => {
     };
 
     fetchQuestionLists();
+    const fetchQuestionsFromContactusReqs=async()=>{
+      try{
+        const contactReqs=await getQuestionsFromContactus()
+        setQsFromContactusReqs(contactReqs)
+      }catch(e){}
+    }
+    fetchQuestionsFromContactusReqs()
   }, [r]);
 
   const handleInputChange = (e) => {
