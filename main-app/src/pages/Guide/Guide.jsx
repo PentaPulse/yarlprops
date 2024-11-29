@@ -16,7 +16,7 @@ import { blue } from '@mui/material/colors';
 import { useEffect } from 'react';
 import { getGuide } from '../../api/db/guide';
 
-const FAQSection = ({ title, faqs }) => {
+const FAQSection = ({ title, faqs,count }) => {
   const [expanded, setExpanded] = useState(false);
   const [feedback, setFeedback] = useState({});
   const theme = useTheme()
@@ -33,6 +33,10 @@ const FAQSection = ({ title, faqs }) => {
       }));
     }
   };
+
+  const handleFaqCount=async(faq)=>{
+    
+  }
 
   return (
     <Box px={{ xs: 2, sm: 3, md: 4 }}>

@@ -8,7 +8,7 @@ const useSessionTimeout = () => {
 
   const startSessionTimer = () => {
     // Set timer for 20 minutes
-    setTimer(setTimeout(showSessionAlert, 2000 * 60 * 1000));
+    setTimer(setTimeout(showSessionAlert, 20 * 60 * 1000));
   };
 
   const resetSessionTimer = () => {
