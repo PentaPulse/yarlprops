@@ -132,7 +132,7 @@ export default function DashboardLayout({ handleMode, children }) {
                   <Divider variant="inset" />
                 </>
               }
-              {index === 7 &&
+              {index === 8 &&
                 <>
                   <Typography variant='h6' ml={3}>Miscellaneous</Typography>
                   <Divider variant="inset" />

@@ -45,30 +45,35 @@ export default function MerchantServices() {
   };
 
   return (
-    <>
-      <Grid item>
-        <Button
-          variant="contained"
-          color="success"
-          startIcon={<AddIcon />}
-          onClick={handleAddService}
-          style={{ margin: '20px' }}
-        >
-          Add Service
-        </Button>
-      </Grid>
-      <Grid item>
-        <Container>
-          {showAddService ? (
-            <ServiceForm sid={editingServiceId} onSuccess={handleSuccess} onCancel={handleCancel} />
-          ) : viewingServiceId ? (
-            <ServiceDetail sid={viewingServiceId} onBack={handleCancel} />
-          ) : (
-            <ServiceList onEditService={handleEditService} onViewService={handleViewService} />
-          )}
-        </Container>
-      </Grid>
-    </>
+    <Container maxWidth={false} sx={{ p: { xs: 1, sm: 2, md: 3} }}>
+      <Grid container spacing={{ xs: 1, sm: 2 }}>
+        <Grid item xs={12}>
+          <Button
+            variant="contained"
+            color="success"
+            startIcon={<AddIcon />}
+            onClick={handleAddService}
+            sx={{
+              m: { xs: 1, sm: 2 },
+              width: { xs: 'auto', sm: 'auto' }
+            }}
+          >
+            Add Service
+          </Button>
+        </Grid>
+        <Grid item xs={12}>
+          
+            {showAddService ? (
+              <ServiceForm sid={editingServiceId} onSuccess={handleSuccess} onCancel={handleCancel} />
+            ) : viewingServiceId ? (
+              <ServiceDetail sid={viewingServiceId} onBack={handleCancel} />
+            ) : (
+              <ServiceList onEditService={handleEditService} onViewService={handleViewService} />
+            )}
+          
+        </Grid>
+    </Grid>
+    </Container>
   );
 }
 
@@ -218,8 +223,8 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
   });
 
   return (
-    <Paper style={{ padding: 16 }}>
-      <Typography variant="h6">{sid ? 'Edit Service' : 'Add Service'}</Typography>
+    <Paper sx={{ p: { xs: 2, sm: 3, md: 4}, mr: {xs: 1, sm: 1, md: 1, lg: -10, xl: -30} }}>
+      <Typography variant="h6" sx={{ mb: { xs: 2, sm: 3 } }}>{sid ? 'Edit Service' : 'Add Service'}</Typography>
       <form onSubmit={handleSubmit}>
         <TextField
           label="Service Name"
@@ -227,10 +232,10 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
           value={service.title}
           onChange={handleChange}
           fullWidth
-          margin="normal"
+          sx={{ mb: { xs: 2, sm: 3 } }}
           required
         />
-        <FormControl fullWidth margin='normal'>
+        <FormControl fullWidth sx={{ mb: { xs: 2, sm: 3 } }}>
           <InputLabel>Category</InputLabel>
           <Select
             name="category"
@@ -245,7 +250,7 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
             ))}
           </Select>
         </FormControl>
-        <FormControl fullWidth margin='normal'>
+        <FormControl fullWidth sx={{ mb: { xs: 2, sm: 3 } }}>
           <InputLabel>SubCategory</InputLabel>
           <Select
             name="subCategory"
@@ -264,21 +269,23 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
         </FormControl>
 
         {service.description.map((description, index) => (
-          <Grid container key={index} spacing={1} alignItems="center">
-            <Grid item xs={11.5}>
+          <Grid container key={index} spacing={1} alignItems="center" sx={{ mb: 1 }}>
+            <Grid item xs={11}>
               <TextField
                 label={`Description Line ${index + 1}`}
                 value={description}
                 onChange={(event) => handleDescriptionChange(index, event)}
                 fullWidth
-                margin="normal"
+                sx={{ mb: { xs: 1, sm: 2 } }}
                 required
               />
             </Grid>
             {index > 0 && (
-              <IconButton onClick={() => handleRemoveDescriptionLine(index)} style={{ marginTop: '1rem' }} aria-label="delete">
-                <DeleteIcon />
-              </IconButton>
+              <Grid item xs={1}>
+                <IconButton onClick={() => handleRemoveDescriptionLine(index)} style={{ marginTop: '1rem' }} aria-label="delete">
+                  <DeleteIcon />
+                </IconButton>
+              </Grid>
             )}
           </Grid>
         ))}
@@ -288,7 +295,7 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
           variant="outlined"
           startIcon={<AddIcon />}
           color="success"
-          style={{ marginTop: '10px', marginBottom: '10px' }}
+          sx={{ mb: { xs: 2, sm: 3 }, width: { xs: '100%', sm: 'auto' } }}
         >
           Add new line
         </Button>
@@ -318,26 +325,50 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
           (Note:- Add high quality images.)
         </Typography>
 
-        <Grid container spacing={2}>
+        <Grid container spacing={2} sx={{ mt: 2 }}>
           {existingImages.map((src, index) => (
-            <Grid item key={index}>
-              <div style={{ position: 'relative' }}>
+            <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+             <Paper 
+              elevation={3}
+              sx={{
+                position: 'relative',
+                paddingTop: '75%',
+                overflow: 'hidden',
+                borderRadius: 1
+              }}
+            >
                 <img src={src} alt={`Existing Preview ${index}`} style={{ width: 150, height: 120, borderRadius: 5 ,objectFit: 'cover' }} />
                 <Button
                   onClick={() => handleRemoveImage(index, 'existing')}
                   variant="contained"
                   color="error"
                   size="small"
-                  style={{ position: 'absolute', top: 0, right: 0 }}
+                  sx={{
+                    position: 'absolute',
+                    top: 8,
+                    right: 8,
+                    minWidth: '32px',
+                    width: '32px',
+                    height: '32px',
+                    p: 0
+                  }}
                 >
                   X
                 </Button>
-              </div>
+              </Paper>
             </Grid>
           ))}
           {newImages.map((file, index) => (
             <Grid item key={index + existingImages.length}>
-              <div style={{ position: 'relative' }}>
+              <Paper 
+              elevation={3}
+              sx={{
+                position: 'relative',
+                paddingTop: '75%',
+                overflow: 'hidden',
+                borderRadius: 1
+              }}
+            >
                 <img src={URL.createObjectURL(file)} alt={`New Preview ${index}`} style={{ width: 150, height: 120, borderRadius: 5 , objectFit: 'cover' }} />
                 <Button
                   onClick={() => handleRemoveImage(index, 'new')}
@@ -348,7 +379,7 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
                 >
                   X
                 </Button>
-              </div>
+              </Paper>
             </Grid>
           ))}
         </Grid>
@@ -390,13 +421,18 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
             {validationMessage}
           </Typography>
         )}
-
-        <Button type="submit" variant="contained" color="success" style={{ marginTop: '25px' }}>
-          Save
-        </Button>
-        <Button onClick={onCancel} variant="outlined" style={{ marginTop: '25px', marginLeft: '10px' }}>
-          Cancel
-        </Button>
+      <Grid container spacing={2} sx={{ mt: 3 }}>
+        <Grid item xs={12} sm={6}>
+          <Button type="submit" variant="contained" color="success" style={{ marginTop: '25px' }}>
+            Save
+          </Button>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Button onClick={onCancel} variant="outlined" style={{ marginTop: '25px', marginLeft: '10px' }}>
+            Cancel
+          </Button>
+        </Grid>
+        </Grid>
       </form>
     </Paper>
   );
@@ -426,36 +462,48 @@ const ServiceDetail = ({ sid, onBack }) => {
   }
 
   return (
-    <Paper style={{ padding: 16 }}>
-      <Typography variant="h4" gutterBottom>
+    <Paper sx={{ p: { xs: 2, sm: 3, md: 4 }, mr: {xs: 1, sm: 1, md: 1, lg: -10, xl: -30} }}>
+      <Typography variant="h4" sx={{ 
+          mb: 3,
+          fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' }
+        }}>
         {service.title}
       </Typography>
-      <Typography variant="subtitle1">
-        Category: {service.category}
-      </Typography>
-      <Typography variant="subtitle1">
-        Sub category: {service.subCategory}
-      </Typography>
-      <Typography variant="body1">
-        Description:
-      </Typography>
-      <ul>
-        {service.description.map((desc, index) => (
-          <li key={index}><Typography variant='body1'>{desc}</Typography></li>
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={6}>
+        <Typography variant="subtitle1" sx={{ mb: 1 }}>
+          Category: {service.category}
+        </Typography>
+        <Typography variant="subtitle1" sx={{ mb: 1 }}>
+          Sub category: {service.subCategory}
+        </Typography>
+        <Typography variant="body1" sx={{ mb: 1 }}>
+          Description:
+        </Typography>
+        <ul style={{ margin: 0, paddingLeft: '1.5rem' }}>
+         {service.description.map((desc, index) => (
+            <li key={index}><Typography variant='body1' sx={{ mb: 0.5 }}>{desc}</Typography></li>
         ))}
-      </ul>
-      <Typography variant="body1">
-        <strong>Location:</strong> {service.location}
-      </Typography>
-      <Typography variant="body1">Visibility: {(service.visibility === false) ? 'No':'Yes'}</Typography>
-      <Grid container spacing={2} style={{ marginTop: 10, marginBottom: 10 }}>
+        </ul>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Typography variant="body1">
+            <strong>Location:</strong> {service.location}
+          </Typography>
+          <Typography variant="body1">Visibility: {(service.visibility === false) ? 'No':'Yes'}</Typography>
+        </Grid>
+      </Grid>
+      <Grid container spacing={2} sx={{ mt: 3, mb: 3 }}>
         {service.images.map((url, index) => (
           <Grid item key={index}>
             <img src={url} alt={`Service  ${index + 1}`} style={{ width: '185px', height: '175px', objectFit: 'cover', borderRadius: '10px' }} />
           </Grid>
         ))}
       </Grid>
-      <Button variant="contained" onClick={onBack} style={{ marginTop: 16 }}>
+      <Button variant="contained" onClick={onBack} fullWidth sx={{ 
+          mt: 3,
+          maxWidth: { sm: 200 }
+        }}>
         Back
       </Button>
     </Paper>
@@ -515,7 +563,7 @@ const ServiceList = ({ onEditService, onViewService }) => {
     }
   };
 
-  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  /*const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: theme.palette.common.black,
       color: theme.palette.common.white,
@@ -523,6 +571,22 @@ const ServiceList = ({ onEditService, onViewService }) => {
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
     },
+  }));*/
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+      [theme.breakpoints.down('sm')]: {
+        padding: theme.spacing(1),
+        fontSize: '0.875rem'
+      }
+    },
+    [`&.${tableCellClasses.body}`]: {
+      [theme.breakpoints.down('sm')]: {
+        padding: theme.spacing(1),
+        fontSize: '0.875rem'
+      }
+    }
   }));
 
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -532,6 +596,11 @@ const ServiceList = ({ onEditService, onViewService }) => {
     '&:last-child td, &:last-child th': {
       border: 0,
     },
+    [theme.breakpoints.down('sm')]: {
+      '& > *': {
+        display: 'table-cell'
+      }
+    }
   }));
 
   const handleChangePage = (event, newPage) => {
@@ -544,18 +613,18 @@ const ServiceList = ({ onEditService, onViewService }) => {
   };
 
   return (
-    <Paper>
-      <TableContainer>
-        <Table aria-label="customized table">
+    <Paper sx={{ width: 'auto', overflow: 'hidden', mr: {xs: 1, sm: 1, md: 1} }}>
+      <TableContainer sx={{ maxHeight: { xs: 440, sm: 600, md: 'none' } }}>
+        <Table stickyHeader sx={{ minWidth: { xs: 300, sm: 750} }}>
           <TableHead>
             <TableRow>
-              <StyledTableCell align="center">Name</StyledTableCell>
-              <StyledTableCell align="center">Category</StyledTableCell>
-              <StyledTableCell align="center">Sub Category</StyledTableCell>
+              <StyledTableCell sx={{ display: { xs: 'table-cell', md: 'table-cell' } }}>Name</StyledTableCell>
+              <StyledTableCell sx={{ display: { xs: 'none', sm: 'none', md: 'table-cell' } }}>Category</StyledTableCell>
+              <StyledTableCell sx={{ display: { xs: 'none', sm: 'none', md: 'table-cell' } }}>Sub Category</StyledTableCell>
               {/* <StyledTableCell>Description</StyledTableCell> */}
-              <StyledTableCell align="center">Location</StyledTableCell>
-              <StyledTableCell align="center">Visibility On Site</StyledTableCell>
-              <StyledTableCell align="center">Actions</StyledTableCell>
+              <StyledTableCell sx={{ display: { xs: 'none', sm: 'none', md: 'table-cell' } }}>Location</StyledTableCell>
+              <StyledTableCell sx={{ display: { xs: 'table-cell', sm: 'table-cell' } }}>Visibility On Site</StyledTableCell>
+              <StyledTableCell sx={{ display: { xs: 'table-cell', sm: 'table-cell' } }}>Actions</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -568,16 +637,24 @@ const ServiceList = ({ onEditService, onViewService }) => {
             ) : services.length > 0 ? (
               services.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(service => (
                 <StyledTableRow key={service.sid}>
-                  <StyledTableCell align="center">{service.title}</StyledTableCell>
-                  <StyledTableCell align="center">{service.category}</StyledTableCell>
-                  <StyledTableCell align="center">{service.subCategory}</StyledTableCell>
+                  <StyledTableCell sx={{ display: { xs: 'table-cell', md: 'table-cell' } }}>{service.title}</StyledTableCell>
+                  <StyledTableCell sx={{ display: { xs: 'none', sm: 'none', md: 'table-cell' } }}>{service.category}</StyledTableCell>
+                  <StyledTableCell sx={{ display: { xs: 'none', sm: 'none', md: 'table-cell' } }}>{service.subCategory}</StyledTableCell>
                   {/* <StyledTableCell>{service.description}</StyledTableCell> */}
-                  <StyledTableCell align="center">{service.location}</StyledTableCell>
-                  <StyledTableCell align="center">{(service.visibility === false) ? 'No':'Yes'}</StyledTableCell>
+                  <StyledTableCell sx={{ display: { xs: 'none', sm: 'none', md: 'table-cell' } }}>{service.location}</StyledTableCell>
+                  <StyledTableCell sx={{ display: { xs: 'table-cell', sm: 'table-cell' } }}>{(service.visibility === false) ? 'No':'Yes'}</StyledTableCell>
                   <StyledTableCell>
-                    <Button onClick={() => onEditService(service.sid)} variant="outlined" color="success" style={{ margin: '5px', width: '100%' }}>Edit</Button>
-                    <Button onClick={() => onViewService(service.sid)} variant="outlined" color="secondary" style={{ margin: '5px', width: '100%' }}>View</Button>
-                    <Button onClick={() => handleDeleteService(service.sid)} variant="outlined" color="error" style={{ margin: '5px', width: '100%' }}>Delete</Button>
+                  <Grid container spacing={1} sx={{ flexDirection: { xs: 'column', sm: 'row' } }}>
+                    <Grid item xs={12} sm={10}>
+                      <Button onClick={() => onEditService(service.sid)} variant="outlined" color="success" style={{ margin: '5px', width: '100%' }}>Edit</Button>
+                   </Grid> 
+                   <Grid item xs={12} sm={10}>
+                      <Button onClick={() => onViewService(service.sid)} variant="outlined" color="secondary" style={{ margin: '5px', width: '100%' }}>View</Button>
+                   </Grid>
+                    <Grid item xs={12} sm={10}>
+                      <Button onClick={() => handleDeleteService(service.sid)} variant="outlined" color="error" style={{ margin: '5px', width: '100%' }}>Delete</Button>
+                    </Grid>
+                  </Grid>
                   </StyledTableCell>
                 </StyledTableRow>
               ))
@@ -599,6 +676,11 @@ const ServiceList = ({ onEditService, onViewService }) => {
         page={page}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
+        sx={{
+          '.MuiTablePagination-selectLabel, .MuiTablePagination-displayedRows': {
+            fontSize: { xs: '0.75rem', sm: '0.875rem' }
+          }
+        }}
       />
     </Paper>
   );

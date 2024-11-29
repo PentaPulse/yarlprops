@@ -8,7 +8,6 @@ import { collection, deleteDoc, doc, getDocs, updateDoc } from 'firebase/firesto
 import { useAuth } from '../api/AuthContext';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { fetchSelectedRequest, sendResponse } from '../api/db/contactus';
-import { sendEmail } from '../api/db/siteManager';
 
 export default function ContactusRequests() {
   const [viewingResponseId, setViewingResponseId] = React.useState(null);

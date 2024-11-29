@@ -1,4 +1,4 @@
-import { addDoc, collection, getDocs, query, setDoc, where } from "firebase/firestore";
+import { addDoc, collection, getDocs, query, setDoc, where,doc } from "firebase/firestore";
 import { db } from "../firebase";
 
 //FOR CUSTOMERS
@@ -100,12 +100,12 @@ export const fetchOrdersForItem = async (itemId, merchId) => {
 }
 
 export const fetchProductsToOrders = async (merchId) => {
-  const q = await getDocs(collection(db, 'products'), where('merchId', '==', merchId))
+  const q = await getDocs(query(collection(db, 'products'), where('merchId', '==', merchId)))
   const data = q.docs.map((doc) => doc.data())
   return data
 }
 export const fetchRentalsToOrders = async (merchId) => {
-  const q = await getDocs(collection(db, 'rentals'), where('merchId', '==', merchId))
+  const q = await getDocs(query(collection(db, 'rentals'), where('merchId', '==', merchId)))
   const data = q.docs.map((doc) => doc.data())
   return data
 }

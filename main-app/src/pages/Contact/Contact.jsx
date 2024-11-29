@@ -75,7 +75,7 @@ function Contact() {
           align="center"
           gutterBottom
           sx={{
-            fontSize: { xs: '1.8rem', sm: '2.5rem', md: '3rem' },
+            fontSize: { xs: '1.8rem', sm: '2.2rem', md: '3rem' },
           }}
         >
           <b>About Us</b>
@@ -111,11 +111,11 @@ function Contact() {
           }}
         >
           <Box sx={{ background: "white", opacity: "0.8", borderRadius: 3, padding: { xs: 3 } ,}}>
-            <Typography sx={{fontSize: { xs: '1.9rem', sm: '1.2rem', md: '3.5rem' ,lg:'3.2rem' }}} color="black" align="center" pt={8} gutterBottom>
+            <Typography sx={{fontSize: { xs: '1.9rem', sm: '2.2rem', md: '3.5rem' ,lg:'3.2rem' }}} color="black" align="center" pt={8} gutterBottom>
               <b>Contact Us</b>
             </Typography>
             <Typography sx={{
-            fontSize: { xs: '1.1rem', sm: '1.2rem', md: '2rem' ,lg:'1.2rem' },
+            fontSize: { xs: '1.1rem', sm: '1.5rem', md: '2rem' ,lg:'1.2rem' },
           }}
            color="black" align="justify" pl={1} pr={1} pb={8}>
               We are committed to supporting you, first and foremost.We continually strive to exceed expectations and deliver superior 24/7 Days Support.
@@ -128,11 +128,11 @@ function Contact() {
 
       {/* Contact Form Section */}
       <Box sx={{ padding: 4,marginLeft:{xs:-3} }}>
-        <Typography sx={{fontSize: { xs: '1.9rem', sm: '1.2rem', md: '3rem' ,lg:'3.2rem' }}} align="center" pt={8} gutterBottom>
+        <Typography sx={{fontSize: { xs: '1.9rem', sm: '2.2rem', md: '3rem' ,lg:'3.2rem' }}} align="center" pt={8} gutterBottom>
           <b>Contact <span style={{ color: "#018ABD" }}>Yarl</span>Props</b>
         </Typography>
         <Typography sx={{
-            fontSize: { xs: '1.1rem', sm: '1.2rem', md: '2rem' ,lg:'1.2rem' },
+            fontSize: { xs: '1.1rem', sm: '1.5rem', md: '2rem' ,lg:'1.2rem' },
           }} align="center" pb={8} >
           We are committed to supporting you, first and foremost! We continually strive to exceed expectations and deliver superior 24/7 Days Support...
         </Typography>
@@ -141,22 +141,22 @@ function Contact() {
   sx={{
     padding: { xs: 1, sm: 2, md: 3 },
     margin: "0 auto", 
-    width: { xs: "105%", sm: "100%", md: "100%", lg: "100%" }, 
-    marginLeft:{lg:3,sm:-6,xs : -1,md:1}
+    width: { xs: "105%", sm: "100%", md: "102%", lg: "100%" }, 
+    marginLeft:{lg:3,sm:1,xs : -1,md:1}
   }}
 >
           <Grid container spacing={3}>
             <Grid item xs={12} sm={8}>
               <Card sx={{ backgroundColor: "rgba(255, 255, 255, 0.3)", padding: { xs:4,lg:5}, borderRadius: 4 }}>
                 <CardContent>
-                  <Typography gutterBottom variant="h5">
+                  <Typography gutterBottom sx={{fontSize: { xs: '1.5rem', sm: '1.6rem', md: '2.1rem' ,lg:'2rem' }}}>
                     <b>Get in touch</b>
                   </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p" gutterBottom>
+                  <Typography sx={{fontSize: { xs: '0.9rem', sm: '1.3rem', md: '1.3rem' ,lg:'1.2rem' }}} color="black" component="p" gutterBottom>
                     Fill up the form and our team will get back to you within 24 hours.
                   </Typography>
                   <form >
-                  <Typography   gutterBottom>
+                  <Typography  sx={{fontSize:{md:'2.2rem',sm:'2.5rem'}}}  gutterBottom>
                     <Grid container spacing={2}>
                       <Grid item xs={12} sm={6}>
                         <TextField placeholder="Enter first name" label="First Name" variant="outlined" name='firstName' fullWidth value={details.firstName} onChange={handleChange} required />
@@ -180,9 +180,33 @@ function Contact() {
               </Card>
             </Grid>
             <Grid item xs={12} sm={4}>
-              <Box display="flex" justifyContent="center" alignItems="center" height="100%">
-                <img src={Image2} alt="Contact Us" style={{ maxWidth: '76%', height: 'auto', margin: '0 auto' }} />
-              </Box>
+            <Box 
+  display="flex" 
+  justifyContent="center" 
+  alignItems="center" 
+  height="100%"
+>
+  <Box
+    component="img"
+    src={Image2}
+    alt="Contact Us"
+    sx={{
+      width: {
+        xs: '80%', 
+        sm: '129%', 
+        md: '99%', 
+        lg: '76%', 
+      },
+      height: { 
+        xs: '100%', 
+        sm: '98%', 
+        md: '100%', 
+        lg: '100%',},
+      margin: '0 auto',
+    }}
+  />
+</Box>
+
             </Grid>
           </Grid>
         </Box>

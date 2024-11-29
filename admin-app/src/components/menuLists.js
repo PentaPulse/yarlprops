@@ -18,6 +18,7 @@ export const adminMenu = [
     ['Products', <InventoryIcon />, 'productlist'],
     ['Rentals', <CarRentalIcon />, 'rentallist'],
     ['Services', <MiscellaneousServicesIcon />, 'servicelist'],
+    ['Orders',<ShoppingCartIcon/>,'orderlist'],
     ['Site Manager', <CommentIcon />, 'site'],
     ['Contactus reqs', <CommentIcon />, 'contactreqs'],
 ]

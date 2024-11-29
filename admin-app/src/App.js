@@ -19,6 +19,7 @@ import Customers from "./dashboard/Users/Customers";
 import Merchants from "./dashboard/Users/Merchants";
 import NotificationsPanel from "./dashboard/NotificationsPanel";
 import SiteManager from "./dashboard/SiteManager";
+import Orders from "./dashboard/Items/Orders";
 
 const lightTheme = createTheme({
   palette: {
@@ -115,6 +116,7 @@ function DashboardRoutes({ handleMode }) {
           <Route path="servicelist" element={<Services />} />
           <Route path="contactreqs" element={<ContactusRequests />} />
           <Route path="site" element={<SiteManager/>} />   
+          <Route path="orderlist" element={<Orders/>}/>
         </Routes>
       </DashboardLayout>
     </>
