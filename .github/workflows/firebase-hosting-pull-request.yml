@@ -1,48 +1,46 @@
-name: Deploy to Firebase Hosting on PR
-on: pull_request
+name: Deploy to Firebase Hosting
+on:
+  push:
+    branches:
+      - main  # Trigger deployment only on push to the main branch
 permissions:
-  checks: write
   contents: read
-  pull-requests: write
+  id-token: write
 jobs:
-  build_and_preview:
-    if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
+  deploy:
     runs-on: ubuntu-latest
     steps:
+      # Check out the repository
       - uses: actions/checkout@v4
 
       # Build Main App
-      #- name: Build Main App
-       # working-directory: ./main-app
-        #run: |
-         # export CI=false
-          #npm ci
-          #npm run build
+     # - name: Build Main App
+      #  working-directory: ./main-app
+       # run: |
+        #  npm ci
+         # npm run build
 
       # Build Admin App
       - name: Build Admin App
         working-directory: ./admin-app
         run: |
-          export CI=false
           npm ci
           npm run build
 
-      # Deploy Main App
+      # Deploy Main App to yarlprops.web.app
       - name: Deploy Main App
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_YARLPROPS }}
           projectId: yarlprops
-          target: main
-          public: main-app/build
+          target: main  # Deploy to the "main" target (yarlprops)
 
-      # Deploy Admin App
+      # Deploy Admin App to ypalog.web.app
       - name: Deploy Admin App
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_YARLPROPS }}
           projectId: yarlprops
-          target: admin
-          public: admin-app/build
+          target: admin  # Deploy to the "admin" target (ypalog)
