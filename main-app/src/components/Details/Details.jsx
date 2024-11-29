@@ -39,7 +39,7 @@ export default function Details({
       } catch (e) {}
     };
     fetchMerchant();
-  }, []);
+  }, [merchantId]);
 
   const handleOrderNow = async () => {
     try {

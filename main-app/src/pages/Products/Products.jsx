@@ -1,9 +1,7 @@
-import { Grid, Typography, Button, capitalize, Container, Card, CardActionArea, CardMedia, CardContent, CardActions, useTheme, CircularProgress, IconButton, Box, useMediaQuery } from '@mui/material';
+import { Grid, Typography, Button,  Container, Card, CardActionArea, CardMedia, CardContent, CardActions, useTheme, CircularProgress,  Box, useMediaQuery } from '@mui/material';
 import * as React from 'react';
 import { productFilters } from '../../components/menuLists';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import { db } from '../../api/firebase';
 import {  fetchSelectedProduct } from '../../api/db/products';
 import DbError from '../../components/DbError/DbError';
 import { fetchMerchantDetails} from '../../api/db/users';
@@ -95,7 +93,7 @@ export function ProductPage({ setSignin, setSignup }) {
   const [reviews, setReviews] = React.useState([]); // Store product reviews
   const [averageRating, setAverageRating] = React.useState(0); 
   const [selectedImageIndex, setSelectedImageIndex] = React.useState(0); // Track the index of the selected image
-  const [startIndex, setStartIndex] = React.useState(0);
+ // const [0, setStartIndex] = React.useState(0);
   const visibleImagesCount = 3; // Number of images to display at a time
   const { id } = useParams();
   const theme = useTheme();
@@ -125,14 +123,14 @@ export function ProductPage({ setSignin, setSignup }) {
     };
     fetchProduct();
     
-  }, [id]);
+  }, [id,merchant,product.merchantId]);
 
   if (!product) {
     return <CircularProgress />;
   }
 
   return (
-    <Container maxWidth="lg" sx={{ backgroundColor: theme.palette.background.default }}>
+    <Container maxWidth="lg" sx={{ backgroundColor: theme.palette.background.default }}> 
       <Grid container spacing={4}>
         <Grid item xs={12} md={6} sx={{ alignItems: 'center', justifyContent: 'center' }}>
           {/* Main Product Image */}
@@ -156,7 +154,7 @@ export function ProductPage({ setSignin, setSignup }) {
               </IconButton>
             </Grid> */}
 
-            {product.images.slice(startIndex, startIndex + visibleImagesCount).map((image, index) => (
+            {product.images.slice(0, 0 + visibleImagesCount).map((image, index) => (
               <Grid item xs={3} key={index}>
                 <CardMedia
                   component="img"
@@ -171,12 +169,12 @@ export function ProductPage({ setSignin, setSignup }) {
                     boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
                     cursor: 'pointer',
                     transition: 'transform 0.3s',
-                    border: selectedImageIndex === index + startIndex ? '3px solid blue' : 'none', // Highlight the selected image
+                    border: selectedImageIndex === index + 0 ? '3px solid blue' : 'none', // Highlight the selected image
                     '&:hover': {
                       transform: 'scale(1.1)',
                     },
                   }}
-                  onClick={() => setSelectedImageIndex(index + startIndex)}  // Update the main image on click
+                  onClick={() => setSelectedImageIndex(index + 0)}  // Update the main image on click
                 />
               </Grid>
             ))}
@@ -278,7 +276,7 @@ export function ProductPage({ setSignin, setSignup }) {
   );
 }
 
-{/* <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
+/* <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
   <Typography variant="subtitle1" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-user"></i> Name</Typography>
   <Typography variant="body1" >{merchant && merchant.firstName + ' ' + merchant.lastName}</Typography>
   <Typography variant="subtitle1" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-location-dot"></i> Location</Typography>
@@ -286,4 +284,4 @@ export function ProductPage({ setSignin, setSignup }) {
   <Typography variant="subtitle1" component="h4" sx={{ textAlign: 'center', fontWeight: 'bold' }}><i className="fa-solid fa-phone"></i> Contact No</Typography>
   <Typography variant="body1">{merchant && merchant.phoneNumber}</Typography> 
   #0d6efd
-  */}
+  */

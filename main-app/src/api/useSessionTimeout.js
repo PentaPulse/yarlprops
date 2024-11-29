@@ -44,7 +44,7 @@ const useSessionTimeout = () => {
 
     // Cleanup timer on unmount
     return () => clearTimeout(timer);
-  }, []);
+  }, [auth.currentUser]);
 
   return { resetSessionTimer };
 };

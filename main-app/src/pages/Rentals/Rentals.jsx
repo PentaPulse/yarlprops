@@ -1,20 +1,15 @@
-import { Box, Button, capitalize, Card, CardActionArea, CardActions, CardContent, CardMedia, CircularProgress, Container, Grid, IconButton, Typography, useMediaQuery } from '@mui/material';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { Box, Button, Card, CardActionArea, CardActions, CardContent, CardMedia, CircularProgress, Container, Grid,  Typography, useMediaQuery } from '@mui/material';
 import * as React from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { db } from '../../api/firebase';
 import DbError from '../../components/DbError/DbError';
 import { useTheme } from '@emotion/react';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { rentalFilters } from '../../components/menuLists';
 import { fetchSelectedRental } from '../../api/db/rentals';
 import Filters from '../../components/Filters/Filters';
 import Details from '../../components/Details/Details';
-import Rate from '../../components/Ratings/Ratings';
 import { fetchProductReviews } from '../../api/db/feedback';
-import { fetchFilters, useFilters } from '../../api/db/items';
+import { fetchFilters } from '../../api/db/items';
 
 export default function Rentals() {
     return (
@@ -147,11 +142,10 @@ function RentalsContents() {
 
 export function RentalsPage({ setSignin, setSignup }) {
     const [rental, setRental] = React.useState(null);
-    const [merchant, setMerchant] = React.useState(null);
     const [reviews, setReviews] = React.useState([]); // Store product reviews
     const [averageRating, setAverageRating] = React.useState(0);
     const [selectedImageIndex, setSelectedImageIndex] = React.useState(0); // Track the index of the selected image
-    const [startIndex, setStartIndex] = React.useState(0);
+    //const [0, setStartIndex] = React.useState(0);
     const visibleImagesCount = 3; // Number of images to display at a time
     const { id } = useParams();
     const theme = useTheme();
@@ -208,25 +202,25 @@ export function RentalsPage({ setSignin, setSignup }) {
     //     }
     // };
 
-    const handlePrevious = () => {
-        if (startIndex > 0) {
-            setStartIndex(startIndex - 1);
-            setSelectedImageIndex(startIndex - 1);
-        } else {
-            setStartIndex(rental.images.length - visibleImagesCount);
-            setSelectedImageIndex(rental.images.length - 1);
-        }
-    };
+    // const handlePrevious = () => {
+    //     if (0 > 0) {
+    //         setStartIndex(0 - 1);
+    //         setSelectedImageIndex(0 - 1);
+    //     } else {
+    //         setStartIndex(rental.images.length - visibleImagesCount);
+    //         setSelectedImageIndex(rental.images.length - 1);
+    //     }
+    // };
 
-    const handleNext = () => {
-        if (startIndex + visibleImagesCount < rental.images.length) {
-            setStartIndex(startIndex + 1);
-            setSelectedImageIndex(startIndex + 1);
-        } else {
-            setStartIndex(0);
-            setSelectedImageIndex(0);
-        }
-    };
+    // const handleNext = () => {
+    //     if (0 + visibleImagesCount < rental.images.length) {
+    //         setStartIndex(0 + 1);
+    //         setSelectedImageIndex(0 + 1);
+    //     } else {
+    //         setStartIndex(0);
+    //         setSelectedImageIndex(0);
+    //     }
+    // };
 
     return (
         <Container maxWidth="lg" sx={{ backgroundColor: theme.palette.background.default }}>
@@ -254,7 +248,7 @@ export function RentalsPage({ setSignin, setSignup }) {
                             </IconButton>
                         </Grid> */}
 
-                        {rental.images.slice(startIndex, startIndex + visibleImagesCount).map((image, index) => (
+                        {rental.images.slice(0, 0 + visibleImagesCount).map((image, index) => (
                             <Grid item xs={3} key={index}>
                                 <CardMedia
                                     component="img"
@@ -269,12 +263,12 @@ export function RentalsPage({ setSignin, setSignup }) {
                                         boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
                                         cursor: 'pointer',
                                         transition: 'transform 0.3s',
-                                        border: selectedImageIndex === index + startIndex ? '3px solid blue' : 'none', // Highlight the selected image
+                                        border: selectedImageIndex === index + 0 ? '3px solid blue' : 'none', // Highlight the selected image
                                         '&:hover': {
                                             transform: 'scale(1.1)',
                                         },
                                     }}
-                                    onClick={() => setSelectedImageIndex(index + startIndex)}  // Update the main image on click
+                                    onClick={() => setSelectedImageIndex(index + 0)}  // Update the main image on click
                                 />
                             </Grid>
                         ))}
@@ -373,7 +367,7 @@ export function RentalsPage({ setSignin, setSignup }) {
     );
 }
 
-{/* 
+/* 
     <Grid item xs={12} md={6}>
             <Card sx={{ height: '100%', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)' }}>
               <CardContent sx={{ marginTop: '30px', marginBottom: '30px' }}>
@@ -414,4 +408,4 @@ export function RentalsPage({ setSignin, setSignup }) {
               </CardContent>
             </Card>
           </Grid> 
-*/}
+*/
