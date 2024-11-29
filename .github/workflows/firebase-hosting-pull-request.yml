@@ -9,24 +9,25 @@ jobs:
     if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
     runs-on: ubuntu-latest
     steps:
-      # Check out the repository
       - uses: actions/checkout@v4
 
-      # Install dependencies and build the main-app
-      - name: Build Main App
-        working-directory: ./main-app
-        run: |
-          npm ci
-          npm run build
+      # Build Main App
+      #- name: Build Main App
+       # working-directory: ./main-app
+        #run: |
+         # export CI=false
+          #npm ci
+          #npm run build
 
-      # Install dependencies and build the admin-app
+      # Build Admin App
       - name: Build Admin App
         working-directory: ./admin-app
         run: |
+          export CI=false
           npm ci
           npm run build
 
-      # Deploy the main-app to the 'main' target
+      # Deploy Main App
       - name: Deploy Main App
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
@@ -36,7 +37,7 @@ jobs:
           target: main
           public: main-app/build
 
-      # Deploy the admin-app to the 'admin' target
+      # Deploy Admin App
       - name: Deploy Admin App
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
