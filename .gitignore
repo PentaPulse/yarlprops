@@ -14,9 +14,7 @@ backend/node_modules
 # production
 /build
 #main-app/build
-admin-app/build
-/main
-/admin
+#admin-app/build
 
 # misc
 .DS_Store
