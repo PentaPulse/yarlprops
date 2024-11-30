@@ -11,6 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Build Admin App
+        working-directory: ./admin-app
+        run: |
+          npm i
+          npm run build
       - name: Deploy Admin App
         if: success()  # Only deploy if the build succeeds
         uses: FirebaseExtended/action-hosting-deploy@v0
