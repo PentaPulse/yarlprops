@@ -1,8 +1,8 @@
 name: Deploy to Firebase Hosting on PR to main-live
 on:
-  pull_request:
+  push:
     branches:
-      - main-live
+      - main
 permissions:
   contents: read
   id-token: write
