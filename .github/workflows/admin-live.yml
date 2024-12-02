@@ -14,6 +14,7 @@ jobs:
       - name: Build Admin App
         working-directory: ./admin-app
         run: |
+          npm ci
           firebase target:apply hosting main yarlprops
           firebase deploy --only hosting:yarlprops
       - name: Deploy Admin App
