@@ -16,6 +16,9 @@ jobs:
         run: |
           npm ci
           npm run build
+          npm i -g firebase-tools 
+          firebase target:apply hosting main yarlprops
+          firebase deploy --only hosting:yarlprops
       - name: Deploy Admin App
         if: success()  # Only deploy if the build succeeds
         uses: FirebaseExtended/action-hosting-deploy@v0
