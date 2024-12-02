@@ -15,10 +15,9 @@ jobs:
         working-directory: ./admin-app
         run: |
           npm ci
-          firebase target:apply hosting main yarlprops
-          firebase deploy --only hosting:yarlprops
+          npm run build
       - name: Deploy Admin App
-        if: success()  # Only deploy if the build succeeds
+        if: success()
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
