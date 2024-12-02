@@ -34,7 +34,8 @@
     "recharts": "^2.13.0",
     "styled-components": "^6.1.13",
     "sweetalert2": "^11.14.3",
-    "web-vitals": "^4.2.3"
+    "web-vitals": "^4.2.3",
+    "yarlprops": "file:.."
   },
   "scripts": {
     "start": "react-scripts start",

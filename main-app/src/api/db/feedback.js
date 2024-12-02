@@ -1,42 +1,65 @@
-import { collection, query, where, getDocs,addDoc } from 'firebase/firestore';
-import { db } from '../firebase';
+import { db} from '../firebase'; // Assume Firebase is initialized here
+import { doc, collection, addDoc, updateDoc, getDocs, getDoc, arrayUnion } from 'firebase/firestore';
 
-export const getOrderDetails = async (order) => {
-    const itemq = await getDocs(collection(db, order.itemType), where(`${order.itemType.charAt(0)}id`, '==', order.itemId))
-    const merchq = await getDocs(collection(db, 'systemusers'), where('uid', '==', order.merchId))
-
-    const itemData = itemq.docs.map((doc) => doc.data())
-    const merchData = merchq.docs[0]?.data().displayName;
-
-    return merchData
-}
-
-export const sendFeedback=async(custId,merchId,itemId,itemType,feedbackData)=>{
-    await addDoc(collection(db,'systemusers',merchId,'feedbacks'),feedbackData)
-    await addDoc(collection(db,'systemusers',custId,'reviews'),feedbackData)
-    await addDoc(collection(db,itemType,itemId,'reviews'),feedbackData)
-}
-
-export const fetchFeedbacks=async(custId)=>{
-    const q = await getDocs(collection(db,'systemusers',custId,'reviews'))
-    const data = q.docs.map((doc)=>doc.data())
-    return data
-}
-
-export const fetchProductReviews = async (itemId) => {
+// Add feedback and calculate ratings
+export const addFeedback = async (itemType,itemId, merchantId, userId, itemRating, merchantRating, feedback) => {
+    const itemDocRef = doc(db, itemType, itemId);
+    const merchantDocRef = doc(db, 'systemusers', merchantId);
+    const reviewRef = collection(itemDocRef, 'reviews');
+    
     try {
-      const reviewsRef = collection(db, 'products', itemId, "reviews");
-  
-      const reviewsSnapshot = await getDocs(reviewsRef);
-  
-      const reviews = reviewsSnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data() 
-      }));
-  
-      return reviews;
+        // Add feedback to item reviews
+        await addDoc(reviewRef, { userId, itemRating, feedback, createdAt: new Date() });
+
+        // Update item ratings
+        const itemDoc = await getDoc(itemDocRef);
+        const itemData = itemDoc.exists() ? itemDoc.data() : { avgRating: 0, totalRatings: 0 };
+        const newItemAvg = calculateAvg(itemRating, itemData.totalRatings, itemData.avgRating);
+        await updateDoc(itemDocRef, {
+            avgRating: newItemAvg,
+            totalRatings: (itemData.totalRatings || 0) + 1
+        });
+
+        // Update merchant ratings
+        const merchantDoc = await getDoc(merchantDocRef);
+        const merchantData = merchantDoc.exists() ? merchantDoc.data() : { avgRating: 0, totalRatings: 0 };
+        const newMerchantAvg = calculateAvg(merchantRating, merchantData.totalRatings, merchantData.avgRating);
+        await updateDoc(merchantDocRef, {
+            avgRating: newMerchantAvg,
+            totalRatings: (merchantData.totalRatings || 0) + 1
+        });
     } catch (error) {
-      console.error("Error fetching product reviews:", error);
-      return [];
+        console.error('Error adding feedback:', error);
+        throw error;
     }
-  };
+};
+
+// Utility to calculate average
+const calculateAvg = (newRating, totalRatings, currentAvg) => {
+    return ((currentAvg * totalRatings) + newRating) / (totalRatings + 1);
+};
+
+// Fetch reviews for an item
+export const fetchItemReviews = async (itemType,itemId) => {
+    const reviewsRef = collection(db, itemType, itemId, 'reviews');
+    const snapshot = await getDocs(reviewsRef);
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+};
+
+// Fetch merchant and item ratings
+export const fetchRatings = async (itemType,itemId, merchantId) => {
+    const itemDoc = await getDoc(doc(db, itemType, itemId));
+    const merchantDoc = await getDoc(doc(db, 'systemusers', merchantId));
+
+    return {
+        itemRating: itemDoc.exists() ? itemDoc.data().avgRating : 0,
+        merchantRating: merchantDoc.exists() ? merchantDoc.data().avgRating : 0
+    };
+};
+
+
+//remove
+export const fetchProductReviews=()=>{}
+export const fetchFeedbacks=()=>{}
+export const getOrderDetails=()=>{}
+export const sendFeedback=()=>{}

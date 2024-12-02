@@ -10,6 +10,7 @@ import Filters from '../../components/Filters/Filters';
 import Details from '../../components/Details/Details';
 import { fetchProductReviews } from '../../api/db/feedback';
 import { fetchFilters } from '../../api/db/items';
+import { RatingsSummary } from '../../components/Ratings/Reviews';
 
 function Products() {
   return (
@@ -123,7 +124,7 @@ export function ProductPage({ setSignin, setSignup }) {
     };
     fetchProduct();
     
-  }, [id,merchant,product.merchantId]);
+  }, [id,merchant]);
 
   if (!product) {
     return <CircularProgress />;
@@ -232,6 +233,7 @@ export function ProductPage({ setSignin, setSignup }) {
               <Details itemImage={product.images[0]} setSignin={setSignin} setSignup={setSignup} itemType={'products'} itemId={product.pid} itemTitle={product.title} merchantId={product.merchantId}  />
               <Box sx={{ my: 3 }}>
                 <Typography variant="h6" sx={{ textAlign: 'center', fontWeight: 'bold' }}>Reviews Summary</Typography>
+                <RatingsSummary itemId={product.pid} itemType={'products'} />
                 {reviews.length > 0 ? (
                   <>
                     <Typography variant="body1" sx={{ textAlign: 'center', mb: 1 }}>

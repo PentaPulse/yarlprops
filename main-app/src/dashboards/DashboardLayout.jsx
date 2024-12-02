@@ -149,10 +149,6 @@ export default function DashboardLayout({ handleMode, children }) {
         >
           {(merchantList.includes(user.uid) ? (orderList?bothMenu:merchMenu) : customerList.includes(user.uid) ? userMenu : [])
             .map((text, index) => (
-text[0]==='Feedbacks'?
-              <MenuItem disabled key={index} onClick={() => handleNavigation(text[2])}>
-                {text[1]} {text[0]}
-              </MenuItem>:
               <MenuItem key={index} onClick={() => handleNavigation(text[2])}>
                 {text[1]} {text[0]}
               </MenuItem>

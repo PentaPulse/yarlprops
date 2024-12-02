@@ -19,7 +19,8 @@
     "styled-components": "^6.1.13",
     "sweetalert2": "^11.14.3",
     "util": "^0.12.5",
-    "web-vitals": "^4.2.3"
+    "web-vitals": "^4.2.3",
+    "yarlprops": "file:.."
   },
   "scripts": {
     "start": "react-app-rewired start",
