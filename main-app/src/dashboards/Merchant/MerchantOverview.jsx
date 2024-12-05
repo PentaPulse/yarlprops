@@ -69,8 +69,10 @@ const MerchantOverview = () => {
     };
   
     const updateitemCounts = async () => {
-      setAvailableProductCount(await fetchItemCounts('product', true, 'For Sale'));
-      setSoldProductCount(await fetchItemCounts('product',false,'For Sale'))
+      //setAvailableProductCount(await fetchItemCounts('product', true, 'For Sale'));
+      setAvailableProductCount(100000);
+      //setSoldProductCount(await fetchItemCounts('product',false,'For Sale'))
+      setSoldProductCount(100)
       setAvailableRentalCount(await fetchItemCounts('rental',true,'For Rent'))
       setSoldRentalCount(await fetchItemCounts('rental',false,'For Rent'))
     };
