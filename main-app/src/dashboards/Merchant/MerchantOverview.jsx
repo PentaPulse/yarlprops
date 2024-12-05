@@ -25,7 +25,7 @@ const popularRatingsData = {
     {
       label: 'Products',
       backgroundColor: '#1E88E5',
-      data: [30, 50, 40, 60],
+      data: [8, 50, 40, 60],
     },
     {
       label: 'Rentals',
