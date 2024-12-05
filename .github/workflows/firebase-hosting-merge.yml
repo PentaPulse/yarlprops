@@ -18,8 +18,12 @@ jobs:
       - run: npm ci --prefix admin-app
       - run: echo "successfully cl admin"
       - run: npm run build --prefix admin-app
+        env:
+          CI: false
       - run: echo "successfully build admin build"
       - run: npm run build --prefix main-app
+        env:
+          CI: false
       - run: echo "successfully build main build"
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
