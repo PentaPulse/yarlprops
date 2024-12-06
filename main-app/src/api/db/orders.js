@@ -43,6 +43,15 @@ export const fetchOrders = async (custid) => {
     console.log('error fetch o hist :- ', e)
   }
 }
+export const fetchOrdersToFeedback = async (custid) => {
+  try {
+    const q = await getDocs(query(collection(db, 'orders'), where('custId', '==', custid),where('status','==','completed')))
+    const data = q.docs.map((doc) => doc.data())
+    return data;
+  } catch (e) {
+    console.log('error fetch o hist :- ', e)
+  }
+}
 
 //FOR MERCHANTS
 export const fetchCustomerOrders = async (merchid, itemType, itemId) => {
@@ -100,17 +109,17 @@ export const fetchOrdersForItem = async (itemId, merchId) => {
 }
 
 export const fetchProductsToOrders = async (merchId) => {
-  const q = await getDocs(query(collection(db, 'products'), where('merchId', '==', merchId)))
+  const q = await getDocs(query(collection(db, 'products'), where('merchantId', '==', merchId)))
   const data = q.docs.map((doc) => doc.data())
   return data
 }
 export const fetchRentalsToOrders = async (merchId) => {
-  const q = await getDocs(query(collection(db, 'rentals'), where('merchId', '==', merchId)))
+  const q = await getDocs(query(collection(db, 'rentals'), where('merchantId', '==', merchId)))
   const data = q.docs.map((doc) => doc.data())
   return data
 }
 export const fetchServicesToOrders = async (merchId) => {
-  const q = await getDocs(collection(db, 'services'), where('merchId', '==', merchId))
+  const q = await getDocs(query(collection(db, 'services'), where('merchantId', '==', merchId)))
   const data = q.docs.map((doc) => doc.data())
   return data
 }

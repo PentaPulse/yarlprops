@@ -10,6 +10,7 @@ import Filters from '../../components/Filters/Filters';
 import Details from '../../components/Details/Details';
 import { fetchProductReviews } from '../../api/db/feedback';
 import { fetchFilters } from '../../api/db/items';
+import Reviews from '../../components/Reviews/Reviews';
 
 export default function Rentals() {
     return (
@@ -142,8 +143,6 @@ function RentalsContents() {
 
 export function RentalsPage({ setSignin, setSignup }) {
     const [rental, setRental] = React.useState(null);
-    const [reviews, setReviews] = React.useState([]); // Store product reviews
-    const [averageRating, setAverageRating] = React.useState(0);
     const [selectedImageIndex, setSelectedImageIndex] = React.useState(0); // Track the index of the selected image
     //const [0, setStartIndex] = React.useState(0);
     const visibleImagesCount = 3; // Number of images to display at a time
@@ -159,13 +158,6 @@ export function RentalsPage({ setSignin, setSignup }) {
                 const rentalData = await fetchSelectedRental(id)
                 setRental(rentalData);
                 setSelectedImageIndex(0);
-
-
-                const reviewsData = await fetchProductReviews(id, 'rentals');
-                setReviews(reviewsData);
-
-                const totalRating = reviewsData.reduce((acc, review) => acc + review.rating, 0);
-                setAverageRating(reviewsData.length ? totalRating / reviewsData.length : 0);
             } catch (error) {
                 //console.error("Error fetching rental:", error);
             }
@@ -321,23 +313,7 @@ export function RentalsPage({ setSignin, setSignup }) {
                                 <Typography variant={isMobile ? 'h6' : 'h5'} component="h3" sx={{ textAlign: 'center', fontWeight: 'bold', mb: '1rem' }}>Seller/Renter Details</Typography>
                             </Box>
                             <Details itemImage={rental.images[0]} setSignin={setSignin} setSignup={setSignup} itemType={'rentals'} itemId={rental.rid} itemTitle={rental.title} merchantId={rental.merchantId} />
-                            <Box sx={{ my: 3 }}>
-                                <Typography variant="h6" sx={{ textAlign: 'center', fontWeight: 'bold' }}>Reviews Summary</Typography>
-                                {reviews.length > 0 ? (
-                                    <>
-                                        <Typography variant="body1" sx={{ textAlign: 'center', mb: 1 }}>
-                                            Average Rating: {averageRating.toFixed(1)} / 5
-                                        </Typography>
-                                        <Typography variant="body2" sx={{ textAlign: 'center' }}>
-                                            Based on {reviews.length} review{reviews.length > 1 ? 's' : ''}.
-                                        </Typography>
-                                    </>
-                                ) : (
-                                    <Typography variant="body1" sx={{ textAlign: 'center', mb: 1 }}>
-                                        No reviews yet. Be the first to leave a review!
-                                    </Typography>
-                                )}
-                            </Box>
+                            <Reviews itemId={rental.pid} itemType={'rentals'}/>
                         </CardContent>
                     </Card>
                 </Grid>
