@@ -103,17 +103,9 @@ export default function MyOrders() {
                         theme.palette.mode === "dark" ? "#b0bec5" : "#616161",
                     }}
                   >
-                    Quantity: {order.quantity}
+                    Quantity: {order.itemQuantity}
                   </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color:
-                        theme.palette.mode === "dark" ? "#b0bec5" : "#616161",
-                    }}
-                  >
-                    Price: Rs.{order.price}
-                  </Typography>
+               
                   <Typography
                     variant="body2"
                     sx={{
