@@ -22,6 +22,7 @@ import { useAlerts } from "../../api/AlertService";
 import { addFeedback, fetchItemReviews } from "../../api/db/feedback";
 import { fetchOrdersToFeedback } from "../../api/db/orders";
 import formatDate from "../../components/date/dateTime";
+import { useLocation } from "react-router-dom";
 
 export default function FeedbackPage() {
   const { user } = useAuth();
@@ -39,8 +40,14 @@ export default function FeedbackPage() {
     merchantRating: 2.5,
   });
   const [refresh, setRefresh] = useState(false);
+  const location = useLocation();
+  const { state } = location || {};
+  const { merchantName,  order } = state || {};
 
   useEffect(() => {
+    if(order){
+      setSelectedOrder(order)
+    }
     const fetchInitialData = async () => {
       try {
         const orders = await fetchOrdersToFeedback(user.uid);

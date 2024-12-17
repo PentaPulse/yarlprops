@@ -27,9 +27,7 @@ import { fetchMerchantDetails } from "../../api/db/users";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import Filters from "../../components/Filters/Filters";
 import Details from "../../components/Details/Details";
-import { fetchProductReviews } from "../../api/db/feedback";
 import { fetchFilters } from "../../api/db/items";
-import { RatingsSummary } from "../../components/Ratings/Reviews";
 import Reviews from "../../components/Reviews/Reviews";
 
 function Products() {
