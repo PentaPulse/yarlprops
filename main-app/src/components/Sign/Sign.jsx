@@ -84,15 +84,15 @@ export function Login({ closeBox }) {
     return (
         <Grid container spacing={2} >
             <Grid item xs={12}>
-                <Typography  sx={{fontSize: { xs: '1.1rem', sm: '1.5rem', md: '2rem' ,lg:'1.8rem' }}} align="center"><b>Welcome to YarlProps</b></Typography>
+                <Typography  sx={{fontSize: { xs: '1.2rem', sm: '1.5rem', md: '2rem' ,lg:'1.8rem' }}} align="center"><b>Welcome to YarlProps</b></Typography>
             </Grid>
             <Grid item xs={12} md={8}>
                 <Button
                     fullWidth
-                    sx={{ marginLeft:{md:'40px',lg:'50px'},borderRadius: '100px', border: `1px solid ${theme.palette.mode === 'light' ? '#FFFFFF' : '#000000'}` }}
+                    sx={{ marginLeft:{md:'40px',lg:'50px'},borderRadius: '100px', gap: '9px', border: `1px solid ${theme.palette.mode === 'light' ? '#FFFFFF' : '#000000'}` }}
                     onClick={handleGoogle}
                 >
-                    <GoogleIcon /> Connect with Google
+                    <GoogleIcon />  <Typography  sx={{fontSize: { xs: '0.8rem', sm: '0.9rem', md: '0.9rem' ,lg:'0.8rem' }}} >Connect with Google</Typography> 
                 </Button>
             </Grid>
             <Grid item xs={12} md={8}>
@@ -103,7 +103,7 @@ export function Login({ closeBox }) {
                     label="Email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    sx={{ width: { xs: "102%", sm: "100%", md: "140%", lg: "150%" }}}
+                    sx={{ width: { xs: "102%", sm: "100%", md: "150%", lg: "150%" }}}
                     
                     onKeyDown={(e) => e.key === 'Enter' && handleLogin(e)}
                 />
