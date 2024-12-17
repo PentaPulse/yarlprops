@@ -11,8 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: npm install -g npm@latest
-      - run: echo "npm updated"
       - run: npm ci
       - run: echo "successfully cl outer"
       - run: npm ci --prefix main-app
