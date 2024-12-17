@@ -82,33 +82,34 @@ export function Login({ closeBox }) {
     };
 
     return (
-        <Grid container spacing={2} direction="column" alignItems="center">
+        <Grid container spacing={2} >
             <Grid item xs={12}>
-                <Typography variant="h4" align="center">Welcome to YarlProps</Typography>
+                <Typography  sx={{fontSize: { xs: '1.1rem', sm: '1.5rem', md: '2rem' ,lg:'1.8rem' }}} align="center"><b>Welcome to YarlProps</b></Typography>
             </Grid>
             <Grid item xs={12} md={8}>
                 <Button
                     fullWidth
-                    sx={{ borderRadius: '100px', border: `1px solid ${theme.palette.mode === 'light' ? '#FFFFFF' : '#000000'}` }}
+                    sx={{ marginLeft:{md:'40px',lg:'50px'},borderRadius: '100px', border: `1px solid ${theme.palette.mode === 'light' ? '#FFFFFF' : '#000000'}` }}
                     onClick={handleGoogle}
                 >
                     <GoogleIcon /> Connect with Google
                 </Button>
             </Grid>
             <Grid item xs={12} md={8}>
-                <Typography variant="body1" align="center">OR</Typography>
+                <Typography variant="body1" sx={{marginLeft:{xs:'20px',md:'50px',lg:'80px'}}}>OR</Typography>
             </Grid>
             <Grid item xs={12} md={8}>
                 <TextField
                     label="Email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    fullWidth
+                    sx={{ width: { xs: "102%", sm: "130%", md: "150%", lg: "150%" }}}
+                    
                     onKeyDown={(e) => e.key === 'Enter' && handleLogin(e)}
                 />
             </Grid>
             <Grid item xs={12} md={8}>
-                <FormControl fullWidth variant="outlined">
+                <FormControl sx={{ width: { xs: "102%", sm: "100%", md: "150%", lg: "150%" }}} variant="outlined">
                     <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                     <OutlinedInput
                         id="outlined-adornment-password"
@@ -127,16 +128,16 @@ export function Login({ closeBox }) {
                     />
                 </FormControl>
             </Grid>
-            <Grid item xs={12} md={8}>
+            <Grid item xs={12} md={9}>
                 <Typography
                     onClick={handleReset}
-                    sx={{ cursor: 'pointer', color: theme.palette.primary.main, textAlign: 'center' }}
+                    sx={{ cursor: 'pointer', color: theme.palette.primary.main, marginLeft: {xs:'10px',sm:'60px',md:'50px' ,lg:'70px' }}}
                 >
                     Forgot Your Password?
                 </Typography>
             </Grid>
             <Grid item xs={12} md={8}>
-                <Button variant="contained" onClick={handleLogin} fullWidth>Sign in</Button>
+                <Button variant="contained" onClick={handleLogin} sx={{ marginLeft:{md:'50px',lg:'60px'} ,display: 'block' }} fullWidth>Sign in</Button>
             </Grid>
         </Grid>
     );
@@ -178,7 +179,7 @@ export function Register({ closeBox }) {
                     label="First Name"
                     value={firstName}
                     onChange={(e) => { setFirstName(e.target.value); setDisplayName(`${e.target.value} ${lastName}`); }}
-                    fullWidth
+                  
                 />
             </Grid>
             <Grid item xs={12} md={8}>

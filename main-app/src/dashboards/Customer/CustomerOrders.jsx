@@ -163,7 +163,7 @@ export default function MyOrders() {
             </Grid>
           ))
         ) : (
-          <Typography>No orders to show</Typography>
+          <Typography sx={{mt:'50px',marginLeft:'35px'}}>No orders to show</Typography>
         )}
       </Grid>
     </Container>
