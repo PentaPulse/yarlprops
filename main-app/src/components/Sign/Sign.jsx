@@ -103,7 +103,7 @@ export function Login({ closeBox }) {
                     label="Email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    sx={{ width: { xs: "102%", sm: "130%", md: "150%", lg: "150%" }}}
+                    sx={{ width: { xs: "102%", sm: "100%", md: "140%", lg: "150%" }}}
                     
                     onKeyDown={(e) => e.key === 'Enter' && handleLogin(e)}
                 />
@@ -170,7 +170,7 @@ export function Register({ closeBox }) {
     }
 
     return (
-        <Grid container spacing={2} direction="column" alignItems="center">
+        <Grid container spacing={2} >
             <Grid item xs={12}>
                 <Typography variant="h4" align="center">Create Account</Typography>
             </Grid>
@@ -179,7 +179,7 @@ export function Register({ closeBox }) {
                     label="First Name"
                     value={firstName}
                     onChange={(e) => { setFirstName(e.target.value); setDisplayName(`${e.target.value} ${lastName}`); }}
-                  
+                    sx={{ width: { xs: "102%", sm: "100%", md: "150%", lg: "140%" },marginLeft:{xs:'1px',sm:'4px',md:'9px',lg:'10px'}}}
                 />
             </Grid>
             <Grid item xs={12} md={8}>
@@ -187,7 +187,7 @@ export function Register({ closeBox }) {
                     label="Last Name"
                     value={lastName}
                     onChange={(e) => { setLastName(e.target.value); setDisplayName(`${firstName} ${e.target.value}`); }}
-                    fullWidth
+                    sx={{ width: { xs: "102%", sm: "100%", md: "150%", lg: "140%" },marginLeft:{xs:'1px',sm:'6px',md:'9px',lg:'10px'}}}
                 />
             </Grid>
             <Grid item xs={12} md={8}>
@@ -195,7 +195,7 @@ export function Register({ closeBox }) {
                     label="Display Name"
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
-                    fullWidth
+                    sx={{ width: { xs: "102%", sm: "100%", md: "150%", lg: "140%" },marginLeft:{xs:'1px',sm:'6px',md:'9px',lg:'10px'}}}
                 />
             </Grid>
             <Grid item xs={12} md={8}>
@@ -204,11 +204,11 @@ export function Register({ closeBox }) {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    fullWidth
+                    sx={{ width: { xs: "102%", sm: "100%", md: "150%", lg: "140%" },marginLeft:{xs:'1px',sm:'6px',md:'9px',lg:'10px'}}}
                 />
             </Grid>
             <Grid item xs={12} md={8}>
-                <FormControl fullWidth variant="outlined">
+                <FormControl  sx={{ width: { xs: "102%", sm: "100%", md: "150%", lg: "140%" },marginLeft:{xs:'1px',sm:'6px',md:'9px',lg:'10px'}}} variant="outlined">
                     <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                     <OutlinedInput
                         id="outlined-adornment-password"
@@ -227,7 +227,7 @@ export function Register({ closeBox }) {
                 </FormControl>
             </Grid>
             <Grid item xs={12} md={8}>
-                <Button variant="contained" onClick={handleRegister} fullWidth>Register</Button>
+                <Button variant="contained" onClick={handleRegister}  sx={{ width: { xs: "102%", sm: "100%", md: "150%", lg: "140%" },marginLeft:{xs:'2px',sm:'8px',md:'9px',lg:'10px'}}}>Register</Button>
             </Grid>
         </Grid>
     );
