@@ -14,6 +14,7 @@ import {
   useTheme,
   styled,
   Skeleton,
+  CircularProgress,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -125,18 +126,10 @@ export default function DashboardLayout({ handleMode, children }) {
 
   const fetchMerchantList = async () => {
     try {
-      const userSnapshot = await getDocs(
-        query(collection(db, "systemusers"), where("uid", "==", user.uid))
-      );
-      const userData = userSnapshot.docs.map((doc) => doc.data());
-      if (userData.isMerchant) {
-        setMerchant(true);
-      } else {
-        setMerchant(false);
-      }
-    } catch (e) {}
-    finally{
-      setLoading(false)
+      setMerchant(user.isMerchant);
+    } catch (e) {
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -175,24 +168,14 @@ export default function DashboardLayout({ handleMode, children }) {
             "--MuiMenuItem-insetStart": "30px",
           }}
         >
-          {
-  loading ? (
-    <Skeleton></Skeleton>
-  ) : merchant ? (
-    orderList ? (
-      bothMenu
-    ) : (
-      merchMenu
-    )
-  ) : (
-    userMenu
-  ).map((text, index) => (
-    <MenuItem key={index} onClick={() => handleNavigation(text[2])}>
-      {text[1]} {text[0]}
-    </MenuItem>
-  ))
-}
-
+          {loading && <CircularProgress />}
+          {(user.isMerchant ? (orderList ? bothMenu : merchMenu) : userMenu).map(
+            (text, index) => (
+              <MenuItem key={index} onClick={() => handleNavigation(text[2])}>
+                {text[1]} {text[0]}
+              </MenuItem>
+            )
+          )}
         </MenuList>
 
         <MenuList
@@ -334,7 +317,18 @@ export default function DashboardLayout({ handleMode, children }) {
             columnSpacing={{ xs: 1, sm: 1, md: 2, lg: 2 }}
             rowSpacing={{ xs: 3, sm: 3, md: 2, lg: 2 }}
           >
-            {children}
+            {!loading ? (
+              children
+            ) : (
+              <Box
+                display={"flex"}
+                justifyContent={"center"}
+                alignItems={"center"}
+                height={"50vh"}
+              >
+                <CircularProgress />
+              </Box>
+            )}
           </Grid>
         </Grid>
       </Grid>

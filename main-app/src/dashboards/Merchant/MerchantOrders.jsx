@@ -17,6 +17,7 @@ import { rejectOrder,approveOrder, fetchOrdersForItem, fetchProductsToOrders, fe
 import { Button } from '@mui/material';
 import { useAuth } from '../../api/AuthContext'; 
 import formatDate from '../../components/date/dateTime';
+import Swal from 'sweetalert2';
 
 function Row(props) {
   const { row } = props;
@@ -33,8 +34,27 @@ function Row(props) {
   };
 
   const handleApproval = async (order) => {
-    await approveOrder(order)
-  }
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to approve this request?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, approve it!",
+    });
+  
+    if (result.isConfirmed) {
+      try {
+        await approveOrder(order);
+        console.log("Request approved");
+        await Swal.fire("Approved!", "The request has been approved.", "success");
+      } catch (error) {
+        console.error("Error approving the request:", error);
+        await Swal.fire("Error!", "There was an error approving the request.", "error");
+      }
+    }
+  };
 
   const handleReject=async(order)=>{
     await rejectOrder(order)

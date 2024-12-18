@@ -124,6 +124,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
     location: "",
     status: "For Sale",
     images: [],
+    id:pid
   });
 
   const [existingImages, setExistingImages] = React.useState([]);
@@ -135,7 +136,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
       const fetchProduct = async () => {
         const fetchedProduct = await fetchSelectedProduct(pid);
         if (fetchedProduct) {
-          setProduct(fetchedProduct);
+          setProduct({...fetchedProduct,id:pid});
           setExistingImages(fetchedProduct.images || []);
         } else {
           console.log("No such document!");
