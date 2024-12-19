@@ -423,12 +423,12 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
         )}
       <Grid container spacing={2} sx={{ mt: 3 }}>
         <Grid item xs={12} sm={6}>
-          <Button type="submit" variant="contained" color="success" style={{ marginTop: '25px' }}>
+          <Button type="submit" variant="contained" color="success" sx={{width:'40%'}} style={{ marginTop: '25px',marginLeft: '10px'  }}>
             Save
           </Button>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Button onClick={onCancel} variant="outlined" style={{ marginTop: '25px', marginLeft: '10px' }}>
+          <Button onClick={onCancel} variant="outlined" sx={{width:'40%'}} style={{ marginTop: '25px', marginLeft: '-290px' }}>
             Cancel
           </Button>
         </Grid>
