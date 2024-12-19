@@ -234,7 +234,7 @@ const RentalForm = ({ rid, onSuccess, onCancel }) => {
   });
 
   return (
-    <Paper /*style={{ padding: 16 }}*/ sx={{ p: { xs: 2, sm: 3, md: 4}, mr: {xs: 1, sm: 1, md: 1, lg: -10, xl: -30} }}>
+    <Paper /*style={{ padding: 16 }}*/ sx={{ p: { xs: 2, sm: 3, md: 4}, mr: {xs: 1, sm: 1, md: 1, lg: -13} }}>
       <Typography variant="h6" sx={{ mb: { xs: 2, sm: 3 } }}>{rid ? 'Edit Rental' : 'Add Rental'}</Typography>
       <form onSubmit={handleSubmit}>
         <TextField

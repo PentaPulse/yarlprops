@@ -223,7 +223,7 @@ const ServiceForm = ({ sid, onSuccess, onCancel }) => {
   });
 
   return (
-    <Paper sx={{ p: { xs: 2, sm: 3, md: 4}, mr: {xs: 1, sm: 1, md: 1, lg: -10, xl: -30} }}>
+    <Paper sx={{ p: { xs: 2, sm: 3, md: 4}, mr: {xs: 1, sm: 1, md: 1, lg: -13} }}>
       <Typography variant="h6" sx={{ mb: { xs: 2, sm: 3 } }}>{sid ? 'Edit Service' : 'Add Service'}</Typography>
       <form onSubmit={handleSubmit}>
         <TextField

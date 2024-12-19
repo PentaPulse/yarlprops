@@ -261,7 +261,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
   });
 
   return (
-    <Paper /*style={{ padding: 16 }}*/ sx={{ p: { xs: 2, sm: 3, md: 4}, mr: {xs: 1, sm: 1, md: 1, lg: -10, xl: -30} }} >
+    <Paper /*style={{ padding: 16 }}*/ sx={{ p: { xs: 2, sm: 3, md: 4}, mr: {xs: 1, sm: 1, md: 1, lg: -13} }} >
       <Typography variant="h6"  sx={{ mb: { xs: 2, sm: 3 } }}>
         {pid ? 'Edit Product' : 'Add Product'}
       </Typography>
@@ -648,7 +648,7 @@ const ProductList = ({ onEditProduct, onViewProduct }) => {
                     <StyledTableCell align="center" sx={{ display: { xs: 'table-cell', sm: 'table-cell' } }}>{(product.visibility === false) ? 'No':'Yes'}</StyledTableCell>
 
                     <StyledTableCell>
-                      <Grid container spacing={1} sx={{ flexDirection: { xs: 'column', sm: 'row' } }}>
+                      <Grid container spacing={1} sx={{ flexDirection: { xs: 'column', sm: 'row' }, alignItems: 'center', justifyContent:'center'}}>
                         <Grid item xs={12} sm={10}>
                           <Button
                             onClick={() => onViewProduct(product.pid)}
