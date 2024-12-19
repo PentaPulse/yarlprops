@@ -89,3 +89,28 @@ export const fetchAllItems = async () => {
     return [];
   }
 };
+
+export const fetchItemCounts = async (uid,itemType, available, status) => {
+  const operator = available ? '==' : '!=';
+  const q = query(
+    collection(db, `${itemType}s`),
+    where('merchantId', '==', uid),
+    where('status', operator, status)
+  );
+
+  try {
+    const snapshot = await getDocs(q);
+    return snapshot.size;
+  } catch (e) {
+    console.error("Error fetching item counts:", e);
+    return 0;
+  }
+};
+
+export const fetchServicesCount=async(uid)=>{
+  const q = query(collection(db,'services'),where('merchantId','==',uid))
+  try{
+    const querySnapshot = await getDocs(q)
+    return querySnapshot.size 
+  }catch(e){}
+}
