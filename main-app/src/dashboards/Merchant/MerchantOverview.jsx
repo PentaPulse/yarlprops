@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Container, Grid, Paper, Typography, Box, useTheme } from '@mui/material';
 import { Pie, Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
-import { collection, getDocs, query, where } from 'firebase/firestore';
 import { useAuth } from '../../api/AuthContext';
 import { db } from '../../api/firebase';
+import { fetchItemCounts, fetchServicesCount } from '../../api/db/items';
+import { fetchRatingData } from '../../api/db/ratings';
 
 // Data for Pie Charts
 const createPieData = (sold, available) => ({
@@ -12,33 +13,22 @@ const createPieData = (sold, available) => ({
   datasets: [
     {
       data: [sold, available],
-      backgroundColor: ['#1E88E5', '#000000'], // Blue and Black
-      hoverBackgroundColor: ['#42A5F5', '#424242'],
+      backgroundColor: ['#1E88E5', '#000000'],
+    },
+  ],
+});
+
+const createServicePieData = (total) => ({
+  labels: ['Total'],
+  datasets: [
+    {
+      data: [total],
+      backgroundColor: ['#1E88E5'], 
     },
   ],
 });
 
 // Data for Bar Chart (Popular Times)
-const popularRatingsData = {
-  labels: ['5', '4', '3', '2','1'],
-  datasets: [
-    {
-      label: 'Products',
-      backgroundColor: '#1E88E5',
-      data: [8, 50, 40, 60],
-    },
-    {
-      label: 'Rentals',
-      backgroundColor: '#000000',
-      data: [45, 70, 35, 50],
-    },
-    {
-      label: 'Services',
-      backgroundColor: '#42A5F5',
-      data: [20, 40, 60, 30],
-    },
-  ],
-};
 
 const MerchantOverview = () => {
   const theme=useTheme()
@@ -46,35 +36,48 @@ const MerchantOverview = () => {
   const [soldProductCount,setSoldProductCount]=useState(0)
   const [availableRentalCount,setAvailableRentalCount]=useState(0)
   const [soldRentalCount,setSoldRentalCount]=useState(0)
-  const soldServices = 90;
-  const availableServices = 110;
+  const [productsRatingData,setProductsRatingData]=useState([])
+  const [rentalsRatingData,setRentalsRatingData]=useState([])
+  const [servicesRatingData,setServicesRatingData]=useState([])
+  const [totalServices,setTotalServices]=useState(0)
   const { user } = useAuth();
 
-  useEffect(() => {
-    const fetchItemCounts = async (itemType, available, status) => {
-      const operator = available ? '==' : '!=';
-      const q = query(
-        collection(db, `${itemType}s`),
-        where('merchantId', '==', user.uid),
-        where('status', operator, status)
-      );
-  
-      try {
-        const snapshot = await getDocs(q);
-        return snapshot.size;
-      } catch (e) {
-        console.error("Error fetching item counts:", e);
-        return 0;
-      }
-    };
-  
+  const popularRatingsData = {
+    labels: ['0','1','2','3','4','5'],
+    datasets: [
+      {
+        label: 'Products',
+        backgroundColor: '#1E88E5',
+        data: productsRatingData,
+      },
+      {
+        label: 'Rentals',
+        backgroundColor: '#000000',
+        data: rentalsRatingData,
+      },
+      {
+        label: 'Services',
+        backgroundColor: '#42A5F5',
+        data: servicesRatingData,
+      },
+    ],
+  };
+
+    useEffect(() => {  
     const updateitemCounts = async () => {
-      setAvailableProductCount(await fetchItemCounts('product', true, 'For Sale'));
-      setSoldProductCount(await fetchItemCounts('product',false,'For Sale'))
-      setAvailableRentalCount(await fetchItemCounts('rental',true,'For Rent'))
-      setSoldRentalCount(await fetchItemCounts('rental',false,'For Rent'))
+      setAvailableProductCount(await fetchItemCounts(user.uid,'product', true, 'For Sale'));
+      setSoldProductCount(await fetchItemCounts(user.uid,'product',false,'For Sale'))
+      setAvailableRentalCount(await fetchItemCounts(user.uid,'rental',true,'For Rent'))
+      setSoldRentalCount(await fetchItemCounts(user.uid,'rental',false,'For Rent'))
+      setTotalServices(await fetchServicesCount(user.uid))
     };
-  
+
+    const fetchRatings=async()=>{
+      setProductsRatingData(await fetchRatingData(user.uid,'products'))
+      setRentalsRatingData(await fetchRatingData(user.uid,'rentals'))
+      setServicesRatingData(await fetchRatingData(user.uid,'services'))
+    }
+    fetchRatings()
     updateitemCounts();
   }, [user.uid]);
 
@@ -107,9 +110,9 @@ const MerchantOverview = () => {
         <Grid item xs={12} md={4}>
           <Paper elevation={3} sx={{ padding: 2, backgroundColor: theme.palette.background }}>
             <Typography variant="h6" align="center" color={'inherit'}>
-              Services (Sold vs Available)
+              Services (Total Available)
             </Typography>
-            <Pie data={createPieData(soldServices, availableServices)} />
+            <Pie data={createServicePieData(totalServices)} />
           </Paper>
         </Grid>
 
@@ -154,8 +157,7 @@ const MerchantOverview = () => {
               Services Summary
             </Typography>
             <Box sx={{ p: 2 }}>
-              <Typography>Total Services Sold: {soldServices}</Typography>
-              <Typography>Total Services Available: {availableServices}</Typography>
+              <Typography>Total Services: {totalServices}</Typography>
             </Box>
           </Paper>
         </Grid>
