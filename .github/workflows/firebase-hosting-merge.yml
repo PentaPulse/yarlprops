@@ -24,6 +24,7 @@ jobs:
 
       - name: Build admin-app
         run: npm run build --prefix admin-app
+
         env:
           CI: false
           REACT_APP_API_KEY: ${{ secrets.REACT_APP_API_KEY }}
