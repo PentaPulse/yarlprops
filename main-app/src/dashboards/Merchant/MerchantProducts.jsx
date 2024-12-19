@@ -261,7 +261,7 @@ const ProductForm = ({ pid, onSuccess, onCancel }) => {
   });
 
   return (
-    <Paper /*style={{ padding: 16 }}*/ sx={{ p: { xs: 2, sm: 3, md: 4}, mr: {xs: 1, sm: 1, md: 1, lg: -10, xl: -30} }} >
+    <Paper /*style={{ padding: 16 }}*/ sx={{ p: { xs: 2, sm: 3, md: 4}, mr: {xs: 1, sm: 1, md: 1, lg: -13} }} >
       <Typography variant="h6"  sx={{ mb: { xs: 2, sm: 3 } }}>
         {pid ? 'Edit Product' : 'Add Product'}
       </Typography>
@@ -622,15 +622,15 @@ const ProductList = ({ onEditProduct, onViewProduct }) => {
             <TableHead>
               <TableRow>
                 {/* <TableCell>ID</TableCell> */}
-                <StyledTableCell /*align="center"*/ sx={{ display: { xs: 'table-cell', md: 'table-cell' } }}>Title</StyledTableCell>
-                <StyledTableCell /*align="center"*/ sx={{ display: { xs: 'none', sm: 'none', md: 'table-cell' } }}>Category</StyledTableCell>
-                <StyledTableCell /*align="center"*/sx={{ display: { xs: 'none', sm: 'none', md: 'table-cell' } }}>Sub category</StyledTableCell>
+                <StyledTableCell align="center" sx={{ display: { xs: 'table-cell', md: 'table-cell' } }}>Title</StyledTableCell>
+                <StyledTableCell align="center" sx={{ display: { xs: 'none', sm: 'none', md: 'table-cell' } }}>Category</StyledTableCell>
+                <StyledTableCell align="center"sx={{ display: { xs: 'none', sm: 'none', md: 'table-cell' } }}>Sub category</StyledTableCell>
                 {/* <StyledTableCell align="center">Description</StyledTableCell>
                 <StyledTableCell align="center">Quantity</StyledTableCell>
                 <StyledTableCell align="center">Location</StyledTableCell> */}
-                <StyledTableCell /*align="center"*/ sx={{ display: { xs: 'none', sm: 'none', md: 'table-cell' } }}>Current Status</StyledTableCell>
-                <StyledTableCell sx={{ display: { xs: 'table-cell', sm: 'table-cell' } }}>Visibility On Site</StyledTableCell>
-                <StyledTableCell sx={{ display: { xs: 'table-cell', sm: 'table-cell' } }}>Actions</StyledTableCell>
+                <StyledTableCell align="center" sx={{ display: { xs: 'none', sm: 'none', md: 'table-cell' } }}>Current Status</StyledTableCell>
+                <StyledTableCell align="center" sx={{ display: { xs: 'table-cell', sm: 'table-cell' } }}>Visibility On Site</StyledTableCell>
+                <StyledTableCell align="center" sx={{ display: { xs: 'table-cell', sm: 'table-cell' } }}>Actions</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -638,17 +638,17 @@ const ProductList = ({ onEditProduct, onViewProduct }) => {
                 products.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(product => (
                   <StyledTableRow key={product.pid}>
                     {/* <TableCell>{product.id}</TableCell> */}
-                    <StyledTableCell /*align="center"*/ sx={{ display: { xs: 'table-cell', md: 'table-cell' } }}>{product.title}</StyledTableCell>
-                    <StyledTableCell /*align="center"*/ sx={{ display: { xs: 'none', sm: 'none', md: 'table-cell' } }}>{product.category}</StyledTableCell>
-                    <StyledTableCell /*align="center"*/ sx={{ display: { xs: 'none', sm: 'none', md: 'table-cell' } }}>{product.subCategory}</StyledTableCell>
+                    <StyledTableCell align="center" sx={{ display: { xs: 'table-cell', md: 'table-cell' } }}>{product.title}</StyledTableCell>
+                    <StyledTableCell align="center" sx={{ display: { xs: 'none', sm: 'none', md: 'table-cell' } }}>{product.category}</StyledTableCell>
+                    <StyledTableCell align="center" sx={{ display: { xs: 'none', sm: 'none', md: 'table-cell' } }}>{product.subCategory}</StyledTableCell>
                     {/* <StyledTableCell align="justify">{product.description}</StyledTableCell>
                     <StyledTableCell align="center">{product.quantity}</StyledTableCell>
                     <StyledTableCell align="center">{product.location}</StyledTableCell> */}
-                    <StyledTableCell /*align="center"*/ sx={{ display: { xs: 'none', sm: 'none', md: 'table-cell' } }}>{product.status}</StyledTableCell>
-                    <StyledTableCell /*align="center"*/sx={{ display: { xs: 'table-cell', sm: 'table-cell' } }}>{(product.visibility === false) ? 'No':'Yes'}</StyledTableCell>
+                    <StyledTableCell align="center" sx={{ display: { xs: 'none', sm: 'none', md: 'table-cell' } }}>{product.status}</StyledTableCell>
+                    <StyledTableCell align="center" sx={{ display: { xs: 'table-cell', sm: 'table-cell' } }}>{(product.visibility === false) ? 'No':'Yes'}</StyledTableCell>
 
                     <StyledTableCell>
-                      <Grid container spacing={1} sx={{ flexDirection: { xs: 'column', sm: 'row' } }}>
+                      <Grid container spacing={1} sx={{ flexDirection: { xs: 'column', sm: 'row' }, alignItems: 'center', justifyContent:'center'}}>
                         <Grid item xs={12} sm={10}>
                           <Button
                             onClick={() => onViewProduct(product.pid)}
@@ -741,18 +741,17 @@ const ProductDetail = ({ pid, onBack }) => {
   if (loading) return <CircularProgress />;
 
   return (
-    <Paper /*style={{ padding: 16 }}*/ sx={{ p: { xs: 2, sm: 3, md: 4 }, mr: {xs: 1, sm: 1, md: 1, lg: -10, xl: -30} }}>
-      <Typography variant="h4" /*gutterBottom*/
+    <Paper /*style={{ padding: 16 }}*/ sx={{ p: { xs: 2, sm: 3, md: 4 }, mr: {xs: 1, sm: 1, md: 1, lg: 1} }}>
+      <Typography variant="h4" gutterBottom
         sx={{ 
-          mb: 3,
           fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' }
         }}>{product.title}</Typography>
 
 <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
-          <Typography variant="subtitle1" sx={{ mb: 1 }}>Category: {product.category}</Typography>
-          <Typography variant="subtitle1" sx={{ mb: 1 }}>Sub category: {product.subCategory}</Typography>
-          <Typography variant="body1" sx={{ mb: 1 }}>Description:</Typography>
+          <Typography variant="subtitle1" gutterBottom>Category: {product.category}</Typography>
+          <Typography variant="subtitle1" gutterBottom>Sub category: {product.subCategory}</Typography>
+          <Typography variant="body1" gutterBottom>Description:</Typography>
           <ul style={{ margin: 0, paddingLeft: '1.5rem' }}>
             {product.description.map((item, index) => (
               <li key={index}>
@@ -763,26 +762,27 @@ const ProductDetail = ({ pid, onBack }) => {
         </Grid>
         
         <Grid item xs={12} md={6}>
-          <Typography variant="body1" sx={{ mb: 1 }}>Quantity: {product.quantity}</Typography>
-          <Typography variant="body1" sx={{ mb: 1 }}>Location: {product.location}</Typography>
-          <Typography variant="body1" sx={{ mb: 1 }}>Status: {product.status}</Typography>
-          <Typography variant="body1" sx={{ mb: 1 }}>
+          <Typography variant="body1" gutterBottom>Quantity: {product.quantity}</Typography>
+          <Typography variant="body1" gutterBottom>Location: {product.location}</Typography>
+          <Typography variant="body1" gutterBottom>Status: {product.status}</Typography>
+          <Typography variant="body1" gutterBottom>
             Visibility: {product.visibility === false ? 'No' : 'Yes'}
           </Typography>
         </Grid>
       </Grid>
-      <Grid container spacing={2} /*style={{ marginTop: 10, marginBottom: 10 }}*/ sx={{ mt: 3, mb: 3 }}>
+      <Grid container spacing={2} /*style={{ marginTop: 10, marginBottom: 10 }}*/ sx={{ mt: 2, mb: 2 }}>
         {product.images && product.images.map((src, index) => (
           <Grid item key={index}>
             <Image src={src} alt={`Product ${index}`} style={{ width: '185px', height: '175px', objectFit: 'cover', borderRadius: '10px' }}/>
           </Grid>
         ))}
       </Grid>
-      <Button variant="contained" color="primary" onClick={onBack} /*style={{ marginTop: 16 }}*/ fullWidth
-        sx={{ 
-          mt: 3,
-          maxWidth: { sm: 200 }
-        }}>
+      <Button variant="contained" color="primary" onClick={onBack} /*style={{ marginTop: 16 }}*/
+        // sx={{ 
+        //   mt: 3,
+        //   maxWidth: { sm: 200 }
+        // }}
+        >
         Back
       </Button>
     </Paper>
