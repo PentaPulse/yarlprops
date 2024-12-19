@@ -24,13 +24,20 @@ jobs:
 
       - name: Add environment variables
         run: |
-          echo "REACT_APP_API_KEY=${{ secrets.REACT_APP_API_KEY }}" >> .env
-          echo "REACT_APP_AUTH_DOMAIN=${{ secrets.REACT_APP_AUTH_DOMAIN }}" >> .env
-          echo "REACT_APP_PROJECT_ID=${{ secrets.REACT_APP_PROJECT_ID }}" >> .env
-          echo "REACT_APP_STORAGE_BUCKET=${{ secrets.REACT_APP_STORAGE_BUCKET }}" >> .env
-          echo "REACT_APP_MESSAGE_SENDER_ID=${{ secrets.REACT_APP_MESSAGE_SENDER_ID }}" >> .env
-          echo "REACT_APP_APP_ID=${{ secrets.REACT_APP_APP_ID }}" >> .env
-          echo "REACT_APP_MEASUREMENT_ID=${{ secrets.REACT_APP_MEASUREMENT_ID }}" >> .env
+          echo "REACT_APP_API_KEY=${{ secrets.REACT_APP_API_KEY }}" >> main-app/.env
+          echo "REACT_APP_AUTH_DOMAIN=${{ secrets.REACT_APP_AUTH_DOMAIN }}" >> main-app/.env
+          echo "REACT_APP_PROJECT_ID=${{ secrets.REACT_APP_PROJECT_ID }}" >> main-app/.env
+          echo "REACT_APP_STORAGE_BUCKET=${{ secrets.REACT_APP_STORAGE_BUCKET }}" >> main-app/.env
+          echo "REACT_APP_MESSAGE_SENDER_ID=${{ secrets.REACT_APP_MESSAGE_SENDER_ID }}" >> main-app/.env
+          echo "REACT_APP_APP_ID=${{ secrets.REACT_APP_APP_ID }}" >> main-app/.env
+          echo "REACT_APP_MEASUREMENT_ID=${{ secrets.REACT_APP_MEASUREMENT_ID }}" >> main-app/.env
+          echo "REACT_APP_API_KEY=${{ secrets.REACT_APP_API_KEY }}" >> admin-app/.env
+          echo "REACT_APP_AUTH_DOMAIN=${{ secrets.REACT_APP_AUTH_DOMAIN }}" >> admin-app/.env
+          echo "REACT_APP_PROJECT_ID=${{ secrets.REACT_APP_PROJECT_ID }}" >> admin-app/.env
+          echo "REACT_APP_STORAGE_BUCKET=${{ secrets.REACT_APP_STORAGE_BUCKET }}" >> admin-app/.env
+          echo "REACT_APP_MESSAGE_SENDER_ID=${{ secrets.REACT_APP_MESSAGE_SENDER_ID }}" >> admin-app/.env
+          echo "REACT_APP_APP_ID=${{ secrets.REACT_APP_APP_ID }}" >> admin-app/.env
+          echo "REACT_APP_MEASUREMENT_ID=${{ secrets.REACT_APP_MEASUREMENT_ID }}" >> admin-app/.env
 
       - name: Build admin-app
         run: npm run build --prefix admin-app
