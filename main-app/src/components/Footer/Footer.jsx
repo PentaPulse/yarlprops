@@ -76,11 +76,11 @@ export default function Footer() {
             </Typography>
             <Typography variant="body1" sx={{ mb: '0.3rem', color: footerTextColor }}>
               <PhoneIcon sx={{ verticalAlign: 'middle', mr: '0.5rem', color: iconColor }} />
-              +94 77 1234567
+              +94 78 7819915 
             </Typography>
             <Typography variant="body1" sx={{ mb: '0.3rem', color: footerTextColor }}>
               <EmailIcon sx={{ verticalAlign: 'middle', mr: '0.5rem', color: iconColor }} />
-              PentaPulse@gmail.com
+              penta5pulse@gmail.com
             </Typography>
             <Typography variant="body1" sx={{ color: footerTextColor }}>
               <LocationOnIcon sx={{ verticalAlign: 'middle', mr: '0.5rem', color: iconColor }} />
