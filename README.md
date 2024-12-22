@@ -32,5 +32,7 @@ YarlProps is a web application designed to streamline the process of managing pr
 3. Install dependencies
    ```bash
    npm install
+   npm install --prefix main-app
+   npm install --prefix admin-app
 4. Configure Firebase
     Contact administrators
