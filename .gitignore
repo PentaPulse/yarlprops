@@ -36,3 +36,4 @@ yarn-error.log*
 
 main-app/.env
 admin-app/.env
+admin-app/.env
